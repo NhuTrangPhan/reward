@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coffee House Loyalty — Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #f5f1ec;
+    --bg-card: #ffffff;
+    --border: #e6dfd5;
+    --text: #2b2118;
+    --text-muted: #7a6d60;
+    --text-soft: #a89b8d;
+    --brand: #6b3410;
+    --brand-light: #b06a3a;
+    --accent: #d97a2c;
+    --good: #2e8a4a;
+    --good-soft: #e7f4ec;
+    --warn: #d39b2a;
+    --warn-soft: #fbf2dc;
+    --bad: #c0392b;
+    --bad-soft: #fbe6e3;
+    --info: #3c6a99;
+    --info-soft: #e6eef7;
+    --shadow: 0 1px 2px rgba(43, 33, 24, 0.04), 0 4px 16px rgba(43, 33, 24, 0.06);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Text", "Inter", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* === HEADER === */
+  .topbar {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #4a2208 0%, #6b3410 100%);
+    color: #f5e9da;
+    position: sticky; top: 0; z-index: 50;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; font-size: 16px;
+    margin-right: auto;
+  }
+  .brand .logo {
+    width: 32px; height: 32px;
+    background: #d97a2c; border-radius: 8px;
+    display: grid; place-items: center;
+    font-size: 18px;
+  }
+  .topbar .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    font-size: 13px; cursor: pointer;
+    color: #f5e9da;
+  }
+  .topbar .pill:hover { background: rgba(255,255,255,0.2); }
+  .topbar .icon-btn {
+    position: relative;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    background: rgba(255,255,255,0.1);
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .topbar .icon-btn .dot {
+    position: absolute; top: 6px; right: 6px;
+    width: 16px; height: 16px;
+    background: #ff5252; color: white;
+    font-size: 10px; font-weight: 700;
+    border-radius: 50%;
+    display: grid; place-items: center;
+  }
+  .user-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 12px 4px 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px; cursor: pointer;
+  }
+  .avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, #d97a2c, #f5a854);
+    display: grid; place-items: center;
+    color: white; font-weight: 700; font-size: 12px;
+  }
+
+  /* === TABS === */
+  .tabs {
+    display: flex; gap: 4px;
+    padding: 0 28px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 14px 18px;
+    font-size: 14px; font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    color: var(--brand);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* === LAYOUT === */
+  .container { padding: 24px 28px 60px; max-width: 1440px; margin: 0 auto; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .grid { display: grid; gap: 16px; }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-2 { grid-template-columns: 2fr 1fr; }
+  .grid-2eq { grid-template-columns: 1fr 1fr; }
+  .row { display: flex; gap: 16px; }
+
+  @media (max-width: 1100px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-2eq { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* === CARD === */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+  .card-title {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    text-transform: none;
+  }
+  .card-title .label { display: flex; align-items: center; gap: 8px; }
+  .card-title .label .ico { font-size: 16px; }
+
+  /* === KPI CARD === */
+  .kpi {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+    position: relative; overflow: hidden;
+  }
+  .kpi::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent);
+  }
+  .kpi.good::before { background: var(--good); }
+  .kpi.warn::before { background: var(--warn); }
+  .kpi.bad::before { background: var(--bad); }
+  .kpi-label {
+    font-size: 13px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 10px;
+  }
+  .kpi-value {
+    font-size: 30px; font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+  }
+  .kpi-sub {
+    margin-top: 8px;
+    font-size: 12px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+  .delta-up { color: var(--good); font-weight: 600; }
+  .delta-down { color: var(--bad); font-weight: 600; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px; font-weight: 600;
+  }
+  .badge.good { background: var(--good-soft); color: var(--good); }
+  .badge.warn { background: var(--warn-soft); color: #8a6510; }
+  .badge.bad  { background: var(--bad-soft);  color: var(--bad); }
+  .badge.info { background: var(--info-soft); color: var(--info); }
+
+  /* === CHART CONTAINERS === */
+  .chart-wrap { position: relative; height: 280px; }
+  .chart-wrap.short { height: 220px; }
+  .chart-wrap.tall { height: 320px; }
+
+  /* === FUNNEL === */
+  .funnel { display: flex; flex-direction: column; gap: 10px; padding: 4px 0; }
+  .funnel-step { position: relative; }
+  .funnel-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 4px;
+  }
+  .funnel-name { font-size: 13px; font-weight: 500; }
+  .funnel-num { font-size: 13px; font-weight: 600; color: var(--text); }
+  .funnel-bar {
+    height: 22px;
+    background: linear-gradient(90deg, var(--accent), var(--brand-light));
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+  .funnel-drop {
+    font-size: 11px; color: var(--text-soft);
+    margin: 4px 0 6px 8px;
+    border-left: 2px solid var(--border);
+    padding-left: 8px;
+  }
+
+  /* === TABLE === */
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead th {
+    text-align: left; font-weight: 600;
+    color: var(--text-muted);
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--border);
+    background: #faf6f1;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  tbody td {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tbody tr:hover { background: #faf6f1; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .rank-cell {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: #f0e7da; color: var(--brand);
+    font-weight: 700; font-size: 12px;
+    display: inline-grid; place-items: center;
+  }
+  .mini-bar {
+    display: inline-block;
+    height: 6px; border-radius: 3px;
+    background: var(--accent);
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+  .btn-link {
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  .btn-link:hover { text-decoration: underline; }
+  .btn {
+    display: inline-block; padding: 6px 12px;
+    background: var(--accent); color: white;
+    border-radius: var(--radius-sm);
+    font-size: 12px; font-weight: 500;
+    cursor: pointer; border: none;
+  }
+  .btn:hover { background: #c46a1f; }
+  .btn-ghost {
+    background: transparent; color: var(--brand);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { background: #faf6f1; }
+
+  /* === ACTIVITY LIST === */
+  .activity { display: flex; flex-direction: column; gap: 0; }
+  .act-row {
+    display: grid;
+    grid-template-columns: 50px 1fr 1fr 80px;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px; align-items: center;
+  }
+  .act-row:last-child { border-bottom: none; }
+  .act-time { color: var(--text-soft); font-size: 12px; }
+  .act-name { font-weight: 500; }
+  .act-status { text-align: right; font-size: 12px; font-weight: 500; }
+
+  /* === INSIGHT CARD === */
+  .insight-list { display: flex; flex-direction: column; gap: 10px; }
+  .insight {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border-left: 4px solid;
+    background: #faf7f3;
+    font-size: 13px;
+  }
+  .insight.red    { border-color: var(--bad);  background: var(--bad-soft); }
+  .insight.yellow { border-color: var(--warn); background: var(--warn-soft); }
+  .insight.green  { border-color: var(--good); background: var(--good-soft); }
+  .insight .dot {
+    font-size: 14px; line-height: 1; margin-top: 2px;
+  }
+  .insight .body { flex: 1; }
+  .insight .body strong { color: var(--text); }
+
+  /* === COHORT === */
+  .cohort-cell {
+    text-align: center;
+    padding: 8px 4px !important;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+  .heat-0 { background: transparent; color: var(--text-soft); }
+  .heat-1 { background: #fdf3ea; color: #6b3410; }
+  .heat-2 { background: #f9dfc3; color: #6b3410; }
+  .heat-3 { background: #f1bf91; color: #4a2208; }
+  .heat-4 { background: #d97a2c; color: white; font-weight: 600; }
+  .heat-5 { background: #b85a18; color: white; font-weight: 700; }
+
+  /* === BALANCE === */
+  .progress-bar {
+    height: 10px; border-radius: 5px;
+    background: var(--border);
+    overflow: hidden;
+    margin: 10px 0;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 5px;
+    background: linear-gradient(90deg, var(--accent), var(--brand-light));
+  }
+  .progress-fill.good { background: linear-gradient(90deg, var(--good), #4caf50); }
+  .progress-fill.warn { background: linear-gradient(90deg, var(--warn), #f5b73a); }
+  .progress-fill.bad  { background: linear-gradient(90deg, var(--bad),  #e57373); }
+
+  .stat-row {
+    display: flex; justify-content: space-between;
+    padding: 8px 0; border-bottom: 1px dashed var(--border);
+    font-size: 13px;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-row .v { font-weight: 600; }
+
+  /* utility */
+  .muted { color: var(--text-muted); }
+  .small { font-size: 12px; }
+  .mb-8 { margin-bottom: 8px; }
+  .mb-12 { margin-bottom: 12px; }
+  .mb-16 { margin-bottom: 16px; }
+  .flex-row { display: flex; align-items: center; gap: 8px; }
+  .space-between { display: flex; align-items: center; justify-content: space-between; }
+  .hot { color: var(--bad); }
+  .nowrap { white-space: nowrap; }
+
+  .legend {
+    display: flex; gap: 14px; align-items: center;
+    font-size: 12px; color: var(--text-muted);
+  }
+  .legend .swatch {
+    display: inline-block; width: 12px; height: 12px;
+    border-radius: 3px; vertical-align: middle; margin-right: 5px;
+  }
+
+  .footnote {
+    font-size: 12px; color: var(--text-muted);
+    background: #faf6f1;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--accent);
+    margin-top: 12px;
+  }
+
+  .ribbon-warn {
+    display: inline-block;
+    padding: 2px 6px;
+    background: var(--warn-soft); color: #8a6510;
+    border-radius: 4px;
+    font-size: 11px; font-weight: 600;
+  }
+
+  /* === GLOSSARY === */
+  .term {
+    border-bottom: 1px dotted var(--text-soft);
+    cursor: help;
+  }
+  .glossary-card {
+    background: linear-gradient(135deg, #fdf6ed 0%, #faeede 100%);
+    border: 1px solid #e8d4ba;
+  }
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px 18px;
+    font-size: 12.5px;
+  }
+  @media (max-width: 1100px) {
+    .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 700px) {
+    .glossary-grid { grid-template-columns: 1fr; }
+  }
+  .glossary-grid > div {
+    padding: 4px 0;
+    border-bottom: 1px dashed #e8d4ba;
+  }
+  .glossary-grid strong { color: var(--brand); margin-right: 4px; }
+  .glossary-card.collapsed .glossary-grid { display: none; }
+  .kpi-explain {
+    font-size: 11px; color: var(--text-soft);
+    margin-top: 3px; line-height: 1.3;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">☕</div>
+    <span>Coffee House Loyalty</span>
+  </div>
+  <div class="pill">📅 30 ngày qua ▾</div>
+  <div class="pill">🏷 Tất cả ▾</div>
+  <div class="icon-btn" title="Thông báo">
+    🔔<span class="dot">3</span>
+  </div>
+  <div class="user-chip">
+    <div class="avatar">HN</div>
+    <span class="small">Hoa N. ▾</span>
+  </div>
+</header>
+
+<!-- TABS -->
+<nav class="tabs" id="tabs">
+  <div class="tab active" data-screen="overview">📊 Overview</div>
+  <div class="tab" data-screen="reward">🎁 Reward Performance</div>
+  <div class="tab" data-screen="user">👥 User Engagement & Cohort</div>
+  <div class="tab" data-screen="finance">💰 Financial / Balance</div>
+</nav>
+
+<main class="container">
+
+<!-- =========================================================
+     SCREEN 1 — OVERVIEW
+     ========================================================= -->
+<section class="screen active" id="screen-overview">
+
+  <!-- GLOSSARY -->
+  <div class="card glossary-card mb-16" id="glossary">
+    <div class="card-title">
+      <span class="label"><span class="ico">📖</span> Giải thích thuật ngữ trong dashboard</span>
+      <span class="btn-link" onclick="document.getElementById('glossary').classList.toggle('collapsed')">Ẩn / Hiện</span>
+    </div>
+    <div class="glossary-grid">
+      <div><strong>ROI Reward</strong> — Return on Investment: Tỷ suất sinh lời = Doanh thu từ member / Chi phí reward. ROI 324% nghĩa là 1đ chi reward thu lại 4.24đ doanh thu.</div>
+      <div><strong>Member</strong> — Khách hàng đã đăng ký thành viên (có tài khoản, được tích điểm)</div>
+      <div><strong>Ký quỹ (Deposit)</strong> — Số tiền doanh nghiệp nạp trước cho CNV để chạy chương trình reward</div>
+      <div><strong>AOV</strong> — Average Order Value: Giá trị đơn trung bình</div>
+      <div><strong>LTV</strong> — Lifetime Value: Tổng doanh thu kỳ vọng từ một khách hàng trong toàn bộ vòng đời</div>
+      <div><strong>Voucher utilization</strong> — Tỷ lệ voucher đã phát ra được sử dụng (đổi/tổng phát)</div>
+      <div><strong>Cohort retention</strong> — Tỷ lệ giữ chân: nhóm user đổi quà cùng tháng quay lại đổi tiếp ở các tháng sau</div>
+      <div><strong>M+1, M+2…</strong> — Tháng thứ 1, 2, … sau lần đổi quà đầu tiên</div>
+      <div><strong>pp (percentage points)</strong> — Điểm phần trăm. VD: 31% → 35% là tăng 4pp (không phải 4%).</div>
+      <div><strong>Lift</strong> — Mức chênh lệch giữa nhóm tham gia reward và nhóm không tham gia</div>
+      <div><strong>Repeat rate</strong> — Tỷ lệ khách quay lại mua trong 30 ngày</div>
+      <div><strong>Super Redeemer</strong> — Khách đổi quà nhiều nhất, nguồn doanh thu trọng yếu</div>
+      <div><strong>Forecast</strong> — Dự báo dòng tiền các ngày tới dựa trên tốc độ tiêu hiện tại</div>
+      <div><strong>Đối soát (Reconciliation)</strong> — So khớp dữ liệu CNV với nhà cung cấp voucher (UrBox/GotIt)</div>
+      <div><strong>Funnel chuyển đổi</strong> — Phễu hành vi: từ tổng user → tích điểm → đổi quà → đã sử dụng</div>
+    </div>
+  </div>
+
+  <!-- KPI ROW -->
+  <div class="grid grid-4 mb-16">
+    <div class="kpi good">
+      <div class="kpi-label">💰 <span class="term" title="Return on Investment — Tỷ suất sinh lời từ tiền chi cho chương trình reward">ROI</span> chương trình Reward</div>
+      <div class="kpi-value">324%</div>
+      <div class="kpi-sub"><span class="delta-up">▲ 18%</span> so với kỳ trước</div>
+      <div class="kpi-explain">1đ chi reward → 4.24đ doanh thu từ member</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">🎁 Số đơn đổi quà</div>
+      <div class="kpi-value">1,247</div>
+      <div class="kpi-sub"><span class="delta-up">▲ 22%</span> · <span class="badge good">95% thành công</span></div>
+      <div class="kpi-explain">Tổng đơn đổi quà trong 30 ngày</div>
+    </div>
+    <div class="kpi bad">
+      <div class="kpi-label">💳 Tiền ký quỹ còn lại</div>
+      <div class="kpi-value">85.6 tr đ</div>
+      <div class="kpi-sub"><span class="badge bad">⚠ ~12 ngày là hết</span></div>
+      <div class="kpi-explain">Số dư trong tài khoản chương trình</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">👥 Thành viên đã đổi quà</div>
+      <div class="kpi-value">3,891 <span class="muted small" style="font-weight:400">/ 12,450</span></div>
+      <div class="kpi-sub">31.3% · <span class="delta-up">▲ 4.1 <span class="term" title="Điểm phần trăm — đơn vị so sánh hai tỷ lệ. 31% → 35% là tăng 4pp">điểm %</span></span></div>
+      <div class="kpi-explain">Tỷ lệ thành viên có ít nhất 1 lần đổi quà</div>
+    </div>
+  </div>
+
+  <!-- ROW: revenue chart + funnel -->
+  <div class="grid grid-2 mb-16">
+    <div class="card">
+      <div class="card-title">
+        <span class="label"><span class="ico">📈</span> Doanh thu từ thành viên vs Chi phí Reward (30 ngày)</span>
+        <span class="legend">
+          <span><span class="swatch" style="background:#6b3410"></span>Doanh thu thành viên mang lại</span>
+          <span><span class="swatch" style="background:#d97a2c;opacity:0.5"></span>Chi phí chương trình</span>
+        </span>
+      </div>
+      <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+      <div class="footnote">💡 Cứ <strong>1đ chi reward → +4.24đ doanh thu</strong> từ thành viên (= ROI 324%)</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="label"><span class="ico">🎯</span> <span class="term" title="Funnel — Hành trình của khách: từ vào hệ thống → tích điểm → đổi quà → sử dụng voucher">Phễu chuyển đổi khách hàng</span></span></div>
+      <div class="funnel">
+        <div class="funnel-step">
+          <div class="funnel-row"><span class="funnel-name">Tổng thành viên</span><span class="funnel-num">12,450</span></div>
+          <div class="funnel-bar" style="width:100%"></div>
+        </div>
+        <div class="funnel-drop">↓ 63% chuyển sang bước tích điểm</div>
+        <div class="funnel-step">
+          <div class="funnel-row"><span class="funnel-name">Đã tích điểm</span><span class="funnel-num">7,838</span></div>
+          <div class="funnel-bar" style="width:63%"></div>
+        </div>
+        <div class="funnel-drop">↓ 49% chuyển sang đổi quà</div>
+        <div class="funnel-step">
+          <div class="funnel-row"><span class="funnel-name">Đã đổi quà (nhận voucher)</span><span class="funnel-num">3,891</span></div>
+          <div class="funnel-bar" style="width:31%"></div>
+        </div>
+        <div class="funnel-drop">↓ 78% đã sử dụng voucher</div>
+        <div class="funnel-step">
+          <div class="funnel-row"><span class="funnel-name">Đã sử dụng voucher</span><span class="funnel-num">3,034</span></div>
+          <div class="funnel-bar" style="width:24%"></div>
+        </div>
+      </div>
+      <div class="footnote">💡 22% voucher đã đổi nhưng chưa dùng — đề xuất gửi nhắc nhở (push reminder)</div>
+    </div>
+  </div>
+
+  <!-- ROW: top rewards + activity -->
+  <div class="grid grid-2eq mb-16">
+    <div class="card">
+      <div class="card-title">
+        <span class="label"><span class="ico">🏆</span> Top 5 Reward được đổi nhiều nhất</span>
+        <span class="btn-link">Xem tất cả →</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Tên Reward</th><th class="num">Lượt đổi</th><th>Tỷ lệ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="rank-cell">1</span></td><td>Highlands 50k</td><td class="num">428</td><td>34% <span class="mini-bar" style="width:80px"></span></td></tr>
+          <tr><td><span class="rank-cell">2</span></td><td>Phúc Long 100k</td><td class="num">213</td><td>17% <span class="mini-bar" style="width:40px"></span></td></tr>
+          <tr><td><span class="rank-cell">3</span></td><td>GS25 30k</td><td class="num">189</td><td>15% <span class="mini-bar" style="width:36px"></span></td></tr>
+          <tr><td><span class="rank-cell">4</span></td><td>Lotte CGV 80k vé phim</td><td class="num">156</td><td>13% <span class="mini-bar" style="width:30px"></span></td></tr>
+          <tr><td><span class="rank-cell">5</span></td><td>Grab Food 50k mã</td><td class="num">118</td><td>9% <span class="mini-bar" style="width:22px"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="label"><span class="ico">⏱</span> Hoạt động gần đây</span>
+        <span class="btn-link">Xem tất cả →</span>
+      </div>
+      <div class="activity">
+        <div class="act-row"><div class="act-time">14:32</div><div class="act-name">Anh Minh</div><div>Highlands 50k</div><div class="act-status" style="color:var(--good)">✅ Hoàn tất</div></div>
+        <div class="act-row"><div class="act-time">14:30</div><div class="act-name">Chị Lan</div><div>GS25 30k</div><div class="act-status" style="color:var(--good)">✅ Hoàn tất</div></div>
+        <div class="act-row"><div class="act-time">14:28</div><div class="act-name">Anh Tuấn</div><div>Phúc Long 100k</div><div class="act-status" style="color:var(--warn)">⏳ Đang xử lý</div></div>
+        <div class="act-row"><div class="act-time">14:25</div><div class="act-name">Chị Hoa</div><div>Lotte CGV 80k</div><div class="act-status" style="color:var(--good)">✅ Hoàn tất</div></div>
+        <div class="act-row"><div class="act-time">14:22</div><div class="act-name">Anh Nam</div><div>Highlands 50k</div><div class="act-status" style="color:var(--bad)">❌ Thất bại</div></div>
+        <div class="act-row"><div class="act-time">14:20</div><div class="act-name">Chị Yến</div><div>Grab Food 50k</div><div class="act-status" style="color:var(--good)">✅ Hoàn tất</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI INSIGHTS -->
+  <div class="card">
+    <div class="card-title">
+      <span class="label"><span class="ico">⚠</span> Cảnh báo & AI Insight</span>
+      <span class="muted small">cập nhật mỗi giờ</span>
+    </div>
+    <div class="insight-list">
+      <div class="insight red">
+        <span class="dot">🔴</span>
+        <div class="body">
+          <strong>Số dư ký quỹ 85.6tr</strong> — với tốc độ tiêu hiện tại, sẽ hết trong <strong>~12 ngày</strong>.
+        </div>
+        <button class="btn">Nạp ngay →</button>
+      </div>
+      <div class="insight yellow">
+        <span class="dot">🟡</span>
+        <div class="body">
+          <strong>22% voucher</strong> đã phát quá 7 ngày chưa dùng. Gợi ý: gửi push reminder để tăng utilization.
+        </div>
+        <button class="btn btn-ghost">Tạo chiến dịch</button>
+      </div>
+      <div class="insight green">
+        <span class="dot">🟢</span>
+        <div class="body">
+          Hạng <strong>VIP đổi quà gấp 2.7x</strong> hạng thường — đẩy mạnh voucher cao cấp (>200k) cho VIP để tối ưu.
+        </div>
+      </div>
+      <div class="insight green">
+        <span class="dot">🟢</span>
+        <div class="body">
+          Khung giờ vàng đổi quà: <strong>11h–13h và 19h–21h</strong>. Cân nhắc push notification khung giờ này.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SCREEN 2 — REWARD PERFORMANCE
+     ========================================================= -->
+<section class="screen" id="screen-reward">
+
+  <div class="card mb-16">
+    <div class="card-title">
+      <span class="label"><span class="ico">📋</span> So sánh hiệu quả từng Reward Item</span>
+      <button class="btn btn-ghost">Xuất Excel ↓</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Tên Reward</th><th>Thương hiệu</th>
+          <th class="num">Lượt đổi</th>
+          <th class="num"><span class="term" title="Average Order Value — Giá trị đơn trung bình của khách đổi reward này">Đơn TB</span></th>
+          <th class="num">Chi phí</th><th class="num">Doanh thu</th>
+          <th class="num"><span class="term" title="Return on Investment — Tỷ suất sinh lời = Doanh thu / Chi phí">ROI</span></th>
+          <th>Bán chạy</th><th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Highlands 50k</td><td>Highlands</td>
+          <td class="num">428</td><td class="num">125k</td>
+          <td class="num">21.4tr</td><td class="num">132tr</td>
+          <td class="num"><span class="badge good">617%</span></td>
+          <td class="hot">🔥</td>
+          <td><button class="btn btn-ghost">📌 Pin top</button></td>
+        </tr>
+        <tr>
+          <td>Phúc Long 100k</td><td>Phúc Long</td>
+          <td class="num">213</td><td class="num">180k</td>
+          <td class="num">21.3tr</td><td class="num">89tr</td>
+          <td class="num"><span class="badge good">418%</span></td>
+          <td class="hot">🔥</td>
+          <td><button class="btn btn-ghost">📌 Pin top</button></td>
+        </tr>
+        <tr>
+          <td>GS25 30k</td><td>GS25</td>
+          <td class="num">189</td><td class="num">95k</td>
+          <td class="num">5.7tr</td><td class="num">34tr</td>
+          <td class="num"><span class="badge good">596%</span></td>
+          <td></td>
+          <td><button class="btn btn-ghost">📌 Pin top</button></td>
+        </tr>
+        <tr>
+          <td>Galaxy Cinema 60k</td><td>Galaxy</td>
+          <td class="num">28</td><td class="num">140k</td>
+          <td class="num">1.7tr</td><td class="num">8.2tr</td>
+          <td class="num"><span class="badge good">488%</span></td>
+          <td></td>
+          <td><span class="muted">—</span></td>
+        </tr>
+        <tr>
+          <td>AEON 200k</td><td>AEON</td>
+          <td class="num">12</td><td class="num">320k</td>
+          <td class="num">2.4tr</td><td class="num">7.8tr</td>
+          <td class="num"><span class="badge info">325%</span></td>
+          <td></td>
+          <td><span class="muted">—</span></td>
+        </tr>
+        <tr>
+          <td>Tous les Jours 100k</td><td>TLJ</td>
+          <td class="num">3</td><td class="num">90k</td>
+          <td class="num">0.3tr</td><td class="num">1.1tr</td>
+          <td class="num"><span class="badge warn">367%</span></td>
+          <td><span class="ribbon-warn">⚠ Low</span></td>
+          <td><button class="btn">Promote?</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="footnote">
+      📊 <strong>Phân tích:</strong> F&B chiếm 71% lượt đổi (đúng đặc điểm thị trường VN — cafe & ăn uống được ưa).
+      Voucher >200k có ROI thấp hơn trung bình → cân nhắc giảm tỷ trọng.
+    </div>
+  </div>
+
+  <div class="grid grid-2eq mb-16">
+    <div class="card">
+      <div class="card-title"><span class="label"><span class="ico">🍩</span> Phân bổ theo Category</span></div>
+      <div class="chart-wrap"><canvas id="categoryDonut"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="label"><span class="ico">📊</span> Top Brand (lượt đổi)</span></div>
+      <div class="chart-wrap"><canvas id="brandBar"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="label"><span class="ico">🗓️</span> Heatmap đổi quà theo khung giờ × ngày trong tuần</span></div>
+    <div id="heatmapTime"></div>
+    <div class="footnote">
+      💡 <strong>Khung giờ vàng:</strong> 11h–13h (giờ trưa) & 19h–21h (giờ tối) — khớp đặc điểm tiêu dùng VN.
+      Cuối tuần (T7, CN) cao hơn ngày thường ~28%.
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SCREEN 3 — USER ENGAGEMENT & COHORT
+     ========================================================= -->
+<section class="screen" id="screen-user">
+
+  <div class="card mb-16">
+    <div class="card-title"><span class="label"><span class="ico">⚖️</span> So sánh hành vi: Thành viên có Reward vs Không có Reward</span></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Chỉ số</th>
+          <th class="num">Thành viên (có Reward)</th>
+          <th class="num">Khách thường (không Reward)</th>
+          <th class="num"><span class="term" title="Lift = Mức chênh lệch giữa hai nhóm">Chênh lệch</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Giá trị đơn trung bình (AOV)</strong></td>
+          <td class="num">385,000 đ</td>
+          <td class="num">220,000 đ</td>
+          <td class="num"><span class="badge good">+75% ✨</span></td>
+        </tr>
+        <tr>
+          <td><strong>Tần suất mua mỗi tháng</strong></td>
+          <td class="num">3.2 lần</td>
+          <td class="num">1.4 lần</td>
+          <td class="num"><span class="badge good">+129% ✨</span></td>
+        </tr>
+        <tr>
+          <td><strong>Tỷ lệ quay lại trong 30 ngày</strong></td>
+          <td class="num">68%</td>
+          <td class="num">31%</td>
+          <td class="num"><span class="badge good">+37 <span class="term" title="Điểm phần trăm — đơn vị so sánh hai tỷ lệ. 31% → 68% là tăng 37pp">điểm %</span></span></td>
+        </tr>
+        <tr>
+          <td><strong>Giá trị khách hàng trọn đời (LTV)</strong></td>
+          <td class="num">4.8 tr đ</td>
+          <td class="num">1.7 tr đ</td>
+          <td class="num"><span class="badge good">+182%</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card mb-16">
+    <div class="card-title"><span class="label"><span class="ico">📅</span> <span class="term" title="Cohort Retention — Phân tích nhóm khách: từng tháng có bao nhiêu khách đổi quà lần đầu, sau đó tỷ lệ quay lại đổi tiếp ở các tháng sau là bao nhiêu">Phân tích giữ chân khách (Cohort Retention)</span> — Khách đổi quà lần đầu có quay lại không?</span></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Tháng đổi đầu tiên</th>
+          <th class="num">Số khách</th>
+          <th class="num"><span class="term" title="Tháng kế tiếp — % khách quay lại đổi quà 1 tháng sau">Sau 1 tháng</span></th>
+          <th class="num"><span class="term" title="2 tháng sau lần đổi đầu">Sau 2 tháng</span></th>
+          <th class="num">Sau 3 tháng</th>
+          <th class="num">Sau 4 tháng</th>
+          <th class="num">Sau 5 tháng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>T11/2025</td><td class="num">412</td>
+          <td class="cohort-cell heat-3">58%</td>
+          <td class="cohort-cell heat-2">41%</td>
+          <td class="cohort-cell heat-2">33%</td>
+          <td class="cohort-cell heat-1">28%</td>
+          <td class="cohort-cell heat-1">26%</td>
+        </tr>
+        <tr>
+          <td>T12/2025</td><td class="num">521</td>
+          <td class="cohort-cell heat-4">62%</td>
+          <td class="cohort-cell heat-3">45%</td>
+          <td class="cohort-cell heat-2">35%</td>
+          <td class="cohort-cell heat-2">30%</td>
+          <td class="cohort-cell heat-0">—</td>
+        </tr>
+        <tr>
+          <td>T01/2026</td><td class="num">489</td>
+          <td class="cohort-cell heat-4">64%</td>
+          <td class="cohort-cell heat-3">48%</td>
+          <td class="cohort-cell heat-2">38%</td>
+          <td class="cohort-cell heat-0">—</td>
+          <td class="cohort-cell heat-0">—</td>
+        </tr>
+        <tr>
+          <td>T02/2026</td><td class="num">612</td>
+          <td class="cohort-cell heat-4">67%</td>
+          <td class="cohort-cell heat-3">51%</td>
+          <td class="cohort-cell heat-0">—</td>
+          <td class="cohort-cell heat-0">—</td>
+          <td class="cohort-cell heat-0">—</td>
+        </tr>
+        <tr>
+          <td>T03/2026</td><td class="num">728</td>
+          <td class="cohort-cell heat-5">71%</td>
+          <td class="cohort-cell heat-0">—</td>
+          <td class="cohort-cell heat-0">—</td>
+          <td class="cohort-cell heat-0">—</td>
+          <td class="cohort-cell heat-0">—</td>
+        </tr>
+        <tr>
+          <td>T04/2026</td><td class="num">891</td>
+          <td class="cohort-cell heat-0">—</td>
+          <td class="cohort-cell heat-0">—</td>
+          <td class="cohort-cell heat-0">—</td>
+          <td class="cohort-cell heat-0">—</td>
+          <td class="cohort-cell heat-0">—</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="footnote">
+      💡 <strong>Tỷ lệ quay lại sau 1 tháng đang tăng dần</strong> (58% → 71%) — chương trình đang giữ chân khách tốt hơn theo thời gian.
+      Tiếp tục đẩy voucher vào tuần thứ 2–3 để nâng tỷ lệ ở tháng thứ 2.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <span class="label"><span class="ico">⭐</span> <span class="term" title="Super Redeemer — Khách hàng đổi quà nhiều nhất, mang lại doanh thu lớn cho thương hiệu">Top 10 khách đổi quà nhiều nhất</span></span>
+      <span class="btn-link">Xem tất cả →</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Tên khách</th><th>Hạng</th>
+          <th class="num">Số lần đổi</th>
+          <th class="num">Tổng chi tiêu</th>
+          <th class="num"><span class="term" title="Lifetime Value — Tổng giá trị khách mang lại trong toàn bộ vòng đời">Giá trị trọn đời</span></th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="rank-cell">1</span></td><td>Anh Minh</td><td><span class="badge bad">VIP</span></td><td class="num">28</td><td class="num">8.2 tr</td><td class="num">24 tr</td><td><button class="btn">🎁 Gửi quà tri ân</button></td></tr>
+        <tr><td><span class="rank-cell">2</span></td><td>Chị Lan</td><td><span class="badge warn">Gold</span></td><td class="num">24</td><td class="num">6.5 tr</td><td class="num">18 tr</td><td><button class="btn">🎁 Gửi quà tri ân</button></td></tr>
+        <tr><td><span class="rank-cell">3</span></td><td>Anh Tuấn</td><td><span class="badge bad">VIP</span></td><td class="num">22</td><td class="num">6.1 tr</td><td class="num">16 tr</td><td><button class="btn btn-ghost">Xem chi tiết</button></td></tr>
+        <tr><td><span class="rank-cell">4</span></td><td>Chị Hoa</td><td><span class="badge warn">Gold</span></td><td class="num">19</td><td class="num">5.4 tr</td><td class="num">14 tr</td><td><button class="btn btn-ghost">Xem chi tiết</button></td></tr>
+        <tr><td><span class="rank-cell">5</span></td><td>Anh Nam</td><td><span class="badge info">Silver</span></td><td class="num">17</td><td class="num">4.2 tr</td><td class="num">11 tr</td><td><button class="btn btn-ghost">Xem chi tiết</button></td></tr>
+        <tr><td><span class="rank-cell">6</span></td><td>Chị Yến</td><td><span class="badge warn">Gold</span></td><td class="num">15</td><td class="num">3.9 tr</td><td class="num">10 tr</td><td><button class="btn btn-ghost">Xem chi tiết</button></td></tr>
+        <tr><td><span class="rank-cell">7</span></td><td>Anh Long</td><td><span class="badge info">Silver</span></td><td class="num">14</td><td class="num">3.5 tr</td><td class="num">9.2 tr</td><td><button class="btn btn-ghost">Xem chi tiết</button></td></tr>
+        <tr><td><span class="rank-cell">8</span></td><td>Chị Trang</td><td><span class="badge bad">VIP</span></td><td class="num">13</td><td class="num">3.3 tr</td><td class="num">8.8 tr</td><td><button class="btn btn-ghost">Xem chi tiết</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- =========================================================
+     SCREEN 4 — FINANCIAL / BALANCE
+     ========================================================= -->
+<section class="screen" id="screen-finance">
+
+  <div class="grid grid-3 mb-16">
+    <div class="card">
+      <div class="card-title"><span class="label">💰 <span class="term" title="Số tiền đã nạp trước cho CNV để chạy chương trình reward">Ký quỹ (Trả trước)</span></span></div>
+      <div class="kpi-value">85.6 <span class="muted small" style="font-weight:400">tr đ</span></div>
+      <div class="progress-bar"><div class="progress-fill warn" style="width:56%"></div></div>
+      <div class="small muted">Còn 56% so với mức ban đầu</div>
+      <div class="kpi-sub" style="color:var(--bad)">⚠ Sắp hết — dự kiến cạn quỹ vào <strong>20/05/2026</strong></div>
+      <button class="btn" style="margin-top:10px">Nạp thêm →</button>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="label">💳 <span class="term" title="Số tiền doanh nghiệp đang nợ CNV — sẽ thanh toán định kỳ">Công nợ (Trả sau)</span></span></div>
+      <div class="kpi-value">12.4 <span class="muted small" style="font-weight:400">/ 50 tr đ</span></div>
+      <div class="progress-bar"><div class="progress-fill good" style="width:25%"></div></div>
+      <div class="small muted">Hạn mức còn lại 37.6 tr</div>
+      <div class="kpi-sub">Đã dùng 25% hạn mức</div>
+      <button class="btn btn-ghost" style="margin-top:10px">Thanh toán công nợ →</button>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="label">📊 Tổng chi phí reward T05/2026</span></div>
+      <div class="kpi-value">45.2 <span class="muted small" style="font-weight:400">tr đ</span></div>
+      <div class="kpi-sub"><span class="delta-up">▲ 18%</span> so với T04</div>
+      <div class="stat-row"><span>Trung bình mỗi ngày</span><span class="v">1.5 tr/ngày</span></div>
+      <div class="stat-row"><span>Ngày tiêu cao nhất</span><span class="v">3.2 tr (06/05)</span></div>
+    </div>
+  </div>
+
+  <div class="card mb-16">
+    <div class="card-title">
+      <span class="label"><span class="ico">📜</span> Lịch sử nạp tiền & Đối soát</span>
+      <button class="btn btn-ghost">Xuất Excel ↓</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Ngày</th>
+          <th>Loại giao dịch</th>
+          <th class="num">Số tiền</th>
+          <th>Trạng thái</th>
+          <th>Tham chiếu</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>05/05/26</td><td><span title="Nạp thêm tiền vào ký quỹ">Nạp tiền (TopUp)</span></td><td class="num" style="color:var(--good); font-weight:600">+200 tr</td><td><span class="badge good">✅ Đã duyệt</span></td><td>TXN-2026-04781</td><td><span class="btn-link">📄 Hóa đơn</span></td></tr>
+        <tr><td>05/05/26</td><td><span title="Thanh toán công nợ định kỳ">Trả công nợ</span></td><td class="num" style="color:var(--bad); font-weight:600">−15 tr</td><td><span class="badge good">✅ Hoàn tất</span></td><td>Trả công nợ T04</td><td><span class="btn-link">📄 Hóa đơn</span></td></tr>
+        <tr><td>03/04/26</td><td>Nạp tiền (TopUp)</td><td class="num" style="color:var(--good); font-weight:600">+150 tr</td><td><span class="badge good">✅ Đã duyệt</span></td><td>TXN-2026-04102</td><td><span class="btn-link">📄 Hóa đơn</span></td></tr>
+        <tr><td>02/04/26</td><td>Trả công nợ</td><td class="num" style="color:var(--bad); font-weight:600">−12.8 tr</td><td><span class="badge good">✅ Hoàn tất</span></td><td>Trả công nợ T03</td><td><span class="btn-link">📄 Hóa đơn</span></td></tr>
+        <tr><td>15/03/26</td><td>Nạp tiền (TopUp)</td><td class="num" style="color:var(--good); font-weight:600">+100 tr</td><td><span class="badge good">✅ Đã duyệt</span></td><td>TXN-2026-03544</td><td><span class="btn-link">📄 Hóa đơn</span></td></tr>
+      </tbody>
+    </table>
+    <div class="footnote space-between" style="display:flex; align-items:center; justify-content:space-between">
+      <span>📑 Báo cáo đối soát T04/2026 · ✅ Đã đối soát với UrBox + GotIt</span>
+      <span style="display:flex; gap:8px">
+        <button class="btn btn-ghost">Tải PDF ↓</button>
+        <button class="btn btn-ghost">Xuất CSV ↓</button>
+      </span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="label"><span class="ico">🔮</span> <span class="term" title="Forecast — Dự báo dòng tiền 90 ngày tới dựa trên tốc độ tiêu hiện tại">Dự báo dòng tiền (Forecast) 90 ngày tới</span></span></div>
+    <div class="chart-wrap tall"><canvas id="forecastChart"></canvas></div>
+    <div class="insight red" style="margin-top:14px">
+      <span class="dot">⚠</span>
+      <div class="body">
+        <strong>Dự kiến cạn quỹ: 20/05/2026</strong> (~12 ngày nữa).
+        Khuyến nghị nạp thêm <strong>200–300 tr</strong> trong 7 ngày tới để đảm bảo chương trình không bị gián đoạn.
+      </div>
+      <button class="btn">Nạp ngay →</button>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<script>
+/* =========================================================
+   TAB SWITCHING
+   ========================================================= */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('screen-' + tab.dataset.screen).classList.add('active');
+  });
+});
+
+/* =========================================================
+   CHART DEFAULTS
+   ========================================================= */
+Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Roboto", sans-serif';
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#7a6d60';
+
+const COLOR_BRAND = '#6b3410';
+const COLOR_ACCENT = '#d97a2c';
+const COLOR_LIGHT = '#f0c490';
+const COLOR_BAD = '#c0392b';
+const COLOR_GOOD = '#2e8a4a';
+
+/* =========================================================
+   1. REVENUE vs COST CHART (Overview)
+   ========================================================= */
+const days = Array.from({length: 30}, (_, i) => (i + 1).toString());
+const revenue = [180,210,195,240,260,255,290,310,295,340,360,380,355,400,420,445,430,460,485,470,495,455,490,510,475,500,460,485,495,520];
+const cost   = [70,75,72,80,85,82,90,95,90,100,105,110,108,115,120,128,125,130,140,135,142,135,140,145,138,145,135,140,142,148];
+
+new Chart(document.getElementById('revenueChart'), {
+  type: 'line',
+  data: {
+    labels: days,
+    datasets: [
+      {
+        label: 'Doanh thu (tr đ)',
+        data: revenue,
+        borderColor: COLOR_BRAND,
+        backgroundColor: 'rgba(107,52,16,0.12)',
+        tension: 0.35, fill: true,
+        pointRadius: 0, pointHoverRadius: 5,
+        borderWidth: 2.5
+      },
+      {
+        label: 'Chi phí reward (tr đ)',
+        data: cost,
+        borderColor: COLOR_ACCENT,
+        backgroundColor: 'rgba(217,122,44,0.12)',
+        borderDash: [5,4],
+        tension: 0.35, fill: true,
+        pointRadius: 0, pointHoverRadius: 5,
+        borderWidth: 2
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: '#eee5d8' }, ticks: { callback: v => v + ' tr' } },
+      x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } }
+    }
+  }
+});
+
+/* =========================================================
+   2. CATEGORY DONUT (Reward Performance)
+   ========================================================= */
+new Chart(document.getElementById('categoryDonut'), {
+  type: 'doughnut',
+  data: {
+    labels: ['F&B', 'Giải trí', 'Mua sắm', 'Tiện lợi', 'Khác'],
+    datasets: [{
+      data: [71, 13, 9, 5, 2],
+      backgroundColor: ['#6b3410','#d97a2c','#f5a854','#f0c490','#e6dfd5'],
+      borderWidth: 2,
+      borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '62%',
+    plugins: {
+      legend: { position: 'right', labels: { boxWidth: 14, padding: 12 } },
+      tooltip: { callbacks: { label: c => c.label + ': ' + c.parsed + '%' } }
+    }
+  }
+});
+
+/* =========================================================
+   3. BRAND BAR (Reward Performance)
+   ========================================================= */
+new Chart(document.getElementById('brandBar'), {
+  type: 'bar',
+  data: {
+    labels: ['Highlands','Phúc Long','GS25','Lotte','Grab','Galaxy','AEON'],
+    datasets: [{
+      label: 'Đổi',
+      data: [428, 213, 189, 156, 118, 28, 12],
+      backgroundColor: [
+        '#6b3410','#8a4517','#a05a25','#b06a3a','#c9854a','#dca47a','#ecc4a3'
+      ],
+      borderRadius: 6,
+      barThickness: 18
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: '#eee5d8' }, beginAtZero: true },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+/* =========================================================
+   4. HEATMAP — TIME × DAY OF WEEK (Reward Performance)
+   ========================================================= */
+(function buildHeatmap(){
+  const root = document.getElementById('heatmapTime');
+  if (!root) return;
+  const days = ['T2','T3','T4','T5','T6','T7','CN'];
+  const hours = ['6h','8h','10h','12h','14h','16h','18h','20h','22h'];
+  // intensity 0-9 (0 lowest, 9 highest)
+  const matrix = [
+    /* T2 */ [1,2,3,7,4,3,5,8,3],
+    /* T3 */ [1,2,3,7,5,3,5,8,4],
+    /* T4 */ [1,2,3,7,4,3,5,8,3],
+    /* T5 */ [1,2,3,7,5,4,6,8,4],
+    /* T6 */ [1,2,4,8,5,4,6,9,5],
+    /* T7 */ [2,3,5,9,6,5,7,9,6],
+    /* CN */ [2,3,5,9,6,5,7,8,5]
+  ];
+
+  const colors = ['#fdf3ea','#f9e6d3','#f4d4b1','#eebd8c','#e7a467','#dc8a47','#cb6f2c','#b85a18','#9a4810','#7d3a08'];
+
+  let html = '<div style="overflow-x:auto"><table style="border-collapse:separate; border-spacing:3px; min-width:560px">';
+  html += '<thead><tr><th style="background:transparent; border:none"></th>';
+  hours.forEach(h => html += `<th style="background:transparent; border:none; padding:4px 6px; font-weight:500; color:#a89b8d; font-size:11px">${h}</th>`);
+  html += '</tr></thead><tbody>';
+  days.forEach((d, i) => {
+    html += `<tr><td style="background:transparent; border:none; padding:4px 8px; font-weight:600; color:#7a6d60">${d}</td>`;
+    matrix[i].forEach(v => {
+      html += `<td title="Lượt đổi: ${v*15+10}" style="background:${colors[v]}; border-radius:4px; height:30px; min-width:46px; border:none"></td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  html += `
+    <div style="display:flex; align-items:center; gap:8px; margin-top:10px; font-size:11px; color:#7a6d60">
+      <span>Ít</span>
+      ${colors.map(c => `<span style="display:inline-block; width:18px; height:12px; background:${c}; border-radius:2px"></span>`).join('')}
+      <span>Nhiều</span>
+    </div>`;
+  root.innerHTML = html;
+})();
+
+/* =========================================================
+   5. FORECAST CHART (Financial)
+   ========================================================= */
+const forecastLabels = ['Hôm nay','+10d','+20d','+30d','+40d','+50d','+60d','+70d','+80d','+90d'];
+const forecastBalance = [85.6, 70.6, 55.6, 40.6, 25.6, 10.6, 0, null, null, null];
+const forecastTrend   = [85.6, 70.6, 55.6, 40.6, 25.6, 10.6, -4.4, -19.4, -34.4, -49.4];
+
+new Chart(document.getElementById('forecastChart'), {
+  type: 'line',
+  data: {
+    labels: forecastLabels,
+    datasets: [
+      {
+        label: 'Số dư dự kiến (tr đ)',
+        data: forecastBalance,
+        borderColor: COLOR_BRAND,
+        backgroundColor: 'rgba(107,52,16,0.15)',
+        tension: 0.25, fill: true,
+        pointRadius: 4, pointBackgroundColor: COLOR_BRAND,
+        borderWidth: 3
+      },
+      {
+        label: 'Xu hướng (nếu không nạp)',
+        data: forecastTrend,
+        borderColor: COLOR_BAD,
+        borderDash: [6,4],
+        backgroundColor: 'transparent',
+        tension: 0.25, fill: false,
+        pointRadius: 0,
+        borderWidth: 2
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { boxWidth: 14, padding: 12 } },
+      annotation: false
+    },
+    scales: {
+      y: { grid: { color: '#eee5d8' }, ticks: { callback: v => v + ' tr' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

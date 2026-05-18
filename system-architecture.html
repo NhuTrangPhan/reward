@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Kiến trúc hệ thống Reward-v2</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 24px;
+    background: #f5f7fa;
+    color: #1f2937;
+  }
+  h1 {
+    text-align: center;
+    margin: 0 0 8px;
+    color: #111827;
+    font-size: 24px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 32px;
+    font-size: 14px;
+  }
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-line {
+    width: 32px;
+    height: 0;
+    border-top: 2px solid #2563eb;
+  }
+  .legend-line.dashed { border-top-style: dashed; border-color: #dc2626; }
+  .legend-line.webhook { border-color: #f59e0b; }
+
+  .canvas {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    position: relative;
+  }
+
+  .row {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 16px;
+    flex-wrap: nowrap;
+  }
+  .row.tight { gap: 16px; }
+
+  .node {
+    border: 2px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 14px 16px;
+    background: #ffffff;
+    min-width: 180px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .node h3 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+  }
+  .node .meta {
+    font-size: 11px;
+    color: #64748b;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    line-height: 1.5;
+  }
+  .node ul {
+    margin: 6px 0 0;
+    padding-left: 14px;
+    text-align: left;
+    font-size: 11px;
+    color: #475569;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+  .node ul li { margin-bottom: 2px; }
+
+  /* Color variants */
+  .client     { background: #eff6ff; border-color: #60a5fa; }
+  .frontend   { background: #ecfeff; border-color: #22d3ee; }
+  .backend    { background: #fef3c7; border-color: #f59e0b; }
+  .reward     { background: #f0fdf4; border-color: #22c55e; }
+  .vendor     { background: #fdf2f8; border-color: #ec4899; }
+  .external   { background: #fff1f2; border-color: #f43f5e; }
+  .worker     { background: #f5f3ff; border-color: #a78bfa; }
+  .ops        { background: #f8fafc; border-color: #94a3b8; }
+  .blocked    { border-color: #dc2626; border-style: dashed; background: #fef2f2; }
+
+  .arrow {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 4px 0;
+    color: #2563eb;
+    font-size: 11px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+  .arrow .label {
+    background: #fff;
+    padding: 2px 8px;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    z-index: 2;
+  }
+  .arrow::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+    height: 100%;
+    background: #2563eb;
+    z-index: 1;
+  }
+  .arrow.down::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid #2563eb;
+  }
+  .arrow.dashed::before { background: repeating-linear-gradient(to bottom, #dc2626 0 6px, transparent 6px 12px); }
+  .arrow.dashed { color: #dc2626; }
+  .arrow.dashed .label { border-color: #fecaca; color: #b91c1c; font-weight: 600; }
+  .arrow.dashed.down::after { border-top-color: #dc2626; }
+
+  .cluster {
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 20px;
+    background: rgba(241, 245, 249, 0.4);
+    position: relative;
+  }
+  .cluster-title {
+    position: absolute;
+    top: -12px;
+    left: 16px;
+    background: #fff;
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .horizontal-link {
+    display: flex;
+    align-items: center;
+    color: #2563eb;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    gap: 4px;
+  }
+  .horizontal-link::before,
+  .horizontal-link::after {
+    content: "";
+    flex: 1;
+    height: 2px;
+    background: #2563eb;
+  }
+  .horizontal-link.webhook::before,
+  .horizontal-link.webhook::after { background: #f59e0b; }
+  .horizontal-link.webhook { color: #b45309; }
+
+  .arrow-h {
+    align-self: center;
+    color: #2563eb;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    text-align: center;
+    padding: 0 8px;
+  }
+  .arrow-h .label {
+    display: block;
+    background: #fff;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    padding: 2px 8px;
+    margin-bottom: 4px;
+  }
+  .arrow-h .line { color: #2563eb; font-size: 18px; line-height: 1; }
+
+  .section {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px dashed #cbd5e1;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+  .badge.warn { background: #fef3c7; color: #92400e; }
+  .badge.danger { background: #fee2e2; color: #b91c1c; }
+  .badge.ok { background: #dcfce7; color: #166534; }
+
+  .tag {
+    display: inline-block;
+    background: #1e293b;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    font-family: "SF Mono", monospace;
+  }
+
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; align-items: start; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+
+  .center-flex { display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+  .footer-note {
+    margin-top: 24px;
+    padding: 12px 16px;
+    background: #fef2f2;
+    border-left: 4px solid #dc2626;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #7f1d1d;
+  }
+  .footer-note strong { color: #b91c1c; }
+</style>
+</head>
+<body>
+
+<h1>Kiến trúc hệ thống Reward-v2 hiện tại</h1>
+<p class="subtitle">Sơ đồ luồng dữ liệu giữa Miniapp, CDP, Reward-v2 và các vendor</p>
+
+<div class="legend">
+  <div class="legend-item"><span class="legend-line"></span><span>HTTP / HTTPS request</span></div>
+  <div class="legend-item"><span class="legend-line webhook"></span><span>Webhook callback</span></div>
+  <div class="legend-item"><span class="legend-line dashed"></span><span>Chưa kết nối</span></div>
+</div>
+
+<div class="canvas">
+
+  <!-- ============ LAYER 1: CLIENTS ============ -->
+  <div class="row">
+    <div class="node client">
+      <span class="tag">CLIENT</span>
+      <h3>Zalo Mini Program</h3>
+      <div class="meta">[Miniapp]<br>app.cnvcdp/service</div>
+    </div>
+
+    <div class="node client">
+      <span class="tag">CLIENT</span>
+      <h3>CNV Staff Web</h3>
+      <div class="meta">[Cdp-FE]<br>hub.cnvcdp.com</div>
+    </div>
+
+    <div class="node external">
+      <span class="tag">EXTERNAL</span>
+      <h3>GotIt Vendor</h3>
+      <div class="meta">(External system)</div>
+    </div>
+  </div>
+
+  <!-- Arrows from clients -->
+  <div class="row tight">
+    <div class="arrow down" style="min-width: 180px;"><span class="label">HTTPS</span></div>
+    <div class="arrow down" style="min-width: 180px;"><span class="label">HTTPS</span></div>
+    <div class="arrow down" style="min-width: 180px;"><span class="label">webhook</span></div>
+  </div>
+
+  <!-- ============ LAYER 2: BACKEND CORE ============ -->
+  <div class="grid-2">
+    <!-- Cdp-BE Cluster -->
+    <div class="cluster">
+      <span class="cluster-title">Cdp-BE</span>
+      <div class="node backend">
+        <h3>frontend-api</h3>
+        <div class="meta">port 6060 — gateway Miniapp</div>
+      </div>
+      <div style="height: 12px;"></div>
+      <div class="node backend">
+        <h3>api</h3>
+        <div class="meta">port 7070 — gateway FE</div>
+      </div>
+      <div style="height: 12px;"></div>
+      <div class="node backend">
+        <h3>internal-api</h3>
+        <div class="meta">port 6061</div>
+      </div>
+      <div style="height: 12px;"></div>
+      <div class="node backend">
+        <h3>cnv-integration (lib)</h3>
+        <ul>
+          <li>RewardV2Client</li>
+          <li>RewardV2Service</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Reward-v2 Cluster -->
+    <div class="cluster">
+      <span class="cluster-title">Reward-v2</span>
+      <div class="node reward">
+        <h3>webhook-api</h3>
+        <div class="meta">port 9091</div>
+        <ul>
+          <li>verify sign</li>
+          <li>update voucher</li>
+        </ul>
+      </div>
+      <div style="height: 12px;"></div>
+      <div class="node reward">
+        <h3>internal-api</h3>
+        <div class="meta">port 9090</div>
+        <ul>
+          <li>/user/*</li>
+          <li>/account/*</li>
+          <li>/crm-admin/*</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connection Cdp-BE → Reward-v2 -->
+  <div class="row" style="margin-top: 16px;">
+    <div class="arrow-h" style="flex:1; max-width: 600px;">
+      <span class="label">HTTP — X-Account-ID, X-Contact-ID</span>
+      <span class="line">───────────────▶</span>
+    </div>
+  </div>
+
+  <!-- ============ LAYER 3: VENDORS & WORKERS ============ -->
+  <div class="row tight" style="margin-top: 20px;">
+    <div class="arrow down" style="min-width: 180px;"></div>
+    <div class="arrow down" style="min-width: 180px;"></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="node vendor">
+      <span class="tag">VENDOR APIs</span>
+      <h3>External Vendor APIs</h3>
+      <ul>
+        <li>UrBox</li>
+        <li>GotIt</li>
+        <li>CNV Loyalty (cnvAccountId)</li>
+      </ul>
+    </div>
+
+    <div class="node worker">
+      <span class="tag">CRONJOB</span>
+      <h3>Workers</h3>
+      <ul>
+        <li>sync-gotit</li>
+        <li>sync-urbox</li>
+        <li>recovery-pending</li>
+        <li>send-voucher</li>
+        <li>cleanup-idemp</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ LAYER 4: CRM (NOT CONNECTED) ============ -->
+  <div class="section">
+    <h2 style="margin: 0 0 16px; font-size: 16px; color: #475569;">Khối CRM Operations</h2>
+    <div class="row">
+      <div class="node ops">
+        <span class="tag">CSR</span>
+        <h3>CSR / CNV Ops</h3>
+        <div class="meta">(CRM staff)</div>
+      </div>
+
+      <div class="arrow-h">
+        <span class="label">HTTP</span>
+        <span class="line">─────▶</span>
+      </div>
+
+      <div class="node ops">
+        <h3>Crm-internal-api</h3>
+        <div class="meta">port 8712</div>
+        <ul>
+          <li>Lark</li>
+          <li>Mattermost</li>
+          <li>cdp-internal</li>
+          <li>cnv-id</li>
+          <li>credit</li>
+        </ul>
+      </div>
+
+      <div class="arrow-h" style="color:#dc2626;">
+        <span class="label" style="border-color:#fecaca; color:#b91c1c;">CHƯA KẾT NỐI</span>
+        <span class="line" style="color:#dc2626;">─ ─ ╳ ─ ─▶</span>
+      </div>
+
+      <div class="node reward blocked">
+        <h3>Reward-v2</h3>
+        <div class="meta">/crm-admin/*</div>
+        <span class="badge danger">Chưa tích hợp</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <strong>Ghi chú:</strong> Luồng từ <em>Crm-internal-api (8712)</em> tới các endpoint
+    <code>/crm-admin/*</code> trên Reward-v2 hiện <strong>chưa được kết nối</strong>.
+    CSR/CNV Ops vì vậy chưa thao tác trực tiếp được với hệ thống Reward-v2 thông qua CRM internal API.
+  </div>
+
+</div>
+
+</body>
+</html>

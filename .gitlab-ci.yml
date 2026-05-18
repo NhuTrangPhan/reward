@@ -1,0 +1,12 @@
+pages:
+  stage: deploy
+  script:
+    - mkdir -p public
+    - cp html/team-performance-dashboard.html public/index.html
+    - cp -r html/* public/ 2>/dev/null || true
+    - echo "Deploy done at $(date)"
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

@@ -1,0 +1,40 @@
+Weekly Report
+Dạ em đại diện team (Trang + anh Huy + anh Hải) gửi Weekly report tuần W17
+[Reward v2]
+✅ Đã hoàn thành:
+
+* [Backend reward] Brand/Category 2 tầng end-to-end (Master + Per-Vendor Override)
+   * BE: commit 21/04 trên nhánh balance
+   * FE: màn "Cấu hình chung" đã chạy ok
+* [Backend reward] Account Balance Query endpoints cho UI "Ví đổi quà"
+* [Backend reward] OAuth2 integration framework scaffold (non-breaking, feature flag sẵn sàng)
+   * Gửi docx tài liệu kỹ thuật OAuth2 cho GotIt
+* [Backend reward] Refactor miniapp filter xuống DB-level (NOT EXISTS)
+* [Backend reward] Thêm 2 worker sync GotIt mới để đầy đủ data "cửa hàng áp dụng"
+   * worker-sync-gotit-store
+   * worker-sync-gotit-product-store
+* [frontend cdp] 7 màn account-side hoàn thành
+   * Cấu hình chung, Danh sách kết nối, Chi tiết kết nối
+   * Kho quà, Chi tiết quà, Lịch sử đổi quà, Ví đổi quà
+* [miniapp] Bắt đầu phát triển UI user-facing (vượt dự kiến)
+   * Danh sách ưu đãi, Chi tiết ưu đãi + cửa hàng áp dụng
+   * Đổi điểm: đang ở 50%
+* Spec 5 CRM feature (guideline_crm_features.md) + 3 mockup HTML
+
+⏳ Block:
+
+* GotIt --- Đang chờ GotIt phản hồi yêu cầu cung cấp OAuth2
+* CRM --- 5 feature đã có spec nhưng chưa chốt thứ tự ưu tiên (Order Mgmt, Thống kê, Báo cáo, Đối soát, Công nợ)
+* OAuth2 scaffold + balance endpoints mới chưa có unit test
+* 2 worker sync GotIt (store + product-store) chưa confirm smoke test
+* Luồng đối soát (reconciliation) vẫn chưa bắt đầu
+
+Dự kiến tuần tới:
+
+* [Backend reward] Webhook GotIt — nhận voucher state change
+* [miniapp] Hoàn tất 50% còn lại flow đổi điểm
+* [Backend reward] Viết unit test cho OAuth2 scaffold + balance query endpoints
+* [Backend reward] Chốt và implement 1 CRM feature cụ thể
+   * Đề xuất ưu tiên: Đối soát voucher (vendor vs ledger drift)
+* Smoke test 2 worker sync GotIt mới trước khi enable prod
+* Theo dõi phản hồi GotIt về OAuth2, ping lại nếu sau 5 ngày không có reply

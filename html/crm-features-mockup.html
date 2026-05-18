@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>CRM Admin — Công nợ & Audit Log Mockup</title>
+<title>CRM Admin — Tổng quan các tính năng (F1, F2, F4, F5)</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -411,6 +411,188 @@
   .amount { font-family: "SF Mono", Menlo, monospace; font-weight: 600; }
   .overdue-days-red { color: #dc2626; font-weight: 700; }
   .overdue-days-yellow { color: #d97706; font-weight: 600; }
+
+  /* Sidebar badges */
+  .badge-green {
+    margin-left: auto;
+    background: #10b981; color: #fff;
+    font-size: 10px; padding: 1px 6px; border-radius: 8px;
+    font-weight: 600;
+  }
+  .badge-blue {
+    margin-left: auto;
+    background: #3b82f6; color: #fff;
+    font-size: 10px; padding: 1px 6px; border-radius: 8px;
+    font-weight: 600;
+  }
+
+  /* Feature card grid (Dashboard) */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .feature-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 18px;
+    position: relative;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .feature-card:hover { border-color: #3b82f6; box-shadow: 0 2px 8px rgba(59,130,246,.08); }
+  .feature-card .fc-id {
+    font-size: 11px; color: #6b7280; font-weight: 600;
+    letter-spacing: .5px; text-transform: uppercase;
+  }
+  .feature-card .fc-title {
+    font-size: 15px; font-weight: 700; color: #111827;
+    margin: 4px 0 8px;
+  }
+  .feature-card .fc-desc {
+    font-size: 12px; color: #6b7280; line-height: 1.6;
+    min-height: 38px;
+  }
+  .feature-card .fc-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 12px; padding-top: 12px;
+    border-top: 1px dashed #e5e7eb;
+    font-size: 11px;
+  }
+  .feature-card .fc-status {
+    padding: 3px 9px; border-radius: 10px; font-weight: 700;
+    font-size: 10px; letter-spacing: .3px;
+  }
+  .fc-status.done { background: #d1fae5; color: #065f46; }
+  .fc-status.progress { background: #dbeafe; color: #1e40af; }
+  .fc-status.blocked { background: #fee2e2; color: #991b1b; }
+  .fc-status.planned { background: #f3f4f6; color: #374151; }
+  .fc-status.next { background: #fef3c7; color: #92400e; }
+
+  /* Pipeline progress */
+  .pipeline-bar {
+    display: flex; gap: 0;
+    margin-top: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+  }
+  .pipeline-step {
+    flex: 1; padding: 14px 16px;
+    background: #f9fafb;
+    border-right: 1px solid #e5e7eb;
+    position: relative;
+  }
+  .pipeline-step:last-child { border-right: 0; }
+  .pipeline-step.done { background: #d1fae5; }
+  .pipeline-step.current { background: #fef3c7; }
+  .pipeline-step .ps-num {
+    font-size: 11px; color: #6b7280; font-weight: 700;
+  }
+  .pipeline-step .ps-name {
+    font-size: 13px; font-weight: 600; margin-top: 2px;
+  }
+  .pipeline-step .ps-meta {
+    font-size: 11px; color: #6b7280; margin-top: 4px;
+  }
+  .pipeline-step.done .ps-num { color: #065f46; }
+  .pipeline-step.current .ps-num { color: #92400e; }
+
+  /* Bar chart */
+  .barchart { display: flex; flex-direction: column; gap: 10px; }
+  .bar-row { display: grid; grid-template-columns: 140px 1fr 80px; gap: 12px; align-items: center; font-size: 12px; }
+  .bar-row .b-name { color: #374151; font-weight: 500; }
+  .bar-row .b-track { background: #f3f4f6; height: 22px; border-radius: 4px; overflow: hidden; }
+  .bar-row .b-fill { height: 100%; background: #3b82f6; border-radius: 4px; display: flex; align-items: center; padding: 0 8px; color: #fff; font-size: 11px; font-weight: 600; }
+  .bar-row .b-fill.gold { background: #f59e0b; }
+  .bar-row .b-fill.green { background: #10b981; }
+  .bar-row .b-fill.red { background: #ef4444; }
+  .bar-row .b-fill.purple { background: #8b5cf6; }
+  .bar-row .b-value { text-align: right; font-weight: 700; color: #111827; }
+
+  /* Donut */
+  .donut-wrap { display: flex; align-items: center; gap: 24px; }
+  .donut {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: conic-gradient(
+      #3b82f6 0% 45%,
+      #f59e0b 45% 70%,
+      #10b981 70% 95%,
+      #6b7280 95% 100%
+    );
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .donut::before {
+    content: '';
+    width: 90px; height: 90px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+  }
+  .donut .donut-center {
+    position: relative; z-index: 1;
+    text-align: center;
+  }
+  .donut .donut-center .num { font-size: 22px; font-weight: 700; }
+  .donut .donut-center .lbl { font-size: 11px; color: #6b7280; }
+  .donut-legend { flex: 1; display: flex; flex-direction: column; gap: 8px; font-size: 12px; }
+  .donut-legend .dl-item { display: flex; align-items: center; gap: 8px; }
+  .donut-legend .dl-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  /* Trend chart (sparkline-ish) */
+  .trend-chart {
+    height: 200px;
+    background: linear-gradient(180deg, #eff6ff 0%, #fff 100%);
+    border-radius: 6px;
+    padding: 16px;
+    position: relative;
+  }
+  .trend-svg { width: 100%; height: 100%; }
+  .trend-line { stroke: #3b82f6; stroke-width: 2; fill: none; }
+  .trend-area { fill: rgba(59,130,246,.15); stroke: none; }
+  .trend-axis { font-size: 10px; fill: #6b7280; }
+
+  /* Heatmap */
+  .heatmap { display: grid; grid-template-columns: 60px repeat(24, 1fr); gap: 2px; font-size: 10px; }
+  .heat-cell { aspect-ratio: 1; border-radius: 2px; }
+  .heat-cell.h0 { background: #f3f4f6; }
+  .heat-cell.h1 { background: #dbeafe; }
+  .heat-cell.h2 { background: #93c5fd; }
+  .heat-cell.h3 { background: #3b82f6; }
+  .heat-cell.h4 { background: #1d4ed8; }
+  .heat-day { font-size: 10px; color: #6b7280; padding: 2px 4px; text-align: right; align-self: center; }
+  .heat-hour { font-size: 9px; color: #9ca3af; text-align: center; }
+
+  /* Vendor card */
+  .vendor-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 14px;
+  }
+  .vendor-card .v-name { font-weight: 700; font-size: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .vendor-card .v-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; font-size: 11px; }
+  .vendor-card .v-stat .vs-lbl { color: #6b7280; }
+  .vendor-card .v-stat .vs-val { font-weight: 700; font-size: 14px; }
+
+  /* Alerts */
+  .alert {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    display: flex; gap: 10px; align-items: start;
+    font-size: 13px;
+  }
+  .alert.warn { background: #fef3c7; border-left: 4px solid #f59e0b; color: #78350f; }
+  .alert.danger { background: #fee2e2; border-left: 4px solid #ef4444; color: #7f1d1d; }
+  .alert.info { background: #dbeafe; border-left: 4px solid #3b82f6; color: #1e3a8a; }
+  .alert .alert-icon { font-size: 18px; }
+  .alert .alert-body { flex: 1; }
+  .alert .alert-body b { display: block; margin-bottom: 2px; }
 </style>
 </head>
 <body>
@@ -421,14 +603,19 @@
     <div class="brand">CRM <span>Admin</span></div>
 
     <div class="nav-section">
+      <div class="nav-label">Overview</div>
+      <div class="nav-item active" data-page="dashboard"><span class="icon">🏠</span>Dashboard</div>
+    </div>
+
+    <div class="nav-section">
       <div class="nav-label">Operations</div>
-      <div class="nav-item" data-page="orders"><span class="icon">📦</span>Quản lý đơn</div>
-      <div class="nav-item" data-page="reports"><span class="icon">📊</span>Báo cáo</div>
+      <div class="nav-item" data-page="orders"><span class="icon">📦</span>Quản lý đơn<span class="badge-green">F1</span></div>
+      <div class="nav-item" data-page="reports"><span class="icon">📊</span>Thống kê Reward<span class="badge-blue">F2</span></div>
     </div>
 
     <div class="nav-section">
       <div class="nav-label">Finance</div>
-      <div class="nav-item active" data-page="collection"><span class="icon">💳</span>Công nợ<span class="badge-red">23</span></div>
+      <div class="nav-item" data-page="collection"><span class="icon">💳</span>Công nợ<span class="badge-red">23</span></div>
       <div class="nav-item" data-page="reconciliation"><span class="icon">🔁</span>Đối soát</div>
     </div>
 
@@ -446,7 +633,7 @@
   <!-- MAIN -->
   <main class="main">
     <div class="topbar">
-      <div class="crumbs">Finance › <b id="crumb-current">Công nợ › Aging report</b></div>
+      <div class="crumbs">Overview › <b id="crumb-current">Dashboard</b></div>
       <div class="user-chip">
         <div class="avatar">CF</div>
         <div>CNV Force One</div>
@@ -455,8 +642,243 @@
 
     <div class="content">
 
+      <!-- ======= PAGE: DASHBOARD / OVERVIEW ======= -->
+      <section class="page active" id="page-dashboard">
+        <h1 class="page-title">CRM Admin Dashboard</h1>
+        <p class="page-sub">Tổng quan các tính năng CRM Admin · Cập nhật: 24/04/2026 · Sprint 17 (W4 Apr)</p>
+
+        <!-- Top KPIs -->
+        <div class="kpis">
+          <div class="kpi accent-blue">
+            <div class="label">Đơn đổi quà tuần</div>
+            <div class="value">8.421</div>
+            <div class="delta down">▲ 12.3% vs tuần trước</div>
+          </div>
+          <div class="kpi accent-green">
+            <div class="label">GMV tuần</div>
+            <div class="value">487.2M ₫</div>
+            <div class="delta down">▲ 8.7% vs tuần trước</div>
+          </div>
+          <div class="kpi accent-yellow">
+            <div class="label">Khiếu nại pending</div>
+            <div class="value">17</div>
+            <div class="delta up">▼ 5 cases vs tuần trước</div>
+          </div>
+          <div class="kpi accent-red">
+            <div class="label">Công nợ outstanding</div>
+            <div class="value">2.85B ₫</div>
+            <div class="delta up">▲ 8.3% (cảnh báo)</div>
+          </div>
+        </div>
+
+        <!-- Feature status grid -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Trạng thái 5 tính năng CRM</h2>
+            <div class="legend">
+              <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span>Done</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>In Progress</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Next</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Blocked</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#9ca3af"></span>Planned</span>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="feature-grid">
+
+              <!-- F1 Quản lý đơn -->
+              <div class="feature-card" onclick="navigateTo('orders')">
+                <div class="fc-id">📦 Feature 1</div>
+                <div class="fc-title">Quản lý đơn đổi quà</div>
+                <div class="fc-desc">CSR tra cứu, resend voucher, manual refund đơn đổi quà.</div>
+                <div class="fc-meta">
+                  <span class="fc-status done">Phase 1a Done</span>
+                  <span style="color:#6b7280">3 endpoints · 34 tests</span>
+                </div>
+              </div>
+
+              <!-- F2 Thống kê -->
+              <div class="feature-card" onclick="navigateTo('reports')" style="border-color:#f59e0b;border-width:2px">
+                <div class="fc-id">📊 Feature 2</div>
+                <div class="fc-title">Thống kê Reward</div>
+                <div class="fc-desc">Dashboard phân tích redemption: top brand/reward, vendor performance, trend, peak hours.</div>
+                <div class="fc-meta">
+                  <span class="fc-status next">▶ NEXT</span>
+                  <span style="color:#6b7280">5 endpoints · 4-5 ngày</span>
+                </div>
+              </div>
+
+              <!-- F3 Báo cáo -->
+              <div class="feature-card">
+                <div class="fc-id">📑 Feature 3</div>
+                <div class="fc-title">Báo cáo Redemption</div>
+                <div class="fc-desc">Daily/weekly/monthly aggregate. Export PDF/Excel. Email theo cadence.</div>
+                <div class="fc-meta">
+                  <span class="fc-status planned">Sprint 4</span>
+                  <span style="color:#6b7280">5 ngày</span>
+                </div>
+              </div>
+
+              <!-- F4 Đối soát -->
+              <div class="feature-card" onclick="navigateTo('reconciliation')">
+                <div class="fc-id">🔁 Feature 4</div>
+                <div class="fc-title">Đối soát Voucher</div>
+                <div class="fc-desc">3-way reconciliation: CNV ledger ↔ Vendor (UrBox/GotIt) ↔ Loyalty.</div>
+                <div class="fc-meta">
+                  <span class="fc-status progress">P0 · Sprint 1-2</span>
+                  <span style="color:#6b7280">8 ngày</span>
+                </div>
+              </div>
+
+              <!-- F5 Công nợ -->
+              <div class="feature-card" onclick="navigateTo('collection')">
+                <div class="fc-id">💳 Feature 5</div>
+                <div class="fc-title">Quản lý Công nợ</div>
+                <div class="fc-desc">Aging report, freeze account, reminder workflow, statement.</div>
+                <div class="fc-meta">
+                  <span class="fc-status progress">Sprint 2-3</span>
+                  <span style="color:#6b7280">6 ngày</span>
+                </div>
+              </div>
+
+              <!-- Module C Audit -->
+              <div class="feature-card" onclick="navigateTo('audit')">
+                <div class="fc-id">📜 Module C</div>
+                <div class="fc-title">Audit Log</div>
+                <div class="fc-desc">Compliance log: AOP hooks + entity. Hot 1 năm, cold 7 năm (defer).</div>
+                <div class="fc-meta">
+                  <span class="fc-status progress">P0 · Sprint 1</span>
+                  <span style="color:#6b7280">2 ngày</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipeline progress F2 (next feature) -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>F2 Thống kê Reward — Feature Pipeline</h2>
+            <span class="pill warning">Bắt đầu Sprint 18 (28/04)</span>
+          </div>
+          <div class="panel-body">
+            <div class="pipeline-bar">
+              <div class="pipeline-step current">
+                <div class="ps-num">STEP 0</div>
+                <div class="ps-name">PM Brief</div>
+                <div class="ps-meta">WHY / WHO / METRIC</div>
+              </div>
+              <div class="pipeline-step">
+                <div class="ps-num">STEP 1</div>
+                <div class="ps-name">BA Spec</div>
+                <div class="ps-meta">User story + AC + API</div>
+              </div>
+              <div class="pipeline-step">
+                <div class="ps-num">STEP 2</div>
+                <div class="ps-name">Senior Dev</div>
+                <div class="ps-meta">Implementation 3-4d</div>
+              </div>
+              <div class="pipeline-step">
+                <div class="ps-num">STEP 3</div>
+                <div class="ps-name">Code Review</div>
+                <div class="ps-meta">MUST / SHOULD findings</div>
+              </div>
+              <div class="pipeline-step">
+                <div class="ps-num">STEP 4</div>
+                <div class="ps-name">Unit Test</div>
+                <div class="ps-meta">Happy + edge + exception</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity + Risks -->
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-head"><h2>Hoạt động gần đây</h2></div>
+            <div class="panel-body" style="padding:0">
+              <div class="audit-event">
+                <div class="audit-time">24/04 16:42</div>
+                <div>
+                  <div class="audit-actor">Senior Dev → F1 Phase 1a</div>
+                  <div class="audit-action">Commit <code>9f4b6da</code> · 28 files · 1969+ lines · Build PASS</div>
+                </div>
+                <span class="pill healthy">DONE</span>
+              </div>
+              <div class="audit-event">
+                <div class="audit-time">24/04 14:20</div>
+                <div>
+                  <div class="audit-actor">Unit Tester → F1 Phase 1a</div>
+                  <div class="audit-action">34 unit tests PASS · 12 happy + 10 error + 12 edge</div>
+                </div>
+                <span class="pill healthy">DONE</span>
+              </div>
+              <div class="audit-event">
+                <div class="audit-time">24/04 12:05</div>
+                <div>
+                  <div class="audit-actor">Code Reviewer → F1 Phase 1a</div>
+                  <div class="audit-action">Re-review PASS sau khi fix 4 MUST + 2 SHOULD</div>
+                </div>
+                <span class="pill healthy">PASS</span>
+              </div>
+              <div class="audit-event">
+                <div class="audit-time">23/04 16:16</div>
+                <div>
+                  <div class="audit-actor">PM → OAuth2 GotIt</div>
+                  <div class="audit-action">Tài liệu kỹ thuật gửi đối tác · Đợi GotIt assess feasibility</div>
+                </div>
+                <span class="pill warning">PENDING</span>
+              </div>
+              <div class="audit-event">
+                <div class="audit-time">23/04 09:30</div>
+                <div>
+                  <div class="audit-actor">Senior Dev → OAuth2 Framework</div>
+                  <div class="audit-action">Scaffold 19 files · Branch <code>trangptn/oauth2</code></div>
+                </div>
+                <span class="pill healthy">DONE</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>Cảnh báo & Blockers</h2></div>
+            <div class="panel-body">
+              <div class="alert danger">
+                <span class="alert-icon">🔴</span>
+                <div class="alert-body">
+                  <b>F1 Phase 1b BLOCKED</b>
+                  Loyalty team chưa deploy API <code>addPoints</code>. Manual refund không chạy được. ETA chưa rõ.
+                </div>
+              </div>
+              <div class="alert warn">
+                <span class="alert-icon">🟡</span>
+                <div class="alert-body">
+                  <b>ZNS gửi voucher lỗi</b>
+                  Worker send-voucher: Email + SMS OK. ZNS đang lỗi config Zalo. Escalate cdp-backend team.
+                </div>
+              </div>
+              <div class="alert warn">
+                <span class="alert-icon">🟡</span>
+                <div class="alert-body">
+                  <b>Voucher GotIt callback chưa nhận</b>
+                  Webhook receiver code 50% (controller + service stub). Cần wire RSA verify + handler logic.
+                </div>
+              </div>
+              <div class="alert info">
+                <span class="alert-icon">🔵</span>
+                <div class="alert-body">
+                  <b>OAuth2 GotIt — đợi đối tác</b>
+                  Tài liệu kỹ thuật đã gửi 23/04. Ping lại nếu &gt; 5 ngày không phản hồi.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ======= PAGE: COLLECTION AGING ======= -->
-      <section class="page active" id="page-collection">
+      <section class="page" id="page-collection">
         <h1 class="page-title">Công nợ — Aging Report</h1>
         <p class="page-sub">Tổng hợp dư nợ CREDIT mode theo tuổi nợ. Worker chạy daily 02:00 ICT · Cập nhật lần cuối: 22/04/2026 02:03</p>
 
@@ -844,51 +1266,66 @@
           <div class="panel-body">
             <div class="sprint-row">
               <div>
-                <div class="sprint-label">Sprint 1 — Đang chạy</div>
-                <div class="sprint-dates">22/04 – 28/04</div>
+                <div class="sprint-label" style="color:#059669">Sprint 17 — DONE ✓</div>
+                <div class="sprint-dates">22/04 – 24/04</div>
               </div>
               <div class="tasks">
-                <div class="task p0"><span><b>Feature 4 Reconciliation — Phase 1</b> (Vendor voucher + Balance ledger)</span><span class="eff">5 days</span></div>
-                <div class="task p0"><span><b>Module C Audit Log</b> — foundation (AOP + entity)</span><span class="eff">2 days</span></div>
+                <div class="task" style="border-left-color:#10b981;background:#d1fae5"><span><b>F1 Phase 1a Quản lý đơn</b> — CRM list + detail + export · 28 files · 34 tests · Commit 9f4b6da</span><span class="eff">Done</span></div>
+                <div class="task" style="border-left-color:#10b981;background:#d1fae5"><span><b>OAuth2 Framework Scaffold</b> — 19 files · Branch trangptn/oauth2</span><span class="eff">Done</span></div>
+                <div class="task" style="border-left-color:#10b981;background:#d1fae5"><span><b>Brand/Category 2-tier config</b> — Master + Per-Vendor Override</span><span class="eff">Done</span></div>
               </div>
             </div>
             <div class="sprint-row">
               <div>
-                <div class="sprint-label">Sprint 2</div>
-                <div class="sprint-dates">29/04 – 05/05</div>
+                <div class="sprint-label" style="color:#d97706">Sprint 18 — Đang chạy</div>
+                <div class="sprint-dates">28/04 – 02/05</div>
               </div>
               <div class="tasks">
-                <div class="task p0"><span><b>Feature 4 — Phase 2</b> (Loyalty points + worker + email)</span><span class="eff">3 days</span></div>
-                <div class="task p1"><span><b>Feature 5 Công nợ</b> — Aging + Freeze</span><span class="eff">4 days</span></div>
+                <div class="task p0"><span><b>▶ F2 Thống kê Reward</b> — 5 endpoints (overview + top brand/reward + trend + vendor)</span><span class="eff">4-5 days</span></div>
+                <div class="task p1"><span><b>Webhook GotIt Receiver</b> — wire RSA verify + voucher state handler</span><span class="eff">2-3 days</span></div>
+                <div class="task p2"><span><b>Recovery Task Monitor</b> — CRM admin xem task pending</span><span class="eff">1-2 days</span></div>
               </div>
             </div>
             <div class="sprint-row">
               <div>
-                <div class="sprint-label">Sprint 3</div>
-                <div class="sprint-dates">06/05 – 12/05</div>
+                <div class="sprint-label">Sprint 19</div>
+                <div class="sprint-dates">05/05 – 11/05</div>
               </div>
               <div class="tasks">
-                <div class="task p1"><span><b>Feature 1 Quản lý đơn</b> — CRM list + detail + resend + refund</span><span class="eff">5 days</span></div>
-                <div class="task p1"><span><b>Feature 5 Công nợ</b> — Reminder + Alert</span><span class="eff">2 days</span></div>
+                <div class="task p0"><span><b>F4 Reconciliation Phase 1</b> — Balance ledger drift + Voucher GotIt</span><span class="eff">5 days</span></div>
+                <div class="task p0"><span><b>Module C Audit Log</b> — AOP + entity</span><span class="eff">2 days</span></div>
+                <div class="task p1"><span><b>F1 Phase 1b</b> — Resend + Refund (nếu Loyalty deploy addPoints)</span><span class="eff">3 days</span></div>
               </div>
             </div>
             <div class="sprint-row">
               <div>
-                <div class="sprint-label">Sprint 4 — Go-live</div>
-                <div class="sprint-dates">13/05 – 19/05</div>
+                <div class="sprint-label">Sprint 20</div>
+                <div class="sprint-dates">12/05 – 18/05</div>
               </div>
               <div class="tasks">
-                <div class="task p1"><span><b>Feature 3 Báo cáo</b> — Daily/weekly/monthly + export + schedule</span><span class="eff">5 days</span></div>
-                <div class="task p1"><span>Integration test + bug fix</span><span class="eff">2 days</span></div>
+                <div class="task p0"><span><b>F4 Reconciliation Phase 2</b> — Loyalty + worker + email</span><span class="eff">3 days</span></div>
+                <div class="task p1"><span><b>F5 Công nợ</b> — Aging + Freeze + Reminder</span><span class="eff">5 days</span></div>
               </div>
             </div>
             <div class="sprint-row">
               <div>
-                <div class="sprint-label">Sprint 5+</div>
-                <div class="sprint-dates">Post go-live</div>
+                <div class="sprint-label">Sprint 21 — Go-live</div>
+                <div class="sprint-dates">19/05 – 25/05</div>
               </div>
               <div class="tasks">
-                <div class="task p2"><span><b>Feature 2 Thống kê</b> — Analytics dashboard</span><span class="eff">1 week</span></div>
+                <div class="task p1"><span><b>F3 Báo cáo</b> — Daily/weekly/monthly + export + schedule</span><span class="eff">5 days</span></div>
+                <div class="task p1"><span>UAT + Integration test + bug fix</span><span class="eff">2 days</span></div>
+              </div>
+            </div>
+            <div class="sprint-row">
+              <div>
+                <div class="sprint-label">Post go-live</div>
+                <div class="sprint-dates">26/05+</div>
+              </div>
+              <div class="tasks">
+                <div class="task p2"><span>OAuth2 GotIt deploy (chờ vendor)</span><span class="eff">2 days</span></div>
+                <div class="task p2"><span>Audit Log cold tier S3 archive</span><span class="eff">3 days</span></div>
+                <div class="task p2"><span>Force-status override (Phase 2 F1)</span><span class="eff">2 days</span></div>
               </div>
             </div>
           </div>
@@ -934,21 +1371,374 @@
         </div>
       </section>
 
-      <!-- ======= PLACEHOLDER PAGES ======= -->
+      <!-- ======= PAGE: ORDERS (F1) ======= -->
       <section class="page" id="page-orders">
-        <h1 class="page-title">Quản lý đơn — Feature 1</h1>
-        <p class="page-sub">CRM list + detail + resend voucher + refund · Sprint 3</p>
-        <div class="panel"><div class="panel-body" style="color:#6b7280;text-align:center;padding:40px">Mockup sẽ được bổ sung ở Sprint 3 · List đơn, detail view, action resend (rate limit 3/day), refund flow với maker-checker &gt; 1M VND.</div></div>
+        <h1 class="page-title">Quản lý Đơn Đổi Quà — Feature 1</h1>
+        <p class="page-sub">
+          <span class="pill healthy">Phase 1a Done</span>
+          <span class="pill warning" style="margin-left:6px">Phase 1b Blocked - Loyalty</span>
+          · 3 endpoints read-only đã deploy · 34 unit tests PASS
+        </p>
+
+        <!-- Filters -->
+        <div class="panel">
+          <div class="panel-head"><h2>Tìm kiếm đơn</h2></div>
+          <div class="panel-body">
+            <div class="filters">
+              <input placeholder="🔍 Tìm theo SĐT khách hàng..." style="flex:1;min-width:200px">
+              <input placeholder="Mã đơn (TXN_xxx)" style="width:160px">
+              <select><option>Tất cả trạng thái</option><option>SUCCESS</option><option>PENDING</option><option>FAILED</option></select>
+              <select><option>Tất cả vendor</option><option>UR_BOX</option><option>GOT_IT</option><option>CNV</option></select>
+              <input type="date" value="2026-04-01">
+              <input type="date" value="2026-04-24">
+              <button class="btn primary">Tìm</button>
+              <button class="btn">Export CSV</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results table -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Kết quả: 1.247 đơn</h2>
+            <div style="color:#6b7280;font-size:12px">Sort: Mới nhất ↓</div>
+          </div>
+          <div class="panel-body" style="padding:0">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mã đơn</th>
+                  <th>Ngày tạo</th>
+                  <th>Khách hàng</th>
+                  <th>SĐT</th>
+                  <th>Phần thưởng</th>
+                  <th>Vendor</th>
+                  <th>Điểm</th>
+                  <th class="amount-col">Chi phí</th>
+                  <th>Voucher</th>
+                  <th>Trạng thái</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>TXN_1745234567</code></td>
+                  <td>24/04 14:23</td>
+                  <td>Nguyễn Văn A</td>
+                  <td>0901234567</td>
+                  <td>Highlands 100K</td>
+                  <td><span class="pill current">GOT_IT</span></td>
+                  <td>1.000</td>
+                  <td class="amount">100.000 ₫</td>
+                  <td>1</td>
+                  <td><span class="pill healthy">SUCCESS</span></td>
+                  <td class="actions-cell"><button class="btn ghost">Detail</button></td>
+                </tr>
+                <tr>
+                  <td><code>TXN_1745234521</code></td>
+                  <td>24/04 14:15</td>
+                  <td>Trần Thị B</td>
+                  <td>0987654321</td>
+                  <td>Lotteria 50K x2</td>
+                  <td><span class="pill current">UR_BOX</span></td>
+                  <td>1.000</td>
+                  <td class="amount">100.000 ₫</td>
+                  <td>2</td>
+                  <td><span class="pill healthy">SUCCESS</span></td>
+                  <td class="actions-cell"><button class="btn ghost">Detail</button></td>
+                </tr>
+                <tr>
+                  <td><code>TXN_1745234489</code></td>
+                  <td>24/04 14:08</td>
+                  <td>Lê Văn C</td>
+                  <td>0912345678</td>
+                  <td>The Coffee House 30K</td>
+                  <td><span class="pill current">GOT_IT</span></td>
+                  <td>300</td>
+                  <td class="amount">30.000 ₫</td>
+                  <td>0</td>
+                  <td><span class="pill warning">PENDING</span></td>
+                  <td class="actions-cell"><button class="btn ghost">Detail</button></td>
+                </tr>
+                <tr>
+                  <td><code>TXN_1745234401</code></td>
+                  <td>24/04 13:55</td>
+                  <td>Phạm Thị D</td>
+                  <td>0978123456</td>
+                  <td>Starbucks 200K</td>
+                  <td><span class="pill current">UR_BOX</span></td>
+                  <td>2.000</td>
+                  <td class="amount">200.000 ₫</td>
+                  <td>0</td>
+                  <td><span class="pill overdue">FAILED</span></td>
+                  <td class="actions-cell"><button class="btn ghost">Detail</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Endpoints info -->
+        <div class="panel">
+          <div class="panel-head"><h2>API Endpoints (Phase 1a — Read-only)</h2></div>
+          <div class="panel-body" style="padding:0">
+            <table>
+              <thead><tr><th>Method</th><th>Path</th><th>Mô tả</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td><code style="color:#10b981">GET</code></td><td><code>/crm-admin/redemption-orders</code></td><td>List + filter + paginate</td><td><span class="pill healthy">DONE</span></td></tr>
+                <tr><td><code style="color:#10b981">GET</code></td><td><code>/crm-admin/redemption-orders/{id}</code></td><td>Detail full với 7 nested objects</td><td><span class="pill healthy">DONE</span></td></tr>
+                <tr><td><code style="color:#10b981">GET</code></td><td><code>/crm-admin/redemption-orders/export</code></td><td>CSV UTF-8 BOM, max 10k rows</td><td><span class="pill healthy">DONE</span></td></tr>
+                <tr><td><code style="color:#3b82f6">POST</code></td><td><code>/crm-admin/redemption-orders/{id}/resend-voucher</code></td><td>Phase 1b · Rate limit 3/order/day</td><td><span class="pill warning">PENDING</span></td></tr>
+                <tr><td><code style="color:#3b82f6">POST</code></td><td><code>/crm-admin/redemption-orders/{id}/manual-refund</code></td><td>Phase 1b · Cộng điểm + Balance REFUND</td><td><span class="pill overdue">BLOCKED</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </section>
+
+      <!-- ======= PAGE: REPORTS / F2 THỐNG KÊ REWARD ======= -->
       <section class="page" id="page-reports">
-        <h1 class="page-title">Báo cáo — Feature 3</h1>
-        <p class="page-sub">Daily/weekly/monthly + export + schedule · Sprint 4</p>
-        <div class="panel"><div class="panel-body" style="color:#6b7280;text-align:center;padding:40px">Sẽ có: scheduled reports, export CSV/XLSX, email delivery theo cadence.</div></div>
+        <h1 class="page-title">Thống kê Reward — Feature 2</h1>
+        <p class="page-sub">
+          <span class="pill warning">▶ NEXT FEATURE</span>
+          · Sprint 18 (28/04 - 02/05) · Effort 4-5 ngày · 5 endpoints
+        </p>
+
+        <!-- Filter period -->
+        <div class="panel">
+          <div class="panel-body">
+            <div class="filters">
+              <span style="color:#6b7280;font-weight:600;font-size:13px">Period:</span>
+              <select style="font-weight:600"><option>Last 7 days</option><option>Last 30 days</option><option>This month</option><option>Custom range</option></select>
+              <input type="date" value="2026-04-17">
+              <span style="color:#6b7280">→</span>
+              <input type="date" value="2026-04-24">
+              <button class="btn primary">Apply</button>
+              <span style="margin-left:auto;color:#6b7280;font-size:12px">Last refresh: 24/04 16:30 · Data fresh ≤ 5 min</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI Overview -->
+        <div class="kpis">
+          <div class="kpi accent-blue">
+            <div class="label">Tổng đơn</div>
+            <div class="value">8.421</div>
+            <div class="delta down">▲ 12.3% vs period trước</div>
+          </div>
+          <div class="kpi accent-green">
+            <div class="label">GMV (VND)</div>
+            <div class="value">487.2M</div>
+            <div class="delta down">▲ 8.7%</div>
+          </div>
+          <div class="kpi accent-yellow">
+            <div class="label">Điểm tiêu</div>
+            <div class="value">4.872K</div>
+            <div class="delta down">▲ 9.1%</div>
+          </div>
+          <div class="kpi accent-red">
+            <div class="label">User unique</div>
+            <div class="value">3.156</div>
+            <div class="delta down">▲ 5.2%</div>
+          </div>
+        </div>
+
+        <!-- Trend chart -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Xu hướng đổi quà 7 ngày qua</h2>
+            <div style="display:flex;gap:8px">
+              <button class="btn ghost" style="font-size:11px">Hour</button>
+              <button class="btn primary" style="font-size:11px">Day</button>
+              <button class="btn ghost" style="font-size:11px">Week</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="trend-chart">
+              <svg class="trend-svg" viewBox="0 0 700 160" preserveAspectRatio="none">
+                <!-- Grid lines -->
+                <line x1="0" y1="40" x2="700" y2="40" stroke="#e5e7eb" stroke-dasharray="3,3" />
+                <line x1="0" y1="80" x2="700" y2="80" stroke="#e5e7eb" stroke-dasharray="3,3" />
+                <line x1="0" y1="120" x2="700" y2="120" stroke="#e5e7eb" stroke-dasharray="3,3" />
+                <!-- Area + line -->
+                <polygon class="trend-area" points="20,110 120,85 220,95 320,60 420,40 520,50 620,30 680,45 680,160 20,160" />
+                <polyline class="trend-line" points="20,110 120,85 220,95 320,60 420,40 520,50 620,30 680,45" />
+                <!-- Dots -->
+                <circle cx="20" cy="110" r="3" fill="#3b82f6" />
+                <circle cx="120" cy="85" r="3" fill="#3b82f6" />
+                <circle cx="220" cy="95" r="3" fill="#3b82f6" />
+                <circle cx="320" cy="60" r="3" fill="#3b82f6" />
+                <circle cx="420" cy="40" r="3" fill="#3b82f6" />
+                <circle cx="520" cy="50" r="3" fill="#3b82f6" />
+                <circle cx="620" cy="30" r="3" fill="#3b82f6" />
+                <circle cx="680" cy="45" r="3" fill="#3b82f6" />
+              </svg>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:#6b7280;margin-top:8px;padding:0 16px">
+              <span>18/04</span><span>19/04</span><span>20/04</span><span>21/04</span><span>22/04</span><span>23/04</span><span>24/04</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two columns: Top brand + Top reward -->
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Top 10 Brand by Volume</h2>
+              <span style="color:#6b7280;font-size:12px">Theo GMV</span>
+            </div>
+            <div class="panel-body">
+              <div class="barchart">
+                <div class="bar-row"><div class="b-name">Highlands Coffee</div><div class="b-track"><div class="b-fill" style="width:92%">92.4M ₫ · 1.847 đơn</div></div><div class="b-value">19%</div></div>
+                <div class="bar-row"><div class="b-name">Starbucks</div><div class="b-track"><div class="b-fill gold" style="width:78%">78.0M ₫ · 642 đơn</div></div><div class="b-value">16%</div></div>
+                <div class="bar-row"><div class="b-name">The Coffee House</div><div class="b-track"><div class="b-fill green" style="width:64%">62.5M ₫ · 1.245 đơn</div></div><div class="b-value">13%</div></div>
+                <div class="bar-row"><div class="b-name">Lotteria</div><div class="b-track"><div class="b-fill" style="width:55%">53.8M ₫ · 1.076 đơn</div></div><div class="b-value">11%</div></div>
+                <div class="bar-row"><div class="b-name">KFC</div><div class="b-track"><div class="b-fill purple" style="width:42%">41.2M ₫ · 412 đơn</div></div><div class="b-value">8%</div></div>
+                <div class="bar-row"><div class="b-name">Phúc Long</div><div class="b-track"><div class="b-fill" style="width:34%">33.7M ₫ · 674 đơn</div></div><div class="b-value">7%</div></div>
+                <div class="bar-row"><div class="b-name">Pizza Hut</div><div class="b-track"><div class="b-fill gold" style="width:28%">27.1M ₫ · 271 đơn</div></div><div class="b-value">6%</div></div>
+                <div class="bar-row"><div class="b-name">Grab Food</div><div class="b-track"><div class="b-fill green" style="width:22%">21.6M ₫ · 432 đơn</div></div><div class="b-value">4%</div></div>
+                <div class="bar-row"><div class="b-name">Shopee Voucher</div><div class="b-track"><div class="b-fill red" style="width:18%">17.3M ₫ · 173 đơn</div></div><div class="b-value">4%</div></div>
+                <div class="bar-row"><div class="b-name">Domino's Pizza</div><div class="b-track"><div class="b-fill purple" style="width:12%">11.2M ₫ · 112 đơn</div></div><div class="b-value">2%</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>Phân bổ Vendor</h2></div>
+            <div class="panel-body">
+              <div class="donut-wrap">
+                <div class="donut">
+                  <div class="donut-center">
+                    <div class="num">487M</div>
+                    <div class="lbl">VND tuần</div>
+                  </div>
+                </div>
+                <div class="donut-legend">
+                  <div class="dl-item"><span class="dl-dot" style="background:#3b82f6"></span><b>UR_BOX</b> · 219M (45%)</div>
+                  <div class="dl-item"><span class="dl-dot" style="background:#f59e0b"></span><b>GOT_IT</b> · 122M (25%)</div>
+                  <div class="dl-item"><span class="dl-dot" style="background:#10b981"></span><b>CNV Internal</b> · 122M (25%)</div>
+                  <div class="dl-item"><span class="dl-dot" style="background:#6b7280"></span>Others · 24M (5%)</div>
+                </div>
+              </div>
+              <hr style="margin:18px 0;border:0;border-top:1px solid #e5e7eb">
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div class="vendor-card" style="border:0;padding:0">
+                  <div class="v-name">UR_BOX <span class="pill healthy">98.2% success</span></div>
+                  <div class="v-stats">
+                    <div class="v-stat"><div class="vs-lbl">Avg latency</div><div class="vs-val">1.2s</div></div>
+                    <div class="v-stat"><div class="vs-lbl">Total orders</div><div class="vs-val">3.789</div></div>
+                    <div class="v-stat"><div class="vs-lbl">Recovery rate</div><div class="vs-val">100%</div></div>
+                  </div>
+                </div>
+                <div class="vendor-card" style="border:0;padding:0">
+                  <div class="v-name">GOT_IT <span class="pill warning">94.7% success</span></div>
+                  <div class="v-stats">
+                    <div class="v-stat"><div class="vs-lbl">Avg latency</div><div class="vs-val">2.4s</div></div>
+                    <div class="v-stat"><div class="vs-lbl">Total orders</div><div class="vs-val">2.106</div></div>
+                    <div class="v-stat"><div class="vs-lbl">Recovery rate</div><div class="vs-val">87%</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top reward + Heatmap -->
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-head"><h2>Top 10 Reward Item</h2></div>
+            <div class="panel-body" style="padding:0">
+              <table>
+                <thead>
+                  <tr><th>#</th><th>Reward</th><th>Brand</th><th>Vendor</th><th class="amount-col">Đơn</th><th class="amount-col">GMV</th><th class="amount-col">Avg điểm</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>Highlands 100K</td><td>Highlands</td><td><span class="pill current">GOT_IT</span></td><td>847</td><td class="amount">84.7M</td><td>1.000</td></tr>
+                  <tr><td>2</td><td>Starbucks 200K</td><td>Starbucks</td><td><span class="pill current">UR_BOX</span></td><td>312</td><td class="amount">62.4M</td><td>2.000</td></tr>
+                  <tr><td>3</td><td>The Coffee House 50K</td><td>TCH</td><td><span class="pill current">GOT_IT</span></td><td>1.024</td><td class="amount">51.2M</td><td>500</td></tr>
+                  <tr><td>4</td><td>Lotteria 100K</td><td>Lotteria</td><td><span class="pill current">UR_BOX</span></td><td>458</td><td class="amount">45.8M</td><td>1.000</td></tr>
+                  <tr><td>5</td><td>KFC Combo 150K</td><td>KFC</td><td><span class="pill current">UR_BOX</span></td><td>274</td><td class="amount">41.1M</td><td>1.500</td></tr>
+                  <tr><td>6</td><td>Highlands 50K</td><td>Highlands</td><td><span class="pill current">GOT_IT</span></td><td>1.000</td><td class="amount">50.0M</td><td>500</td></tr>
+                  <tr><td>7</td><td>Phúc Long 50K</td><td>Phúc Long</td><td><span class="pill current">UR_BOX</span></td><td>674</td><td class="amount">33.7M</td><td>500</td></tr>
+                  <tr><td>8</td><td>Pizza Hut 200K</td><td>Pizza Hut</td><td><span class="pill current">GOT_IT</span></td><td>148</td><td class="amount">29.6M</td><td>2.000</td></tr>
+                  <tr><td>9</td><td>Grab Food 100K</td><td>Grab</td><td><span class="pill current">UR_BOX</span></td><td>216</td><td class="amount">21.6M</td><td>1.000</td></tr>
+                  <tr><td>10</td><td>Shopee 100K</td><td>Shopee</td><td><span class="pill current">UR_BOX</span></td><td>173</td><td class="amount">17.3M</td><td>1.000</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Peak Hours Heatmap</h2>
+              <span style="color:#6b7280;font-size:12px">7 days × 24 hours</span>
+            </div>
+            <div class="panel-body">
+              <div class="heatmap">
+                <span></span>
+                <span class="heat-hour">0</span><span class="heat-hour">2</span><span class="heat-hour">4</span><span class="heat-hour">6</span><span class="heat-hour">8</span><span class="heat-hour">10</span><span class="heat-hour">12</span><span class="heat-hour">14</span><span class="heat-hour">16</span><span class="heat-hour">18</span><span class="heat-hour">20</span><span class="heat-hour">22</span>
+                <span class="heat-hour">1</span><span class="heat-hour">3</span><span class="heat-hour">5</span><span class="heat-hour">7</span><span class="heat-hour">9</span><span class="heat-hour">11</span><span class="heat-hour">13</span><span class="heat-hour">15</span><span class="heat-hour">17</span><span class="heat-hour">19</span><span class="heat-hour">21</span><span class="heat-hour">23</span>
+
+                <span class="heat-day">T2</span>
+                <span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h4"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h1"></span>
+
+                <span class="heat-day">T3</span>
+                <span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h1"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h1"></span>
+
+                <span class="heat-day">T4</span>
+                <span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h1"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h4"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h1"></span><span class="heat-cell h1"></span>
+
+                <span class="heat-day">T5</span>
+                <span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h1"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h1"></span>
+
+                <span class="heat-day">T6</span>
+                <span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h1"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h1"></span>
+
+                <span class="heat-day">T7</span>
+                <span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h1"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h4"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h2"></span><span class="heat-cell h1"></span>
+
+                <span class="heat-day">CN</span>
+                <span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h0"></span><span class="heat-cell h1"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h4"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h4"></span><span class="heat-cell h3"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h2"></span><span class="heat-cell h1"></span><span class="heat-cell h1"></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:14px;font-size:11px;color:#6b7280;justify-content:flex-end">
+                Less
+                <span class="heat-cell h0" style="width:14px;height:14px"></span>
+                <span class="heat-cell h1" style="width:14px;height:14px"></span>
+                <span class="heat-cell h2" style="width:14px;height:14px"></span>
+                <span class="heat-cell h3" style="width:14px;height:14px"></span>
+                <span class="heat-cell h4" style="width:14px;height:14px"></span>
+                More
+              </div>
+              <div style="margin-top:12px;padding:10px 12px;background:#fef3c7;border-radius:6px;font-size:12px;color:#78350f">
+                💡 <b>Insight:</b> Peak hours T6-T7 11h-13h và 18h-20h. Khuyến nghị tối ưu cache + scale worker giờ cao điểm.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- API Endpoints F2 -->
+        <div class="panel">
+          <div class="panel-head"><h2>API Endpoints sẽ implement (F2)</h2></div>
+          <div class="panel-body" style="padding:0">
+            <table>
+              <thead><tr><th>Method</th><th>Path</th><th>Mô tả</th><th>Sample params</th></tr></thead>
+              <tbody>
+                <tr><td><code style="color:#10b981">GET</code></td><td><code>/crm-admin/stats/overview</code></td><td>4 KPI cards (total đơn, GMV, điểm, user)</td><td><code>?from=2026-04-17&to=2026-04-24</code></td></tr>
+                <tr><td><code style="color:#10b981">GET</code></td><td><code>/crm-admin/stats/top-brands</code></td><td>Top brand by GMV/orders</td><td><code>?period=week&limit=10</code></td></tr>
+                <tr><td><code style="color:#10b981">GET</code></td><td><code>/crm-admin/stats/top-rewards</code></td><td>Top reward item</td><td><code>?period=week&limit=10</code></td></tr>
+                <tr><td><code style="color:#10b981">GET</code></td><td><code>/crm-admin/stats/redemption-trend</code></td><td>Time-series daily/hourly</td><td><code>?granularity=day&days=7</code></td></tr>
+                <tr><td><code style="color:#10b981">GET</code></td><td><code>/crm-admin/stats/by-vendor</code></td><td>Vendor split + success rate + latency</td><td><code>?period=week</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </section>
+
+      <!-- ======= PAGE: RECONCILIATION (placeholder) ======= -->
       <section class="page" id="page-reconciliation">
         <h1 class="page-title">Đối soát — Feature 4</h1>
         <p class="page-sub">Vendor voucher + Balance ledger + Loyalty points · Sprint 1–2 · P0</p>
-        <div class="panel"><div class="panel-body" style="color:#6b7280;text-align:center;padding:40px">Reconciliation 3-way: CNV internal ledger vs Vendor (UrBox/GotIt) vs Loyalty. Daily worker + alert nếu mismatch.</div></div>
+        <div class="panel"><div class="panel-body" style="color:#6b7280;text-align:center;padding:40px">Reconciliation 3-way: CNV internal ledger vs Vendor (UrBox/GotIt) vs Loyalty. Daily worker + alert nếu mismatch. Mockup chi tiết sẽ bổ sung khi Sprint 2 bắt đầu.</div></div>
       </section>
 
     </div>
@@ -1054,21 +1844,26 @@
   const pages = document.querySelectorAll('.page');
   const crumb = document.getElementById('crumb-current');
   const crumbMap = {
-    collection: 'Công nợ › Aging report',
+    dashboard: 'Dashboard',
+    collection: 'Finance › Công nợ › Aging report',
     audit: 'Compliance › Audit Log',
     roadmap: 'Planning › Roadmap',
-    orders: 'Operations › Quản lý đơn',
-    reports: 'Operations › Báo cáo',
-    reconciliation: 'Finance › Đối soát'
+    orders: 'Operations › Quản lý đơn (F1)',
+    reports: 'Operations › Thống kê Reward (F2)',
+    reconciliation: 'Finance › Đối soát (F4)'
   };
-  navItems.forEach(n => n.addEventListener('click', () => {
-    const key = n.dataset.page;
+  function navigateTo(key) {
     navItems.forEach(x => x.classList.remove('active'));
     pages.forEach(p => p.classList.remove('active'));
-    n.classList.add('active');
-    document.getElementById('page-' + key).classList.add('active');
+    const navEl = document.querySelector(`.nav-item[data-page="${key}"]`);
+    if (navEl) navEl.classList.add('active');
+    const pageEl = document.getElementById('page-' + key);
+    if (pageEl) pageEl.classList.add('active');
     crumb.textContent = crumbMap[key] || '';
     window.scrollTo(0, 0);
+  }
+  navItems.forEach(n => n.addEventListener('click', () => {
+    navigateTo(n.dataset.page);
   }));
 
   // Modals

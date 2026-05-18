@@ -1,0 +1,12 @@
+{
+  "eval_id": 1,
+  "eval_name": "pm-review-reward-v2-sprint-health",
+  "prompt": "Review tiến độ/sức khỏe dự án Reward v2 dựa trên báo cáo 3 sprint",
+  "assertions": [
+    {"text": "Đưa ra health status rõ ràng (Green/Yellow/Red)", "type": "qualitative"},
+    {"text": "Gantt chart 3 tuần", "type": "qualitative"},
+    {"text": "Liệt kê blockers với impact/urgency", "type": "qualitative"},
+    {"text": "Risk matrix (likelihood × impact)", "type": "qualitative"},
+    {"text": "Action items cụ thể cho tuần tới", "type": "qualitative"}
+  ]
+}

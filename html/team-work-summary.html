@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reward V2 — Tổng hợp công việc 3 thành viên (Trang · Huy · Hải)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #e2e8f0;
+    line-height: 1.55;
+    padding: 24px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1280px; margin: 0 auto; }
+
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding: 28px;
+    background: linear-gradient(135deg, rgba(59,130,246,.18), rgba(139,92,246,.18));
+    border: 1px solid rgba(148,163,184,.22);
+    border-radius: 16px;
+  }
+  header h1 {
+    font-size: 26px;
+    background: linear-gradient(90deg, #60a5fa, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  header .meta { font-size: 13px; color: #94a3b8; }
+  header .branch-info {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 12px;
+    padding: 6px 14px;
+    background: rgba(15,23,42,.5);
+    border-radius: 20px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    color: #cbd5e1;
+  }
+
+  /* Summary KPI strip */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .kpi {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+  .kpi.t::before { background: #38bdf8; }
+  .kpi.h::before { background: #a78bfa; }
+  .kpi.l::before { background: #ec4899; }
+  .kpi.s::before { background: linear-gradient(180deg,#10b981,#34d399); }
+  .kpi-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+  .kpi-value { font-size: 30px; font-weight: 700; color: #f1f5f9; }
+  .kpi-sub { font-size: 11px; color: #64748b; margin-top: 4px; }
+
+  /* Member cards */
+  .member-card {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.18);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .member-card.t { border-left: 5px solid #38bdf8; }
+  .member-card.h { border-left: 5px solid #a78bfa; }
+  .member-card.l { border-left: 5px solid #ec4899; }
+
+  .member-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(148,163,184,.15);
+  }
+  .avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 20px;
+    color: #0f172a;
+    flex-shrink: 0;
+  }
+  .avatar.t { background: linear-gradient(135deg, #38bdf8, #0ea5e9); }
+  .avatar.h { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
+  .avatar.l { background: linear-gradient(135deg, #f472b6, #ec4899); }
+  .member-info { flex: 1; }
+  .member-name {
+    font-size: 19px;
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+  .member-handle {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+  .member-role {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+  .role-lead { background: rgba(56,189,248,.15); color: #7dd3fc; }
+  .role-fs { background: rgba(167,139,250,.15); color: #c4b5fd; }
+  .role-mobile { background: rgba(244,114,182,.15); color: #f9a8d4; }
+
+  .pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .pill {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  .pill.rewards { background: rgba(99,102,241,.12); color: #a5b4fc; border-color: rgba(99,102,241,.3); }
+  .pill.backend { background: rgba(16,185,129,.12); color: #6ee7b7; border-color: rgba(16,185,129,.3); }
+  .pill.frontend { background: rgba(234,88,12,.12); color: #fdba74; border-color: rgba(234,88,12,.3); }
+  .pill.miniapp { background: rgba(219,39,119,.12); color: #f9a8d4; border-color: rgba(219,39,119,.3); }
+  .pill.total { background: rgba(15,23,42,.7); color: #f1f5f9; border-color: rgba(241,245,249,.3); font-weight: 700; }
+
+  .work-section h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #cbd5e1;
+    margin: 16px 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot.rewards { background: #6366f1; }
+  .dot.backend { background: #10b981; }
+  .dot.frontend { background: #ea580c; }
+  .dot.miniapp { background: #db2777; }
+
+  .work-list { list-style: none; margin-left: 6px; }
+  .work-list li {
+    font-size: 13px;
+    padding: 6px 0 6px 22px;
+    color: #cbd5e1;
+    position: relative;
+    line-height: 1.55;
+  }
+  .work-list li::before {
+    content: "▸";
+    position: absolute;
+    left: 4px;
+    color: #38bdf8;
+    font-size: 11px;
+    top: 7px;
+  }
+  .work-list li b { color: #f1f5f9; font-weight: 600; }
+  .work-list li .date {
+    color: #64748b;
+    font-size: 11px;
+    font-family: ui-monospace, monospace;
+    margin-left: 4px;
+  }
+  .work-list li code {
+    background: rgba(15,23,42,.6);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 11px;
+    color: #fbbf24;
+  }
+
+  .highlight-box {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: linear-gradient(90deg, rgba(56,189,248,.08), rgba(139,92,246,.08));
+    border-left: 3px solid #38bdf8;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+  .highlight-box.h-card { border-left-color: #a78bfa; background: linear-gradient(90deg, rgba(167,139,250,.08), rgba(99,102,241,.08)); }
+  .highlight-box.l-card { border-left-color: #ec4899; background: linear-gradient(90deg, rgba(236,72,153,.08), rgba(219,39,119,.08)); }
+  .highlight-box b { color: #f1f5f9; }
+
+  footer {
+    text-align: center;
+    margin-top: 28px;
+    padding: 20px;
+    color: #64748b;
+    font-size: 12px;
+  }
+  footer code { color: #94a3b8; }
+
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .pills { gap: 6px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>📊 Reward V2 — Tổng hợp công việc 3 thành viên</h1>
+    <div class="meta">Trang · Huy · Hải · Khoảng thời gian: <b>08/04/2026 → 08/05/2026</b> · 5 repository</div>
+    <div class="branch-info">
+      Lọc theo branch · rewards-v2 / cdp-backend / cdp-frontend / mini-app → <b>common/rewards-v2</b> · net-core-platform-cnv → <b>haiht/reward-redeem</b>
+    </div>
+  </header>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi t">
+      <div class="kpi-label">Trang (Tech Lead)</div>
+      <div class="kpi-value">68</div>
+      <div class="kpi-sub">commits · Core architect</div>
+    </div>
+    <div class="kpi h">
+      <div class="kpi-label">Huy (Full-stack)</div>
+      <div class="kpi-value">60</div>
+      <div class="kpi-sub">commits · BE+FE Account UI</div>
+    </div>
+    <div class="kpi l">
+      <div class="kpi-label">Hải (Mobile + BE + Loyalty)</div>
+      <div class="kpi-value">43</div>
+      <div class="kpi-sub">commits · 5 repo (có net-core)</div>
+    </div>
+    <div class="kpi s">
+      <div class="kpi-label">Tổng nhóm 3 người</div>
+      <div class="kpi-value">171</div>
+      <div class="kpi-sub">commits trên reward-v2 branches</div>
+    </div>
+  </div>
+
+  <!-- Trang -->
+  <div class="member-card t">
+    <div class="member-header">
+      <div class="avatar t">T</div>
+      <div class="member-info">
+        <div class="member-name">Trang (Như Trang)</div>
+        <div class="member-handle">phanthinhutranghahl@gmail.com · trangptn@cnv.vn</div>
+        <span class="member-role role-lead">Tech Lead Reward V2 — BE Critical + Architecture</span>
+      </div>
+    </div>
+    <div class="pills">
+      <span class="pill rewards">rewards-v2: 63</span>
+      <span class="pill backend">cdp-backend: 5</span>
+      <span class="pill total">Tổng: 68 commits</span>
+    </div>
+
+    <div class="work-section">
+      <h4><span class="dot rewards"></span> rewards-v2 — Core BE Reward Service</h4>
+      <ul class="work-list">
+        <li><b>GotIt redemption foundation</b> (đầu sprint): Redeem GotIt + handle exception + remove retry logic chuyển worker pick + fix UrboxConnectionType→VendorConnectionType <span class="date">08-09/04</span></li>
+        <li><b>Account Balance system</b>: implement đầy đủ entities + transaction ledger + holds + services <span class="date">10/04</span></li>
+        <li><b>Controller restructure</b>: namespace endpoints theo account/user/crm-admin + centralize redemption strategies <span class="date">10/04</span></li>
+        <li><b>Inquiry feature</b>: GotItService update + giải mã voucher RSA + webhook GotIt <span class="date">13-14/04</span></li>
+        <li><b>Voucher status update + Redeem with balance</b> integration <span class="date">15-16/04</span></li>
+        <li><b>RedemptionRecoveryService — close 3 gaps</b> (loyalty + validation + retry) <span class="date">17/04</span></li>
+        <li><b>Idempotency mechanism + automated recovery</b> cho pending redemption orders (TTL 24h) <span class="date">17/04</span></li>
+        <li><b>CRM Admin Balance Management APIs (Phase 3 Module B)</b> — set mode/credit-limit/postpaid <span class="date">20/04</span></li>
+        <li><b>Per-vendor override</b> support cho account brand & category configurations <span class="date">21/04</span></li>
+        <li><b>GotIt usage method integration + entity mapping</b> <span class="date">21/04</span></li>
+        <li><b>Account balance query service + controller</b>: lịch sử giao dịch + summary report <span class="date">22/04</span></li>
+        <li><b>JPA Specifications-based filtering</b>: chuyển vendor-override filter từ application layer xuống DB cho pagination chính xác <span class="date">22/04</span></li>
+        <li><b>Module E CRM F1 Phase 1a (ship 29/04)</b>: redemption order management read-only endpoints — list + detail 7 nested + CSV export + 4 DB index + 34 unit tests <span class="date">29/04</span></li>
+        <li><b>CI/CD pipeline (8+ commits)</b>: build/fix GitLab CI, Docker DinD TLS, version.txt fallback, install curl <span class="date">29/04 → 04/05</span></li>
+        <li><b>Module J — Recovery-core module refactor</b>: extract recovery service + balance logic ra module dedicated + 5 test suites migrated <span class="date">04/05 · a1314b9</span></li>
+        <li><b>Module F — CRM Stats Dashboard</b>: 4 endpoints + Caffeine cache 5/15/10' + 952 LOC service + 952 LOC test <span class="date">04/05 · 13fa909</span></li>
+        <li><b>Public key GotIt rotation</b> + fix repo + fix gotit/ paths <span class="date">05/05</span></li>
+        <li><b>Worker-sync-gotit consolidation</b>: gộp 4 phase (category/brand/mapping/product) trong CI/CD pipeline <span class="date">06/05</span></li>
+        <li><b>Module D — Reconciliation Phase 1a (ship 08/05)</b>: worker-reconciliation module + Kafka consumer + LedgerReconciliationService + 5 CRM endpoints + 7 test suites (1740 LOC test) <span class="date">08/05 · 462a296</span></li>
+        <li><b>Module C — Audit Logging System</b>: <code>@Auditable</code> annotation + Aspect-oriented persistence để log thay đổi nghiệp vụ <span class="date">08/05 · f9b5c6d</span></li>
+        <li>🆕 <b>Module F4 — Reconciliation Phase 1b (Vendor Voucher Excel Upload)</b>: spec gap đã close — Excel upload + voucher rows compare logic cross-vendor <span class="date">08/05 · 3c2a328</span></li>
+        <li>🆕 <b>Fix face_value mismatch logic</b>: dùng <code>SUM(voucher.face_value)</code> thay vì <code>reward.price * quantity</code> — closing edge case Reconciliation đối soát giá trị <span class="date">08/05 · f2a3cf1</span></li>
+        <li><b>Documentation</b>: consolidate AI context, remove duplicate CLAUDE.md, update SKILL files <span class="date">20/04</span></li>
+      </ul>
+
+      <h4><span class="dot backend"></span> cdp-backend</h4>
+      <ul class="work-list">
+        <li><b>Env staging URL resolver</b> cho api & frontend-api <span class="date">05/05</span></li>
+        <li><b>4 round bug fix</b> trên cdp-backend cho luồng reward-v2 (truyền tham số GotIt + balance + reward listing) <span class="date">06/05</span></li>
+      </ul>
+    </div>
+
+    <div class="highlight-box">
+      <b>📌 W5+W6 highlight:</b> Trang chuyển focus mạnh từ A1 Migration / OAuth2 unit test sang <b>Reconciliation Phase 1a + Phase 1b + Stats Dashboard + CnvConnect</b> theo audit findings 24/4. Velocity W6 spike <b>~12 task / 4 ngày = 3 task/dev/ngày</b>. <b>+9 test suites mới</b> trong 4 ngày → 35 test files total. Toàn bộ Module D/E/F/J ship trong 1 sprint, và <b>F4 Phase 1b Vendor Voucher Excel Upload</b> đã close ngày 08/05 — backbone CRM/Reconciliation gần như hoàn thiện. Audit Log <code>@Auditable</code> AOP cũng ship cùng ngày.
+    </div>
+  </div>
+
+  <!-- Huy -->
+  <div class="member-card h">
+    <div class="member-header">
+      <div class="avatar h">H</div>
+      <div class="member-info">
+        <div class="member-name">Huy (Trần Lê Huy)</div>
+        <div class="member-handle">huytl@cnv.vn</div>
+        <span class="member-role role-fs">Full-stack — Account Admin UI + Reward Network + Top-up</span>
+      </div>
+    </div>
+    <div class="pills">
+      <span class="pill rewards">rewards-v2: 26</span>
+      <span class="pill backend">cdp-backend: 19</span>
+      <span class="pill frontend">cdp-frontend: 15</span>
+      <span class="pill total">Tổng: 60 commits</span>
+    </div>
+
+    <div class="work-section">
+      <h4><span class="dot rewards"></span> rewards-v2 — Account-scoped features (BE)</h4>
+      <ul class="work-list">
+        <li><b>Filter reward items theo account-enabled brands/categories</b>: API + service layer <span class="date">08/04</span></li>
+        <li><b>UserRewardItemController</b> + <b>AccountVendorMapping user association</b> + remove legacy test controller <span class="date">09-10/04</span></li>
+        <li><b>Manual voucher sending APIs</b>: Email + SMS + ZNS (3 channel) <span class="date">15/04</span></li>
+        <li><b>LoyaltyPointsClient</b>: mock + real implementations + voucher sending logic <span class="date">17/04</span></li>
+        <li><b>GotIt service logging</b> request/response + remove signature ZNS status check <span class="date">20/04</span></li>
+        <li><b>Vendor management pagination</b> + brand details trong responses <span class="date">21/04</span></li>
+        <li><b>AccountSummary, ConnectionDetail, ConnectionDetailStats models</b> + lastSyncAt + getConnectionDetail endpoint <span class="date">22/04</span></li>
+        <li><b>BrandConfigResponse</b>: categoryIds + channels + getChannelsForBrand method <span class="date">23/04</span></li>
+        <li><b>Reward item & stats models</b>: account-scoped fields + service compute stats <span class="date">23/04</span></li>
+        <li><b>Account-specific redemption limits</b>: entities + service + validation logic <span class="date">24/04</span></li>
+        <li><b>VendorId filter</b> cho reward item & voucher stats + redemption order voucher details + enrich method <span class="date">28/04</span></li>
+        <li><b>Customer statistics + reward store resolution</b> cho redemption orders <span class="date">29/04</span></li>
+        <li><b>Per-vendor effective configuration</b> + low stock threshold support <span class="date">29/04</span></li>
+        <li><b>Bulk request classes</b> cho brand + category configurations <span class="date">29/04</span></li>
+        <li><b>Worker-sync-urbox module</b>: implement initial từ đầu (giữ UrBox maintenance state) <span class="date">05/05</span></li>
+        <li><b>Module I — CRM/CnvConnect integration cho top-up</b> + cnv.connect prefix properties + unified mock flag + payment method <span class="date">06-07/05</span></li>
+        <li><b>Refactor account top-up + voucher services</b> + new response models cho account balance / redemption insights / voucher summary <span class="date">07/05</span></li>
+        <li><b>Module K hỗ trợ — Content hash + sync optimize</b> cho GotItRewardItemEntity <span class="date">07/05</span></li>
+        <li><b>GotItStoreService mock</b> cho AccountBrandConfigControllerTest <span class="date">07/05</span></li>
+      </ul>
+
+      <h4><span class="dot backend"></span> cdp-backend — Reward V2 Gateway</h4>
+      <ul class="work-list">
+        <li><b>Reward V2 client + controller</b> đầu tiên: DTOs cho connections + partners + categories + brands <span class="date">21-22/04</span></li>
+        <li><b>Reward item + mapping status update</b> + vendor override functionality cho categories/brands <span class="date">23/04</span></li>
+        <li><b>Account balance + redemption order DTOs</b> + endpoint chi tiết <span class="date">24/04</span></li>
+        <li><b>Redemption order details endpoint</b> + vendorId param cho getRewardItemStats <span class="date">28/04</span></li>
+        <li><b>Bulk update + clear endpoints</b> cho category/brand configs + redemption stats endpoint + DTOs tracking + stockStatus param <span class="date">29/04</span></li>
+        <li><b>Refactor location services + top-up functionality</b> với DTOs cho billing + connect URL config <span class="date">06/05</span></li>
+        <li><b>Lombok dependency</b> cho nhiều module + spring-boot-autoconfigure <span class="date">06-07/05</span></li>
+        <li><b>Account balance + voucher summary DTOs</b> + enhance top-up request handling <span class="date">07/05</span></li>
+        <li>🆕 <b>New endpoints + DTOs cho redemption + balance transactions</b> — enhance reward management features <span class="date">08/05</span></li>
+        <li>🆕 <b>Simplify DTO usage trong RewardV2Client + RewardV2Controller</b> bằng cách bỏ package prefixes <span class="date">08/05</span></li>
+        <li>🆕 <b>Refactor TopUpPackageDto + ConnectProduct</b>: remove displayOrder field, update rewardWalletPkg method <span class="date">08/05</span></li>
+        <li>🆕 <b>Lombok dependency cho pom.xml</b> root level <span class="date">08/05</span></li>
+      </ul>
+
+      <h4><span class="dot frontend"></span> cdp-frontend — Account Admin UI (Reward Network)</h4>
+      <ul class="work-list">
+        <li><b>Reward Network configuration + connection management</b> pages — full module mới <span class="date">22/04</span></li>
+        <li><b>Connection Detail Inventory tab</b>: filter + pagination + config management <span class="date">23/04</span></li>
+        <li><b>Vendor-specific types refactor</b>: replace legacy models + UI styling cho category/partner management <span class="date">23/04</span></li>
+        <li><b>Gift Inventory Management + Redemption History</b> modules với data models đầy đủ <span class="date">24/04</span></li>
+        <li><b>Redeem History Detail page</b> + navigation từ inventory history list <span class="date">28/04</span></li>
+        <li><b>UrBox item types support</b> + vendor logos + UI layout reward network <span class="date">28/04</span></li>
+        <li><b>Brand/category/stock status filter</b> cho inventory + UI components <span class="date">29/04</span></li>
+        <li><b>Master-detail sidebar layout</b> + bulk API requests (replace category filter strip) <span class="date">29/04</span></li>
+        <li><b>Dynamic date period picker</b> + redemption stats với trends trên history page <span class="date">29/04</span></li>
+        <li><b>Top-up Wallet</b>: package selection + billing support <span class="date">06/05</span></li>
+        <li><b>Reward Network Overview page</b> + GotIt store count support <span class="date">07/05</span></li>
+        <li><b>Dynamic vendor hotline + monthly growth statistics</b> trong inventory details <span class="date">07/05</span></li>
+        <li>🆕 <b>Comprehensive Reward Network Overview Dashboard</b>: new charts + analytical components + optimized transaction count API — đẩy mạnh dashboard Account Admin <span class="date">08/05</span></li>
+        <li>🆕 <b>Top-up package sorting refactor</b>: replace displayOrder bằng unitPrice, remove unused displayOrder field <span class="date">08/05</span></li>
+      </ul>
+    </div>
+
+    <div class="highlight-box h-card">
+      <b>📌 W5+W6 highlight:</b> Huy đã cover đầy đủ <b>FE Account Admin (7/7 màn hình - 100%)</b> trong W4-W5 và bước sang W6 chuyển sang <b>Top-up Wallet flow (CnvConnect)</b>, <b>Reward Network Overview Dashboard</b> với charts/analytical components, <b>monthly growth stats</b>. Cuối W6 ship thêm <b>endpoints redemption + balance transactions</b> ở cdp-backend và refactor <b>TopUpPackageDto unitPrice sorting</b>. W6 còn pair với Trang review schema Reconciliation. Phần còn lại W7 sẽ là <b>1.5 Giỏ Quà E-Voucher</b> + Performance optim Miniapp + C4 Voucher Detail page.
+    </div>
+  </div>
+
+  <!-- Hải -->
+  <div class="member-card l">
+    <div class="member-header">
+      <div class="avatar l">L</div>
+      <div class="member-info">
+        <div class="member-name">Hải (Hoàng Tuấn Hải / haiht1)</div>
+        <div class="member-handle">haiht1@cnv.vn</div>
+        <span class="member-role role-mobile">Full-stack — Loyalty Bridge + Mini App + GotIt Worker</span>
+      </div>
+    </div>
+    <div class="pills">
+      <span class="pill rewards">rewards-v2: 16</span>
+      <span class="pill backend">cdp-backend: 4</span>
+      <span class="pill frontend">cdp-frontend: 6</span>
+      <span class="pill miniapp">mini-app: 11</span>
+      <span class="pill" style="background: rgba(20,184,166,.12); color: #5eead4; border: 1px solid rgba(20,184,166,.3);">net-core: 6</span>
+      <span class="pill total">Tổng: 43 commits</span>
+    </div>
+
+    <div class="work-section">
+      <h4><span class="dot rewards"></span> rewards-v2 — Loyalty Integration + GotIt Worker</h4>
+      <ul class="work-list">
+        <li><b>GotItRedeemStrategy revert + cleanup GotitProduct</b> + category_brand_mapping entity <span class="date">08-09/04</span></li>
+        <li><b>BalanceCheckService</b>: implement service kiểm tra balance khi redeem (tích hợp với balance ledger của Trang) <span class="date">14/04</span></li>
+        <li><b>cnv-integration module</b>: foundation cho integration với CNV Loyalty internal + add loyalty client <span class="date">14/04</span></li>
+        <li><b>CurrentAdminUserIdArgumentResolver</b>: resolve admin userId từ context (paired với Trang restructure) <span class="date">14/04</span></li>
+        <li><b>Remove pointsRequired field</b> (chuyển sang compute động từ price + exchange rate) <span class="date">15/04</span></li>
+        <li><b>Refactor redeem flow</b> end-to-end <span class="date">17/04</span></li>
+        <li><b>vendorImage field</b> + redeemableBrands property <span class="date">21-23/04</span></li>
+        <li><b>Module K — GotItProduct entity + worker-sync-gotit-store</b>: phase 4 trong worker pipeline 4 phase (category/brand/mapping/product) <span class="date">24/04</span></li>
+        <li><b>Streamline account brand/category retrieval</b> + new DB indexes (perf opt) <span class="date">28/04</span></li>
+        <li><b>Got It expiry date parsing</b> trong redeem & recovery strategies <span class="date">04/05</span></li>
+        <li><b>holdPoints với brandName param</b> + adjust implementations (GotIt brand-aware redemption) <span class="date">07/05 · 1d1e31b</span></li>
+      </ul>
+
+      <h4><span class="dot backend"></span> cdp-backend — REWARD_V2 screen + reward listing API</h4>
+      <ul class="work-list">
+        <li><b>list and detail rewards</b> endpoints <span class="date">23/04</span></li>
+        <li><b>listStoresForRewardItem</b> endpoint (lookup cửa hàng cho voucher) <span class="date">24/04</span></li>
+        <li><b>REWARD_V2 case</b> trong DynamicScreenIdType enum + ResponseBuilder cho partner rewards <span class="date">05/05</span></li>
+        <li><b>Loyalty URL config</b> trong application.properties + integration endpoints <span class="date">05/05</span></li>
+      </ul>
+
+      <h4><span class="dot frontend"></span> cdp-frontend — REWARD_V2 dynamic screen</h4>
+      <ul class="work-list">
+        <li><b>REWARD_V2 option</b> cho DynamicScreenId + screen ID options + check shoptest <span class="date">04-05/05</span></li>
+        <li><b>Shop test logic</b>: filter REWARD_V2 trong dynamic configurations <span class="date">05/05</span></li>
+        <li><b>Translation REWARD_V2</b> cho ScreenIdPipe + LinkConfiguration pipes (hỗ trợ đa ngôn ngữ) <span class="date">07/05</span></li>
+        <li>🆕 <b>shopTestIds update</b>: thêm test shop ID 3188 vào nhiều components <span class="date">08/05</span></li>
+      </ul>
+
+      <h4><span class="dot miniapp"></span> mini-app — MyRewardsV2 page (toàn bộ feature)</h4>
+      <ul class="work-list">
+        <li><b>List reward items page</b> (foundation) <span class="date">21/04</span></li>
+        <li><b>Detail page reward + voucher</b> (2 round refine) <span class="date">23-24/04</span></li>
+        <li><b>MyRewardsV2 page với barcode + QR code</b> support <span class="date">28/04</span></li>
+        <li><b>Refactor code</b> + remove event code input + adjust navigation logic <span class="date">29/04</span></li>
+        <li><b>Voucher expiry handling</b> + UI updates <span class="date">04/05</span></li>
+        <li><b>Router</b>: enable rewards-v2 pages trong production <span class="date">05/05 · ✅ luồng đổi điểm 100%</span></li>
+        <li><b>Sync voucher usage status với backend</b> + tab keys <span class="date">07/05</span></li>
+        <li><b>Shared bottom tabs + styles</b> cho rewards pages (UX nhất quán) <span class="date">07/05</span></li>
+        <li><b>VoucherDetailV2 voucher status display + translations</b> <span class="date">07/05</span></li>
+      </ul>
+
+      <h4><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#14b8a6;"></span> 🆕 net-core-platform-cnv — Reward Redeem trên branch <code>haiht/reward-redeem</code></h4>
+      <ul class="work-list">
+        <li><b>Reward redeem foundation</b>: implement reward redeem trên platform CNV <span class="date">14/04</span></li>
+        <li><b>Add loyalty internal</b>: integration với hệ thống loyalty internal <span class="date">17/04</span></li>
+        <li><b>Fix Dockerfile cho loyalty internal</b> deployment <span class="date">28/04</span></li>
+        <li><b>Refactor SYSTEM_OPERATOR_ID</b> để chuẩn hoá identifier <span class="date">29/04</span></li>
+        <li><b>Align với AdjustLoyaltyPointV2Business + idempotent retry</b>: đồng bộ logic adjust point V2 + đảm bảo idempotency khi retry <span class="date">04/05</span></li>
+        <li><b>Persist BrandName + render Title "Đổi ưu đãi {brand}"</b> cho V2 history (UX hiển thị brand cho user) <span class="date">07/05</span></li>
+      </ul>
+    </div>
+
+    <div class="highlight-box l-card">
+      <b>📌 W5+W6 highlight:</b> Hải đóng <b>luồng đổi điểm Miniapp 100%</b> (close 50% còn lại của W4) trong W5. W6 ship <b>Module K — GotIt enrichment</b> (store sync optim + voucher expiry parse + content hash + holdPoints brandName fix) và <b>verify GotIt webhook decrypt e2e với key thật staging</b> ✅. <b>net-core-platform-cnv</b>: implement <b>Reward Redeem branch haiht/reward-redeem</b> — align với AdjustLoyaltyPointV2Business + idempotent retry + persist BrandName cho V2 history. W7 sẽ làm <b>1.6 Popup Chờ Xử Lý + 1.7+1.8 Alert/Disclaimer + 4.8 Out-of-Stock + 4.9 Push Notification</b>.
+    </div>
+  </div>
+
+  <footer>
+    Generated 08/05/2026 (ISO W19) · Lọc commit theo branch <code>common/rewards-v2</code> (4 repo CDP) + <code>haiht/reward-redeem</code> (net-core-platform-cnv)<br>
+    Phương pháp: rewards-v2 — <code>git log common/rewards-v2 --since=2026-04-08 --no-merges</code> · cdp-backend & cdp-frontend & mini-app — range <code>origin/master(2)..common/rewards-v2</code> + merge-inversion từ "Merge branch 'common/rewards-v2' into 'master(2)'" · net-core-platform-cnv — <code>git log origin/haiht/reward-redeem --since=2026-04-08 --no-merges</code><br>
+    Đã fetch origin trước khi tổng hợp · Total: 171 commits của 3 thành viên trên 5 repository
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>CRM API Coverage Report — Đối chiếu với Mockup (v2)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #f4f6fa;
+    color: #1f2937;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .app { display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 230px;
+    background: #0f172a;
+    color: #cbd5e1;
+    padding: 20px 0;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .brand {
+    padding: 0 20px 18px;
+    border-bottom: 1px solid #1e293b;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .brand span { color: #38bdf8; }
+  .brand small { display:block; font-size: 11px; font-weight: 500; color: #94a3b8; margin-top:4px;}
+  .nav-section { margin-top: 16px; }
+  .nav-label {
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    color: #64748b;
+  }
+  .nav-item {
+    padding: 9px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-left: 3px solid transparent;
+    transition: background .15s;
+    font-size: 13px;
+  }
+  .nav-item:hover { background: #1e293b; }
+  .nav-item.active {
+    background: #1e293b;
+    border-left-color: #38bdf8;
+    color: #fff;
+  }
+  .nav-item .ico { width: 18px; text-align: center; }
+  .badge-pill {
+    margin-left: auto;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+  .badge-red { background: #ef4444; color: #fff; }
+  .badge-amber { background: #f59e0b; color: #fff; }
+  .badge-green { background: #10b981; color: #fff; }
+
+  /* Main */
+  .main { flex: 1; min-width: 0; }
+  .topbar {
+    height: 56px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top:0; z-index:5;
+  }
+  .topbar .crumbs { font-size: 13px; color: #6b7280; }
+  .topbar .crumbs b { color: #111827; }
+  .meta-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; background: #ecfeff; color: #0e7490; border-radius: 12px;
+    font-size: 12px; font-weight: 600;
+  }
+  .content { padding: 24px; }
+  .page { display: none; animation: fadeIn 0.2s; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  h1.page-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .page-sub { color: #6b7280; font-size: 13px; margin-bottom: 20px; }
+  h2.sec { font-size: 16px; font-weight: 700; margin: 22px 0 12px; color: #111827; }
+  h3.sub-sec { font-size: 14px; font-weight: 700; margin: 18px 0 10px; color: #334155; }
+
+  /* KPI cards */
+  .kpis { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 22px; }
+  .kpi {
+    background: #fff; border-radius: 10px; padding: 16px;
+    border: 1px solid #e5e7eb; box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .kpi .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: #6b7280; }
+  .kpi .val { font-size: 24px; font-weight: 700; margin-top: 6px; }
+  .kpi .delta { font-size: 12px; margin-top: 4px; }
+  .delta.pos { color: #059669; }
+  .delta.neg { color: #dc2626; }
+  .delta.warn { color: #d97706; }
+  .kpi.crit { border-left: 4px solid #ef4444; }
+  .kpi.warn { border-left: 4px solid #f59e0b; }
+  .kpi.ok { border-left: 4px solid #10b981; }
+
+  /* Cards / panels */
+  .card {
+    background: #fff; border-radius: 10px; padding: 18px;
+    border: 1px solid #e5e7eb; margin-bottom: 14px;
+  }
+  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .card-title { font-weight: 700; font-size: 14px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #f1f5f9; font-size: 13px; vertical-align: top; }
+  th { background: #f8fafc; font-size: 11px; text-transform: uppercase; letter-spacing: .6px; color: #475569; font-weight: 700; }
+  tr:hover td { background: #fafbfc; }
+  td code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: #f1f5f9; color: #0f172a; padding: 2px 6px; border-radius: 4px; font-size: 12px;
+  }
+
+  /* Status pills */
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .pill-done { background: #dcfce7; color: #166534; }
+  .pill-pending { background: #fef3c7; color: #92400e; }
+  .pill-missing { background: #fee2e2; color: #991b1b; }
+  .pill-defer { background: #e0e7ff; color: #3730a3; }
+  .pill-block { background: #fce7f3; color: #9d174d; }
+
+  /* Priority badges */
+  .prio { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+  .prio-p0 { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+  .prio-p1 { background: #fffbeb; color: #b45309; border: 1px solid #fcd34d; }
+  .prio-p2 { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
+  .prio-pq { background: #f3f4f6; color: #4b5563; border: 1px solid #d1d5db; }
+
+  /* Method tags */
+  .m { display:inline-block; padding:1px 6px; border-radius: 3px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; font-weight: 700; }
+  .m-get { background: #dbeafe; color: #1e3a8a; }
+  .m-post { background: #dcfce7; color: #14532d; }
+  .m-put { background: #fef3c7; color: #78350f; }
+  .m-del { background: #fee2e2; color: #7f1d1d; }
+
+  /* Progress bars */
+  .progress { background: #f1f5f9; height: 8px; border-radius: 4px; overflow: hidden; }
+  .progress > span { display: block; height: 100%; }
+  .progress-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+  .progress-row .label { width: 200px; font-size: 13px; }
+  .progress-row .bar { flex: 1; }
+  .progress-row .pct { width: 60px; text-align: right; font-weight: 700; font-size: 13px; }
+
+  .bg-red { background: #ef4444; }
+  .bg-amber { background: #f59e0b; }
+  .bg-green { background: #10b981; }
+  .bg-blue { background: #3b82f6; }
+
+  /* Alert boxes */
+  .alert { border-left: 4px solid; padding: 12px 16px; border-radius: 4px; margin: 10px 0; font-size: 13px; }
+  .alert-red { background: #fef2f2; border-color: #ef4444; color: #7f1d1d; }
+  .alert-amber { background: #fffbeb; border-color: #f59e0b; color: #78350f; }
+  .alert-blue { background: #eff6ff; border-color: #3b82f6; color: #1e3a8a; }
+  .alert-green { background: #f0fdf4; border-color: #10b981; color: #14532d; }
+
+  /* Sprint roadmap */
+  .sprint-grid { display: grid; grid-template-columns: 220px 1fr; gap: 10px; }
+  .sprint-row { display: contents; }
+  .sprint-cell {
+    background: #fff; border: 1px solid #e5e7eb; padding: 12px 14px; border-radius: 8px;
+    font-size: 13px;
+  }
+  .sprint-cell.head { background: #0f172a; color: #fff; }
+  .task-chip { display: inline-block; padding: 4px 8px; margin: 2px 4px 2px 0; background: #f1f5f9; border-radius: 6px; font-size: 12px; }
+  .task-chip.p0 { background: #fef2f2; color: #b91c1c; }
+  .task-chip.p1 { background: #fffbeb; color: #b45309; }
+  .task-chip.p2 { background: #f0fdf4; color: #166534; }
+  .task-chip.done { background: #dcfce7; color: #166534; text-decoration: line-through; }
+
+  /* Diff blocks */
+  .diff-row { display: grid; grid-template-columns: 50px 1fr 1fr; gap: 14px; padding: 12px; border-bottom: 1px solid #f1f5f9; align-items: start; }
+  .diff-tag { font-size: 11px; padding: 3px 6px; border-radius: 4px; font-weight: 700; height: fit-content; text-align: center; }
+  .diff-add { background: #dcfce7; color: #166534; }
+  .diff-fix { background: #fef3c7; color: #92400e; }
+  .diff-rm { background: #fee2e2; color: #991b1b; }
+  .diff-mv { background: #e0e7ff; color: #3730a3; }
+  .diff-side { font-size: 12px; }
+  .diff-side .h { font-weight: 700; color: #475569; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; }
+
+  /* Mini bars chart */
+  .mini-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; padding: 6px 0; }
+  .mini-bar { flex: 1; background: linear-gradient(180deg, #38bdf8, #0284c7); border-radius: 3px 3px 0 0; position: relative; min-height: 4px; }
+  .mini-bar .v { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; color: #475569; white-space: nowrap; }
+
+  /* Tooltip */
+  [data-tip] { position: relative; cursor: help; }
+  [data-tip]:hover::after {
+    content: attr(data-tip);
+    position: absolute; bottom: 100%; left: 0;
+    background: #0f172a; color: #fff;
+    padding: 6px 10px; border-radius: 4px; font-size: 11px;
+    white-space: nowrap; z-index: 100; max-width: 300px; white-space: normal;
+    width: 240px;
+  }
+
+  ul.list { padding-left: 20px; }
+  ul.list li { margin: 4px 0; }
+  .num-circle { display:inline-flex; width:22px; height:22px; border-radius:50%; background:#0f172a; color:#fff; font-size:11px; font-weight:700; align-items:center; justify-content:center; margin-right:6px;}
+  .small { font-size: 12px; color: #6b7280; }
+  .mute { color:#94a3b8; }
+
+  /* Decision card */
+  .decision { background: linear-gradient(135deg, #fef3c7, #fde68a); border: 1px solid #f59e0b; border-radius: 10px; padding: 16px; margin: 14px 0; }
+  .decision .h { font-weight: 700; color: #92400e; margin-bottom: 8px; font-size: 14px; }
+
+  @media (max-width: 1100px) {
+    .kpis { grid-template-columns: repeat(2,1fr); }
+    .grid-2 { grid-template-columns: 1fr; }
+    .sidebar { width: 60px; }
+    .brand, .nav-label, .nav-item span:not(.ico):not(.badge-pill) { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">CRM API <span>Coverage</span><small>Reward-v2 · v2 báo cáo</small></div>
+    <div class="nav-section">
+      <div class="nav-label">Tổng quan</div>
+      <div class="nav-item active" data-page="exec"><span class="ico">📊</span><span>Executive Summary</span></div>
+      <div class="nav-item" data-page="diff"><span class="ico">🔍</span><span>Đối chiếu Mockup</span><span class="badge-pill badge-red">!</span></div>
+      <div class="nav-item" data-page="coverage"><span class="ico">📈</span><span>Coverage matrix</span></div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Endpoint</div>
+      <div class="nav-item" data-page="done"><span class="ico">✅</span><span>Đã có (32)</span></div>
+      <div class="nav-item" data-page="missing"><span class="ico">❌</span><span>Còn thiếu</span><span class="badge-pill badge-red">38</span></div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Theo Feature</div>
+      <div class="nav-item" data-page="f1"><span class="ico">🎁</span><span>F1 Đơn đổi quà</span></div>
+      <div class="nav-item" data-page="f2"><span class="ico">📊</span><span>F2 Analytics</span></div>
+      <div class="nav-item" data-page="f3"><span class="ico">📑</span><span>F3 Báo cáo</span></div>
+      <div class="nav-item" data-page="f4"><span class="ico">🔄</span><span>F4 Đối soát</span></div>
+      <div class="nav-item" data-page="f5"><span class="ico">💰</span><span>F5 Công nợ</span></div>
+      <div class="nav-item" data-page="modulec"><span class="ico">🛡️</span><span>Module C Audit</span></div>
+      <div class="nav-item" data-page="account"><span class="ico">🏢</span><span>Account & Vendor</span></div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Kế hoạch</div>
+      <div class="nav-item" data-page="roadmap"><span class="ico">🗓️</span><span>Roadmap Sprint</span></div>
+      <div class="nav-item" data-page="oq"><span class="ico">❓</span><span>Open Questions</span><span class="badge-pill badge-amber">12</span></div>
+      <div class="nav-item" data-page="decide"><span class="ico">⚡</span><span>Cần quyết định</span></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="crumbs">CRM Admin Reward-v2 · <b>API Coverage Report</b> · so sánh với crm-features-mockup + cnv-crm-admin-dashboard + phase1-mvp-uat-scope</div>
+      <div class="meta-chip">📅 Ngày: 08/05/2026 · Go-live target 30/05</div>
+    </div>
+
+    <div class="content">
+
+      <!-- ===================== PAGE: EXECUTIVE SUMMARY ===================== -->
+      <section class="page active" id="page-exec">
+        <h1 class="page-title">Executive Summary — CRM API Coverage</h1>
+        <div class="page-sub">So sánh 32 endpoints đã build với 3 mockup chính thức (crm-features-mockup, cnv-crm-admin-dashboard, phase1-mvp-uat-scope). Báo cáo này thay thế bản tổng hợp ngày trước với cách phân loại priority lại theo mockup, bổ sung 13 endpoint bị bỏ sót, và roadmap PR sequence.</div>
+
+        <div class="kpis">
+          <div class="kpi ok">
+            <div class="lbl">Endpoints đã build</div>
+            <div class="val">32 / 70</div>
+            <div class="delta pos">~46% coverage tổng</div>
+          </div>
+          <div class="kpi crit">
+            <div class="lbl">P0 còn thiếu (block go-live)</div>
+            <div class="val">14 endpoints</div>
+            <div class="delta neg">Module C + F4 Voucher + F5 freeze</div>
+          </div>
+          <div class="kpi warn">
+            <div class="lbl">P1 daily-ops critical</div>
+            <div class="val">17 endpoints</div>
+            <div class="delta warn">F1 action + F3 report + F5 reminder</div>
+          </div>
+          <div class="kpi">
+            <div class="lbl">Open questions cần resolve</div>
+            <div class="val">12 OQ</div>
+            <div class="delta warn">5 từ stakeholder, 7 BA/Dev</div>
+          </div>
+        </div>
+
+        <div class="alert alert-red">
+          <b>⚠️ Phát hiện chính:</b> Bản báo cáo cũ tự đánh giá "25% Tổng" nhưng sau khi đối chiếu mockup chi tiết, coverage thực tế chỉ <b>~30% feature scope</b>. Có <b>13 endpoint bị thiếu hẳn khỏi bản đếm cũ</b> (Account list, Vendor list, Recovery Task admin, Vendor Sync, CSM Notes, Account 12-month trend, AI Insights, Webhook GotIt, Stats redemption-trend, ...). Chi tiết tại <b>Đối chiếu Mockup</b>.
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Coverage % theo Feature (đã hiệu chỉnh)</div></div>
+            <div class="progress-row"><div class="label">F1 Quản lý đơn đổi quà</div><div class="bar"><div class="progress"><span class="bg-amber" style="width:60%"></span></div></div><div class="pct">60%</div></div>
+            <div class="progress-row"><div class="label">F2 Analytics Reward</div><div class="bar"><div class="progress"><span class="bg-amber" style="width:44%"></span></div></div><div class="pct">44%</div></div>
+            <div class="progress-row"><div class="label">F3 Báo cáo</div><div class="bar"><div class="progress"><span class="bg-red" style="width:0%"></span></div></div><div class="pct">0%</div></div>
+            <div class="progress-row"><div class="label">F4 Đối soát (3-way)</div><div class="bar"><div class="progress"><span class="bg-red" style="width:33%"></span></div></div><div class="pct">33%</div></div>
+            <div class="progress-row"><div class="label">F5 Công nợ</div><div class="bar"><div class="progress"><span class="bg-red" style="width:14%"></span></div></div><div class="pct">14%</div></div>
+            <div class="progress-row"><div class="label">Module C Audit Log</div><div class="bar"><div class="progress"><span class="bg-red" style="width:0%"></span></div></div><div class="pct">0%</div></div>
+            <div class="progress-row"><div class="label">Account / Vendor admin</div><div class="bar"><div class="progress"><span class="bg-amber" style="width:40%"></span></div></div><div class="pct">40%</div></div>
+            <div class="progress-row"><div class="label">Top-up & Payment</div><div class="bar"><div class="progress"><span class="bg-green" style="width:78%"></span></div></div><div class="pct">78%</div></div>
+            <div class="progress-row"><div class="label">Recovery Task admin</div><div class="bar"><div class="progress"><span class="bg-red" style="width:0%"></span></div></div><div class="pct">0%</div></div>
+            <div class="progress-row"><div class="label">Vendor Sync (UrBox/GotIt)</div><div class="bar"><div class="progress"><span class="bg-red" style="width:0%"></span></div></div><div class="pct">0%</div></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><div class="card-title">Top 5 Khác biệt so với báo cáo cũ</div></div>
+            <div class="diff-row">
+              <span class="diff-tag diff-fix">FIX</span>
+              <div class="diff-side"><div class="h">Báo cáo cũ</div>F2 stats: 4/8 endpoint (đã có 4)</div>
+              <div class="diff-side"><div class="h">Mockup yêu cầu</div>5 endpoint MVP: + <code>/stats/redemption-trend</code> (trend chart 7-day SVG). Báo cáo cũ <b>thiếu hẳn</b> endpoint này.</div>
+            </div>
+            <div class="diff-row">
+              <span class="diff-tag diff-add">ADD</span>
+              <div class="diff-side"><div class="h">Báo cáo cũ</div>Vendor Sync — không nhắc đến</div>
+              <div class="diff-side"><div class="h">Mockup yêu cầu</div>Trang Đơn quà có module Vendor Sync (UrBox: Voucher/Brand/Category; GotIt: Category/Brand/Mapping/Product) + sync-now action. <b>Cần 4 endpoint mới.</b></div>
+            </div>
+            <div class="diff-row">
+              <span class="diff-tag diff-add">ADD</span>
+              <div class="diff-side"><div class="h">Báo cáo cũ</div>CSM Notes & Account Insights — không có</div>
+              <div class="diff-side"><div class="h">Mockup yêu cầu</div>Account Detail có tab "Tương tác CSM" + "Cơ hội kinh doanh AI". Cần list/add note, GET insights, GET 12-month GMV trend.</div>
+            </div>
+            <div class="diff-row">
+              <span class="diff-tag diff-mv">MOVE</span>
+              <div class="diff-side"><div class="h">Báo cáo cũ</div>Account list & Vendor list xếp P2 (admin completeness)</div>
+              <div class="diff-side"><div class="h">Mockup yêu cầu</div>Đây là <b>màn hình chính</b> của Account Management — phải <b>P1</b>, có 8 filter (health, mode, vendor, churn, industry, tier, sort) + bulk actions.</div>
+            </div>
+            <div class="diff-row">
+              <span class="diff-tag diff-fix">FIX</span>
+              <div class="diff-side"><div class="h">Báo cáo cũ</div>Heatmap, top-categories, stock-alerts xếp P2</div>
+              <div class="diff-side"><div class="h">Mockup yêu cầu</div>Heatmap (Peak Hours 24×7) đã có trong mockup F2 chính thức → <b>thuộc MVP P1</b>, không phải P2 extra.</div>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="sec">🚦 Critical path tới go-live (30/05/2026)</h2>
+        <div class="card">
+          <table>
+            <thead><tr><th>#</th><th>Hạng mục</th><th>Effort</th><th>Block by</th><th>Status</th><th>Sprint</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Module C — Audit Log (AOP + entity + GET /audit-logs)</td><td>2-3 ngày</td><td>—</td><td><span class="pill pill-missing">MISSING</span></td><td>Sprint 19 (W7)</td></tr>
+              <tr><td>2</td><td>F4 Phase 1b — Reconciliation Excel upload (GotIt voucher)</td><td>5-7 ngày</td><td>Spec ready ✅</td><td><span class="pill pill-pending">SPEC READY</span></td><td>Sprint 19-20</td></tr>
+              <tr><td>3</td><td>F1 Phase 1b — Resend voucher + Manual refund</td><td>3-4 ngày</td><td>Loyalty addPoints API + BA spec</td><td><span class="pill pill-block">BLOCKED</span></td><td>Sprint 19-20</td></tr>
+              <tr><td>4</td><td>F5 — Aging + Freeze + Reminder (block CREDIT mode prod)</td><td>5-6 ngày</td><td>OQ-3, OQ-4 (Finance)</td><td><span class="pill pill-missing">MISSING</span></td><td>Sprint 20</td></tr>
+              <tr><td>5</td><td>F3 — Daily/Weekly/Monthly report + export + email</td><td>5 ngày</td><td>Email SMTP infra (DevOps)</td><td><span class="pill pill-missing">MISSING</span></td><td>Sprint 21</td></tr>
+              <tr><td>6</td><td>Stats <code>redemption-trend</code> + Heatmap (F2 hoàn thiện)</td><td>2 ngày</td><td>—</td><td><span class="pill pill-missing">MISSING</span></td><td>Sprint 19</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="decision">
+          <div class="h">⚡ Cần quyết định ngay (08/05)</div>
+          <ol style="margin-left:20px;">
+            <li><b>Sequence PR2:</b> ưu tiên Module C Audit (3d, P0 compliance) hay F4 Excel (5-7d, P0 finance)? — <i>khuyến nghị Module C trước vì spec gọn và unblock UAT entry criteria.</i></li>
+            <li><b>Resolve OQ-3 + OQ-4 với Finance trong tuần này</b> để F5 có spec start Sprint 20.</li>
+            <li><b>Escalate Loyalty <code>addPoints</code></b> — F1 Phase 1b không thể move không có API này.</li>
+            <li><b>Confirm Email SMTP</b> với DevOps — block F1, F3, F5 (3 features cùng phụ thuộc).</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: DIFF MOCKUP ===================== -->
+      <section class="page" id="page-diff">
+        <h1 class="page-title">🔍 Đối chiếu Báo cáo cũ ↔ Mockup chính thức</h1>
+        <div class="page-sub">13 thay đổi quan trọng phát hiện sau khi đọc 3 file mockup. Báo cáo cũ thiếu một số endpoint, sai priority một số khác.</div>
+
+        <div class="card">
+          <h3 class="sub-sec">A. Thiếu hoàn toàn — chưa list trong báo cáo cũ</h3>
+          <table>
+            <thead><tr><th>#</th><th>Endpoint</th><th>Feature</th><th>Nguồn mockup</th><th>Priority đề xuất</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td><span class="m m-get">GET</span> <code>/crm-admin/stats/redemption-trend</code></td><td>F2 Analytics</td><td>Mockup F2 chính thức (line+area chart 7-day)</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td>2</td><td><span class="m m-get">GET</span> <code>/crm-admin/stats/peak-hours-heatmap</code></td><td>F2 Analytics</td><td>Mockup F2 — Heatmap 24h × 7d</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td>3</td><td><span class="m m-get">GET</span> <code>/crm-admin/accounts/{id}/gmv-trend</code></td><td>Account Detail</td><td>Mockup file 2 — Coffee House 12-month chart</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td>4</td><td><span class="m m-get">GET</span> <code>/crm-admin/accounts/{id}/insights</code></td><td>Account Detail</td><td>Mockup file 2 — "Cơ hội kinh doanh AI"</td><td><span class="prio prio-p2">P2</span></td></tr>
+              <tr><td>5</td><td><span class="m m-get">GET</span> <code>/crm-admin/accounts/{id}/csm-notes</code></td><td>Account Detail</td><td>Mockup file 2 — Tab "Tương tác CSM"</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td>6</td><td><span class="m m-post">POST</span> <code>/crm-admin/accounts/{id}/csm-notes</code></td><td>Account Detail</td><td>Mockup file 2 — Button "+ Thêm note"</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td>7</td><td><span class="m m-get">GET</span> <code>/crm-admin/vendor-sync/status</code></td><td>Order page</td><td>Mockup file 2 — Bảng "Đồng bộ vendor"</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td>8</td><td><span class="m m-post">POST</span> <code>/crm-admin/vendor-sync/{vendor}/{type}/run</code></td><td>Order page</td><td>Mockup — Action "Đồng bộ ngay"</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td>9</td><td><span class="m m-post">POST</span> <code>/crm-admin/webhooks/gotit/voucher</code></td><td>Integration</td><td>Sprint 18 task — RSA verify (50% code)</td><td><span class="prio prio-p0">P0</span></td></tr>
+              <tr><td>10</td><td><span class="m m-get">GET</span> <code>/crm-admin/dashboard/health-distribution</code></td><td>Exec Overview</td><td>Mockup file 2 — Health Score widget</td><td><span class="prio prio-p2">P2</span></td></tr>
+              <tr><td>11</td><td><span class="m m-get">GET</span> <code>/crm-admin/dashboard/churn-risk</code></td><td>Exec Overview</td><td>Mockup file 2 — KPI "Churn risk: 6 accounts"</td><td><span class="prio prio-p2">P2</span></td></tr>
+              <tr><td>12</td><td><span class="m m-post">POST</span> <code>/crm-admin/accounts/bulk-actions</code></td><td>Account list</td><td>Mockup — bulk: send report / mark risk / propose topup / create CSM task</td><td><span class="prio prio-p2">P2</span></td></tr>
+              <tr><td>13</td><td><span class="m m-get">GET</span> <code>/crm-admin/top-up-requests/{id}/evidence</code></td><td>Top-up</td><td>Mockup file 2 — Action "👁 Xem chứng từ"</td><td><span class="prio prio-p1">P1</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">B. Sai priority — đề xuất move</h3>
+          <table>
+            <thead><tr><th>Endpoint</th><th>Báo cáo cũ</th><th>Mockup</th><th>Đề xuất</th><th>Lý do</th></tr></thead>
+            <tbody>
+              <tr><td><span class="m m-get">GET</span> <code>/accounts</code> (list paginated)</td><td><span class="prio prio-p2">P2</span></td><td>Màn chính Account Management</td><td><span class="prio prio-p1">P1</span></td><td>Toàn bộ trang Account Management dựa vào endpoint này. Có 8 filter + sort + bulk action.</td></tr>
+              <tr><td><span class="m m-get">GET</span> <code>/vendors</code> (list)</td><td><span class="prio prio-p2">P2</span></td><td>Vendor admin / dropdown filter</td><td><span class="prio prio-p1">P1</span></td><td>Filter Vendor xuất hiện ở 4 trang khác: F1 Order, F2 Stats, F4 Đối soát, Account list.</td></tr>
+              <tr><td>Heatmap, top-categories</td><td><span class="prio prio-p2">P2</span></td><td>Có trong mockup F2 chính thức</td><td><span class="prio prio-p1">P1</span></td><td>Mockup hiển thị Peak Hours Heatmap như visualization hạng 1, không phải "extra". Nếu thiếu, F2 không phải MVP đầy đủ.</td></tr>
+              <tr><td>Recovery Task admin (force-retry/cancel)</td><td><span class="prio prio-p2">P2</span></td><td>Module trong trang Đơn quà & Vận hành</td><td><span class="prio prio-p1">P1</span></td><td>Mockup có "12 đang xử lý" KPI + 4 task type. CSR cần force-retry để xử lý đơn lỗi hằng ngày.</td></tr>
+              <tr><td>F4 UrBox Reconciliation</td><td><span class="prio prio-pq">DEFER</span> (user skip)</td><td>Mockup hiển thị UrBox: 8420 voucher matched 100%</td><td><span class="prio prio-p1">P1</span></td><td>UrBox là vendor lớn hơn GotIt (45% vs 25% volume). Skip = mất 70% scope đối soát thực tế. <b>Confirm lại với BA.</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">C. Diễn đạt sai / cần làm rõ</h3>
+          <ul class="list">
+            <li><b>"F2 Analytics 50% (4/8 endpoint)"</b> — Sai mẫu số. Mockup F2 spec ra <b>5 endpoint MVP</b> (overview, top-brands, top-rewards, by-vendor, redemption-trend). Đã có 4/5 = <b>80%</b> nếu chỉ tính MVP. P2 extras (heatmap, categories, stock) là 3 endpoint thêm — không nên gộp vào 1 cột "8".</li>
+            <li><b>"F1 Quản lý đơn 60%"</b> — Đúng % nhưng thiếu chi tiết: Phase 1a 3/3 endpoint Done, Phase 1b 0/2 BLOCKED (cần Loyalty addPoints + BA spec). Cần ghi rõ block-by trong báo cáo.</li>
+            <li><b>"F5 Collection 20% (chỉ credit-limit + postpaid toggle)"</b> — Hai endpoint này không thuộc F5 mà thuộc <b>Account Balance config</b>. F5 thực tế <b>0% endpoint</b> (chưa có aging/freeze/reminder). 20% là sai cách tính.</li>
+            <li><b>"Tổng (P0 + P1) ~25%"</b> — Sau khi tính lại với 13 endpoint bị sót: <b>~30%</b> nếu count cả task admin. Vẫn thấp nhưng cần con số đúng để báo cáo stakeholder.</li>
+            <li><b>P2 Account admin "GET /accounts list paginated"</b> — Không phải "admin completeness", đây là yêu cầu chính của trang Account Management ở mockup file 2 (đứng tab thứ 2 trong navigation).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: COVERAGE MATRIX ===================== -->
+      <section class="page" id="page-coverage">
+        <h1 class="page-title">📈 Coverage Matrix theo Mockup</h1>
+        <div class="page-sub">Mỗi feature × phase × endpoint. Done = đã build & merge. Pending = đã có spec nhưng chưa code. Missing = chưa có gì.</div>
+
+        <div class="card">
+          <table>
+            <thead><tr><th>Feature</th><th>Endpoint MVP</th><th>Đã có</th><th>Còn thiếu</th><th>%</th><th>Block by</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><b>F1 Quản lý đơn</b></td>
+                <td>5 (3 read + 2 action)</td>
+                <td>3 (list, detail, export)</td>
+                <td>2 (resend, refund)</td>
+                <td><span class="pill pill-pending">60%</span></td>
+                <td>Loyalty addPoints, BA spec refund flow</td>
+              </tr>
+              <tr>
+                <td><b>F2 Analytics</b></td>
+                <td>5 + 3 extras</td>
+                <td>4 (overview, top-brands, top-rewards, by-vendor)</td>
+                <td>1 MVP (trend) + 3 extras (heatmap, categories, stock)</td>
+                <td><span class="pill pill-pending">44%</span></td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><b>F3 Báo cáo</b></td>
+                <td>5 (daily/weekly/monthly + breakdown + export async)</td>
+                <td>0</td>
+                <td>5</td>
+                <td><span class="pill pill-missing">0%</span></td>
+                <td>Email SMTP, S3/GCS storage</td>
+              </tr>
+              <tr>
+                <td><b>F4 Đối soát Phase 1a (Balance Ledger)</b></td>
+                <td>6</td>
+                <td>6 (runs, discrepancies)</td>
+                <td>0</td>
+                <td><span class="pill pill-done">100%</span></td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><b>F4 Đối soát Phase 1b (Voucher GotIt)</b></td>
+                <td>2 (excel-upload, voucher-rows)</td>
+                <td>0</td>
+                <td>2</td>
+                <td><span class="pill pill-missing">0%</span></td>
+                <td>Spec ready, dispatch ngay</td>
+              </tr>
+              <tr>
+                <td><b>F4 Đối soát Phase 2 (Loyalty)</b></td>
+                <td>2 (worker + email alert)</td>
+                <td>0</td>
+                <td>2</td>
+                <td><span class="pill pill-defer">DEFER</span></td>
+                <td>Loyalty listTransactions API (OQ-1)</td>
+              </tr>
+              <tr>
+                <td><b>F4 Đối soát Phase 1b UrBox</b></td>
+                <td>~2</td>
+                <td>0</td>
+                <td>2</td>
+                <td><span class="pill pill-block">RECONFIRM</span></td>
+                <td>User chốt skip — nhưng UrBox = 45% volume</td>
+              </tr>
+              <tr>
+                <td><b>F5 Công nợ</b></td>
+                <td>7 (aging, account-collection, reminder, freeze, unfreeze, summary, send-reminder)</td>
+                <td>0 (credit-limit & postpaid là Account, không phải F5)</td>
+                <td>7</td>
+                <td><span class="pill pill-missing">0%</span></td>
+                <td>OQ-3, OQ-4, Email SMTP</td>
+              </tr>
+              <tr>
+                <td><b>Module C Audit Log</b></td>
+                <td>3 (entity + AOP + GET /audit-logs)</td>
+                <td>0</td>
+                <td>3</td>
+                <td><span class="pill pill-missing">0%</span></td>
+                <td>OQ-10 scope</td>
+              </tr>
+              <tr>
+                <td><b>Account Management</b></td>
+                <td>5 (list, create, detail, update, bulk)</td>
+                <td>2 (create, detail)</td>
+                <td>3 (list, update, bulk)</td>
+                <td><span class="pill pill-pending">40%</span></td>
+                <td>OQ-11 update fields</td>
+              </tr>
+              <tr>
+                <td><b>Account Detail rich</b></td>
+                <td>3 (gmv-trend, csm-notes get/post, insights)</td>
+                <td>0</td>
+                <td>3</td>
+                <td><span class="pill pill-missing">0%</span></td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><b>Account Balance config</b></td>
+                <td>6</td>
+                <td>6</td>
+                <td>0</td>
+                <td><span class="pill pill-done">100%</span></td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><b>Vendor admin</b></td>
+                <td>5 (create, get, list, update, delete)</td>
+                <td>2 (create, get)</td>
+                <td>3</td>
+                <td><span class="pill pill-pending">40%</span></td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><b>Vendor Sync</b></td>
+                <td>2 (status, sync-now)</td>
+                <td>0</td>
+                <td>2</td>
+                <td><span class="pill pill-missing">0%</span></td>
+                <td>UrBox/GotIt API list (OQ-1 mockup)</td>
+              </tr>
+              <tr>
+                <td><b>Top-up</b></td>
+                <td>7</td>
+                <td>6</td>
+                <td>1 (evidence view)</td>
+                <td><span class="pill pill-pending">86%</span></td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><b>Payment</b></td>
+                <td>4 (create, list, detail, void)</td>
+                <td>1 (create)</td>
+                <td>3</td>
+                <td><span class="pill pill-pending">25%</span></td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><b>Inquiry</b></td>
+                <td>2 (by orderCode, by phone/email)</td>
+                <td>1 (orderCode)</td>
+                <td>1</td>
+                <td><span class="pill pill-pending">50%</span></td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><b>Recovery Task admin</b></td>
+                <td>4 (list, force-retry, cancel, export)</td>
+                <td>0</td>
+                <td>4</td>
+                <td><span class="pill pill-missing">0%</span></td>
+                <td>OQ-12 audit risk</td>
+              </tr>
+              <tr>
+                <td><b>Webhook GotIt</b></td>
+                <td>1 (voucher receiver RSA)</td>
+                <td>0.5 (50% code)</td>
+                <td>0.5</td>
+                <td><span class="pill pill-pending">50%</span></td>
+                <td>RSA verify wire-up</td>
+              </tr>
+              <tr style="background:#fef3c7; font-weight:700;">
+                <td>TỔNG (MVP scope)</td>
+                <td>~70 endpoints</td>
+                <td>32 + 0.5</td>
+                <td>~38</td>
+                <td><span class="pill pill-pending">~46%</span></td>
+                <td>—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: DONE ===================== -->
+      <section class="page" id="page-done">
+        <h1 class="page-title">✅ 32 Endpoints đã có (đã merge)</h1>
+        <div class="page-sub">Bao gồm Phase 1a F1 (3 endpoint, 34 unit tests, commit 9f4b6da) và F4 Phase 1a Balance Ledger Reconciliation (6 endpoint mới merge).</div>
+
+        <div class="card">
+          <h3 class="sub-sec">1. Account Management <span class="small mute">(2)</span></h3>
+          <table><tbody>
+            <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/accounts</code></td><td>Tạo account mới</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts/{id}</code></td><td>Chi tiết account</td></tr>
+          </tbody></table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">2. Account Balance <span class="small mute">(6)</span></h3>
+          <table><tbody>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts/{id}/balance</code></td><td>Overview balance + mode + rows</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts/{id}/balance/transactions</code></td><td>Lịch sử giao dịch (paginated)</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts/{id}/balance/holds</code></td><td>Danh sách hold theo status</td></tr>
+            <tr><td><span class="m m-put">PUT</span></td><td><code>/crm-admin/accounts/{id}/balance/mode</code></td><td>Set DEPOSIT/CREDIT/HYBRID</td></tr>
+            <tr><td><span class="m m-put">PUT</span></td><td><code>/crm-admin/accounts/{id}/balance/credit-limit</code></td><td>Update hạn mức công nợ</td></tr>
+            <tr><td><span class="m m-put">PUT</span></td><td><code>/crm-admin/accounts/{id}/balance/postpaid-enabled</code></td><td>Bật/tắt ghi nợ</td></tr>
+          </tbody></table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">3. Inquiry <span class="small mute">(1)</span></h3>
+          <table><tbody>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/inquiry/{orderCode}</code></td><td>Tra cứu đơn theo orderCode</td></tr>
+          </tbody></table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">4. Payment <span class="small mute">(1)</span></h3>
+          <table><tbody>
+            <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/payments</code></td><td>Ghi nhận thanh toán → giảm CREDIT total</td></tr>
+          </tbody></table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">5. Reconciliation Phase 1a (Balance Ledger) <span class="small mute">(6) — PR1</span></h3>
+          <table><tbody>
+            <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/reconciliation/runs</code></td><td>Trigger Balance Ledger run</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/reconciliation/runs</code></td><td>List runs (filter type/status)</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/reconciliation/runs/{id}</code></td><td>Run detail + discrepancy summary</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/reconciliation/discrepancies</code></td><td>List discrepancies (filter)</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/reconciliation/discrepancies/{id}</code></td><td>Discrepancy detail</td></tr>
+            <tr><td><span class="m m-put">PUT</span></td><td><code>/crm-admin/reconciliation/discrepancies/{id}/resolve</code></td><td>CSR resolve với note</td></tr>
+          </tbody></table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">6. Redemption Orders <span class="small mute">(3) — F1 Phase 1a</span></h3>
+          <table><tbody>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/redemption-orders</code></td><td>List + filter (status, vendor, date, phone)</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/redemption-orders/{id}</code></td><td>Chi tiết đầy đủ (user, reward, balance, vouchers, recovery)</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/redemption-orders/export</code></td><td>Export CSV (UTF-8 BOM, max 10k)</td></tr>
+          </tbody></table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">7. Statistics <span class="small mute">(4)</span></h3>
+          <table><tbody>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/stats/overview</code></td><td>4 KPI cards</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/stats/top-brands</code></td><td>Top brand by GMV/orders</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/stats/top-rewards</code></td><td>Top reward items</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/stats/by-vendor</code></td><td>Vendor split + success rate</td></tr>
+          </tbody></table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">8. Top-up Requests <span class="small mute">(6)</span></h3>
+          <table><tbody>
+            <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/top-up-requests</code></td><td>Tạo top-up (có flag autoApprove)</td></tr>
+            <tr><td><span class="m m-put">PUT</span></td><td><code>/crm-admin/top-up-requests/{id}/approve</code></td><td>Approve → cộng DEPOSIT</td></tr>
+            <tr><td><span class="m m-put">PUT</span></td><td><code>/crm-admin/top-up-requests/{id}/reject</code></td><td>Reject với reason</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/top-up-requests</code></td><td>List + pagination</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/top-up-requests/{id}</code></td><td>Detail</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/top-up-requests/by-status</code></td><td>Filter theo status</td></tr>
+          </tbody></table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">9. Vendor Management <span class="small mute">(2)</span></h3>
+          <table><tbody>
+            <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/vendors</code></td><td>Tạo vendor mới</td></tr>
+            <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/vendors/{id}</code></td><td>Chi tiết vendor</td></tr>
+          </tbody></table>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: MISSING ===================== -->
+      <section class="page" id="page-missing">
+        <h1 class="page-title">❌ ~38 Endpoints còn thiếu — phân theo Priority</h1>
+        <div class="page-sub">Đã hiệu chỉnh priority dựa trên mockup. <b>P0</b> = block go-live. <b>P1</b> = daily-ops critical hoặc UI chính. <b>P2</b> = nice-to-have / admin extras.</div>
+
+        <h2 class="sec">🔴 P0 — Block go-live (14 endpoint)</h2>
+        <div class="card">
+          <table>
+            <thead><tr><th>Group</th><th>Method</th><th>Path</th><th>Purpose</th><th>Effort</th></tr></thead>
+            <tbody>
+              <tr><td rowspan="3"><b>Module C Audit Log</b><br><span class="small mute">2-3d</span></td><td>—</td><td>Entity AuditLog + AOP hooks (BALANCE_MODE_CHANGE, TOPUP_APPROVE, ACCOUNT_FREEZE/UNFREEZE, REFUND_APPROVE, COLLECTION_REMINDER_SEND, AGING_RECOMPUTE)</td><td>Auto-capture mutation</td><td>1.5d</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/audit-logs</code></td><td>List với filter actor/action/resource/date</td><td>0.5d</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/audit-logs/export</code></td><td>Export CSV</td><td>0.5d</td></tr>
+              <tr><td rowspan="2"><b>F4 Phase 1b Voucher Excel</b><br><span class="small mute">5-7d, spec ready</span></td><td><span class="m m-post">POST</span></td><td><code>/crm-admin/reconciliation/runs/excel-upload</code></td><td>Upload Excel GotIt + parse + match</td><td>3d</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/reconciliation/runs/{id}/voucher-rows</code></td><td>List voucher rows + match status</td><td>1d</td></tr>
+              <tr><td><b>Webhook GotIt</b><br><span class="small mute">1d, 50% done</span></td><td><span class="m m-post">POST</span></td><td><code>/crm-admin/webhooks/gotit/voucher</code></td><td>RSA verify + state handler</td><td>1d</td></tr>
+              <tr><td rowspan="7"><b>F5 Công nợ</b><br><span class="small mute">5-6d, block CREDIT mode prod</span></td><td><span class="m m-get">GET</span></td><td><code>/crm-admin/collection/aging-report</code></td><td>Aging buckets summary</td><td>0.5d</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts/{id}/collection</code></td><td>Account-level collection detail</td><td>0.5d</td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/collection/send-reminder</code></td><td>Reminder EMAIL/SMS, rate limit 1/3d</td><td>1d</td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/collection/freeze</code></td><td>Freeze account (postpaid=false)</td><td>0.5d</td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/collection/unfreeze</code></td><td>Unfreeze account</td><td>0.5d</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/collection/summary</code></td><td>Tổng outstanding + overdue + collected</td><td>0.5d</td></tr>
+              <tr><td>—</td><td>Worker daily 02:00 ICT (aging recompute + auto-freeze T+45)</td><td>Cron job</td><td>1d</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="sec">🟡 P1 — Daily-ops critical (17 endpoint)</h2>
+        <div class="card">
+          <table>
+            <thead><tr><th>Group</th><th>Method</th><th>Path</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td rowspan="2"><b>F1 Phase 1b Action</b></td><td><span class="m m-post">POST</span></td><td><code>/crm-admin/redemption-orders/{id}/resend-voucher</code></td><td>Rate limit 3/order/day (OQ-5)</td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/redemption-orders/{id}/manual-refund</code></td><td>Cộng điểm + Balance REFUND, maker-checker >1M (OQ-6)</td></tr>
+              <tr><td rowspan="5"><b>F3 Báo cáo</b></td><td><span class="m m-get">GET</span></td><td><code>/crm-admin/reports/daily</code></td><td>Daily aggregate</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/reports/weekly</code></td><td>Weekly aggregate</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/reports/monthly</code></td><td>Monthly aggregate</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/reports/failure-breakdown</code></td><td>Phân loại lỗi</td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/reports/export</code></td><td>Async export PDF/Excel</td></tr>
+              <tr><td rowspan="2"><b>F2 Analytics MVP còn thiếu</b></td><td><span class="m m-get">GET</span></td><td><code>/crm-admin/stats/redemption-trend</code></td><td>Time-series 7d/30d (mockup line+area)</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/stats/peak-hours-heatmap</code></td><td>Heatmap 24h × 7d</td></tr>
+              <tr><td rowspan="2"><b>Account list & update</b></td><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts</code></td><td>List paginated + 8 filter (health, mode, vendor, churn, industry, tier, ...)</td></tr>
+              <tr><td><span class="m m-put">PUT</span></td><td><code>/crm-admin/accounts/{id}</code></td><td>Update name/contact (OQ-11)</td></tr>
+              <tr><td rowspan="3"><b>Account Detail rich</b></td><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts/{id}/gmv-trend</code></td><td>12-month GMV chart</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts/{id}/csm-notes</code></td><td>List notes</td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/accounts/{id}/csm-notes</code></td><td>Add note</td></tr>
+              <tr><td rowspan="2"><b>Vendor Sync</b></td><td><span class="m m-get">GET</span></td><td><code>/crm-admin/vendor-sync/status</code></td><td>Sync status table</td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/vendor-sync/{vendor}/{type}/run</code></td><td>Sync now per type</td></tr>
+              <tr><td><b>Top-up evidence</b></td><td><span class="m m-get">GET</span></td><td><code>/crm-admin/top-up-requests/{id}/evidence</code></td><td>Xem chứng từ chuyển khoản</td></tr>
+              <tr><td><b>Inquiry rộng</b></td><td><span class="m m-get">GET</span></td><td><code>/crm-admin/inquiry?phone=&email=</code></td><td>Tra cứu theo SĐT/email</td></tr>
+              <tr><td><b>Vendor list</b></td><td><span class="m m-get">GET</span></td><td><code>/crm-admin/vendors</code></td><td>Dropdown filter cho 4 trang khác</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="sec">🟢 P2 — Growth analytics + admin completeness (~12)</h2>
+        <div class="card">
+          <table>
+            <thead><tr><th>Group</th><th>Endpoints</th></tr></thead>
+            <tbody>
+              <tr><td>Recovery Task admin</td><td><code>GET /recovery-tasks</code> · <code>POST /recovery-tasks/{id}/force-retry</code> · <code>POST /recovery-tasks/{id}/cancel</code> · <code>GET /recovery-tasks/export</code></td></tr>
+              <tr><td>F2 Analytics extras</td><td><code>GET /stats/top-categories</code> · <code>GET /stats/stock-alerts</code> · Cache layer Redis</td></tr>
+              <tr><td>Vendor admin</td><td><code>PUT /vendors/{id}</code> · <code>DELETE /vendors/{id}</code></td></tr>
+              <tr><td>Payment admin</td><td><code>GET /payments</code> · <code>GET /payments/{id}</code> · <code>POST /payments/{id}/void</code></td></tr>
+              <tr><td>Account bulk &amp; insights</td><td><code>POST /accounts/bulk-actions</code> (send report / mark risk / propose topup / create CSM task) · <code>GET /accounts/{id}/insights</code> (AI suggest)</td></tr>
+              <tr><td>Exec Dashboard widgets</td><td><code>GET /dashboard/health-distribution</code> · <code>GET /dashboard/churn-risk</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="sec">⚪ P? — Defer (chờ external API hoặc reconfirm)</h2>
+        <div class="card">
+          <table>
+            <thead><tr><th>Hạng mục</th><th>Block by</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>F4 Phase 2 Loyalty Reconciliation (2 endpoint + worker)</td><td>OQ-1: CNV Loyalty <code>listTransactions</code></td><td>Loyalty team confirm</td></tr>
+              <tr><td>F4 Phase 1b UrBox Reconciliation (~2 endpoint)</td><td>User chốt skip — nhưng UrBox = 45% volume</td><td><b>Reconfirm với BA</b> trước khi skip thật</td></tr>
+              <tr><td>Audit Log cold tier S3 archive</td><td>S3 storage (OQ-7)</td><td>Post go-live (Sprint 22+)</td></tr>
+              <tr><td>OAuth2 GotIt deploy</td><td>Vendor reply (sent 23/04)</td><td>Ping vendor lại</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: F1 ===================== -->
+      <section class="page" id="page-f1">
+        <h1 class="page-title">F1 — Quản lý Đơn Đổi Quà</h1>
+        <div class="page-sub">Coverage 60% · Phase 1a DONE · Phase 1b BLOCKED bởi Loyalty addPoints API</div>
+
+        <div class="kpis">
+          <div class="kpi ok"><div class="lbl">Endpoint Done</div><div class="val">3 / 5</div><div class="delta pos">List, Detail, Export</div></div>
+          <div class="kpi crit"><div class="lbl">Endpoint Missing</div><div class="val">2</div><div class="delta neg">Resend, Manual refund</div></div>
+          <div class="kpi"><div class="lbl">Tests</div><div class="val">34 PASS</div><div class="delta">12 happy + 10 error + 12 edge</div></div>
+          <div class="kpi warn"><div class="lbl">Block</div><div class="val">2 OQ</div><div class="delta warn">OQ-5 rate limit, OQ-6 maker-checker</div></div>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">Mockup screen yêu cầu</h3>
+          <p>Filter: SĐT, Mã đơn, Status (SUCCESS/PENDING/FAILED), Vendor (UR_BOX/GOT_IT/CNV), Date range. Columns: Mã đơn, Ngày tạo, Khách hàng, SĐT, Phần thưởng, Vendor, Điểm, Chi phí, Voucher count, Trạng thái, Action.</p>
+          <p style="margin-top:8px;">Failed-row inline expansion: "Lý do lỗi: vendor timeout — đã lên lịch chạy lại lúc HH:MM" với action <b>Buộc xử lý ngay</b> / <b>Điều tra</b> → <i>cần endpoint Recovery Task force-retry (xem trang Recovery Task admin).</i></p>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">Việc cần làm tiếp</h3>
+          <ol style="margin-left:24px;">
+            <li><b>Get BA spec refund flow</b> (maker-checker threshold, deny-points reversal, audit fields) — owner BA, 1d</li>
+            <li><b>Confirm OQ-5 (3/day/order rate limit)</b> với Product</li>
+            <li><b>Escalate Loyalty <code>addPoints</code> deploy</b> — block manual refund</li>
+            <li><b>Implement</b> 2 endpoint POST + thêm AuditLog hook + 16 unit tests (target 50 total)</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: F2 ===================== -->
+      <section class="page" id="page-f2">
+        <h1 class="page-title">F2 — Analytics Reward</h1>
+        <div class="page-sub">Coverage MVP 80% · Coverage tổng 44% (kể cả P2 extras)</div>
+
+        <div class="kpis">
+          <div class="kpi ok"><div class="lbl">MVP Done</div><div class="val">4 / 5</div><div class="delta pos">Overview, Top brand, Top reward, By-vendor</div></div>
+          <div class="kpi crit"><div class="lbl">MVP Missing</div><div class="val">1</div><div class="delta neg">/stats/redemption-trend</div></div>
+          <div class="kpi warn"><div class="lbl">P1 mockup</div><div class="val">1</div><div class="delta warn">/stats/peak-hours-heatmap</div></div>
+          <div class="kpi"><div class="lbl">P2 extras</div><div class="val">3</div><div class="delta">categories, stock, cache</div></div>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">⚠️ Phát hiện trong báo cáo cũ</h3>
+          <p>Báo cáo cũ ghi "F2 Analytics 50% (4/8)". Sau khi xem mockup F2 chính thức, MVP scope chỉ <b>5 endpoint</b> (overview, top-brands, top-rewards, by-vendor, <b>redemption-trend</b>). Endpoint <code>/stats/redemption-trend</code> chính là dữ liệu cho <b>line+area chart 7-day</b> hiển thị ở trang Stats — bị thiếu hẳn khỏi đếm. <b>Heatmap, top-categories, stock-alerts</b> là 3 endpoint thêm — nên tính riêng.</p>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">Đề xuất sequence</h3>
+          <table>
+            <thead><tr><th>Step</th><th>Endpoint</th><th>Effort</th><th>Note</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td><code>GET /stats/redemption-trend</code></td><td>0.5d</td><td>Granularity hour/day, 7d window</td></tr>
+              <tr><td>2</td><td><code>GET /stats/peak-hours-heatmap</code></td><td>0.5d</td><td>24h × 7d grid, 5 intensity levels</td></tr>
+              <tr><td>3</td><td><code>GET /stats/top-categories</code></td><td>0.5d</td><td>(P2)</td></tr>
+              <tr><td>4</td><td><code>GET /stats/stock-alerts</code></td><td>0.5d</td><td>(P2) low / out</td></tr>
+              <tr><td>5</td><td>Redis cache layer</td><td>1d</td><td>(P2) TTL 5min cho 6 endpoint stats</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: F3 ===================== -->
+      <section class="page" id="page-f3">
+        <h1 class="page-title">F3 — Báo cáo Redemption</h1>
+        <div class="page-sub">Coverage 0% · Sprint 21 (Go-live week) · 5 ngày</div>
+
+        <div class="alert alert-amber">⚠️ Block by <b>Email SMTP infra</b> (OQ-2, DevOps) và <b>S3/GCS storage</b> (OQ-7, DevOps) cho async export. Cả 2 OQ này cũng block F1 và F5.</div>
+
+        <div class="card">
+          <h3 class="sub-sec">5 Endpoint cần build</h3>
+          <table>
+            <tbody>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/reports/daily</code></td><td>Daily aggregate (orders, GMV, success rate, top brand/reward)</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/reports/weekly</code></td><td>Weekly</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/reports/monthly</code></td><td>Monthly</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/reports/failure-breakdown</code></td><td>Phân loại lỗi (vendor timeout, balance fail, validation, ...)</td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/reports/export</code></td><td>Async export PDF/Excel + cron schedule email</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: F4 ===================== -->
+      <section class="page" id="page-f4">
+        <h1 class="page-title">F4 — Đối soát (3-way Reconciliation)</h1>
+        <div class="page-sub">Phase 1a Balance Ledger DONE · Phase 1b Voucher GotIt SPEC READY · Phase 2 Loyalty DEFER</div>
+
+        <div class="kpis">
+          <div class="kpi ok"><div class="lbl">Phase 1a Balance Ledger</div><div class="val">100%</div><div class="delta pos">6/6 endpoint, PR1 merged</div></div>
+          <div class="kpi crit"><div class="lbl">Phase 1b GotIt Voucher</div><div class="val">0%</div><div class="delta neg">Spec ready 5-7d</div></div>
+          <div class="kpi warn"><div class="lbl">Phase 1b UrBox</div><div class="val">RECONFIRM</div><div class="delta warn">UrBox = 45% volume</div></div>
+          <div class="kpi"><div class="lbl">Phase 2 Loyalty</div><div class="val">DEFER</div><div class="delta">Chờ OQ-1</div></div>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">3-way Reconciliation overview (theo mockup file 2)</h3>
+          <p>CNV internal ledger ↔ Vendor (UrBox/GotIt) ↔ Loyalty. Daily worker + alert on mismatch. Mockup file 2 hiển thị bảng:</p>
+          <table>
+            <thead><tr><th>Vendor</th><th>CNV ghi nhận</th><th>Vendor báo về</th><th>Sai lệch</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>UrBox</td><td>8420 voucher (310tr)</td><td>matched 100%</td><td>0</td><td>Tải PDF</td></tr>
+              <tr><td>GotIt</td><td>2180 voucher (58tr)</td><td>2178 (57.8tr)</td><td>2 voucher (200k)</td><td>Tạo claim / Bỏ qua</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:8px;"><b>⚠️ Lưu ý:</b> báo cáo cũ ghi UrBox "user chốt skip". Nhưng UrBox volume 45% > GotIt 25% — skip hoàn toàn UrBox = mất 70% scope đối soát voucher. <b>Cần reconfirm với BA</b> trước khi đóng task.</p>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">PR2 — F4 Phase 1b spec ready</h3>
+          <p>Endpoints: <code>POST /reconciliation/runs/excel-upload</code> · <code>GET /runs/{id}/voucher-rows</code>. Workflow: upload Excel GotIt → parse → match với internal voucher → tạo discrepancy → CSR resolve. Effort 5-7d.</p>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: F5 ===================== -->
+      <section class="page" id="page-f5">
+        <h1 class="page-title">F5 — Quản lý Công nợ (Aging + Freeze)</h1>
+        <div class="page-sub">Coverage 0% (báo cáo cũ ghi 20% là tính nhầm credit-limit/postpaid của Account Balance vào F5)</div>
+
+        <div class="alert alert-red">🚫 <b>BLOCK CREDIT mode prod.</b> Plan B: launch DEPOSIT-only mode trước, mở CREDIT sau khi F5 sẵn sàng. Chính sách này confirm với CRM head trước khi đi prod.</div>
+
+        <div class="card">
+          <h3 class="sub-sec">Mockup F5 yêu cầu (file 1)</h3>
+          <h4 style="margin: 10px 0 6px; font-size:13px;">Aging buckets</h4>
+          <table>
+            <thead><tr><th>Bucket</th><th>Amount</th><th>Count</th></tr></thead>
+            <tbody>
+              <tr><td>CURRENT</td><td>1.680.000.000 ₫</td><td>128</td></tr>
+              <tr><td>0-30 ngày</td><td>624.500.000 ₫</td><td>33</td></tr>
+              <tr><td>30-60 ngày</td><td>312.150.000 ₫</td><td>14</td></tr>
+              <tr><td>60-90 ngày</td><td>158.000.000 ₫</td><td>6</td></tr>
+              <tr><td>90+ ngày</td><td>73.000.000 ₫</td><td>3 (FROZEN)</td></tr>
+            </tbody>
+          </table>
+
+          <h4 style="margin: 14px 0 6px; font-size:13px;">Reminder + Auto-freeze workflow</h4>
+          <ul class="list">
+            <li>T-7: Friendly reminder</li>
+            <li>T=0: Due date</li>
+            <li>T+1 → T+15: Urgent reminder + CRM internal alert</li>
+            <li>T+30: Final reminder</li>
+            <li>T+45: AUTO-FREEZE (<code>isPostpaidEnabled = false</code>)</li>
+          </ul>
+
+          <h4 style="margin: 14px 0 6px; font-size:13px;">Business rules</h4>
+          <ul class="list">
+            <li>Rate limit max 1 reminder/account/3 ngày</li>
+            <li>Templates: friendly → urgent → final by severity</li>
+            <li>Account admin có thể opt-out email (internal alert vẫn giữ)</li>
+            <li>Freeze: CREDIT redemption rejected với <code>ACCOUNT_FROZEN</code>, holds preserve</li>
+            <li>Auto-unfreeze (optional) khi outstanding = 0</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">7 Endpoint + 1 worker cần build</h3>
+          <table>
+            <tbody>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/collection/aging-report</code></td><td>5 buckets summary</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts/{id}/collection</code></td><td>Account-level detail (overdue days, last reminder, due date)</td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/collection/send-reminder</code></td><td>3 template, 3 channel</td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/collection/freeze</code></td><td>Maker-checker</td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/collection/unfreeze</code></td><td>Check outstanding=0</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/collection/summary</code></td><td>Tổng outstanding, account overdue, avg days, collected this month</td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/collection/list</code></td><td>List accounts + filter (bucket, status, search)</td></tr>
+              <tr><td>—</td><td>Worker daily 02:00 ICT</td><td>Aging recompute + auto-freeze T+45 + alert finance</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">Open questions cần resolve trước Sprint 20</h3>
+          <ul class="list">
+            <li><b>OQ-3:</b> Billing cycle default monthly 1st + due 15th OK? configurable per account? — <i>Owner: Finance</i></li>
+            <li><b>OQ-4:</b> <code>overdue_freeze_days</code> default — 30 / 45 / 60? — <i>Owner: Finance + CRM head</i></li>
+            <li><b>OQ-2:</b> Email SMTP infra ready? — <i>Owner: DevOps</i></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: MODULE C ===================== -->
+      <section class="page" id="page-modulec">
+        <h1 class="page-title">Module C — Audit Log</h1>
+        <div class="page-sub">Coverage 0% · P0 block compliance · 2-3d</div>
+
+        <div class="alert alert-red">⚠️ <b>UAT entry criteria yêu cầu</b> Audit Log cho config flag off → tức là code phải có sẵn để test ở UAT. Nếu thiếu sẽ <b>block UAT entry</b> (target 19/05).</div>
+
+        <div class="card">
+          <h3 class="sub-sec">Scope (theo mockup file 1)</h3>
+          <ul class="list">
+            <li>100% mutation log với IP + user-agent</li>
+            <li>AOP hooks + AuditLog entity</li>
+            <li>Hot retention 1 năm, cold 7 năm (S3 archive defer post-go-live)</li>
+            <li>Filter: actor (CRM_ADMIN/ACCOUNT_ADMIN/SYSTEM), action, resource ID, date</li>
+            <li>Display: time, action pill, actor, diff (- old / + new), IP, browser/OS</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">Actions cần capture</h3>
+          <table>
+            <thead><tr><th>Action</th><th>Trigger source</th><th>Resource</th></tr></thead>
+            <tbody>
+              <tr><td>BALANCE_MODE_CHANGE</td><td>PUT /balance/mode</td><td>Account</td></tr>
+              <tr><td>BALANCE_CREDIT_LIMIT_CHANGE</td><td>PUT /balance/credit-limit</td><td>Account</td></tr>
+              <tr><td>TOPUP_APPROVE / TOPUP_REJECT</td><td>PUT /top-up-requests/{id}/...</td><td>TopUp</td></tr>
+              <tr><td>ACCOUNT_FREEZE / UNFREEZE</td><td>POST /collection/freeze...</td><td>Account</td></tr>
+              <tr><td>REFUND_APPROVE</td><td>POST /redemption-orders/{id}/manual-refund</td><td>Order</td></tr>
+              <tr><td>COLLECTION_REMINDER_SEND</td><td>POST /collection/send-reminder</td><td>Account</td></tr>
+              <tr><td>AGING_RECOMPUTE</td><td>System worker</td><td>—</td></tr>
+              <tr><td>RECONCILIATION_RESOLVE</td><td>PUT /discrepancies/{id}/resolve</td><td>Discrepancy</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">OQ cần resolve</h3>
+          <ul class="list">
+            <li><b>OQ-10:</b> Scope chỉ track CRM admin actions, hay all mutations (bao gồm user-facing & system)? — <i>Khuyến nghị bắt đầu CRM admin + system worker, mở rộng user-mutation phase 1.5.</i></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: ACCOUNT & VENDOR ===================== -->
+      <section class="page" id="page-account">
+        <h1 class="page-title">Account & Vendor — Mockup file 2 đầy đủ</h1>
+        <div class="page-sub">Coverage Account 40% · Vendor 40% · Còn thiếu 13 endpoint quan trọng cho UI Account Management + Detail.</div>
+
+        <div class="card">
+          <h3 class="sub-sec">Account Management list (mockup file 2 — Tab thứ 2)</h3>
+          <p>Filter rich: search · health (Khỏe/Cần theo dõi/Có rủi ro/Nguy hiểm) · hình thức (Trả trước/Trả sau/Kết hợp) · vendor · churn risk · industry · tier (Gold/Silver/Bronze) · sort.</p>
+          <p><b>Bulk actions:</b> Gửi báo cáo · Đánh dấu Risk · Đề xuất Topup · Tạo task CSM</p>
+          <p><b>Top action:</b> + Thêm Account · Xuất Excel ↓</p>
+          <p style="margin-top:8px;"><b>Cần thêm:</b></p>
+          <table>
+            <tbody>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts</code></td><td>List paginated + 8 filter</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td><span class="m m-put">PUT</span></td><td><code>/crm-admin/accounts/{id}</code></td><td>Update name/contact/industry/tier</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/accounts/bulk-actions</code></td><td>4 bulk action</td><td><span class="prio prio-p2">P2</span></td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts/export</code></td><td>Export Excel</td><td><span class="prio prio-p2">P2</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">Account Detail (mockup file 2 — Coffee House example)</h3>
+          <p>4 stat cards: 💳 Tài chính · 📈 Hoạt động · 🎁 Quà tặng · 👥 Người dùng cuối. Plus: 12-month GMV chart, AI insights, Lịch sử gần đây, CSM Notes.</p>
+          <p><b>Action buttons:</b> ✏ Sửa · 💰 Tạo TopUp · 📞 Liên hệ · 📊 Tải báo cáo · ⚠ Mark Risk · 🚪 Offboard</p>
+          <p style="margin-top:8px;"><b>Cần thêm:</b></p>
+          <table>
+            <tbody>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts/{id}/gmv-trend</code></td><td>12-month GMV chart data</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts/{id}/insights</code></td><td>AI suggestion (nâng credit, auto-topup, push, pitch GotIt)</td><td><span class="prio prio-p2">P2</span></td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/accounts/{id}/csm-notes</code></td><td>List CSM interaction</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/accounts/{id}/csm-notes</code></td><td>Add note</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/accounts/{id}/mark-risk</code></td><td>Đánh dấu rủi ro</td><td><span class="prio prio-p2">P2</span></td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/accounts/{id}/offboard</code></td><td>Đóng account</td><td><span class="prio prio-p2">P2</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3 class="sub-sec">Vendor admin + Vendor Sync</h3>
+          <table>
+            <tbody>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/vendors</code></td><td>List (dropdown filter cho 4 trang khác)</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td><span class="m m-put">PUT</span></td><td><code>/crm-admin/vendors/{id}</code></td><td>Update API key, status</td><td><span class="prio prio-p2">P2</span></td></tr>
+              <tr><td><span class="m m-del">DEL</span></td><td><code>/crm-admin/vendors/{id}</code></td><td>Soft-delete</td><td><span class="prio prio-p2">P2</span></td></tr>
+              <tr><td><span class="m m-get">GET</span></td><td><code>/crm-admin/vendor-sync/status</code></td><td>Sync status table (UrBox: voucher/brand/category; GotIt: category/brand/mapping/product)</td><td><span class="prio prio-p1">P1</span></td></tr>
+              <tr><td><span class="m m-post">POST</span></td><td><code>/crm-admin/vendor-sync/{vendor}/{type}/run</code></td><td>Sync now per data-type</td><td><span class="prio prio-p1">P1</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: ROADMAP ===================== -->
+      <section class="page" id="page-roadmap">
+        <h1 class="page-title">🗓️ Roadmap PR Sequence — căn theo phase1-mvp-uat-scope</h1>
+        <div class="page-sub">UAT entry 19/05 (W8) · Go-live 30/05 (W10). Chuỗi PR sắp xếp theo critical path Module C → F4 Excel → F5 → F1 1b → F3.</div>
+
+        <div class="sprint-grid">
+          <div class="sprint-row">
+            <div class="sprint-cell head">Sprint 17 (DONE) · 22/04-24/04</div>
+            <div class="sprint-cell">
+              <span class="task-chip done">F1 Phase 1a — 3 endpoint, 28 files, 34 tests</span>
+              <span class="task-chip done">OAuth2 Framework Scaffold</span>
+              <span class="task-chip done">Brand/Category 2-tier config</span>
+            </div>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-cell head">Sprint 18 (running) · 28/04-02/05</div>
+            <div class="sprint-cell">
+              <span class="task-chip done">F4 Phase 1a Balance Ledger (PR1) — 6 endpoint</span>
+              <span class="task-chip p0">F2 Stats overview/top-brand/top-reward/by-vendor (4/5 done)</span>
+              <span class="task-chip p1">Webhook GotIt Receiver wire RSA + state handler (50% → 100%, 1d)</span>
+              <span class="task-chip p2">Recovery Task Monitor (1-2d)</span>
+            </div>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-cell head">Sprint 19 · 05/05-11/05 · <span style="color:#f87171;">P0 critical</span></div>
+            <div class="sprint-cell">
+              <span class="task-chip p0">Module C Audit Log — AOP + entity + GET (2-3d) <b>← khuyến nghị làm trước</b></span>
+              <span class="task-chip p0">F4 Phase 1b Excel Upload + voucher-rows (5-7d) — <b>spec ready dispatch ngay</b></span>
+              <span class="task-chip p1">F2 stats <code>redemption-trend</code> + <code>peak-hours-heatmap</code> (1d) — close MVP F2</span>
+              <span class="task-chip p1">F1 Phase 1b Resend + Manual refund (3d) — <b>chỉ start khi Loyalty addPoints sẵn</b></span>
+            </div>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-cell head">Sprint 20 · 12/05-18/05 · F5 + Account Mgmt</div>
+            <div class="sprint-cell">
+              <span class="task-chip p0">F5 Aging + Freeze + Reminder + worker (5-6d) — <b>resolve OQ-3, OQ-4 trước khi start</b></span>
+              <span class="task-chip p1">F4 Phase 2 Loyalty (3d) — <b>conditional, Loyalty API confirm</b></span>
+              <span class="task-chip p1">Account list + update + Vendor list (1.5d)</span>
+              <span class="task-chip p1">Account Detail rich: gmv-trend + csm-notes (1.5d)</span>
+              <span class="task-chip p1">Vendor Sync status + run-now (1d)</span>
+            </div>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-cell head">Sprint 21 (Go-live week) · 19/05-25/05</div>
+            <div class="sprint-cell">
+              <span class="task-chip p1">F3 Báo cáo daily/weekly/monthly + export + email (5d)</span>
+              <span class="task-chip p1">Top-up evidence view + Inquiry phone/email (1d)</span>
+              <span class="task-chip p0">UAT begin 19/05 — bug fix cycle (4d buffer)</span>
+              <span class="task-chip p0">E2E smoke gate</span>
+            </div>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-cell head">Sprint 22 (Post go-live) · 26/05+</div>
+            <div class="sprint-cell">
+              <span class="task-chip p2">OAuth2 GotIt deploy (2d)</span>
+              <span class="task-chip p2">Audit Log cold tier S3 archive (3d)</span>
+              <span class="task-chip p2">F1 Phase 2 force-status override (2d)</span>
+              <span class="task-chip p2">F2 cache Redis + top-categories + stock-alerts (2d)</span>
+              <span class="task-chip p2">Recovery Task admin force-retry/cancel (2d)</span>
+              <span class="task-chip p2">Payment admin (list/detail/void) (1.5d)</span>
+              <span class="task-chip p2">Account bulk-actions + insights (2d)</span>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="sec">Risk register</h2>
+        <div class="card">
+          <div class="alert alert-red"><b>🔴 R1: Module C bị deprioritize</b> → block UAT entry → trượt go-live. Mitigation: ưu tiên Sprint 19 đầu tiên.</div>
+          <div class="alert alert-red"><b>🔴 R2: Loyalty addPoints API chưa deploy</b> → F1 Phase 1b không move. Mitigation: ping Loyalty team mỗi 2 ngày, có Plan B = chỉ refund balance không hoàn điểm tạm thời.</div>
+          <div class="alert alert-amber"><b>🟡 R3: F5 OQ chưa resolve</b> → spec chưa ready cho Sprint 20. Mitigation: meeting Finance + CRM head tuần này.</div>
+          <div class="alert alert-amber"><b>🟡 R4: UrBox skip mạo hiểm</b> → mất 70% scope đối soát. Mitigation: reconfirm với BA trước khi đóng task.</div>
+          <div class="alert alert-blue"><b>🔵 R5: Email SMTP infra</b> → block 3 feature (F1 reminder, F3 export, F5 reminder). Mitigation: escalate DevOps trong tuần này.</div>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: OPEN QUESTIONS ===================== -->
+      <section class="page" id="page-oq">
+        <h1 class="page-title">❓ Open Questions — 12 cần resolve</h1>
+        <div class="page-sub">Bao gồm 8 OQ từ mockup gốc + 4 OQ kỹ thuật mới phát hiện.</div>
+
+        <div class="card">
+          <table>
+            <thead><tr><th>#</th><th>Question</th><th>Owner</th><th>Block what</th><th>Deadline</th></tr></thead>
+            <tbody>
+              <tr><td>OQ-1</td><td>CNV Loyalty có expose <code>listTransactions(accountId, dateFrom, dateTo)</code>?</td><td>Loyalty team</td><td>F4 Phase 2</td><td>Sprint 20 start</td></tr>
+              <tr><td>OQ-2</td><td>Email SMTP infra đã có chưa?</td><td>DevOps</td><td>F1 reminder, F3 export, F5 reminder</td><td>Sprint 19 end</td></tr>
+              <tr><td>OQ-3</td><td>Billing cycle default monthly 1st + due 15th OK? configurable per account?</td><td>Finance</td><td>F5 schema</td><td>Sprint 19 end</td></tr>
+              <tr><td>OQ-4</td><td><code>overdue_freeze_days</code> default — 30 / 45 / 60?</td><td>Finance + CRM head</td><td>F5 policy</td><td>Sprint 19 end</td></tr>
+              <tr><td>OQ-5</td><td>Resend voucher rate limit 3/day/order OK?</td><td>Product</td><td>F1 Phase 1b</td><td>Sprint 19</td></tr>
+              <tr><td>OQ-6</td><td>Maker-checker cho refund > 1M VND — ngưỡng đúng?</td><td>Finance</td><td>F1 Phase 1b</td><td>Sprint 19</td></tr>
+              <tr><td>OQ-7</td><td>File storage S3/GCS có sẵn cho async export?</td><td>DevOps</td><td>F3 export, Audit cold tier</td><td>Sprint 21</td></tr>
+              <tr><td>OQ-8</td><td>Elasticsearch infra cho analytics — sẵn sàng?</td><td>DevOps</td><td>F2 advanced (Phase 2)</td><td>Post go-live</td></tr>
+              <tr><td>OQ-9</td><td>F4 Phase 1b Excel — proceed PR2 ngay sau merge staging hay deploy PR1 staging test trước?</td><td>Tech Lead</td><td>Sprint 19 plan</td><td>09/05</td></tr>
+              <tr><td>OQ-10</td><td>Module C Audit Log scope — chỉ CRM admin actions hay all mutations (user/account/system)?</td><td>Tech Lead + Compliance</td><td>Module C scope</td><td>09/05</td></tr>
+              <tr><td>OQ-11</td><td>Account/Vendor PUT update — fields nào cho phép edit? Constraint (vd. cnvAccountId không đổi)?</td><td>BA</td><td>Account update endpoint</td><td>Sprint 20</td></tr>
+              <tr><td>OQ-12</td><td>Recovery Task admin — chỉ view hay cho phép force-retry/cancel? Risk audit?</td><td>BA + Tech Lead</td><td>Recovery admin endpoints</td><td>Sprint 22</td></tr>
+              <tr style="background:#fef3c7;"><td>OQ-13</td><td><b>NEW:</b> F4 UrBox Reconciliation — confirm skip thật, hay làm vì UrBox = 45% volume?</td><td>BA</td><td>F4 scope</td><td>09/05</td></tr>
+              <tr style="background:#fef3c7;"><td>OQ-14</td><td><b>NEW:</b> Loyalty <code>addPoints</code> API có ETA deploy?</td><td>Loyalty team</td><td>F1 Phase 1b</td><td>Sprint 19 start</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== PAGE: DECISION ===================== -->
+      <section class="page" id="page-decide">
+        <h1 class="page-title">⚡ Cần quyết định — 4 quyết định ưu tiên ngày 08/05</h1>
+        <div class="page-sub">Quyết định để dispatch dev tuần tới (Sprint 19 bắt đầu 12/05).</div>
+
+        <div class="decision">
+          <div class="h">1️⃣ Quyết định: Sequence PR2</div>
+          <p><b>Câu hỏi:</b> Làm Module C Audit (3d) trước, hay F4 Phase 1b Excel (5-7d) trước?</p>
+          <p><b>Khuyến nghị:</b> <span class="prio prio-p0">Module C trước</span> vì:</p>
+          <ul class="list">
+            <li>Spec gọn, ít external dependency</li>
+            <li>Block UAT entry criteria — phải có audit khi UAT 19/05</li>
+            <li>Pattern AOP tái sử dụng cho mọi mutation sau (F5 freeze, F1 refund đều cần)</li>
+            <li>F4 Excel có thể parallel (giao Hải) trong khi Trang làm Module C</li>
+          </ul>
+        </div>
+
+        <div class="decision">
+          <div class="h">2️⃣ Quyết định: Resolve OQ-3 + OQ-4 (F5)</div>
+          <p><b>Câu hỏi:</b> Billing cycle + freeze threshold default? Lịch họp Finance?</p>
+          <p><b>Khuyến nghị:</b> Schedule meeting Finance + CRM head <b>trong tuần này (08-13/05)</b>. Nếu không, F5 không có spec start Sprint 20 → trượt go-live.</p>
+          <p><b>Default đề xuất nếu Finance chưa đáp:</b> billing 1st + due 15th, freeze T+45 (matching mockup mẫu).</p>
+        </div>
+
+        <div class="decision">
+          <div class="h">3️⃣ Quyết định: Loyalty addPoints API ETA</div>
+          <p><b>Câu hỏi:</b> Loyalty team confirm khi nào deploy <code>addPoints</code>?</p>
+          <p><b>Khuyến nghị:</b> Escalate to PM + ping Loyalty team với hard deadline <b>Sprint 19 start (12/05)</b>. Plan B nếu trễ: F1 manual-refund chỉ trả tiền balance, không hoàn điểm — hold-back ticket cho điểm sau.</p>
+        </div>
+
+        <div class="decision">
+          <div class="h">4️⃣ Quyết định: F4 UrBox Reconciliation — skip thật?</div>
+          <p><b>Câu hỏi:</b> Báo cáo cũ ghi "user chốt skip UrBox". Mockup file 2 cho thấy UrBox = 45% volume (lớn hơn GotIt 25%). Skip = mất 70% scope đối soát voucher?</p>
+          <p><b>Khuyến nghị:</b> <b>Reconfirm với BA + Finance</b> trước khi đóng task. Nếu thật sự skip vì UrBox đối soát thủ công đã ổn, thì document rõ trong reconciliation policy. Nếu không, schedule Sprint 22 (post go-live) để làm UrBox Excel upload tương tự GotIt.</p>
+        </div>
+
+        <h2 class="sec">Sau khi quyết xong 4 cái trên, lập tức làm:</h2>
+        <div class="card">
+          <ol style="margin-left:24px;">
+            <li>Dispatch <b>PR2 Module C Audit Log</b> (Sprint 19, owner Trang, 3d)</li>
+            <li>Dispatch <b>PR3 F4 Phase 1b Excel</b> (Sprint 19-20, owner Hải pair, 5-7d)</li>
+            <li>Dispatch <b>PR4 F2 close MVP</b> (Sprint 19, owner Huy, 1d) — <code>redemption-trend</code> + <code>peak-hours-heatmap</code></li>
+            <li>Schedule meeting Finance + CRM head cho <b>OQ-3, OQ-4</b> trong tuần</li>
+            <li>Escalate <b>Loyalty addPoints + DevOps SMTP + DevOps S3</b> với deadline cứng</li>
+          </ol>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.nav-item').forEach(it => {
+    it.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      it.classList.add('active');
+      const target = document.getElementById('page-' + it.dataset.page);
+      if (target) {
+        target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM Internal — Mockup giao diện gọi rewards-v2 crm-admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; }
+  .badge { display:inline-block; padding:2px 8px; font-size:11px; font-weight:500; border-radius:4px; }
+  .badge-success { background:#dcfce7; color:#15803d; }
+  .badge-pending { background:#dbeafe; color:#1d4ed8; }
+  .badge-failed  { background:#fee2e2; color:#b91c1c; }
+  .badge-warn    { background:#fef3c7; color:#a16207; }
+  .badge-critical{ background:#dc2626; color:#fff; }
+  .badge-high    { background:#f97316; color:#fff; }
+  .badge-medium  { background:#eab308; color:#fff; }
+  .badge-low     { background:#9ca3af; color:#fff; }
+  .badge-info    { background:#e0e7ff; color:#4338ca; }
+  .badge-financial{ background:#fef3c7; color:#92400e; border:1px solid #fde68a; }
+  .nav-item.active { background:#2563eb; color:white; }
+  table tbody tr:hover { background:#f9fafb; }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  .api-ref { background: #f0f9ff; border-left: 4px solid #0284c7; padding: 12px 16px; font-size: 13px; }
+  .api-ref code { background: #fff; padding: 2px 6px; border-radius: 3px; font-family: ui-monospace, monospace; }
+  .api-ref .method-get { color:#16a34a; font-weight: bold; }
+  .api-ref .method-post { color:#2563eb; font-weight: bold; }
+  .api-ref .method-put { color:#d97706; font-weight: bold; }
+  .api-ref .method-delete { color:#dc2626; font-weight: bold; }
+</style>
+</head>
+<body class="bg-gray-50">
+
+<div class="flex h-screen">
+
+  <!-- ============== SIDEBAR ============== -->
+  <aside class="w-64 bg-slate-900 text-white flex flex-col">
+    <div class="p-4 border-b border-slate-700">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">🏢</span>
+        <div>
+          <div class="font-bold text-lg">CNV Connect</div>
+          <div class="text-xs text-slate-400">CRM Internal · Rewards V2</div>
+        </div>
+      </div>
+    </div>
+    <nav class="flex-1 p-2 space-y-1 overflow-y-auto text-sm">
+      <a href="#dashboard"      data-page="dashboard"      class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-800 active">
+        <span>📊</span><span>Tổng quan</span>
+      </a>
+      <a href="#inquiry"        data-page="inquiry"        class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-800">
+        <span>🔍</span><span>Tra cứu đơn</span>
+      </a>
+      <a href="#orders"         data-page="orders"         class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-800">
+        <span>🎫</span><span>Đơn đổi quà</span>
+      </a>
+      <a href="#accounts"       data-page="accounts"       class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-800">
+        <span>🏢</span><span>Tài khoản</span>
+      </a>
+      <div class="px-3 pt-3 pb-1 text-xs text-slate-500 uppercase">⚡ Financial</div>
+      <a href="#topups"         data-page="topups"         class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-800">
+        <span>💰</span><span>Nạp ví</span>
+      </a>
+      <a href="#payments"       data-page="payments"       class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-800">
+        <span>💳</span><span>Thanh toán nợ</span>
+      </a>
+      <div class="px-3 pt-3 pb-1 text-xs text-slate-500 uppercase">Vận hành</div>
+      <a href="#reconciliation" data-page="reconciliation" class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-800">
+        <span>⚖️</span><span>Đối soát</span>
+      </a>
+      <a href="#stats"          data-page="stats"          class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-800">
+        <span>📈</span><span>Báo cáo</span>
+      </a>
+      <a href="#audit"          data-page="audit"          class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-800">
+        <span>📜</span><span>Audit log</span>
+      </a>
+    </nav>
+    <div class="p-3 border-t border-slate-700 text-xs text-slate-400">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+        <span>rewards-v2 staging</span>
+      </div>
+      <div class="mt-1 font-mono">cnv-rewards-crm-admin-staging.cnv</div>
+    </div>
+  </aside>
+
+  <!-- ============== MAIN CONTENT ============== -->
+  <main class="flex-1 overflow-y-auto">
+
+    <!-- Top bar -->
+    <header class="bg-white border-b px-6 py-3 flex items-center justify-between sticky top-0 z-10">
+      <div>
+        <h1 class="font-semibold" id="page-title">Tổng quan</h1>
+        <div class="text-xs text-gray-500" id="page-subtitle">Hub vận hành tích hợp rewards-v2</div>
+      </div>
+      <div class="flex items-center gap-3 text-sm">
+        <span class="text-gray-500">Staff:</span>
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs">HT</div>
+          <span>htn.cnv</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="p-6">
+
+      <!-- ===================================================================== -->
+      <!-- 1. DASHBOARD                                                          -->
+      <!-- ===================================================================== -->
+      <section id="page-dashboard" class="page">
+        <div class="grid grid-cols-4 gap-4 mb-6">
+          <div class="bg-white p-5 rounded-lg border shadow-sm">
+            <div class="text-xs text-gray-500 mb-1">Tổng đơn đổi quà (7d)</div>
+            <div class="text-3xl font-bold">1,247</div>
+            <div class="text-xs text-green-600 mt-1">▲ 12% so kỳ trước</div>
+          </div>
+          <div class="bg-white p-5 rounded-lg border shadow-sm">
+            <div class="text-xs text-gray-500 mb-1">GMV (7d)</div>
+            <div class="text-3xl font-bold">285M</div>
+            <div class="text-xs text-green-600 mt-1">▲ 8% so kỳ trước</div>
+          </div>
+          <div class="bg-white p-5 rounded-lg border shadow-sm">
+            <div class="text-xs text-gray-500 mb-1">Top-up chờ duyệt</div>
+            <div class="text-3xl font-bold text-orange-600">5</div>
+            <div class="text-xs text-gray-500 mt-1">Tổng: 45.5M VNĐ</div>
+          </div>
+          <div class="bg-white p-5 rounded-lg border shadow-sm">
+            <div class="text-xs text-gray-500 mb-1">Discrepancy OPEN</div>
+            <div class="text-3xl font-bold text-red-600">3</div>
+            <div class="text-xs text-gray-500 mt-1">2 CRITICAL · 1 HIGH</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="bg-white p-5 rounded-lg border">
+            <h3 class="font-semibold mb-3">🚨 Cần xử lý gấp</h3>
+            <div class="space-y-2 text-sm">
+              <div class="flex items-center justify-between p-2 bg-red-50 rounded">
+                <div>
+                  <span class="badge badge-critical mr-2">CRITICAL</span>
+                  <span>Discrepancy run #105 — GHOST_IN_REWARDS</span>
+                </div>
+                <a href="#reconciliation" data-page="reconciliation" class="nav-item text-blue-600 text-xs">Xem ▸</a>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-orange-50 rounded">
+                <div>
+                  <span class="badge badge-warn mr-2">PENDING</span>
+                  <span>5 top-up requests chờ duyệt</span>
+                </div>
+                <a href="#topups" data-page="topups" class="nav-item text-blue-600 text-xs">Xem ▸</a>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-yellow-50 rounded">
+                <div>
+                  <span class="badge badge-medium mr-2">MEDIUM</span>
+                  <span>Run #103 đang RUNNING quá 45 phút</span>
+                </div>
+                <a href="#reconciliation" data-page="reconciliation" class="nav-item text-blue-600 text-xs">Xem ▸</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-lg border">
+            <h3 class="font-semibold mb-3">🔗 Thao tác nhanh</h3>
+            <div class="grid grid-cols-2 gap-2">
+              <a href="#topups" data-page="topups" class="nav-item border rounded p-3 hover:bg-gray-50">
+                <div class="font-medium">💰 Duyệt top-up</div>
+                <div class="text-xs text-gray-500">5 chờ xử lý</div>
+              </a>
+              <a href="#reconciliation" data-page="reconciliation" class="nav-item border rounded p-3 hover:bg-gray-50">
+                <div class="font-medium">⚖️ Upload Excel</div>
+                <div class="text-xs text-gray-500">Đối soát GotIt T5</div>
+              </a>
+              <a href="#inquiry" data-page="inquiry" class="nav-item border rounded p-3 hover:bg-gray-50">
+                <div class="font-medium">🔍 Tra cứu đơn</div>
+                <div class="text-xs text-gray-500">Theo mã giao dịch</div>
+              </a>
+              <a href="#payments" data-page="payments" class="nav-item border rounded p-3 hover:bg-gray-50">
+                <div class="font-medium">💳 Ghi thanh toán</div>
+                <div class="text-xs text-gray-500">Khi account trả nợ</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="api-ref rounded">
+          <strong>📡 API endpoints sử dụng trên Dashboard:</strong>
+          <ul class="mt-2 ml-4 list-disc space-y-1">
+            <li><span class="method-get">GET</span> <code>/crm-admin/stats/overview?preset=7d</code> — KPI 7 ngày</li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/top-up-requests/by-status?status=PENDING&size=5</code> — top-up cần duyệt</li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/reconciliation/discrepancies?status=OPEN&size=5</code> — alert discrepancy</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- 2. INQUIRY                                                            -->
+      <!-- ===================================================================== -->
+      <section id="page-inquiry" class="page hidden">
+        <h2 class="text-2xl font-bold mb-1">🔍 Tra cứu đơn theo mã giao dịch</h2>
+        <p class="text-gray-500 mb-6 text-sm">Dùng khi customer/vendor báo có vấn đề về 1 mã đơn cụ thể.</p>
+
+        <div class="bg-white rounded-lg border p-6 mb-4">
+          <div class="flex gap-2">
+            <input class="flex-1 border rounded px-3 py-2 font-mono"
+                   placeholder="000578_22b6d474..." value="000578_22b6d474207d4d98b9fcf07c2119a75a">
+            <button class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Tra cứu</button>
+          </div>
+          <div class="text-xs text-gray-500 mt-2">⚠️ Hiện chỉ tra theo <code>orderCode</code> exact (không tra theo phone/email)</div>
+        </div>
+
+        <div class="bg-white rounded-lg border p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold">000578_22b6d474... <span class="badge badge-success ml-2">SUCCESS</span></h3>
+            <span class="text-xs text-gray-500">Tra cứu lúc 14:23 · 13/05/2026</span>
+          </div>
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <h4 class="font-semibold text-sm text-gray-500 mb-2">Đơn rewards-v2</h4>
+              <table class="text-sm w-full">
+                <tr><td class="py-1 text-gray-500 w-32">Order ID</td><td>123</td></tr>
+                <tr><td class="py-1 text-gray-500">Reward</td><td>Voucher Shopee 100K</td></tr>
+                <tr><td class="py-1 text-gray-500">Quantity</td><td>1</td></tr>
+                <tr><td class="py-1 text-gray-500">Total cost</td><td>100,000 VNĐ</td></tr>
+                <tr><td class="py-1 text-gray-500">Points used</td><td>10,000</td></tr>
+                <tr><td class="py-1 text-gray-500">User</td><td>0987654321 · binh@gmail.com</td></tr>
+                <tr><td class="py-1 text-gray-500">Account</td><td>CNV Holdings (cnvAccountId=1168)</td></tr>
+                <tr><td class="py-1 text-gray-500">Created</td><td>12/05/2026 09:15</td></tr>
+              </table>
+            </div>
+            <div>
+              <h4 class="font-semibold text-sm text-gray-500 mb-2">Trạng thái vendor (GOT_IT)</h4>
+              <table class="text-sm w-full">
+                <tr><td class="py-1 text-gray-500 w-32">Vendor txn</td><td class="font-mono">GI-2026-05-12-7891</td></tr>
+                <tr><td class="py-1 text-gray-500">Voucher code</td><td class="font-mono">SHOPEE100K-ABC123</td></tr>
+                <tr><td class="py-1 text-gray-500">Status</td><td><span class="badge badge-success">USED</span></td></tr>
+                <tr><td class="py-1 text-gray-500">Issued at</td><td>12/05/2026 09:16</td></tr>
+                <tr><td class="py-1 text-gray-500">Expired at</td><td>30/06/2026</td></tr>
+              </table>
+              <div class="mt-3 p-2 bg-blue-50 text-xs">Real-time fetch từ GotIt API qua <code>OrderInquiryService</code>.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="api-ref rounded mt-4">
+          <strong>📡 API:</strong>
+          <ul class="mt-2 ml-4 list-disc">
+            <li><span class="method-get">GET</span> <code>/crm-admin/inquiry/{orderCode}</code> — trả về Vendor inquiry response (live fetch từ GotIt)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- 3. REDEMPTION ORDERS                                                  -->
+      <!-- ===================================================================== -->
+      <section id="page-orders" class="page hidden">
+        <h2 class="text-2xl font-bold mb-1">🎫 Đơn đổi quà</h2>
+        <p class="text-gray-500 mb-6 text-sm">Cross-account list. Filter + paginate + export CSV.</p>
+
+        <div class="bg-white rounded-lg border mb-4 p-3 grid grid-cols-5 gap-2">
+          <select class="border rounded px-3 py-2 text-sm">
+            <option>Mọi status</option><option>PENDING</option><option>SUCCESS</option><option>FAILED</option>
+          </select>
+          <select class="border rounded px-3 py-2 text-sm">
+            <option>Mọi account</option><option>CNV Holdings (1168)</option><option>ABC Corp (1169)</option>
+          </select>
+          <input type="date" class="border rounded px-3 py-2 text-sm" placeholder="From">
+          <input type="date" class="border rounded px-3 py-2 text-sm" placeholder="To">
+          <div class="flex gap-2">
+            <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm flex-1">Lọc</button>
+            <button class="border border-gray-300 px-3 py-2 rounded text-sm">📥 CSV</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg border overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 text-left text-gray-500">
+              <tr>
+                <th class="p-3">Order ID</th><th class="p-3">Account</th><th class="p-3">User</th>
+                <th class="p-3">Reward</th><th class="p-3 text-right">Cost</th>
+                <th class="p-3">Status</th><th class="p-3">Created</th><th class="p-3"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#123</td>
+                <td class="p-3">CNV Holdings</td>
+                <td class="p-3">0987654321</td>
+                <td class="p-3">Voucher Shopee 100K</td>
+                <td class="p-3 text-right">100,000</td>
+                <td class="p-3"><span class="badge badge-success">SUCCESS</span></td>
+                <td class="p-3 text-xs">12/05 09:15</td>
+                <td class="p-3"><a href="#" class="text-blue-600">Xem</a></td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#122</td>
+                <td class="p-3">ABC Corp</td>
+                <td class="p-3">0901234567</td>
+                <td class="p-3">Voucher Grab 50K</td>
+                <td class="p-3 text-right">50,000</td>
+                <td class="p-3"><span class="badge badge-pending">PENDING</span><div class="text-xs">12 phút</div></td>
+                <td class="p-3 text-xs">12/05 09:10</td>
+                <td class="p-3"><a href="#" class="text-blue-600">Xem</a></td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#121</td>
+                <td class="p-3">CNV Holdings</td>
+                <td class="p-3">0912345678</td>
+                <td class="p-3">Voucher Tiki 200K</td>
+                <td class="p-3 text-right">200,000</td>
+                <td class="p-3"><span class="badge badge-failed">FAILED</span><div class="text-xs">Vendor lỗi</div></td>
+                <td class="p-3 text-xs">12/05 09:05</td>
+                <td class="p-3"><a href="#" class="text-blue-600">Xem</a></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="p-3 border-t flex items-center justify-between text-sm text-gray-500">
+            <span>Showing 1-3 of 1,247</span>
+            <div class="flex gap-1">
+              <button class="border px-2 py-1 rounded">‹</button>
+              <button class="border bg-blue-600 text-white px-3 py-1 rounded">1</button>
+              <button class="border px-3 py-1 rounded">2</button>
+              <button class="border px-3 py-1 rounded">3</button>
+              <button class="border px-2 py-1 rounded">›</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="api-ref rounded mt-4">
+          <strong>📡 API:</strong>
+          <ul class="mt-2 ml-4 list-disc space-y-1">
+            <li><span class="method-get">GET</span> <code>/crm-admin/redemption-orders?status=&accountId=&fromAt=&toAt=&page=&size=</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/redemption-orders/{id}</code> — full detail (user, account, reward, balance, loyalty, vouchers, recovery)</li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/redemption-orders/export?...</code> — CSV UTF-8 BOM (max 10K rows)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- 4. ACCOUNTS                                                           -->
+      <!-- ===================================================================== -->
+      <section id="page-accounts" class="page hidden">
+        <h2 class="text-2xl font-bold mb-1">🏢 Quản lý tài khoản</h2>
+        <p class="text-gray-500 mb-6 text-sm">Mỗi account = 1 doanh nghiệp khách hàng. Quản lý balance mode (DEPOSIT/CREDIT/cả 2).</p>
+
+        <div class="bg-white rounded-lg border mb-4">
+          <div class="p-4 border-b flex items-center justify-between">
+            <input class="border rounded px-3 py-2 text-sm w-80" placeholder="Tìm theo tên hoặc cnvAccountId">
+            <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm">+ Tạo account mới</button>
+          </div>
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 text-left text-gray-500">
+              <tr>
+                <th class="p-3">ID / cnvAccountId</th><th class="p-3">Tên</th>
+                <th class="p-3">Balance mode</th>
+                <th class="p-3 text-right">Số dư DEPOSIT</th>
+                <th class="p-3 text-right">CREDIT (đã nợ / hạn mức)</th>
+                <th class="p-3"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t">
+                <td class="p-3"><div class="font-mono">1 / 1168</div></td>
+                <td class="p-3">CNV Holdings</td>
+                <td class="p-3"><span class="badge badge-info">DEPOSIT_AND_CREDIT</span></td>
+                <td class="p-3 text-right">12,500,000</td>
+                <td class="p-3 text-right">3,200,000 / 10,000,000</td>
+                <td class="p-3"><a href="#" class="text-blue-600">Chi tiết</a></td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3"><div class="font-mono">2 / 1169</div></td>
+                <td class="p-3">ABC Corp</td>
+                <td class="p-3"><span class="badge badge-info">DEPOSIT</span></td>
+                <td class="p-3 text-right">5,000,000</td>
+                <td class="p-3 text-right text-gray-400">—</td>
+                <td class="p-3"><a href="#" class="text-blue-600">Chi tiết</a></td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3"><div class="font-mono">3 / 1170</div></td>
+                <td class="p-3">XYZ Ltd</td>
+                <td class="p-3"><span class="badge badge-info">CREDIT</span><div class="text-xs">postpaid: <span class="text-green-600">enabled</span></div></td>
+                <td class="p-3 text-right text-gray-400">—</td>
+                <td class="p-3 text-right">7,800,000 / 15,000,000</td>
+                <td class="p-3"><a href="#" class="text-blue-600">Chi tiết</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Account detail panel (mock expanded) -->
+        <details class="bg-white rounded-lg border" open>
+          <summary class="p-4 border-b font-semibold flex items-center justify-between">
+            <span>📋 Chi tiết: CNV Holdings (id=1, cnvAccountId=1168)</span>
+            <span class="text-blue-600 text-sm">⌃ Thu gọn</span>
+          </summary>
+          <div class="p-4">
+            <div class="grid grid-cols-3 gap-4 mb-4">
+              <div class="border rounded p-3">
+                <div class="text-xs text-gray-500">DEPOSIT</div>
+                <div class="text-2xl font-bold mt-1">12,500,000</div>
+                <div class="text-xs text-gray-500">Available · Pending: 0</div>
+                <button class="text-xs text-blue-600 mt-2">+ Nạp tiền</button>
+              </div>
+              <div class="border rounded p-3">
+                <div class="text-xs text-gray-500">CREDIT (công nợ)</div>
+                <div class="text-2xl font-bold mt-1">3,200,000 <span class="text-sm text-gray-500">/ 10M</span></div>
+                <div class="w-full bg-gray-200 rounded h-2 mt-2">
+                  <div class="bg-orange-500 h-2 rounded" style="width: 32%"></div>
+                </div>
+                <button class="text-xs text-blue-600 mt-2">💳 Ghi nhận thanh toán</button>
+              </div>
+              <div class="border rounded p-3">
+                <div class="text-xs text-gray-500">Cấu hình</div>
+                <div class="text-sm mt-1">
+                  <label class="flex items-center gap-2"><input type="checkbox" checked> Cho phép postpaid</label>
+                </div>
+                <div class="text-xs text-gray-500 mt-2">Cập nhật hạn mức credit ▸</div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <div class="flex border-b">
+                <div class="px-4 py-2 border-b-2 border-blue-600 font-medium text-sm">Giao dịch</div>
+                <div class="px-4 py-2 text-gray-500 text-sm">Hold đang active</div>
+              </div>
+              <table class="w-full text-sm mt-3">
+                <thead class="bg-gray-50 text-left text-gray-500">
+                  <tr><th class="p-2">Time</th><th class="p-2">Type</th><th class="p-2 text-right">Amount</th><th class="p-2">Balance after</th><th class="p-2">Ref</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="border-t"><td class="p-2 text-xs">12/05 09:15</td><td class="p-2"><span class="badge badge-failed">REDEMPTION ·OUT</span></td><td class="p-2 text-right">-100,000</td><td class="p-2">12,500,000</td><td class="p-2 font-mono text-xs">ORD-123</td></tr>
+                  <tr class="border-t"><td class="p-2 text-xs">10/05 14:30</td><td class="p-2"><span class="badge badge-success">TOP_UP ·IN</span></td><td class="p-2 text-right">+5,000,000</td><td class="p-2">12,600,000</td><td class="p-2 font-mono text-xs">TOP-101</td></tr>
+                  <tr class="border-t"><td class="p-2 text-xs">08/05 10:00</td><td class="p-2"><span class="badge badge-warn">ADJUSTMENT</span></td><td class="p-2 text-right">-50,000</td><td class="p-2">7,600,000</td><td class="p-2 font-mono text-xs">ADJ-007</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <div class="api-ref rounded mt-4">
+          <strong>📡 API:</strong>
+          <ul class="mt-2 ml-4 list-disc space-y-1">
+            <li><span class="method-get">GET</span> <code>/crm-admin/accounts/{id}</code> · <span class="method-post">POST</span> <code>/crm-admin/accounts</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/accounts/{accountId}/balance</code> — summary (mode + rows)</li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/accounts/{accountId}/balance/transactions?page=&size=</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/accounts/{accountId}/balance/holds?status=HOLDING</code></li>
+            <li><span class="method-put">PUT</span> <code>/crm-admin/accounts/{accountId}/balance/mode</code> body <code>{mode, creditLimit?}</code></li>
+            <li><span class="method-put">PUT</span> <code>/crm-admin/accounts/{accountId}/balance/credit-limit</code></li>
+            <li><span class="method-put">PUT</span> <code>/crm-admin/accounts/{accountId}/balance/postpaid-enabled</code></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- 5. TOP-UP (FINANCIAL — SIGNED)                                        -->
+      <!-- ===================================================================== -->
+      <section id="page-topups" class="page hidden">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">💰 Nạp ví Reward</h2>
+            <p class="text-gray-500 text-sm">Approve/Reject top-up requests từ account. Tích hợp với luồng invoice của CnvConnect.</p>
+          </div>
+          <span class="badge badge-financial">🔐 Cần X-Signature</span>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 rounded p-3 mb-4 text-sm">
+          <strong>⚠️ Workflow:</strong> Khi account user chuyển khoản thanh toán invoice CnvConnect → bank webhook về CnvConnect → CnvConnect tự động gọi
+          <code class="bg-white px-1 rounded">PUT /crm-admin/top-up-requests/{id}/approve</code>.
+          UI này dùng cho <strong>fallback thủ công</strong> khi bank webhook fail hoặc CRM staff cần can thiệp.
+        </div>
+
+        <div class="bg-white rounded-lg border mb-4 p-3 grid grid-cols-5 gap-2">
+          <select class="border rounded px-3 py-2 text-sm">
+            <option>Mọi status</option><option selected>PENDING</option><option>APPROVED</option><option>REJECTED</option>
+          </select>
+          <select class="border rounded px-3 py-2 text-sm">
+            <option>Mọi account</option><option>CNV Holdings</option>
+          </select>
+          <input type="date" class="border rounded px-3 py-2 text-sm">
+          <input type="date" class="border rounded px-3 py-2 text-sm">
+          <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm">Lọc</button>
+        </div>
+
+        <div class="bg-white rounded-lg border">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 text-left text-gray-500">
+              <tr>
+                <th class="p-3">ID</th><th class="p-3">Account</th>
+                <th class="p-3 text-right">Số tiền</th><th class="p-3">Payment ref</th>
+                <th class="p-3">Status</th><th class="p-3">Created</th><th class="p-3">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#101</td>
+                <td class="p-3">CNV Holdings<div class="text-xs text-gray-500">cnvAccountId=1168</div></td>
+                <td class="p-3 text-right">5,000,000</td>
+                <td class="p-3 font-mono text-xs">WHDREWARD101</td>
+                <td class="p-3"><span class="badge badge-pending">PENDING</span></td>
+                <td class="p-3 text-xs">13/05 10:00</td>
+                <td class="p-3">
+                  <button class="bg-green-600 text-white text-xs px-2 py-1 rounded mr-1">✓ Duyệt</button>
+                  <button class="bg-red-600 text-white text-xs px-2 py-1 rounded">✗ Từ chối</button>
+                </td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#100</td>
+                <td class="p-3">ABC Corp</td>
+                <td class="p-3 text-right">3,000,000</td>
+                <td class="p-3 font-mono text-xs">WHDREWARD100</td>
+                <td class="p-3"><span class="badge badge-success">APPROVED</span><div class="text-xs">htn.cnv</div></td>
+                <td class="p-3 text-xs">12/05 14:30</td>
+                <td class="p-3"><a href="#" class="text-blue-600">Xem</a></td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#99</td>
+                <td class="p-3">XYZ Ltd</td>
+                <td class="p-3 text-right">2,500,000</td>
+                <td class="p-3 font-mono text-xs">—</td>
+                <td class="p-3"><span class="badge badge-failed">REJECTED</span><div class="text-xs">Khác số tiền</div></td>
+                <td class="p-3 text-xs">12/05 09:00</td>
+                <td class="p-3"><a href="#" class="text-blue-600">Xem</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Approve modal mock -->
+        <details class="bg-white rounded-lg border mt-4">
+          <summary class="p-4 font-semibold flex items-center justify-between border-b">
+            <span>🖱️ Modal: Duyệt top-up #101</span>
+            <span class="text-blue-600 text-sm">⌃ Mở</span>
+          </summary>
+          <div class="p-6">
+            <div class="bg-yellow-50 border border-yellow-300 rounded p-3 mb-4 text-sm">
+              <strong>🔐 RSA Signature</strong> sẽ tự ký bằng private key của CnvConnect trước khi gọi.
+              Payload: <code class="bg-white px-1 rounded font-mono text-xs">PUT\n/crm-admin/top-up-requests/101/approve\n{timestamp}\n</code>
+            </div>
+            <table class="text-sm w-full mb-4">
+              <tr><td class="py-1 text-gray-500 w-32">Account</td><td>CNV Holdings (cnvAccountId=1168)</td></tr>
+              <tr><td class="py-1 text-gray-500">Số tiền</td><td><strong>5,000,000 VNĐ</strong></td></tr>
+              <tr><td class="py-1 text-gray-500">Payment ref</td><td>WHDREWARD101 → topUpRequestId=101</td></tr>
+              <tr><td class="py-1 text-gray-500">Invoice CnvConnect</td><td>INV-2026-05-001 · numericId=12345</td></tr>
+              <tr><td class="py-1 text-gray-500">Bank txn</td><td>MBB-20260513-7891</td></tr>
+            </table>
+            <div class="flex gap-2 justify-end">
+              <button class="border px-4 py-2 rounded">Hủy</button>
+              <button class="bg-green-600 text-white px-6 py-2 rounded">Xác nhận duyệt (cộng 5M vào DEPOSIT)</button>
+            </div>
+          </div>
+        </details>
+
+        <div class="api-ref rounded mt-4">
+          <strong>📡 API:</strong>
+          <ul class="mt-2 ml-4 list-disc space-y-1">
+            <li><span class="method-get">GET</span> <code>/crm-admin/top-up-requests/by-status?status=PENDING&page=0&size=20</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/top-up-requests/{id}</code></li>
+            <li><span class="method-post">POST</span> <code>/crm-admin/top-up-requests</code> <span class="badge badge-financial">🔐 Signed</span> — tạo mới (CRM ít dùng, account web tự tạo)</li>
+            <li><span class="method-put">PUT</span> <code>/crm-admin/top-up-requests/{id}/approve</code> <span class="badge badge-financial">🔐 Signed</span> — cộng DEPOSIT + ghi tx</li>
+            <li><span class="method-put">PUT</span> <code>/crm-admin/top-up-requests/{id}/reject</code> <span class="badge badge-financial">🔐 Signed</span> body <code>{reason?}</code></li>
+          </ul>
+          <div class="mt-2"><strong>Tích hợp CnvConnect:</strong> field <code>payment_reference</code> theo format <code>WHDREWARD{topUpRequestId}</code> = <code>external_ref</code> của invoice.</div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- 6. PAYMENT                                                            -->
+      <!-- ===================================================================== -->
+      <section id="page-payments" class="page hidden">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">💳 Ghi nhận thanh toán công nợ</h2>
+            <p class="text-gray-500 text-sm">Dùng khi account CREDIT đã trả nợ (đến hạn) → giảm số đang nợ.</p>
+          </div>
+          <span class="badge badge-financial">🔐 Cần X-Signature</span>
+        </div>
+
+        <div class="bg-white rounded-lg border p-6">
+          <h3 class="font-semibold mb-4">Form ghi nhận thanh toán</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium mb-1">Account <span class="text-red-500">*</span></label>
+              <select class="border rounded px-3 py-2 w-full text-sm">
+                <option>-- Chọn account có CREDIT --</option>
+                <option selected>CNV Holdings (cnvAccountId=1168) · nợ 3,200,000</option>
+                <option>XYZ Ltd · nợ 7,800,000</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Số tiền (VNĐ) <span class="text-red-500">*</span></label>
+              <input class="border rounded px-3 py-2 w-full text-sm" type="number" value="3000000">
+              <div class="text-xs text-gray-500 mt-1">Phải ≤ số đang nợ. App reject nếu over-pay.</div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Payment reference</label>
+              <input class="border rounded px-3 py-2 w-full text-sm font-mono" value="MBB-PAYMENT-20260513">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Ghi chú</label>
+              <input class="border rounded px-3 py-2 w-full text-sm" placeholder="Thanh toán công nợ tháng 4">
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-blue-50 text-sm rounded">
+            ℹ️ Sau khi ghi nhận: <code>balance.total</code> giảm 3M, <code>balance.available</code> tăng 3M, ghi <code>BalanceTransaction(PAYMENT, DEBIT_OUT)</code>.
+          </div>
+          <div class="flex justify-end mt-4 gap-2">
+            <button class="border px-4 py-2 rounded">Hủy</button>
+            <button class="bg-blue-600 text-white px-6 py-2 rounded">Ghi nhận thanh toán</button>
+          </div>
+        </div>
+
+        <div class="api-ref rounded mt-4">
+          <strong>📡 API:</strong>
+          <ul class="mt-2 ml-4 list-disc">
+            <li><span class="method-post">POST</span> <code>/crm-admin/payments</code> <span class="badge badge-financial">🔐 Signed</span> body <code>{accountId, amount, paymentReference?, note?}</code></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- 7. RECONCILIATION                                                     -->
+      <!-- ===================================================================== -->
+      <section id="page-reconciliation" class="page hidden">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">⚖️ Đối soát Voucher GotIt</h2>
+            <p class="text-gray-500 text-sm">Hàng tháng: upload Excel GotIt → match với DB → review discrepancies → resolve.</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="bg-gray-100 px-4 py-2 rounded hover:bg-gray-200 text-sm">+ Trigger Balance Ledger</button>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm">📤 Upload Excel GotIt</button>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="bg-white rounded-lg border mb-4">
+          <div class="flex border-b">
+            <div class="px-4 py-3 border-b-2 border-blue-600 font-medium text-sm">Runs (15)</div>
+            <div class="px-4 py-3 text-gray-500 text-sm">Discrepancies (8 OPEN)</div>
+          </div>
+
+          <div class="p-3 bg-gray-50 grid grid-cols-5 gap-2">
+            <select class="border rounded px-3 py-2 text-sm">
+              <option>Mọi type</option><option>BALANCE_LEDGER</option><option>VENDOR_VOUCHER</option>
+            </select>
+            <select class="border rounded px-3 py-2 text-sm">
+              <option>Mọi status</option><option>PENDING</option><option>RUNNING</option><option>COMPLETED</option><option>FAILED</option>
+            </select>
+            <select class="border rounded px-3 py-2 text-sm">
+              <option>Mọi owner</option><option>CNV (CRM upload)</option><option>ACCOUNT (self-upload)</option>
+            </select>
+            <select class="border rounded px-3 py-2 text-sm">
+              <option>Tháng đối soát</option><option>05/2026</option><option>04/2026</option>
+            </select>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm">Lọc</button>
+          </div>
+
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 text-left text-gray-500">
+              <tr>
+                <th class="p-3">ID</th><th class="p-3">Type</th><th class="p-3">Vendor</th>
+                <th class="p-3">Owner</th><th class="p-3">Status</th><th class="p-3">Period</th>
+                <th class="p-3">File</th><th class="p-3 text-right">Disc.</th><th class="p-3"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t bg-blue-50">
+                <td class="p-3 font-mono">#105</td>
+                <td class="p-3">VENDOR_VOUCHER</td>
+                <td class="p-3">GOT_IT</td>
+                <td class="p-3"><span class="badge badge-info">CNV</span></td>
+                <td class="p-3"><span class="badge badge-success">COMPLETED</span></td>
+                <td class="p-3">T4/2026</td>
+                <td class="p-3 text-xs font-mono">BANG_KE_T4.xlsx</td>
+                <td class="p-3 text-right">3 <span class="text-xs">🔴2 🟡1</span></td>
+                <td class="p-3"><a href="#" class="text-blue-600 font-medium">Đang xem ▾</a></td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#104</td>
+                <td class="p-3">BALANCE_LEDGER</td>
+                <td class="p-3 text-gray-400">—</td>
+                <td class="p-3"><span class="badge badge-info">CNV</span></td>
+                <td class="p-3"><span class="badge badge-success">COMPLETED</span></td>
+                <td class="p-3 text-gray-400">—</td>
+                <td class="p-3 text-gray-400">—</td>
+                <td class="p-3 text-right">1 <span class="text-xs">🟡1</span></td>
+                <td class="p-3"><a href="#" class="text-blue-600">Xem</a></td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#103</td>
+                <td class="p-3">VENDOR_VOUCHER</td>
+                <td class="p-3">GOT_IT</td>
+                <td class="p-3"><span class="badge badge-info">ACCOUNT</span><div class="text-xs">cnvAcc=1169</div></td>
+                <td class="p-3"><span class="badge badge-pending">RUNNING</span><div class="text-xs">12 phút</div></td>
+                <td class="p-3">T4/2026</td>
+                <td class="p-3 text-xs font-mono">acct-self.xlsx</td>
+                <td class="p-3 text-right">—</td>
+                <td class="p-3"><a href="#" class="text-blue-600">Theo dõi</a></td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#102</td>
+                <td class="p-3">VENDOR_VOUCHER</td>
+                <td class="p-3">GOT_IT</td>
+                <td class="p-3"><span class="badge badge-info">CNV</span></td>
+                <td class="p-3"><span class="badge badge-failed">FAILED</span><div class="text-xs">Sheet thiếu</div></td>
+                <td class="p-3">T3/2026</td>
+                <td class="p-3 text-xs font-mono">v1_BAD.xlsx</td>
+                <td class="p-3 text-right text-gray-400">—</td>
+                <td class="p-3"><a href="#" class="text-blue-600">Re-upload</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Run #105 Detail -->
+        <div class="bg-white rounded-lg border mb-4">
+          <div class="p-4 border-b flex items-center justify-between">
+            <div>
+              <h3 class="font-semibold">Run #105 · GotIt T4/2026 · CNV upload</h3>
+              <div class="text-xs text-gray-500">Upload bởi htn.cnv lúc 13/05 14:23 · file BANG_KE_T4.xlsx · 250 rows</div>
+            </div>
+            <div class="flex gap-2">
+              <a href="#" class="text-sm text-blue-600">📥 Download file gốc</a>
+            </div>
+          </div>
+          <div class="grid grid-cols-5 gap-3 p-4 bg-gray-50">
+            <div class="bg-white p-3 rounded border">
+              <div class="text-xs text-gray-500">Rows parse</div>
+              <div class="text-2xl font-bold">250</div>
+            </div>
+            <div class="bg-white p-3 rounded border">
+              <div class="text-xs text-gray-500">Matched</div>
+              <div class="text-2xl font-bold text-green-600">247</div>
+            </div>
+            <div class="bg-white p-3 rounded border">
+              <div class="text-xs text-gray-500">Unmapped</div>
+              <div class="text-2xl font-bold text-orange-600">3</div>
+            </div>
+            <div class="bg-white p-3 rounded border">
+              <div class="text-xs text-gray-500">Discrepancies</div>
+              <div class="text-2xl font-bold text-red-600">3</div>
+              <div class="text-xs">2 OPEN · 1 RESOLVED</div>
+            </div>
+            <div class="bg-white p-3 rounded border">
+              <div class="text-xs text-gray-500">Child reports</div>
+              <div class="text-2xl font-bold">5</div>
+              <div class="text-xs">accounts có voucher</div>
+            </div>
+          </div>
+
+          <div class="flex border-b">
+            <div class="px-4 py-3 border-b-2 border-blue-600 font-medium text-sm">Child reports (5)</div>
+            <div class="px-4 py-3 text-gray-500 text-sm">Voucher rows (250)</div>
+            <div class="px-4 py-3 text-gray-500 text-sm">Unmapped (3)</div>
+            <div class="px-4 py-3 text-gray-500 text-sm">Discrepancies (3)</div>
+          </div>
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 text-left text-gray-500">
+              <tr>
+                <th class="p-3">Account Report</th><th class="p-3">Account</th>
+                <th class="p-3 text-right">Rows</th><th class="p-3 text-right">Matched</th>
+                <th class="p-3 text-right">Disc.</th><th class="p-3">Status</th><th class="p-3"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#77</td>
+                <td class="p-3">CNV Holdings (1168)</td>
+                <td class="p-3 text-right">120</td>
+                <td class="p-3 text-right text-green-600">118</td>
+                <td class="p-3 text-right text-red-600">2</td>
+                <td class="p-3"><span class="badge badge-warn">HAS_DISCREPANCY</span></td>
+                <td class="p-3"><a href="#" class="text-blue-600">Discrepancy ▸</a></td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#78</td>
+                <td class="p-3">ABC Corp (1169)</td>
+                <td class="p-3 text-right">85</td>
+                <td class="p-3 text-right text-green-600">84</td>
+                <td class="p-3 text-right text-red-600">1</td>
+                <td class="p-3"><span class="badge badge-warn">HAS_DISCREPANCY</span></td>
+                <td class="p-3"><a href="#" class="text-blue-600">Discrepancy ▸</a></td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#79</td>
+                <td class="p-3">XYZ Ltd (1170)</td>
+                <td class="p-3 text-right">45</td>
+                <td class="p-3 text-right text-green-600">45</td>
+                <td class="p-3 text-right">0</td>
+                <td class="p-3"><span class="badge badge-success">CLEAN</span></td>
+                <td class="p-3"><a href="#" class="text-blue-600">Xem</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Discrepancy detail -->
+        <div class="bg-white rounded-lg border mb-4">
+          <div class="p-4 border-b">
+            <h3 class="font-semibold">Discrepancies (3) · Run #105 / Child Report #77 (CNV Holdings)</h3>
+          </div>
+          <div class="p-3 bg-gray-50 grid grid-cols-4 gap-2">
+            <select class="border rounded px-3 py-2 text-sm"><option>Mọi type</option><option>MISSING_IN_REWARDS</option><option>GHOST_IN_REWARDS</option><option>FACE_VALUE_MISMATCH</option><option>STATUS_MISMATCH</option></select>
+            <select class="border rounded px-3 py-2 text-sm"><option>Mọi severity</option><option>CRITICAL</option><option>HIGH</option><option>MEDIUM</option><option>LOW</option></select>
+            <select class="border rounded px-3 py-2 text-sm"><option>Mọi status</option><option selected>OPEN</option><option>RESOLVED</option></select>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm">Lọc</button>
+          </div>
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 text-left text-gray-500">
+              <tr>
+                <th class="p-3">#</th><th class="p-3">Severity</th><th class="p-3">Type</th>
+                <th class="p-3">Status</th><th class="p-3">Reference</th>
+                <th class="p-3">Expected → Actual</th><th class="p-3"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#201</td>
+                <td class="p-3"><span class="badge badge-critical">CRITICAL</span></td>
+                <td class="p-3">GHOST_IN_REWARDS<div class="text-xs text-gray-500">DB có, file không</div></td>
+                <td class="p-3"><span class="badge badge-pending">OPEN</span></td>
+                <td class="p-3 font-mono text-xs">REDEMPTION_ORDER · #198</td>
+                <td class="p-3 text-xs">expected: file row<br>actual: missing</td>
+                <td class="p-3"><button class="bg-blue-600 text-white text-xs px-2 py-1 rounded">Resolve</button></td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#200</td>
+                <td class="p-3"><span class="badge badge-critical">CRITICAL</span></td>
+                <td class="p-3">MISSING_IN_REWARDS<div class="text-xs text-gray-500">File có, DB không</div></td>
+                <td class="p-3"><span class="badge badge-pending">OPEN</span></td>
+                <td class="p-3 font-mono text-xs">VOUCHER_ROW · #9876</td>
+                <td class="p-3 text-xs">expected: order #?<br>actual: file row #18</td>
+                <td class="p-3"><button class="bg-blue-600 text-white text-xs px-2 py-1 rounded">Resolve</button></td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 font-mono">#199</td>
+                <td class="p-3"><span class="badge badge-high">HIGH</span></td>
+                <td class="p-3">FACE_VALUE_MISMATCH<div class="text-xs text-gray-500">Excel 100K, DB 200K</div></td>
+                <td class="p-3"><span class="badge badge-success">RESOLVED</span><div class="text-xs">htn.cnv</div></td>
+                <td class="p-3 font-mono text-xs">REDEMPTION_ORDER · #185</td>
+                <td class="p-3 text-xs">expected: 200000<br>actual: 100000</td>
+                <td class="p-3"><a href="#" class="text-blue-600 text-xs">Xem note</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Resolve modal mock -->
+        <details class="bg-white rounded-lg border">
+          <summary class="p-4 font-semibold flex items-center justify-between border-b">
+            <span>🖱️ Modal: Resolve discrepancy #200</span>
+            <span class="text-blue-600 text-sm">⌃ Mở</span>
+          </summary>
+          <div class="p-6">
+            <table class="text-sm w-full mb-4">
+              <tr><td class="py-1 text-gray-500 w-32">Type</td><td>MISSING_IN_REWARDS — file GotIt có voucher nhưng rewards-v2 không có order tương ứng</td></tr>
+              <tr><td class="py-1 text-gray-500">Severity</td><td><span class="badge badge-critical">CRITICAL</span></td></tr>
+              <tr><td class="py-1 text-gray-500">File row</td><td>BANG_KE_T4.xlsx → row #18: Ref_id <code>ORD-MISSING-001</code></td></tr>
+              <tr><td class="py-1 text-gray-500">Voucher info</td><td>SHOPEE100K · issued 03/04/2026 · code GIT-XYZ-123</td></tr>
+            </table>
+            <label class="block text-sm font-medium mb-1">Resolution note <span class="text-red-500">*</span></label>
+            <textarea class="border rounded px-3 py-2 w-full text-sm" rows="3" placeholder="Vd: Liên hệ GotIt → voucher do test sandbox push nhầm, đã đề nghị remove khỏi file tháng sau.">Liên hệ GotIt → voucher do test sandbox push nhầm, đã đề nghị remove khỏi file tháng sau.</textarea>
+            <div class="text-xs text-gray-500 mt-1">Max 500 ký tự. Auditable: ghi vào audit_log với action DISCREPANCY_RESOLVE.</div>
+            <div class="flex justify-end gap-2 mt-4">
+              <button class="border px-4 py-2 rounded">Hủy</button>
+              <button class="bg-green-600 text-white px-6 py-2 rounded">Resolve</button>
+            </div>
+          </div>
+        </details>
+
+        <div class="api-ref rounded mt-4">
+          <strong>📡 API:</strong>
+          <ul class="mt-2 ml-4 list-disc space-y-1">
+            <li><span class="method-post">POST</span> <code>/crm-admin/reconciliation/runs</code> body <code>{type: BALANCE_LEDGER, accountId?}</code></li>
+            <li><span class="method-post">POST</span> <code>/crm-admin/reconciliation/runs/excel-upload</code> multipart <code>file=*.xlsx, vendor=GOT_IT</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/reconciliation/runs?type=&status=&page=</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/reconciliation/runs/{id}</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/reconciliation/runs/{id}/reports?status=</code> — list N child reports</li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/reconciliation/runs/{id}/reports/{accountReportId}</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/reconciliation/runs/{id}/reports/{accountReportId}/discrepancies?discrepancyType=&severity=&status=</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/reconciliation/runs/{id}/voucher-rows?matchStatus=</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/reconciliation/runs/{id}/unmapped-rows</code> — rows không match account</li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/reconciliation/discrepancies?runId=*&discrepancyType=&severity=&status=</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/reconciliation/discrepancies/{id}</code></li>
+            <li><span class="method-put">PUT</span> <code>/crm-admin/reconciliation/discrepancies/{id}/resolve</code> body <code>{resolutionNote*}</code></li>
+          </ul>
+          <div class="mt-2"><strong>Async pattern:</strong> trigger trả 202 với <code>runId</code>. UI poll <code>GET /runs/{id}</code> backoff 2→5→10→30s đến khi status ≠ PENDING/RUNNING. Hard timeout 60 phút (server tự mark FAILED).</div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- 8. STATS                                                              -->
+      <!-- ===================================================================== -->
+      <section id="page-stats" class="page hidden">
+        <h2 class="text-2xl font-bold mb-1">📈 Báo cáo phân tích</h2>
+        <p class="text-gray-500 mb-6 text-sm">Cross-account stats. Cache 5-15 phút phía server.</p>
+
+        <div class="bg-white rounded-lg border mb-4 p-3 grid grid-cols-5 gap-2">
+          <select class="border rounded px-3 py-2 text-sm">
+            <option>Preset 7d</option><option>30d</option><option>this-month</option><option>Custom</option>
+          </select>
+          <input type="date" class="border rounded px-3 py-2 text-sm">
+          <input type="date" class="border rounded px-3 py-2 text-sm">
+          <select class="border rounded px-3 py-2 text-sm">
+            <option>Mọi account</option><option>CNV Holdings</option>
+          </select>
+          <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm">Áp dụng</button>
+        </div>
+
+        <div class="grid grid-cols-4 gap-3 mb-4">
+          <div class="bg-white border rounded p-4"><div class="text-xs text-gray-500">Tổng đơn SUCCESS</div><div class="text-2xl font-bold">1,247</div><div class="text-xs text-green-600">+12% kỳ trước</div></div>
+          <div class="bg-white border rounded p-4"><div class="text-xs text-gray-500">GMV (VND)</div><div class="text-2xl font-bold">285M</div><div class="text-xs text-green-600">+8%</div></div>
+          <div class="bg-white border rounded p-4"><div class="text-xs text-gray-500">Điểm tiêu thụ</div><div class="text-2xl font-bold">28.5M</div><div class="text-xs text-gray-500">avg 22.8/đơn</div></div>
+          <div class="bg-white border rounded p-4"><div class="text-xs text-gray-500">Unique users</div><div class="text-2xl font-bold">842</div><div class="text-xs text-gray-500">+15%</div></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white border rounded p-4">
+            <h3 class="font-semibold mb-3">Top 10 brands theo GMV</h3>
+            <div class="space-y-2 text-sm">
+              <div class="flex items-center justify-between"><span>Shopee</span><span class="text-gray-500">85M (29.8%)</span></div>
+              <div class="flex items-center justify-between"><span>Grab</span><span class="text-gray-500">52M (18.2%)</span></div>
+              <div class="flex items-center justify-between"><span>Tiki</span><span class="text-gray-500">38M (13.3%)</span></div>
+              <div class="flex items-center justify-between"><span>Lazada</span><span class="text-gray-500">25M (8.7%)</span></div>
+              <div class="flex items-center justify-between"><span>Highlands Coffee</span><span class="text-gray-500">18M (6.3%)</span></div>
+              <div class="text-xs text-gray-400 italic">... 5 brands tiếp</div>
+            </div>
+          </div>
+          <div class="bg-white border rounded p-4">
+            <h3 class="font-semibold mb-3">Stats theo vendor</h3>
+            <table class="w-full text-sm">
+              <thead class="text-gray-500"><tr><th class="py-1 text-left">Vendor</th><th class="text-right">Đơn</th><th class="text-right">Success rate</th><th class="text-right">GMV</th></tr></thead>
+              <tbody>
+                <tr class="border-t"><td class="py-1">GOT_IT</td><td class="text-right">980</td><td class="text-right text-green-600">98.5%</td><td class="text-right">220M</td></tr>
+                <tr class="border-t"><td class="py-1">UR_BOX</td><td class="text-right">250</td><td class="text-right text-green-600">96.2%</td><td class="text-right">52M</td></tr>
+                <tr class="border-t"><td class="py-1">CNV</td><td class="text-right">17</td><td class="text-right text-yellow-600">88.2%</td><td class="text-right">13M</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="api-ref rounded mt-4">
+          <strong>📡 API:</strong>
+          <ul class="mt-2 ml-4 list-disc space-y-1">
+            <li><span class="method-get">GET</span> <code>/crm-admin/stats/overview?preset=7d|30d|this-month|&from=&to=&accountId=</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/stats/top-brands?limit=10&sortBy=gmv|count</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/stats/top-rewards?limit=10&sortBy=gmv|count</code></li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/stats/by-vendor?from=&to=&accountId=</code></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- 9. AUDIT LOG                                                          -->
+      <!-- ===================================================================== -->
+      <section id="page-audit" class="page hidden">
+        <h2 class="text-2xl font-bold mb-1">📜 Audit log</h2>
+        <p class="text-gray-500 mb-6 text-sm">Tất cả hành động đụng tiền/đối soát đều ghi log. Read-only.</p>
+
+        <div class="bg-white rounded-lg border mb-4 p-3 grid grid-cols-6 gap-2">
+          <input class="border rounded px-3 py-2 text-sm" placeholder="actorId (X-User-ID)">
+          <select class="border rounded px-3 py-2 text-sm">
+            <option>Mọi action</option>
+            <option>TOPUP_APPROVE</option><option>TOPUP_REJECT</option><option>TOPUP_CREATE</option>
+            <option>PAYMENT_RECORD</option><option>DISCREPANCY_RESOLVE</option>
+            <option>BALANCE_MODE_CHANGE</option><option>CREDIT_LIMIT_UPDATE</option>
+          </select>
+          <select class="border rounded px-3 py-2 text-sm">
+            <option>Mọi resource</option><option>TOP_UP_REQUEST</option><option>ACCOUNT_BALANCE</option><option>RECONCILIATION_DISCREPANCY</option><option>CREDIT_PAYMENT</option>
+          </select>
+          <input type="date" class="border rounded px-3 py-2 text-sm">
+          <input type="date" class="border rounded px-3 py-2 text-sm">
+          <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm">Lọc</button>
+        </div>
+
+        <div class="bg-white rounded-lg border overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 text-left text-gray-500">
+              <tr><th class="p-3">Time</th><th class="p-3">Actor</th><th class="p-3">Action</th><th class="p-3">Resource</th><th class="p-3">Result</th><th class="p-3">IP</th><th class="p-3">Request ID</th></tr>
+            </thead>
+            <tbody>
+              <tr class="border-t">
+                <td class="p-3 text-xs">13/05 14:30</td>
+                <td class="p-3 font-mono text-xs">htn.cnv<div class="text-xs text-gray-500">CRM_ADMIN</div></td>
+                <td class="p-3">TOPUP_APPROVE</td>
+                <td class="p-3">TOP_UP_REQUEST · #101</td>
+                <td class="p-3"><span class="badge badge-success">SUCCESS</span></td>
+                <td class="p-3 text-xs">10.10.30.5</td>
+                <td class="p-3 font-mono text-xs">a3f4b9c2</td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 text-xs">13/05 14:15</td>
+                <td class="p-3 font-mono text-xs">htn.cnv</td>
+                <td class="p-3">DISCREPANCY_RESOLVE</td>
+                <td class="p-3">RECONCILIATION_DISCREPANCY · #199</td>
+                <td class="p-3"><span class="badge badge-success">SUCCESS</span></td>
+                <td class="p-3 text-xs">10.10.30.5</td>
+                <td class="p-3 font-mono text-xs">b1e2d8f7</td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 text-xs">13/05 14:00</td>
+                <td class="p-3 font-mono text-xs">cnvconnect-system<div class="text-xs text-gray-500">CRM_ADMIN</div></td>
+                <td class="p-3">TOPUP_APPROVE</td>
+                <td class="p-3">TOP_UP_REQUEST · #100</td>
+                <td class="p-3"><span class="badge badge-success">SUCCESS</span></td>
+                <td class="p-3 text-xs">10.10.20.50</td>
+                <td class="p-3 font-mono text-xs">c7g8h9i0</td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-3 text-xs">13/05 13:45</td>
+                <td class="p-3 font-mono text-xs">htn.cnv</td>
+                <td class="p-3">CREDIT_LIMIT_UPDATE</td>
+                <td class="p-3">ACCOUNT_BALANCE · 1168</td>
+                <td class="p-3"><span class="badge badge-failed">FAILED</span><div class="text-xs">CREDIT_LIMIT_TOO_LOW</div></td>
+                <td class="p-3 text-xs">10.10.30.5</td>
+                <td class="p-3 font-mono text-xs">d4j5k6l7</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="api-ref rounded mt-4">
+          <strong>📡 API:</strong>
+          <ul class="mt-2 ml-4 list-disc space-y-1">
+            <li><span class="method-get">GET</span> <code>/crm-admin/audit-logs?actorId=&action=&resourceType=&resourceId=&fromAt=&toAt=&page=&size=</code> (max 100/page)</li>
+            <li><span class="method-get">GET</span> <code>/crm-admin/audit-logs/{id}</code></li>
+          </ul>
+          <div class="mt-2"><strong>Note:</strong> mỗi request CRM Internal gửi sang rewards-v2 đều được log với <code>actor_id = X-User-ID</code>, <code>ip_address</code>, <code>user_agent</code>, <code>request_id = X-Request-ID</code>.</div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Footer info -->
+    <footer class="border-t bg-white px-6 py-4 text-xs text-gray-500">
+      <div class="flex items-center justify-between">
+        <div>
+          <strong>Auth headers mỗi request</strong>: <code>X-CRM-API-Key</code> + <code>X-User-ID</code> + <code>X-Timestamp</code>
+          (+ <code>X-Signature</code> cho 4 financial endpoint: POST top-up-requests, POST payments, PUT approve, PUT reject)
+        </div>
+        <div>Mockup spec · <a href="cnvconnect-crm-internal-api-spec.md" class="text-blue-600">Full API spec ▸</a></div>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script>
+  // Simple SPA-style page switching
+  const navItems = document.querySelectorAll('.nav-item');
+  const pages = document.querySelectorAll('.page');
+  const pageTitle = document.getElementById('page-title');
+  const pageSubtitle = document.getElementById('page-subtitle');
+
+  const titles = {
+    dashboard:      ['Tổng quan', 'Hub vận hành tích hợp rewards-v2'],
+    inquiry:        ['Tra cứu đơn', 'Tìm đơn theo mã giao dịch'],
+    orders:         ['Đơn đổi quà', 'Cross-account redemption orders'],
+    accounts:       ['Tài khoản', 'Quản lý balance + cấu hình account'],
+    topups:         ['Nạp ví', 'Approve/Reject top-up requests (Financial)'],
+    payments:       ['Thanh toán nợ', 'Ghi nhận account trả nợ CREDIT (Financial)'],
+    reconciliation: ['Đối soát', 'Upload Excel GotIt + resolve discrepancies'],
+    stats:          ['Báo cáo', 'Analytics dashboard'],
+    audit:          ['Audit log', 'Lịch sử thao tác'],
+  };
+
+  function activate(page) {
+    pages.forEach(p => p.classList.toggle('hidden', p.id !== 'page-' + page));
+    navItems.forEach(n => n.classList.toggle('active', n.dataset.page === page));
+    const [t, s] = titles[page] || ['', ''];
+    pageTitle.textContent = t;
+    pageSubtitle.textContent = s;
+    window.scrollTo(0, 0);
+  }
+
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      e.preventDefault();
+      activate(item.dataset.page);
+      history.replaceState(null, '', '#' + item.dataset.page);
+    });
+  });
+
+  // Init from URL hash
+  const hash = window.location.hash.slice(1);
+  if (hash && titles[hash]) activate(hash);
+</script>
+
+</body>
+</html>

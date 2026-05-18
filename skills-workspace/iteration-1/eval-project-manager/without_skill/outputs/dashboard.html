@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Sức khỏe Dự án Reward v2</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            color-scheme: light;
+            --primary: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f9fafb;
+            color: var(--dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .health-indicator {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .health-indicator.yellow {
+            background-color: var(--warning);
+        }
+
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        .metric-card.success {
+            border-left-color: var(--success);
+        }
+
+        .metric-card.warning {
+            border-left-color: var(--warning);
+        }
+
+        .metric-card.danger {
+            border-left-color: var(--danger);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .metric-unit {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            border-radius: 4px;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--dark);
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 10px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .issue-item {
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+        }
+
+        .issue-item.critical {
+            background: #fee2e2;
+            border-left-color: var(--danger);
+        }
+
+        .issue-item.done {
+            background: #dcfce7;
+            border-left-color: var(--success);
+        }
+
+        .issue-priority {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 8px;
+            text-transform: uppercase;
+        }
+
+        .issue-priority.p0 {
+            background: var(--danger);
+            color: white;
+        }
+
+        .issue-priority.p1 {
+            background: var(--warning);
+            color: #000;
+        }
+
+        .issue-priority.p2 {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .issue-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .issue-desc {
+            font-size: 13px;
+            color: #4b5563;
+            margin-top: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th {
+            background: var(--light);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            color: #6b7280;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: #fafbfc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge.done {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge.blocked {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .phase-timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .phase-timeline::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: 0;
+        }
+
+        .phase {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .phase-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--success);
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .phase-dot.current {
+            background: var(--primary);
+        }
+
+        .phase-dot.future {
+            background: #d1d5db;
+        }
+
+        .phase-date {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .phase-desc {
+            font-size: 12px;
+            color: var(--dark);
+            font-weight: 500;
+            margin-top: 3px;
+        }
+
+        .recommendation {
+            background: #eff6ff;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .recommendation-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .recommendation-text {
+            font-size: 13px;
+            color: #1e40af;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #9ca3af;
+            font-size: 12px;
+            margin-top: 40px;
+            border-top: 1px solid var(--light);
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-row {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dashboard Sức khỏe Dự án Reward v2 <span class="health-indicator yellow"></span></h1>
+            <p>Trạng thái: VÀNG (Medium Risk) | Cập nhật: 21/4/2026 | Tuần 3/4 hoàn thành</p>
+        </header>
+
+        <!-- KPIs Overview -->
+        <div class="metrics-row">
+            <div class="metric-card success">
+                <div class="metric-label">Tiến độ Tổng thể</div>
+                <div class="metric-value">75%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%"></div>
+                </div>
+            </div>
+
+            <div class="metric-card warning">
+                <div class="metric-label">Blockers Đang có</div>
+                <div class="metric-value">2</div>
+                <div class="metric-unit">GotIt OAuth + ZNS</div>
+            </div>
+
+            <div class="metric-card warning">
+                <div class="metric-label">Rủi ro Kinh doanh</div>
+                <div class="metric-value">2</div>
+                <div class="metric-unit">Mode ký quỹ + Đối soát</div>
+            </div>
+
+            <div class="metric-card danger">
+                <div class="metric-label">UI Coverage</div>
+                <div class="metric-value">0%</div>
+                <div class="metric-unit">CRITICAL - Chưa bắt đầu</div>
+            </div>
+        </div>
+
+        <!-- Timeline Giai đoạn -->
+        <div class="section">
+            <div class="section-title">⏱️ Timeline Giai đoạn Phát triển</div>
+            <div class="phase-timeline">
+                <div class="phase">
+                    <div class="phase-dot">✓</div>
+                    <div class="phase-date">30/3 - 3/4</div>
+                    <div class="phase-desc">Worker Urbox</div>
+                </div>
+                <div class="phase">
+                    <div class="phase-dot">✓</div>
+                    <div class="phase-date">6/4 - 10/4</div>
+                    <div class="phase-desc">API Tích hợp</div>
+                </div>
+                <div class="phase">
+                    <div class="phase-dot">✓</div>
+                    <div class="phase-date">13/4 - 17/4</div>
+                    <div class="phase-desc">Production Ready</div>
+                </div>
+                <div class="phase">
+                    <div class="phase-dot current">Hiện tại</div>
+                    <div class="phase-date">20/4 - 24/4</div>
+                    <div class="phase-desc">UI + Chốt</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blockers & Risks -->
+        <div class="grid-2">
+            <div class="section">
+                <div class="section-title">🚫 Blockers Cấp độ cao</div>
+
+                <div class="issue-item critical">
+                    <span class="issue-priority p0">BLOCKER</span>
+                    <div class="issue-title">GotIt OAuth2 - Chưa phản hồi</div>
+                    <div class="issue-desc">GotIt chưa cung cấp OAuth2 key/process. Có thể delay tích hợp GotIt.</div>
+                    <div style="margin-top: 8px; font-size: 12px;">
+                        <strong>Hành động:</strong> Gọi/email/escalate GotIt ngay lập tức
+                    </div>
+                </div>
+
+                <div class="issue-item critical">
+                    <span class="issue-priority p1">ISSUE</span>
+                    <div class="issue-title">ZNS Channel - Gửi lỗi</div>
+                    <div class="issue-desc">Kênh gửi ZNS bị lỗi. Email/SMS hoạt động bình thường.</div>
+                    <div style="margin-top: 8px; font-size: 12px;">
+                        <strong>Hành động:</strong> Fix hoặc accept limitation nếu không phải MVP
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">⚠️ Rủi ro Kinh doanh</div>
+
+                <div class="issue-item">
+                    <span class="issue-priority p1">HIGH</span>
+                    <div class="issue-title">Mode Ký quỹ - Tự quyết</div>
+                    <div class="issue-desc">Dev đã tự quyết support 3 mode (ký quỹ/công nợ/hybrid) chưa chốt với PO/BA.</div>
+                    <div style="margin-top: 8px; font-size: 12px;">
+                        <strong>Hành động:</strong> Họp ngay với PO/BA/Finance để xác nhận
+                    </div>
+                </div>
+
+                <div class="issue-item">
+                    <span class="issue-priority p2">MEDIUM</span>
+                    <div class="issue-title">Luồng Đối soát - Chưa có</div>
+                    <div class="issue-desc">Chưa có luồng đối soát số liệu tài chính. Cần lên kế hoạch.</div>
+                    <div style="margin-top: 8px; font-size: 12px;">
+                        <strong>Hành động:</strong> Lên roadmap cho giai đoạn tiếp theo
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Status -->
+        <div class="section">
+            <div class="section-title">🔧 Trạng thái Kỹ thuật</div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Thành phần</th>
+                        <th>Trạng thái</th>
+                        <th>Chi tiết</th>
+                        <th>Đánh giá</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Worker Urbox</strong></td>
+                        <td><span class="badge done">✓ Hoàn thành</span></td>
+                        <td>Quà tặng, Brand (sync 1 ngày 1 lần)</td>
+                        <td>Tốt - Hợp lý với constraint</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Worker GotIt</strong></td>
+                        <td><span class="badge done">✓ Hoàn thành</span></td>
+                        <td>Category, Brand, Product, Mapping</td>
+                        <td>Tốt - Thiết kế sạch</td>
+                    </tr>
+                    <tr>
+                        <td><strong>API Danh sách Quà</strong></td>
+                        <td><span class="badge done">✓ Hoàn thành</span></td>
+                        <td>List, Filter, Pagination</td>
+                        <td>Tốt - API tiêu chuẩn</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RedeemService</strong></td>
+                        <td><span class="badge done">✓ Hoàn thành</span></td>
+                        <td>Strategy Pattern, 2+ vendors</td>
+                        <td>Tốt - Mở rộng được</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Retry + Idempotency</strong></td>
+                        <td><span class="badge done">✓ Hoàn thành</span></td>
+                        <td>Framework, chống double-click</td>
+                        <td>Tốt - Production-ready</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Self-Healing Worker</strong></td>
+                        <td><span class="badge done">✓ Hoàn thành</span></td>
+                        <td>Quét PENDING quá timeout</td>
+                        <td>Tốt - Chủ động xử lý</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CNV Loyalty Integration</strong></td>
+                        <td><span class="badge done">✓ Hoàn thành</span></td>
+                        <td>Check, Cộng, Trừ, Refund</td>
+                        <td>Tốt - Đầy đủ</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Webhook API</strong></td>
+                        <td><span class="badge done">✓ Hoàn thành</span></td>
+                        <td>Phát hành, Inquiry voucher</td>
+                        <td>Tốt - Test thành công</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Web Admin UI</strong></td>
+                        <td><span class="badge pending">⏳ Chưa chốt</span></td>
+                        <td>Design chưa confirm</td>
+                        <td><strong>🔴 CRITICAL</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Miniapp UI</strong></td>
+                        <td><span class="badge pending">⏳ Chưa chốt</span></td>
+                        <td>Design chưa confirm</td>
+                        <td><strong>🔴 CRITICAL</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>CRM UI</strong></td>
+                        <td><span class="badge pending">⏳ Chưa chốt</span></td>
+                        <td>Design chưa confirm</td>
+                        <td><strong>🔴 CRITICAL</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Work Done by Phase -->
+        <div class="section">
+            <div class="section-title">✅ Chi tiết Công việc Hoàn thành</div>
+
+            <div style="display: grid; gap: 20px;">
+                <div style="border-left: 4px solid var(--success); padding-left: 15px;">
+                    <h3 style="color: var(--success); margin-bottom: 10px;">📦 Giai đoạn 1: Worker Urbox (30/3 - 3/4)</h3>
+                    <ul style="font-size: 13px; line-height: 1.8; color: #4b5563; list-position: inside;">
+                        <li>✓ Worker đồng bộ quà tặng (tạo, cập nhật giá & stock)</li>
+                        <li>✓ Worker đồng bộ brand</li>
+                        <li>✓ API chi tiết quà</li>
+                        <li><em style="color: #6b7280;">Note: Urbox không support API, sync 1 ngày 1 lần</em></li>
+                    </ul>
+                </div>
+
+                <div style="border-left: 4px solid var(--success); padding-left: 15px;">
+                    <h3 style="color: var(--success); margin-bottom: 10px;">🔗 Giai đoạn 2: API Tích hợp (6/4 - 10/4)</h3>
+                    <ul style="font-size: 13px; line-height: 1.8; color: #4b5563; list-position: inside;">
+                        <li>✓ Phân tích tài liệu kỹ thuật GotIt</li>
+                        <li>✓ Test sơ bộ sandbox GotIt</li>
+                        <li>✓ Auto-Sync worker GotIt (category, brand, product, mapping)</li>
+                        <li>✓ API danh sách quà + filter + pagination</li>
+                        <li>✓ RedeemService + Strategy Pattern</li>
+                        <li>✓ API lịch sử đổi quà</li>
+                        <li>✓ API voucher user</li>
+                        <li>✓ API cài đặt (API Key, đổi điểm)</li>
+                    </ul>
+                </div>
+
+                <div style="border-left: 4px solid var(--success); padding-left: 15px;">
+                    <h3 style="color: var(--success); margin-bottom: 10px;">🚀 Giai đoạn 3: Production-Ready (13/4 - 17/4)</h3>
+                    <ul style="font-size: 13px; line-height: 1.8; color: #4b5563; list-position: inside;">
+                        <li>✓ Sandbox GotIt chính thức + test Phát hành/Inquiry voucher</li>
+                        <li>✓ Kênh gửi voucher (Email, SMS, ZNS - ZNS lỗi)</li>
+                        <li>✓ Webhook API</li>
+                        <li>✓ Luồng tiền 3 modes (ký quỹ/công nợ/hybrid)</li>
+                        <li>✓ Retry framework + Idempotency key</li>
+                        <li>✓ Self-Healing Worker (quét PENDING quá timeout)</li>
+                        <li>✓ CNV Loyalty integration</li>
+                        <li>✓ Miniapp API hoàn chỉnh</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="section">
+            <div class="section-title">💡 Khuyến cáo Tuần tiếp theo (20/4 - 24/4)</div>
+
+            <div class="recommendation">
+                <div class="recommendation-title">🔴 P0: Follow-up GotIt OAuth2</div>
+                <div class="recommendation-text">
+                    Gọi, email, hoặc escalate đến GotIt management. Đây là blocker cho production. Nếu không có response trong 24h, lên kế hoạch alternative (API key, password, webhook flow khác).
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="recommendation-title">🔴 P0: Chốt UI Designs</div>
+                <div class="recommendation-text">
+                    Bắt đầu ngay hôm nay: Web Admin UI, Miniapp UI, CRM UI cần design mockup và chốt spec. Ước tính công sức. Đây là critical path cho go-live.
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="recommendation-title">🔴 P0: Chốt Mode Ký quỹ với PO/BA</div>
+                <div class="recommendation-text">
+                    Họp ngay với PO/BA/Finance để confirm: 3 modes hay customize? Nếu cần change, dev cần biết sớm để không phải rebuild.
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="recommendation-title">🟡 P1: Xử lý ZNS hoặc Accept Limitation</div>
+                <div class="recommendation-text">
+                    Nếu ZNS là MVP requirement, fix ngay. Nếu không, accept limitation và document. Email/SMS là fallback đủ dùng.
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="recommendation-title">🟡 P1: Lên kế hoạch Luồng Đối soát</div>
+                <div class="recommendation-text">
+                    Khi nào cần delivery? Ước tính chi phí. Có thể là sprint tiếp sau go-live.
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="recommendation-title">🟡 P1: Chuẩn bị Test Script</div>
+                <div class="recommendation-text">
+                    Lên danh sách test cases cho QA: happy path, edge cases (double-click, timeout, retry), integration (workers + API).
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Assessment -->
+        <div class="section">
+            <div class="section-title">👥 Đánh giá Team</div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Yếu tố</th>
+                        <th>Đánh giá</th>
+                        <th>Chi tiết</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Tốc độ phát triển</strong></td>
+                        <td><span style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Rất Tốt</span></td>
+                        <td>1-2 feature/ngày, không chậm tiến độ</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Chất lượng thiết kế</strong></td>
+                        <td><span style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Tốt</span></td>
+                        <td>Strategy Pattern, Retry Framework, Idempotency - chuyên nghiệp</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tính đầy đủ</strong></td>
+                        <td><span style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Tốt</span></td>
+                        <td>Handling edge cases: double-click, timeout, refund - suy nghĩ kỹ</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Giao tiếp & Align</strong></td>
+                        <td><span style="background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Cần cải thiện</span></td>
+                        <td>Mode ký quỹ tự quyết, chưa chốt UI - cần align sớm hơn</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Final Assessment -->
+        <div class="section">
+            <div class="section-title">🎯 Kết luận Tổng thể</div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="background: #dcfce7; padding: 15px; border-radius: 8px;">
+                    <h4 style="color: #166534; margin-bottom: 10px;">✨ Điểm Tích cực</h4>
+                    <ul style="font-size: 13px; line-height: 1.8; color: #166534; list-position: inside;">
+                        <li>Backend/API phát triển rất nhanh</li>
+                        <li>Team có khả năng xử lý phức tạp</li>
+                        <li>Kiến trúc kỹ thuật vững chắc</li>
+                        <li>Xử lý edge case tốt</li>
+                    </ul>
+                </div>
+
+                <div style="background: #fef3c7; padding: 15px; border-radius: 8px;">
+                    <h4 style="color: #92400e; margin-bottom: 10px;">⚠️ Điểm Cần lo ngại</h4>
+                    <ul style="font-size: 13px; line-height: 1.8; color: #92400e; list-position: inside;">
+                        <li><strong>UI chưa bắt đầu</strong> - Delay risk cao</li>
+                        <li>2 blockers từ bên ngoài - Cần xử lý ngay</li>
+                        <li>Rủi ro kinh doanh chưa xử lý</li>
+                        <li>Giao tiếp cần tăng cường</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #eff6ff; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid var(--primary);">
+                <h4 style="color: var(--primary); margin-bottom: 10px;">📊 Đánh giá Rủi ro</h4>
+                <p style="font-size: 13px; color: #1e40af; line-height: 1.8; margin-bottom: 10px;">
+                    <strong>Mức độ:</strong> <span style="background: var(--warning); color: white; padding: 2px 8px; border-radius: 4px; font-weight: 600;">VÀNG (MEDIUM)</span>
+                </p>
+                <p style="font-size: 13px; color: #1e40af; line-height: 1.8;">
+                    Dự án vẫn có thể hoàn thành đúng hạn nếu xử lý tốt các blocker trong tuần tiếp theo. UI là critical path - cần bắt đầu ngay lập tức.
+                </p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Dashboard được tạo tự động dựa trên báo cáo tiến độ ngày 21/4/2026 | Reward v2 Project Health Review</p>
+        </footer>
+    </div>
+
+    <script>
+        // Completion Timeline Chart
+        const ctx1 = document.createElement('canvas');
+        const container = document.querySelector('.section');
+
+        // Optional: Add interactive elements if needed
+        console.log('Dashboard loaded successfully');
+    </script>
+</body>
+</html>

@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>W19/2026 — Reward V2 Team Report (Feature-first)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding: 24px;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 1400px; margin: 0 auto; }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding: 28px 24px;
+    background: linear-gradient(135deg, rgba(59,130,246,.18), rgba(139,92,246,.18));
+    border: 1px solid rgba(148,163,184,.2);
+    border-radius: 16px;
+  }
+  header .eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  header h1 {
+    font-size: 30px;
+    background: linear-gradient(90deg, #60a5fa, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+  }
+  header p { color: #94a3b8; font-size: 14px; }
+  header .meta { margin-top: 12px; display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; font-size: 12px; color: #cbd5e1; }
+  header .meta span { background: rgba(15,23,42,.5); padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(148,163,184,.15); }
+
+  /* KPI grid */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .kpi {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::before {
+    content: ""; position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+  .kpi.blue::before { background: #3b82f6; }
+  .kpi.green::before { background: #10b981; }
+  .kpi.orange::before { background: #f59e0b; }
+  .kpi.purple::before { background: #a855f7; }
+  .kpi.red::before { background: #ef4444; }
+  .kpi-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+  .kpi-value { font-size: 28px; font-weight: 700; color: #f1f5f9; }
+  .kpi-sub { font-size: 12px; color: #64748b; margin-top: 4px; }
+
+  /* Section heading */
+  .section-title {
+    display: flex; align-items: baseline; gap: 10px;
+    margin: 28px 0 16px 0;
+  }
+  .section-title h2 {
+    font-size: 18px; color: #f1f5f9;
+  }
+  .section-title .hint {
+    font-size: 12px; color: #64748b;
+  }
+  .section-title h2::before {
+    content: "";
+    display: inline-block;
+    width: 4px; height: 18px;
+    background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+    border-radius: 2px;
+    margin-right: 10px;
+    transform: translateY(2px);
+  }
+
+  /* Cards generic */
+  .card {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  /* Person overview */
+  .people-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .person {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .person-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 18px; color: #fff;
+  }
+  .av-trang { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
+  .av-huy   { background: linear-gradient(135deg, #10b981, #06b6d4); }
+  .av-hai   { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+  .person h3 { font-size: 16px; color: #f1f5f9; }
+  .person .role { font-size: 12px; color: #94a3b8; }
+  .repo-stack { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .repo-pill {
+    font-size: 11px;
+    padding: 3px 10px; border-radius: 12px;
+    background: rgba(15,23,42,.6);
+    border: 1px solid rgba(148,163,184,.2);
+    color: #cbd5e1;
+  }
+  .repo-pill b { color: #60a5fa; }
+  .person .total { font-size: 13px; color: #94a3b8; margin-bottom: 8px; }
+  .person .total b { color: #f1f5f9; font-size: 16px; }
+  .bar { height: 8px; background: rgba(15,23,42,.6); border-radius: 4px; overflow: hidden; display: flex; }
+  .bar > div { height: 100%; }
+  .b-rewards { background: #3b82f6; }
+  .b-cdpbe   { background: #10b981; }
+  .b-cdpfe   { background: #f59e0b; }
+  .b-mini    { background: #a855f7; }
+  .b-net     { background: #ec4899; }
+  .legend { display: flex; gap: 12px; font-size: 11px; color: #94a3b8; margin-top: 8px; flex-wrap: wrap; }
+  .legend i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; margin-right: 4px; vertical-align: middle; }
+
+  /* Feature cards */
+  .features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .feature {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 18px 20px;
+    border-left: 4px solid;
+  }
+  .feature.f1 { border-left-color: #3b82f6; }
+  .feature.f2 { border-left-color: #10b981; }
+  .feature.f3 { border-left-color: #f59e0b; }
+  .feature.f4 { border-left-color: #a855f7; }
+  .feature.f5 { border-left-color: #06b6d4; }
+  .feature.f6 { border-left-color: #ec4899; }
+  .feature.f7 { border-left-color: #84cc16; }
+
+  .feature-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .feature-title {
+    font-size: 16px; color: #f1f5f9; font-weight: 600;
+  }
+  .feature-title .tag {
+    font-size: 10px; color: #94a3b8; margin-right: 8px;
+    background: rgba(15,23,42,.6); padding: 2px 8px; border-radius: 4px;
+  }
+  .badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge {
+    font-size: 11px; padding: 3px 10px; border-radius: 10px;
+    background: rgba(15,23,42,.6); border: 1px solid rgba(148,163,184,.2);
+    color: #cbd5e1;
+  }
+  .badge.trang { border-color: rgba(59,130,246,.5); color: #93c5fd; }
+  .badge.huy   { border-color: rgba(16,185,129,.5); color: #6ee7b7; }
+  .badge.hai   { border-color: rgba(245,158,11,.5); color: #fcd34d; }
+  .badge.status-green  { background: rgba(16,185,129,.15); border-color: rgba(16,185,129,.4); color: #6ee7b7; }
+  .badge.status-yellow { background: rgba(245,158,11,.15); border-color: rgba(245,158,11,.4); color: #fcd34d; }
+  .badge.status-red    { background: rgba(239,68,68,.15); border-color: rgba(239,68,68,.4); color: #fca5a5; }
+
+  .feature-desc { color: #cbd5e1; font-size: 13px; margin-bottom: 12px; }
+  .feature-desc b { color: #f1f5f9; }
+
+  .commit-list { font-size: 12.5px; }
+  .commit-list .commit {
+    display: grid;
+    grid-template-columns: 70px 90px 90px 1fr;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(148,163,184,.1);
+  }
+  .commit-list .commit:last-child { border-bottom: none; }
+  .commit .date { color: #64748b; font-variant-numeric: tabular-nums; }
+  .commit .who  { color: #cbd5e1; font-weight: 600; }
+  .commit .repo { color: #94a3b8; font-size: 11px; padding-top: 1px; }
+  .commit .msg  { color: #e2e8f0; }
+  .commit.ops { background: rgba(168,85,247,.06); border-left: 2px solid #a855f7; padding-left: 8px; margin-left: -10px; }
+  .commit.ops .repo { color: #c084fc; font-weight: 600; }
+  .commit.ops .msg::before { content: "⚙ "; color: #c084fc; font-weight: 700; }
+
+  /* Completed features ("Tính năng đã làm xong") */
+  .done-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .done-area {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .done-area-head {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(148,163,184,.15);
+    border-left: 4px solid var(--accent, #3b82f6);
+    margin-left: -20px;
+    padding-left: 16px;
+  }
+  .done-area-icon { font-size: 22px; line-height: 1; }
+  .done-area-title { font-size: 15px; color: #f1f5f9; font-weight: 600; }
+  .done-area-sub { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+  .done-list { display: flex; flex-direction: column; gap: 12px; }
+  .done-item {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(15,23,42,.4);
+    border-radius: 8px;
+    border: 1px solid rgba(148,163,184,.08);
+  }
+  .done-status { font-size: 18px; line-height: 1.2; text-align: center; }
+  .done-status.ok { color: #6ee7b7; }
+  .done-status.partial { color: #fcd34d; }
+  .done-status.progress { color: #93c5fd; }
+  .done-title { color: #f1f5f9; font-weight: 600; font-size: 13.5px; margin-bottom: 4px; }
+  .done-desc { color: #cbd5e1; font-size: 12.5px; line-height: 1.55; margin-bottom: 8px; }
+  .done-desc code { background: rgba(15,23,42,.6); padding: 1px 6px; border-radius: 3px; font-size: 11.5px; color: #93c5fd; }
+  .done-meta { display: flex; flex-wrap: wrap; gap: 6px; }
+  .done-item.compact {
+    grid-template-columns: 28px 1fr auto;
+    gap: 10px;
+    padding: 8px 10px;
+    align-items: center;
+  }
+  .done-title-inline { color: #f1f5f9; font-weight: 500; font-size: 13px; line-height: 1.4; }
+  .done-title-inline code { background: rgba(15,23,42,.6); padding: 1px 5px; border-radius: 3px; font-size: 11.5px; color: #93c5fd; }
+  .done-owners { display: flex; gap: 4px; flex-wrap: nowrap; }
+  .done-owners .badge { font-size: 10px; padding: 2px 8px; }
+
+
+  /* Scoring table */
+  .scoring {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .score-card {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .score-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .score-head .total-score {
+    margin-left: auto;
+    font-size: 22px; font-weight: 700; color: #f1f5f9;
+  }
+  .score-head .total-score small { font-size: 12px; color: #64748b; font-weight: 400; }
+  .score-row {
+    display: grid;
+    grid-template-columns: 130px 60px 1fr;
+    gap: 8px;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 12px;
+  }
+  .score-row .axis { color: #cbd5e1; }
+  .score-row .num { color: #f1f5f9; font-weight: 600; text-align: right; padding-right: 8px; }
+  .score-bar {
+    height: 6px; background: rgba(15,23,42,.6); border-radius: 3px; overflow: hidden;
+  }
+  .score-bar > div { height: 100%; background: linear-gradient(90deg, #3b82f6, #8b5cf6); }
+  .score-row.warn .num { color: #fca5a5; }
+  .score-row.warn .score-bar > div { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+  .score-row.good .num { color: #6ee7b7; }
+  .score-row.good .score-bar > div { background: linear-gradient(90deg, #10b981, #06b6d4); }
+  .score-card .verdict {
+    margin-top: 12px; padding-top: 12px; border-top: 1px dashed rgba(148,163,184,.15);
+    font-size: 12px; color: #94a3b8;
+  }
+  .score-card .verdict b { color: #f1f5f9; }
+
+  /* Two-column grid for highlights/red flags */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .list-card h3 { font-size: 15px; color: #f1f5f9; margin-bottom: 12px; display:flex; align-items:center; gap:8px; }
+  .list-card h3::before {
+    content: ""; width: 4px; height: 16px;
+    background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+    border-radius: 2px;
+  }
+  .list-card.red h3::before    { background: linear-gradient(180deg, #ef4444, #f59e0b); }
+  .list-card.green h3::before  { background: linear-gradient(180deg, #10b981, #06b6d4); }
+  .list-card.orange h3::before { background: linear-gradient(180deg, #f59e0b, #ec4899); }
+
+  .list-card ol, .list-card ul { padding-left: 20px; }
+  .list-card li { color: #cbd5e1; font-size: 13px; margin-bottom: 8px; line-height: 1.55; }
+  .list-card li b { color: #f1f5f9; }
+  .list-card li small { color: #64748b; }
+
+  /* Charts */
+  .chart-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 900px) { .chart-row { grid-template-columns: 1fr; } }
+  .chart-card { background: rgba(30,41,59,.6); border: 1px solid rgba(148,163,184,.15); border-radius: 12px; padding: 20px; }
+  .chart-card h3 { font-size: 15px; color: #f1f5f9; margin-bottom: 12px; }
+  .chart-wrap { position: relative; height: 280px; }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    color: #64748b;
+    font-size: 12px;
+    padding: 16px 0;
+    border-top: 1px solid rgba(148,163,184,.1);
+    margin-top: 24px;
+  }
+  footer .caveats {
+    text-align: left;
+    background: rgba(15,23,42,.5);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  footer .caveats b { color: #cbd5e1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Weekly Performance Report · Feature-first · Updated post-fetch</div>
+    <h1>W19 / 2026 — Reward V2 Team</h1>
+    <p>Tuần 19, 2026 · 04 → 08/05 (5 ngày làm việc) · 3 contributors · 5 repos</p>
+    <div class="meta">
+      <span>📦 rewards-v2</span>
+      <span>🏗 cdp-backend</span>
+      <span>🎨 cdp-frontend</span>
+      <span>📱 mini-app</span>
+      <span style="background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.4);color:#c084fc;">🆕 net-core-platform-cnv</span>
+    </div>
+  </header>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi blue">
+      <div class="kpi-label">Total commits W19</div>
+      <div class="kpi-value">49</div>
+      <div class="kpi-sub">Trang 10 · Huy 20 · Hải 19 · <span style="color:#6ee7b7;">+16 từ fetch mới</span></div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-label">Tính năng đã xong</div>
+      <div class="kpi-value">16<span style="font-size:18px;color:#fcd34d;"> +1</span><span style="font-size:18px;color:#93c5fd;"> +1</span></div>
+      <div class="kpi-sub">16 ✅ shipped · 1 🟡 partial (Audit retention) · 1 🔵 foundation (net-core branch)</div>
+    </div>
+    <div class="kpi orange">
+      <div class="kpi-label">Repos touched</div>
+      <div class="kpi-value">5</div>
+      <div class="kpi-sub">3 BE/FE + mini-app + <b style="color:#c084fc;">net-core-platform-cnv 🆕</b></div>
+    </div>
+    <div class="kpi purple">
+      <div class="kpi-label">Ops &amp; vendor work</div>
+      <div class="kpi-value">3</div>
+      <div class="kpi-sub">Trang: CnvConnect API · GotIt webhook ✓ · whitelist deploy</div>
+    </div>
+    <div class="kpi purple">
+      <div class="kpi-label">Health</div>
+      <div class="kpi-value">🟡</div>
+      <div class="kpi-sub">Yellow — output cao, test debt vẫn còn</div>
+    </div>
+    <div class="kpi red">
+      <div class="kpi-label">Test commits</div>
+      <div class="kpi-value">1</div>
+      <div class="kpi-sub">/ 49 · GotItStoreService mock · ratio giảm</div>
+    </div>
+  </div>
+
+  <!-- Person overview -->
+  <div class="section-title">
+    <h2>Phân bố theo người &amp; repo</h2>
+    <span class="hint">Output volume per contributor, theo repo</span>
+  </div>
+
+  <div class="people-grid">
+
+    <div class="person">
+      <div class="person-head">
+        <div class="avatar av-trang">NT</div>
+        <div>
+          <h3>Như Trang (Trang)</h3>
+          <div class="role">Tech Lead — Core Architect</div>
+        </div>
+      </div>
+      <div class="repo-stack">
+        <span class="repo-pill">rewards-v2 · <b>8</b></span>
+        <span class="repo-pill">cdp-backend · <b>2</b></span>
+        <span class="repo-pill" style="border-color:rgba(168,85,247,.5);color:#c084fc;">⚙ ops · <b>3</b></span>
+      </div>
+      <div class="total">W19 commits: <b>10</b> <span style="color:#6ee7b7;font-size:12px;">+2 fetch mới</span> <span style="color:#c084fc;font-size:12px;">· + 3 ops/vendor items</span></div>
+      <div class="bar">
+        <div class="b-rewards" style="width:80%"></div>
+        <div class="b-cdpbe"   style="width:20%"></div>
+      </div>
+      <div class="legend">
+        <span><i class="b-rewards"></i>rewards-v2</span>
+        <span><i class="b-cdpbe"></i>cdp-backend</span>
+      </div>
+    </div>
+
+    <div class="person">
+      <div class="person-head">
+        <div class="avatar av-huy">H</div>
+        <div>
+          <h3>Trần Lê Huy (huy)</h3>
+          <div class="role">Full-stack — BE + FE</div>
+        </div>
+      </div>
+      <div class="repo-stack">
+        <span class="repo-pill">rewards-v2 · <b>7</b></span>
+        <span class="repo-pill">cdp-backend · <b>8</b></span>
+        <span class="repo-pill">cdp-frontend · <b>5</b></span>
+      </div>
+      <div class="total">W19 commits: <b>20</b> <span style="color:#6ee7b7;font-size:12px;">+7 fetch mới</span></div>
+      <div class="bar">
+        <div class="b-rewards" style="width:35%"></div>
+        <div class="b-cdpbe"   style="width:40%"></div>
+        <div class="b-cdpfe"   style="width:25%"></div>
+      </div>
+      <div class="legend">
+        <span><i class="b-rewards"></i>rewards-v2</span>
+        <span><i class="b-cdpbe"></i>cdp-backend</span>
+        <span><i class="b-cdpfe"></i>cdp-frontend</span>
+      </div>
+    </div>
+
+    <div class="person">
+      <div class="person-head">
+        <div class="avatar av-hai">H1</div>
+        <div>
+          <h3>Hồ Trung Hải (haiht1)</h3>
+          <div class="role">Full-stack — BE + FE + Mini-app</div>
+        </div>
+      </div>
+      <div class="repo-stack">
+        <span class="repo-pill">rewards-v2 · <b>2</b></span>
+        <span class="repo-pill">cdp-backend · <b>2</b></span>
+        <span class="repo-pill">cdp-frontend · <b>4</b></span>
+        <span class="repo-pill">mini-app · <b>5</b></span>
+        <span class="repo-pill" style="border-color:rgba(236,72,153,.5);color:#f9a8d4;">net-core · <b>6</b> 🆕</span>
+      </div>
+      <div class="total">W19 commits: <b>19</b> <span style="color:#6ee7b7;font-size:12px;">+7 fetch mới (1 cdp-fe + 6 net-core)</span></div>
+      <div class="bar">
+        <div class="b-rewards" style="width:11%"></div>
+        <div class="b-cdpbe"   style="width:11%"></div>
+        <div class="b-cdpfe"   style="width:21%"></div>
+        <div class="b-mini"    style="width:26%"></div>
+        <div class="b-net"     style="width:31%"></div>
+      </div>
+      <div class="legend">
+        <span><i class="b-rewards"></i>rewards-v2</span>
+        <span><i class="b-cdpbe"></i>cdp-backend</span>
+        <span><i class="b-cdpfe"></i>cdp-frontend</span>
+        <span><i class="b-mini"></i>mini-app</span>
+        <span><i class="b-net"></i>net-core 🆕</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Charts -->
+  <div class="chart-row">
+    <div class="chart-card">
+      <h3>📊 Commit theo người × repo</h3>
+      <div class="chart-wrap"><canvas id="chart-stack"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>📊 Commit theo nhóm tính năng</h3>
+      <div class="chart-wrap"><canvas id="chart-feature"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Completed features -->
+  <div class="section-title">
+    <h2>Tính năng team đã làm xong · W19</h2>
+    <span class="hint">Đầu mục chính · 16 ✅ shipped · 1 🟡 partial · 1 🔵 foundation</span>
+  </div>
+
+  <div class="done-grid">
+
+    <!-- Account Admin (B2B) -->
+    <div class="done-area">
+      <div class="done-area-head" style="--accent:#3b82f6;">
+        <span class="done-area-icon">🏪</span>
+        <div>
+          <div class="done-area-title">Account Admin · B2B</div>
+          <div class="done-area-sub">3 tính năng shipped — luồng quản trị ví &amp; đổi quà cho account admin</div>
+        </div>
+      </div>
+      <div class="done-list">
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Luồng nạp ví đổi quà E2E (qua CnvConnect)</span><span class="done-owners"><span class="badge huy">Huy (chủ lực)</span> <span class="badge trang">Trang (CnvConnect API)</span> <span class="badge hai">Hải (touch holdPoints)</span></span></div>
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Trang tổng quan Mạng lưới đối tác đổi quà</span><span class="done-owners"><span class="badge huy">Huy (FE chính)</span> <span class="badge trang">Trang (analytics endpoint)</span></span></div>
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">API giao dịch đổi quà &amp; lịch sử số dư</span><span class="done-owners"><span class="badge huy">Huy</span></span></div>
+      </div>
+    </div>
+
+    <!-- Vendor Integration -->
+    <div class="done-area">
+      <div class="done-area-head" style="--accent:#10b981;">
+        <span class="done-area-icon">🔌</span>
+        <div>
+          <div class="done-area-title">Vendor Integration</div>
+          <div class="done-area-sub">3 tính năng shipped — sync &amp; webhook với GotIt và UrBox</div>
+        </div>
+      </div>
+      <div class="done-list">
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Webhook GotIt — test tích hợp trên staging THÀNH CÔNG</span><span class="done-owners"><span class="badge trang">Trang</span></span></div>
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Gộp worker đồng bộ GotIt (4 phase trong 1 pipeline)</span><span class="done-owners"><span class="badge huy">Huy</span></span></div>
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Module worker đồng bộ UrBox (phiên bản đầu)</span><span class="done-owners"><span class="badge huy">Huy</span></span></div>
+      </div>
+    </div>
+
+    <!-- CRM Features -->
+    <div class="done-area">
+      <div class="done-area-head" style="--accent:#fbbf24;">
+        <span class="done-area-icon">📊</span>
+        <div>
+          <div class="done-area-title">CRM Features</div>
+          <div class="done-area-sub">1 phase shipped — close 1/5 CRM features từ W17</div>
+        </div>
+      </div>
+      <div class="done-list">
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Đối soát Phase 1b — Upload Excel đối soát voucher vendor</span><span class="done-owners"><span class="badge trang">Trang</span></span></div>
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Fix lỗi sai face_value (giá trị mặt voucher)</span><span class="done-owners"><span class="badge trang">Trang</span></span></div>
+      </div>
+    </div>
+
+    <!-- Architecture -->
+    <div class="done-area">
+      <div class="done-area-head" style="--accent:#a855f7;">
+        <span class="done-area-icon">🏗</span>
+        <div>
+          <div class="done-area-title">Architecture &amp; Hardening</div>
+          <div class="done-area-sub">2 tính năng shipped + 1 partial — module extraction &amp; audit trail</div>
+        </div>
+      </div>
+      <div class="done-list">
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Tách module recovery-core (logic phục hồi)</span><span class="done-owners"><span class="badge trang">Trang</span></span></div>
+        <div class="done-item compact"><span class="done-status partial">🟡</span><span class="done-title-inline">Hệ thống ghi log nghiệp vụ (Audit Log · code đã xong)</span><span class="done-owners"><span class="badge trang">Trang</span></span></div>
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Parse ngày hết hạn voucher GotIt (cải tiến luồng recovery)</span><span class="done-owners"><span class="badge hai">Hải</span></span></div>
+      </div>
+    </div>
+
+    <!-- Platform Integration -->
+    <div class="done-area">
+      <div class="done-area-head" style="--accent:#06b6d4;">
+        <span class="done-area-icon">🔗</span>
+        <div>
+          <div class="done-area-title">Platform Integration (CDP ↔ Reward V2)</div>
+          <div class="done-area-sub">2 tính năng shipped — REWARD_V2 vào hệ sinh thái CDP</div>
+        </div>
+      </div>
+      <div class="done-list">
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Tích hợp REWARD_V2 vào Dynamic Screen (full-stack)</span><span class="done-owners"><span class="badge hai">Hải (full-stack)</span></span></div>
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Mở rộng whitelist shop test (thêm shop ID 3188)</span><span class="done-owners"><span class="badge hai">Hải</span></span></div>
+      </div>
+    </div>
+
+    <!-- User-facing (Mini-app) -->
+    <div class="done-area">
+      <div class="done-area-head" style="--accent:#84cc16;">
+        <span class="done-area-icon">📱</span>
+        <div>
+          <div class="done-area-title">User-facing · Mini-app</div>
+          <div class="done-area-sub">1 nhóm UX shipped — voucher V2 demo-able E2E</div>
+        </div>
+      </div>
+      <div class="done-list">
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Mini-app Voucher V2 — hoàn thiện UX (demo-able E2E)</span><span class="done-owners"><span class="badge hai">Hải</span></span></div>
+      </div>
+    </div>
+
+    <!-- Operations -->
+    <div class="done-area">
+      <div class="done-area-head" style="--accent:#ef4444;">
+        <span class="done-area-icon">🚀</span>
+        <div>
+          <div class="done-area-title">Operations &amp; Vendor Coordination</div>
+          <div class="done-area-sub">3 ops items — deploy &amp; vendor handover (Trang)</div>
+        </div>
+      </div>
+      <div class="done-list">
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Deploy tính năng cho shop whitelist (staging)</span><span class="done-owners"><span class="badge trang">Trang</span></span></div>
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Bổ sung API cho CnvConnect (lớp tích hợp vendor)</span><span class="done-owners"><span class="badge trang">Trang</span></span></div>
+        <div class="done-item compact"><span class="done-status ok">✅</span><span class="done-title-inline">Xoay public key GotIt (security ops)</span><span class="done-owners"><span class="badge trang">Trang</span></span></div>
+      </div>
+    </div>
+
+    <!-- Platform Layer (in progress) -->
+    <div class="done-area">
+      <div class="done-area-head" style="--accent:#ec4899;">
+        <span class="done-area-icon">⚙</span>
+        <div>
+          <div class="done-area-title">Platform Layer · net-core (foundation)</div>
+          <div class="done-area-sub">1 foundation work — chưa merge sang trunk, đang ở branch</div>
+        </div>
+      </div>
+      <div class="done-list">
+        <div class="done-item compact"><span class="done-status progress">🔵</span><span class="done-title-inline">Nền tảng Reward Redeem trong net-core (branch <code>haiht/reward-redeem</code>)</span><span class="done-owners"><span class="badge hai">Hải</span></span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Per-person Evaluation -->
+  <div class="section-title">
+    <h2>Đánh giá per-person · W19</h2>
+    <span class="hint">Cùng rubric với W17-2026.md (6 trục, scale 1–10)</span>
+  </div>
+
+  <div class="scoring">
+
+    <!-- Trang -->
+    <div class="score-card">
+      <div class="score-head">
+        <div class="avatar av-trang" style="width:36px;height:36px;font-size:14px;">NT</div>
+        <div>
+          <div style="color:#f1f5f9;font-weight:600;">Như Trang — Tech Lead</div>
+          <div style="color:#94a3b8;font-size:11px;">Core Architect · 10 commits / 2 repos · <span style="color:#c084fc;">+3 ops/vendor items</span></div>
+        </div>
+        <div class="total-score">7.3 <small>/10</small></div>
+      </div>
+      <div class="score-row good">
+        <span class="axis">Technical Execution</span><span class="num">8</span>
+        <div class="score-bar"><div style="width:80%"></div></div>
+      </div>
+      <div class="score-row good">
+        <span class="axis">System Design</span><span class="num">8</span>
+        <div class="score-bar"><div style="width:80%"></div></div>
+      </div>
+      <div class="score-row good">
+        <span class="axis">Domain Depth</span><span class="num">8</span>
+        <div class="score-bar"><div style="width:80%"></div></div>
+      </div>
+      <div class="score-row warn">
+        <span class="axis">Testing &amp; Quality</span><span class="num">4</span>
+        <div class="score-bar"><div style="width:40%"></div></div>
+      </div>
+      <div class="score-row good">
+        <span class="axis">Communication</span><span class="num">8</span>
+        <div class="score-bar"><div style="width:80%"></div></div>
+      </div>
+      <div class="score-row good">
+        <span class="axis">Ownership</span><span class="num">9</span>
+        <div class="score-bar"><div style="width:90%"></div></div>
+      </div>
+      <div class="verdict">
+        <b>Senior signals:</b> Recovery-core extraction + Audit Logging via AOP + <b>Reconciliation Phase 1b</b> (close W17 CRM blocker). Phát hiện và fix bug face_value mismatch (SUM voucher thay vì price × quantity) — debug logic ở mức nghiệp vụ. <b>Vendor coordination:</b> close GotIt webhook blocker (test staging PASS), bổ sung API CnvConnect, deploy whitelist shop. <b>Gap:</b> 50% commits là CI/CD &amp; infra fix → pipeline chưa tự đứng. Test discipline vẫn là red flag từ W17.
+      </div>
+    </div>
+
+    <!-- Huy -->
+    <div class="score-card">
+      <div class="score-head">
+        <div class="avatar av-huy" style="width:36px;height:36px;font-size:14px;">H</div>
+        <div>
+          <div style="color:#f1f5f9;font-weight:600;">Trần Lê Huy — Full-stack</div>
+          <div style="color:#94a3b8;font-size:11px;">BE + FE · 20 commits / 3 repos · <span style="color:#6ee7b7;">+7 fetch mới</span></div>
+        </div>
+        <div class="total-score">7.4 <small>/10</small></div>
+      </div>
+      <div class="score-row good">
+        <span class="axis">Technical Execution</span><span class="num">9</span>
+        <div class="score-bar"><div style="width:90%"></div></div>
+      </div>
+      <div class="score-row">
+        <span class="axis">System Design</span><span class="num">7</span>
+        <div class="score-bar"><div style="width:70%"></div></div>
+      </div>
+      <div class="score-row">
+        <span class="axis">Domain Depth</span><span class="num">7</span>
+        <div class="score-bar"><div style="width:70%"></div></div>
+      </div>
+      <div class="score-row warn">
+        <span class="axis">Testing &amp; Quality</span><span class="num">5</span>
+        <div class="score-bar"><div style="width:50%"></div></div>
+      </div>
+      <div class="score-row">
+        <span class="axis">Communication</span><span class="num">7</span>
+        <div class="score-bar"><div style="width:70%"></div></div>
+      </div>
+      <div class="score-row good">
+        <span class="axis">Ownership</span><span class="num">9</span>
+        <div class="score-bar"><div style="width:90%"></div></div>
+      </div>
+      <div class="verdict">
+        <b>Output volume cao nhất tuần:</b> 20 commits / 3 repos. Top-up Wallet ship full-stack (BE rewards + BE cdp gateway + FE) trong 2 ngày, sau đó 08/05 ship tiếp <b>Comprehensive Dashboard analytics</b> + <b>endpoints/DTOs cho redemption + balance transactions</b>. DTO simplification (bỏ package prefixes, replace displayOrder→unitPrice) là dấu hiệu refactor có chủ đích. <b>Watch:</b> response models gộp nhiều use case — có thể nên tách per usecase để evolve độc lập. Test ratio 1/20 commits.
+      </div>
+    </div>
+
+    <!-- Hải -->
+    <div class="score-card">
+      <div class="score-head">
+        <div class="avatar av-hai" style="width:36px;height:36px;font-size:14px;">H1</div>
+        <div>
+          <div style="color:#f1f5f9;font-weight:600;">Hồ Trung Hải — Full-stack + Mini-app + Loyalty</div>
+          <div style="color:#94a3b8;font-size:11px;">BE + FE + Mini + net-core · 19 commits / <b style="color:#f9a8d4;">5 repos</b> · <span style="color:#6ee7b7;">+7 fetch mới</span></div>
+        </div>
+        <div class="total-score">7.0 <small>/10</small></div>
+      </div>
+      <div class="score-row">
+        <span class="axis">Technical Execution</span><span class="num">7</span>
+        <div class="score-bar"><div style="width:70%"></div></div>
+      </div>
+      <div class="score-row good">
+        <span class="axis">System Design</span><span class="num">8</span>
+        <div class="score-bar"><div style="width:80%"></div></div>
+      </div>
+      <div class="score-row good">
+        <span class="axis">Domain Depth</span><span class="num">8</span>
+        <div class="score-bar"><div style="width:80%"></div></div>
+      </div>
+      <div class="score-row warn">
+        <span class="axis">Testing &amp; Quality</span><span class="num">3</span>
+        <div class="score-bar"><div style="width:30%"></div></div>
+      </div>
+      <div class="score-row">
+        <span class="axis">Communication</span><span class="num">7</span>
+        <div class="score-bar"><div style="width:70%"></div></div>
+      </div>
+      <div class="score-row good">
+        <span class="axis">Ownership</span><span class="num">8</span>
+        <div class="score-bar"><div style="width:80%"></div></div>
+      </div>
+      <div class="verdict">
+        <b>Coverage rộng nhất tuần:</b> <b>5 repos</b> (thêm <code>net-core-platform-cnv</code>). REWARD_V2 dynamic screen ship E2E + mini-app voucher polish khép UX gap. <b>Senior signal mới:</b> trên branch <code>haiht/reward-redeem</code> đã apply <b>idempotent retry pattern</b> (chống double deduct), align <code>AdjustLoyaltyPointV2Business</code> với V2 contract — đây là loyalty engine work ở mức platform, đẳng cấp distributed-systems thinking. <b>Watch:</b> 0 unit test, đặc biệt cho holdPoints + idempotent retry — nguy hiểm khi chính idempotency là thứ cần test nhất.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Highlights / Red flags / Next week -->
+  <div class="grid-2">
+    <div class="card list-card green">
+      <h3>✨ Điểm nhấn tuần W19 (post-fetch)</h3>
+      <ol>
+        <li><b>🆕 Reconciliation Phase 1b ship</b> (Trang, 08/05) — close 1 trong 5 CRM features đã treo từ W17 (theo đúng đề xuất ưu tiên: Reconciliation voucher-vs-ledger). Đi kèm fix bug face_value mismatch. <small>CRM Features · 2 commits</small></li>
+        <li><b>🆕 net-core Loyalty Engine foundation</b> (Hải, branch <code>haiht/reward-redeem</code>) — 6 commits ở repo mới, đặt nền cho Reward Redeem flow ở platform layer (idempotent retry, V2 align, BrandName history). <small>Platform Layer · new repo</small></li>
+        <li><b>GotIt webhook staging ✓ PASS</b> (Trang) — close blocker đã treo từ W17 (OAuth/webhook chờ vendor). Vendor coordination thành công. <small>Vendor Integration · ops</small></li>
+        <li><b>Top-up Wallet end-to-end + Comprehensive Dashboard</b> (Huy) — feature B2B nặng nhất tuần, ship được FE+BE+gateway, sau đó 08/05 ship dashboard analytics đầy đủ. <small>Account Admin · 13+6 commits</small></li>
+        <li><b>Audit Logging với AOP</b> (Trang, 08/05) — enterprise pattern, prep cho compliance/audit trail. <small>Architecture · senior-level</small></li>
+        <li><b>Recovery-core extraction</b> (Trang, 04/05) — refactor đúng lúc, giảm tech debt trước khi phình to. <small>Architecture</small></li>
+        <li><b>Whitelist shop deploy</b> (Trang) — chủ động deploy staging để team có sandbox test, không block UAT. <small>Operations · ops</small></li>
+        <li><b>REWARD_V2 dynamic screen + shopTestIds</b> (Hải) — full-stack 6 commits, mở đường cho app shell consume reward partner; thêm shop 3188 vào whitelist test. <small>Platform Integration</small></li>
+        <li><b>Mini-app voucher V2 polish</b> (Hải) — UX layer tròn, sync status với BE, miniapp đã demo-able end-to-end. <small>User-facing Mini-app</small></li>
+      </ol>
+    </div>
+
+    <div class="card list-card red">
+      <h3>🚩 Red flags · cần xử lý W20</h3>
+      <ul>
+        <li><b>Test debt nặng hơn sau fetch</b> — 1/49 commit có test (ratio rớt từ 3% → 2%). Đặc biệt nguy hiểm: <b>idempotent retry</b> trong net-core (Hải) ship 0 test, mà idempotency là thứ chính ra cần test nhất. <small>Risk: regression + double deduct khi scale.</small></li>
+        <li><b>CI/CD chưa stable</b> — 4/10 commits của Tech Lead là infra fix. Cần định nghĩa "done" cho CI/CD epic. <small>Trang đang gánh.</small></li>
+        <li><b>Audit Logging ship Thứ 6 (08/05)</b> — không có log retention policy + sample query + dashboard view. <small>Coding done ≠ feature done.</small></li>
+        <li><b>Reconciliation Phase 1b: chỉ Phase 1b</b> — Excel upload là first cut. Còn các phase: auto-trigger, drift alert, daily report. CRM feature này chưa "done", chỉ là "started". <small>Phase 2 cần spec trước khi tiếp.</small></li>
+        <li><b>4/5 CRM features còn lại</b> — Order Mgmt, Công nợ, Báo cáo, Thống kê. Đã ship 1/5 (Reconciliation Phase 1b), còn 4. <small>2 tuần nữa nếu không claim → đẩy sang sprint sau.</small></li>
+        <li><b>Worker-sync-urbox + worker-sync-gotit consolidated</b> chưa confirm smoke test prod-like. <small>Risk: data drift sync vendor.</small></li>
+        <li><b>net-core Loyalty Engine: branch lone-wolf</b> — Hải làm trên branch <code>haiht/reward-redeem</code> một mình, chưa thấy review/pair từ Trang về interface với rewards-v2. <small>Risk: integration drift khi merge.</small></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card list-card orange" style="margin-bottom:28px;">
+    <h3>🎯 Action items · W20</h3>
+    <ol>
+      <li><b>Test sprint Mon–Tue:</b> dedicated 2 ngày viết unit test cho Top-up Wallet + dashboard endpoints (Huy), Audit Logging + Recovery + Reconciliation Phase 1b (Trang), <b>idempotent retry trong net-core</b> + holdPoints (Hải). <b>Target:</b> ≥15 test commits (lớn hơn vì codebase đã grown).</li>
+      <li><b>Reconciliation Phase 2 spec:</b> auto-trigger (cron daily?), drift alert threshold, admin viewer report. Trang draft trước Wed, review pair với PM.</li>
+      <li><b>net-core integration review:</b> Trang + Hải pair-review interface giữa rewards-v2 ↔ net-core <code>haiht/reward-redeem</code> branch, chốt contract trước khi merge sang trunk.</li>
+      <li><b>Chốt CRM feature thứ 2</b> trước Wed: đề xuất <b>Order Management read-only enrichment</b> (Trang đã touch ở W18 với Phase 1a, có thể extend).</li>
+      <li><b>Smoke test 2 worker mới</b> trên staging với data thật (≥1 brand UrBox + 1 brand GotIt) trước khi enable prod.</li>
+      <li><b>Audit Logging round-2:</b> retention policy (90 ngày?) + 3 sample queries (ai sửa balance, ai approve top-up, ai redeem voucher) + admin viewer endpoint.</li>
+      <li><b>CI/CD "done" definition:</b> Trang doc pipeline có thể tự build mà không cần fix tay 5 lần/tuần. Nếu chưa được — escalate cho DevOps support.</li>
+    </ol>
+  </div>
+
+  <footer>
+    <div class="caveats">
+      <b>Caveats:</b> Data dựa trên user-provided commit list + <b>git fetch mới nhất từ 5 repos</b> (ngày 08/05). Hải có 6 commits trong <code>net-core-platform-cnv</code> trên branch <code>haiht/reward-redeem</code> — date stamp được suy là W19 dựa trên context fetch; nếu một số commit thuộc tuần trước thì W19 net-core count sẽ &lt;6.
+      <b>Ops/vendor work</b> (CnvConnect API, GotIt webhook test, whitelist deploy) là 3 work item của Trang ngoài git commits — hiển thị riêng với marker ⚙ tím, không tính vào chart commit/repo nhưng có ảnh hưởng tới scoring (Communication + Ownership).
+      <b>Sprint vs W19:</b> số sprint-totals user cung cấp (Trang 68 / Huy 60 / Hải 43, total 171) là 4-5 tuần (08/04–08/05); báo cáo này chỉ tracker W19 (49 commits).
+      Một số commit "8+ build/fix" được counted as 1 dòng, có thể underestimate effort CI/CD của Trang.
+      Score tuần đơn lẻ; cần ≥4 tuần tích lũy để thấy trend cá nhân chính xác.
+      "Test commits" đếm dựa trên message có từ "test/mock"; có thể có test ẩn trong refactor commits.
+      Báo cáo này so sánh với W17-2026.md (template) cho consistency.
+    </div>
+    Generated for Reward V2 team · W19/2026 (04–08/05) · Feature-first view
+  </div>
+
+</div>
+
+<script>
+  const ctx1 = document.getElementById('chart-stack').getContext('2d');
+  new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: ['Trang', 'Huy', 'Hải'],
+      datasets: [
+        { label: 'rewards-v2',   data: [8, 7, 2], backgroundColor: '#3b82f6' },
+        { label: 'cdp-backend',  data: [2, 8, 2], backgroundColor: '#10b981' },
+        { label: 'cdp-frontend', data: [0, 5, 4], backgroundColor: '#f59e0b' },
+        { label: 'mini-app',     data: [0, 0, 5], backgroundColor: '#a855f7' },
+        { label: 'net-core 🆕',  data: [0, 0, 6], backgroundColor: '#ec4899' }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#cbd5e1', font: { size: 11 } } },
+        tooltip: { backgroundColor: 'rgba(15,23,42,.95)' }
+      },
+      scales: {
+        x: { stacked: true, ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148,163,184,.08)' } },
+        y: { stacked: true, beginAtZero: true, ticks: { color: '#94a3b8', precision: 0 }, grid: { color: 'rgba(148,163,184,.08)' } }
+      }
+    }
+  });
+
+  const ctx2 = document.getElementById('chart-feature').getContext('2d');
+  new Chart(ctx2, {
+    type: 'doughnut',
+    data: {
+      labels: [
+        'Top-up Wallet & CnvConnect (13)',
+        'Vendor Integration (3)',
+        'CI/CD & Deploy (5)',
+        'Architecture (Recovery + Audit) (3)',
+        'Analytics + Network Overview (6)',
+        'Dynamic Screen Integration (6)',
+        'Mini-app Voucher Polish (5)',
+        'Reconciliation 🆕 (2)',
+        'net-core Loyalty Engine 🆕 (6)'
+      ],
+      datasets: [{
+        data: [13, 3, 5, 3, 6, 6, 5, 2, 6],
+        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#a855f7', '#06b6d4', '#ec4899', '#84cc16', '#fbbf24', '#f472b6'],
+        borderColor: 'rgba(15,23,42,.8)', borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { color: '#cbd5e1', font: { size: 11 }, boxWidth: 14 } },
+        tooltip: { backgroundColor: 'rgba(15,23,42,.95)' }
+      }
+    }
+  });
+</script>
+</body>
+</html>

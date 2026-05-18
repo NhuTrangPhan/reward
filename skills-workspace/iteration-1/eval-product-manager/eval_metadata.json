@@ -1,0 +1,12 @@
+{
+  "eval_id": 2,
+  "eval_name": "product-mgr-value-review-reward-v2",
+  "prompt": "Đánh giá giá trị sản phẩm và product thinking của team Reward v2",
+  "assertions": [
+    {"text": "Phân biệt Output vs Outcome", "type": "qualitative"},
+    {"text": "Value vs Effort matrix", "type": "qualitative"},
+    {"text": "Chấm Product Thinking Score 6 trục", "type": "qualitative"},
+    {"text": "UX gaps + risk rework", "type": "qualitative"},
+    {"text": "3 recommendation khả thi", "type": "qualitative"}
+  ]
+}

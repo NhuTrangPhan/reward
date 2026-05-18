@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CNV CRM Admin — Quản lý Account & Đơn quà</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #f4f6fa;
+    --bg-card: #ffffff;
+    --bg-soft: #f8fafc;
+    --border: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --text-soft: #94a3b8;
+    --brand: #1e3a5f;
+    --brand-dark: #0f2540;
+    --brand-light: #2c5282;
+    --accent: #3182ce;
+    --accent-2: #4299e1;
+    --good: #16a34a;
+    --good-soft: #dcfce7;
+    --warn: #d97706;
+    --warn-soft: #fef3c7;
+    --bad: #dc2626;
+    --bad-soft: #fee2e2;
+    --info: #0891b2;
+    --info-soft: #cffafe;
+    --purple: #7c3aed;
+    --purple-soft: #ede9fe;
+    --shadow: 0 1px 2px rgba(15,23,42,0.04), 0 4px 14px rgba(15,23,42,0.06);
+    --radius: 12px;
+    --radius-sm: 6px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* === HEADER === */
+  .topbar {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #0f2540 0%, #1e3a5f 100%);
+    color: #e2e8f0;
+    position: sticky; top: 0; z-index: 50;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; font-size: 15px;
+    margin-right: auto;
+    letter-spacing: 0.2px;
+  }
+  .brand .logo {
+    width: 30px; height: 30px;
+    background: #3182ce; border-radius: 7px;
+    display: grid; place-items: center;
+    font-size: 16px;
+  }
+  .topbar .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    font-size: 12.5px; cursor: pointer;
+    color: #e2e8f0;
+  }
+  .topbar .pill:hover { background: rgba(255,255,255,0.16); }
+  .topbar .icon-btn {
+    position: relative;
+    width: 34px; height: 34px;
+    border-radius: 6px;
+    display: grid; place-items: center;
+    background: rgba(255,255,255,0.08);
+    cursor: pointer; font-size: 15px;
+  }
+  .topbar .icon-btn .dot {
+    position: absolute; top: 4px; right: 4px;
+    width: 16px; height: 16px;
+    background: #ef4444; color: white;
+    font-size: 10px; font-weight: 700;
+    border-radius: 50%;
+    display: grid; place-items: center;
+  }
+  .user-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 12px 4px 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 6px; cursor: pointer;
+  }
+  .avatar {
+    width: 26px; height: 26px; border-radius: 6px;
+    background: linear-gradient(135deg, #3182ce, #4299e1);
+    display: grid; place-items: center;
+    color: white; font-weight: 700; font-size: 11px;
+  }
+
+  /* === TABS === */
+  .tabs {
+    display: flex; gap: 2px;
+    padding: 0 24px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 13px 18px;
+    font-size: 13.5px; font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); background: var(--bg-soft); }
+  .tab.active {
+    color: var(--brand);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* === LAYOUT === */
+  .container { padding: 20px 24px 60px; max-width: 1500px; margin: 0 auto; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .grid { display: grid; gap: 14px; }
+  .grid-5 { grid-template-columns: repeat(5, 1fr); }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-2 { grid-template-columns: 2fr 1fr; }
+  .grid-2eq { grid-template-columns: 1fr 1fr; }
+
+  @media (max-width: 1200px) {
+    .grid-5 { grid-template-columns: repeat(2, 1fr); }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-2eq { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* === CARD === */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+  .card-title {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; font-weight: 600;
+    color: var(--text);
+    margin-bottom: 14px;
+    gap: 10px;
+  }
+  .card-title .label { display: flex; align-items: center; gap: 8px; }
+  .card-title .label .ico { font-size: 15px; }
+
+  /* === KPI CARD === */
+  .kpi {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+    position: relative; overflow: hidden;
+    border-left: 3px solid var(--accent);
+  }
+  .kpi.good { border-left-color: var(--good); }
+  .kpi.warn { border-left-color: var(--warn); }
+  .kpi.bad  { border-left-color: var(--bad); }
+  .kpi.purple { border-left-color: var(--purple); }
+  .kpi-label {
+    font-size: 12px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .kpi-value {
+    font-size: 24px; font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+    letter-spacing: -0.4px;
+  }
+  .kpi-sub {
+    margin-top: 6px;
+    font-size: 11.5px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+  .delta-up { color: var(--good); font-weight: 600; }
+  .delta-down { color: var(--bad); font-weight: 600; }
+
+  .badge {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 11px; font-weight: 600;
+    line-height: 1.6;
+  }
+  .badge.good { background: var(--good-soft); color: #166534; }
+  .badge.warn { background: var(--warn-soft); color: #92400e; }
+  .badge.bad  { background: var(--bad-soft);  color: #991b1b; }
+  .badge.info { background: var(--info-soft); color: #155e75; }
+  .badge.purple { background: var(--purple-soft); color: #6b21a8; }
+  .badge.gold {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: white;
+  }
+  .badge.silver {
+    background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+    color: white;
+  }
+  .badge.bronze {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    color: white;
+  }
+
+  /* === HEALTH DOT === */
+  .health-dot {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-weight: 600; font-variant-numeric: tabular-nums;
+  }
+  .health-dot::before {
+    content: ''; display: inline-block;
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .h-good::before { background: var(--good); }
+  .h-watch::before { background: #eab308; }
+  .h-risk::before  { background: var(--warn); }
+  .h-crit::before  { background: var(--bad); }
+  .h-good { color: #166534; }
+  .h-watch { color: #854d0e; }
+  .h-risk  { color: #92400e; }
+  .h-crit  { color: #991b1b; }
+
+  /* === CHART === */
+  .chart-wrap { position: relative; height: 260px; }
+  .chart-wrap.short { height: 200px; }
+  .chart-wrap.tall { height: 320px; }
+
+  /* === TABLE === */
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead th {
+    text-align: left; font-weight: 600;
+    color: var(--text-muted);
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-soft);
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tbody tr { transition: background 0.1s; }
+  tbody tr:hover { background: var(--bg-soft); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .rank-cell {
+    width: 22px; height: 22px;
+    border-radius: 4px;
+    background: #e2e8f0; color: var(--brand);
+    font-weight: 700; font-size: 11px;
+    display: inline-grid; place-items: center;
+  }
+  .rank-cell.top { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; }
+
+  /* === BUTTONS === */
+  .btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 6px 11px;
+    background: var(--accent); color: white;
+    border-radius: var(--radius-sm);
+    font-size: 12px; font-weight: 500;
+    cursor: pointer; border: none;
+    transition: background 0.15s;
+  }
+  .btn:hover { background: #2c5d99; }
+  .btn-ghost {
+    background: transparent; color: var(--brand);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-ghost:hover { background: var(--bg-soft); }
+  .btn-good { background: var(--good); }
+  .btn-good:hover { background: #15803d; }
+  .btn-bad  { background: var(--bad); }
+  .btn-bad:hover  { background: #b91c1c; }
+  .btn-warn { background: var(--warn); }
+  .btn-sm { padding: 3px 8px; font-size: 11px; }
+  .btn-link {
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  .btn-link:hover { text-decoration: underline; }
+
+  .filter-bar {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    padding: 12px 16px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px; align-items: center;
+  }
+  .filter-input {
+    padding: 6px 10px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 12.5px;
+    background: white;
+    min-width: 180px;
+  }
+  .filter-input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .filter-select {
+    padding: 6px 22px 6px 10px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 12.5px;
+    background: white;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 4l3 3 3-3' stroke='%2364748b' fill='none' stroke-width='1.5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+  }
+
+  /* === HEALTH BAR === */
+  .health-bars { display: flex; flex-direction: column; gap: 10px; padding: 4px 0; }
+  .health-bar {
+    display: grid;
+    grid-template-columns: 90px 1fr 80px;
+    gap: 10px; align-items: center;
+    font-size: 12.5px;
+  }
+  .health-bar-label { font-weight: 500; }
+  .health-bar-track {
+    height: 18px; background: var(--bg-soft);
+    border-radius: 4px; overflow: hidden; position: relative;
+  }
+  .health-bar-fill { height: 100%; border-radius: 4px; }
+  .health-bar-num { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-muted); }
+
+  /* === INSIGHT === */
+  .insight-list { display: flex; flex-direction: column; gap: 8px; }
+  .insight {
+    display: flex; gap: 10px; align-items: center;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid;
+    background: var(--bg-soft);
+    font-size: 12.5px;
+  }
+  .insight.red    { border-color: var(--bad);  background: var(--bad-soft); }
+  .insight.yellow { border-color: var(--warn); background: var(--warn-soft); }
+  .insight.green  { border-color: var(--good); background: var(--good-soft); }
+  .insight.blue   { border-color: var(--info); background: var(--info-soft); }
+  .insight .body { flex: 1; }
+  .insight .body strong { color: var(--text); }
+
+  /* === STATS PANEL === */
+  .stat-card {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+  }
+  .stat-card-title {
+    font-size: 11.5px; color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .stat-row {
+    display: flex; justify-content: space-between;
+    padding: 4px 0;
+    font-size: 12.5px;
+  }
+  .stat-row .v { font-weight: 600; }
+
+  /* === PROGRESS === */
+  .pbar {
+    height: 6px; border-radius: 3px;
+    background: var(--border);
+    overflow: hidden;
+  }
+  .pbar-fill { height: 100%; }
+
+  /* === MODE PILL === */
+  .mode-pill {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 11px; font-weight: 600;
+    border: 1px solid;
+  }
+  .mode-deposit { color: #166534; border-color: #166534; background: #f0fdf4; }
+  .mode-credit  { color: #6b21a8; border-color: #7e22ce; background: #faf5ff; }
+  .mode-hybrid  { color: #155e75; border-color: #0e7490; background: #ecfeff; }
+
+  /* === TREND ARROW === */
+  .tup { color: var(--good); font-weight: 600; }
+  .tdown { color: var(--bad); font-weight: 600; }
+  .tflat { color: var(--text-soft); font-weight: 600; }
+
+  /* === SECTION HEADER === */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-size: 18px; font-weight: 700;
+    color: var(--text);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .ico { font-size: 20px; }
+
+  /* === ACCOUNT DETAIL HEADER === */
+  .account-hero {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+    color: white;
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .account-hero h2 {
+    margin: 0 0 6px 0;
+    font-size: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .account-hero .meta {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    font-size: 12.5px; opacity: 0.85;
+    margin-bottom: 12px;
+  }
+  .account-hero .meta span strong { color: white; opacity: 1; margin-left: 4px; }
+  .account-hero .actions {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .account-hero .btn-ghost {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    border-color: rgba(255,255,255,0.2);
+  }
+  .account-hero .btn-ghost:hover {
+    background: rgba(255,255,255,0.2);
+  }
+
+  /* === STATUS DOTS === */
+  .status-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  /* === EMPTY ROWS === */
+  .row-failed {
+    background: #fef2f2;
+  }
+  .row-failed:hover { background: #fee2e2 !important; }
+  .row-detail {
+    background: #fef9c3 !important;
+    font-size: 12px; color: #713f12;
+  }
+
+  /* === FOOTNOTE === */
+  .footnote {
+    font-size: 12px; color: var(--text-muted);
+    background: var(--bg-soft);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--accent);
+    margin-top: 10px;
+  }
+
+  /* utility */
+  .muted { color: var(--text-muted); }
+  .small { font-size: 11.5px; }
+  .mb-8 { margin-bottom: 8px; }
+  .mb-12 { margin-bottom: 12px; }
+  .mb-16 { margin-bottom: 16px; }
+  .mt-12 { margin-top: 12px; }
+  .nowrap { white-space: nowrap; }
+  .flex-row { display: flex; align-items: center; gap: 8px; }
+  .flex-end { display: flex; justify-content: flex-end; gap: 8px; }
+
+  .pagination {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 12px;
+    padding: 8px 4px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .pagination .page-btn {
+    padding: 4px 10px;
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    margin: 0 2px;
+    font-size: 12px;
+  }
+  .pagination .page-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+  .bulk-actions {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: var(--bg-soft);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    font-size: 12.5px;
+  }
+
+  .total-bar {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    padding: 10px 14px;
+    background: var(--brand);
+    color: white;
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    font-size: 12.5px;
+  }
+  .total-bar strong { font-size: 13px; }
+
+  /* note item */
+  .note-item {
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 12.5px;
+    display: grid;
+    grid-template-columns: 90px 60px 1fr;
+    gap: 10px;
+  }
+  .note-item:last-child { border-bottom: none; }
+  .note-date { color: var(--text-muted); font-size: 11.5px; }
+  .note-author { color: var(--brand); font-weight: 600; font-size: 11.5px; }
+
+  /* === GLOSSARY === */
+  .term {
+    border-bottom: 1px dotted var(--text-soft);
+    cursor: help;
+  }
+  .glossary-card {
+    background: linear-gradient(135deg, #eef4fb 0%, #f0f7ff 100%);
+    border: 1px solid #c7dcf0;
+  }
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px 18px;
+    font-size: 12.5px;
+  }
+  @media (max-width: 1100px) {
+    .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 700px) {
+    .glossary-grid { grid-template-columns: 1fr; }
+  }
+  .glossary-grid > div {
+    padding: 4px 0;
+    border-bottom: 1px dashed #c7dcf0;
+  }
+  .glossary-grid strong { color: var(--brand); margin-right: 4px; }
+  .glossary-card.collapsed .glossary-grid { display: none; }
+  .kpi-explain {
+    font-size: 11px; color: var(--text-soft);
+    margin-top: 2px; line-height: 1.3;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">🛡</div>
+    <span>CNV CRM Admin</span>
+  </div>
+  <div class="pill">📅 T05/2026 ▾</div>
+  <div class="pill">📊 Toàn hệ thống ▾</div>
+  <div class="icon-btn" title="Thông báo">🔔<span class="dot">7</span></div>
+  <div class="user-chip">
+    <div class="avatar">HG</div>
+    <span class="small">Hùng (CSM Lead) ▾</span>
+  </div>
+</header>
+
+<!-- TABS -->
+<nav class="tabs" id="tabs">
+  <div class="tab active" data-screen="overview">📊 Executive Overview</div>
+  <div class="tab" data-screen="accounts">🏢 Account Management</div>
+  <div class="tab" data-screen="detail">☕ Account Detail</div>
+  <div class="tab" data-screen="orders">🎁 Đơn quà & Vận hành</div>
+  <div class="tab" data-screen="finance">💼 Đối soát & Tài chính</div>
+</nav>
+
+<main class="container">
+
+<!-- =========================================================
+     SCREEN 1 — EXECUTIVE OVERVIEW
+     ========================================================= -->
+<section class="screen active" id="screen-overview">
+
+  <!-- GLOSSARY -->
+  <div class="card glossary-card mb-16" id="glossary">
+    <div class="card-title">
+      <span class="label"><span class="ico">📖</span> Giải thích thuật ngữ trong dashboard</span>
+      <button class="btn-link" onclick="document.getElementById('glossary').classList.toggle('collapsed')">Ẩn / Hiện</button>
+    </div>
+    <div class="glossary-grid">
+      <div><strong>GMV</strong> — Gross Merchandise Value: tổng giá trị giao dịch (đơn đổi quà × mệnh giá)</div>
+      <div><strong>DT CNV</strong> — Doanh thu CNV: phần hoa hồng (commission) CNV thu được, mặc định 10% GMV</div>
+      <div><strong>Take rate</strong> — Tỷ lệ hoa hồng CNV thu trên mỗi giao dịch (5–10% theo hợp đồng)</div>
+      <div><strong>MoM</strong> — Month-over-Month: so với tháng liền trước</div>
+      <div><strong>AOV</strong> — Average Order Value: giá trị đơn trung bình</div>
+      <div><strong>LTV</strong> — Lifetime Value: tổng doanh thu kỳ vọng từ một khách hàng</div>
+      <div><strong>Health Score</strong> — Điểm sức khỏe account (0–100), tính từ hoạt động, tài chính, growth, engagement, sync</div>
+      <div><strong>Churn Risk</strong> — Account có dấu hiệu rời bỏ (không nạp tiền, GMV giảm, không hoạt động)</div>
+      <div><strong>CSM</strong> — Customer Success Manager: nhân viên chăm sóc account</div>
+      <div><strong>Mode Deposit</strong> — Trả trước: account nạp ký quỹ, hệ thống trừ dần khi đổi quà</div>
+      <div><strong>Mode Credit</strong> — Trả sau (công nợ): hệ thống ứng tiền, account trả định kỳ</div>
+      <div><strong>Mode Hybrid</strong> — Kết hợp: vừa ký quỹ vừa có hạn mức công nợ</div>
+      <div><strong>DSO</strong> — Days Sales Outstanding: số ngày trung bình để thu hồi công nợ</div>
+      <div><strong>Recovery Task</strong> — Tác vụ tự động chạy lại các bước thanh toán/cấp voucher bị lỗi</div>
+      <div><strong>TopUp</strong> — Nạp thêm tiền vào ký quỹ của account</div>
+      <div><strong>Đối soát (Reconciliation)</strong> — So khớp số liệu CNV ghi nhận vs vendor báo về</div>
+      <div><strong>Vendor</strong> — Nhà cung cấp voucher: UrBox, GotIt, hoặc CNV tự cung cấp</div>
+      <div><strong>Onboard</strong> — Tháng tham gia hệ thống (vd "14th" = tháng thứ 14 từ khi onboard)</div>
+    </div>
+  </div>
+
+  <!-- KPI ROW: 5 cards -->
+  <div class="grid grid-5 mb-16">
+    <div class="kpi good">
+      <div class="kpi-label">💵 <span class="term" title="Gross Merchandise Value — Tổng giá trị giao dịch toàn hệ thống">GMV — Tổng doanh số</span></div>
+      <div class="kpi-value">4.82 <span class="muted small">tỷ đ</span></div>
+      <div class="kpi-sub"><span class="delta-up">▲ 18%</span> so với tháng trước</div>
+      <div class="kpi-explain">Tổng giá trị các đơn đổi quà T05/2026</div>
+    </div>
+    <div class="kpi good">
+      <div class="kpi-label">💰 <span class="term" title="Doanh thu CNV thu được, là phần hoa hồng (commission) trên GMV">Doanh thu CNV</span> (hoa hồng 10%)</div>
+      <div class="kpi-value">482 <span class="muted small">tr đ</span></div>
+      <div class="kpi-sub"><span class="delta-up">▲ 18%</span> so với tháng trước</div>
+      <div class="kpi-explain">= 10% × GMV (take rate hợp đồng)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">🏢 Account đang hoạt động</div>
+      <div class="kpi-value">43 <span class="muted small">/ 51</span></div>
+      <div class="kpi-sub">+ 2 account mới trong T05</div>
+      <div class="kpi-explain">Có giao dịch trong 30 ngày qua</div>
+    </div>
+    <div class="kpi warn">
+      <div class="kpi-label">⚠ Nguy cơ rời bỏ <span class="term" title="Churn Risk — Account có dấu hiệu sẽ ngừng dùng dịch vụ: GMV giảm, không nạp tiền lâu, hoạt động ít">(Churn Risk)</span></div>
+      <div class="kpi-value">6 <span class="muted small">account</span></div>
+      <div class="kpi-sub">Doanh thu kỳ vọng mất: <strong>92 tr/tháng</strong></div>
+      <div class="kpi-explain">Health Score &lt; 60 hoặc không hoạt động &gt; 14d</div>
+    </div>
+    <div class="kpi bad">
+      <div class="kpi-label">🚨 Cần xử lý NGAY</div>
+      <div class="kpi-value">12 <span class="muted small">vấn đề</span></div>
+      <div class="kpi-sub"><span class="delta-up">▲ 4</span> so với hôm qua</div>
+      <div class="kpi-explain">Lỗi sync, recovery, hết quỹ, account critical</div>
+    </div>
+  </div>
+
+  <!-- ROW: GMV chart + Health distribution -->
+  <div class="grid grid-2 mb-16">
+    <div class="card">
+      <div class="card-title">
+        <span class="label"><span class="ico">📈</span> GMV (Tổng doanh số) & Doanh thu CNV (12 tháng)</span>
+        <span class="small muted">Tỷ lệ hoa hồng (take rate) trung bình 10%</span>
+      </div>
+      <div class="chart-wrap"><canvas id="gmvChart"></canvas></div>
+      <div class="footnote">💡 Tỷ lệ hoa hồng trung bình <strong>10%</strong>, doanh thu định kỳ (MRR) ổn định, GMV tăng <strong>18% so với tháng trước</strong></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="label"><span class="ico">🏢</span> Phân bố <span class="term" title="Điểm sức khỏe account: 80–100 Khỏe, 60–79 Cần theo dõi, 40–59 Có rủi ro, <40 Nguy hiểm">Health Score (Điểm sức khỏe Account)</span></span></div>
+      <div class="health-bars">
+        <div class="health-bar">
+          <span class="health-bar-label"><span class="status-dot" style="background:var(--good)"></span>Khỏe (80–100)</span>
+          <div class="health-bar-track"><div class="health-bar-fill" style="width:47%; background:var(--good)"></div></div>
+          <span class="health-bar-num">24 (47%)</span>
+        </div>
+        <div class="health-bar">
+          <span class="health-bar-label"><span class="status-dot" style="background:#eab308"></span>Cần theo dõi (60–79)</span>
+          <div class="health-bar-track"><div class="health-bar-fill" style="width:25%; background:#eab308"></div></div>
+          <span class="health-bar-num">13 (25%)</span>
+        </div>
+        <div class="health-bar">
+          <span class="health-bar-label"><span class="status-dot" style="background:var(--warn)"></span>Có rủi ro (40–59)</span>
+          <div class="health-bar-track"><div class="health-bar-fill" style="width:12%; background:var(--warn)"></div></div>
+          <span class="health-bar-num">6 (12%)</span>
+        </div>
+        <div class="health-bar">
+          <span class="health-bar-label"><span class="status-dot" style="background:var(--bad)"></span>Nguy hiểm (&lt;40)</span>
+          <div class="health-bar-track"><div class="health-bar-fill" style="width:4%; background:var(--bad)"></div></div>
+          <span class="health-bar-num">2 (4%)</span>
+        </div>
+        <div class="health-bar">
+          <span class="health-bar-label"><span class="status-dot" style="background:var(--text-soft)"></span>Không hoạt động</span>
+          <div class="health-bar-track"><div class="health-bar-fill" style="width:12%; background:var(--text-soft)"></div></div>
+          <span class="health-bar-num">6 (12%)</span>
+        </div>
+      </div>
+      <div class="footnote">⚠ <strong>8 account gần biên rời bỏ</strong> — đề xuất CSM (Chăm sóc khách hàng) liên hệ tuần này</div>
+    </div>
+  </div>
+
+  <!-- TOP 10 ACCOUNTS -->
+  <div class="card mb-16">
+    <div class="card-title">
+      <span class="label"><span class="ico">🏆</span> Top 10 Account theo Tổng doanh số (T05/2026)</span>
+      <span class="btn-link">Xem tất cả 51 account →</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Account</th>
+          <th><span class="term" title="Hình thức thanh toán: Deposit = Trả trước/ký quỹ, Credit = Công nợ/trả sau, Hybrid = Kết hợp">Hình thức</span></th>
+          <th class="num"><span class="term" title="Tổng giá trị giao dịch (Gross Merchandise Value) trong T05/2026">GMV T05</span></th>
+          <th class="num">Doanh thu CNV</th>
+          <th><span class="term" title="Health Score: điểm sức khỏe account 0–100">Sức khỏe</span></th>
+          <th>Xu hướng</th><th>Hoạt động cuối</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="rank-cell top">1</span></td><td><strong>Coffee House</strong></td><td><span class="mode-pill mode-hybrid" title="Kết hợp: Vừa có ký quỹ vừa có hạn mức công nợ">Kết hợp</span></td><td class="num">680 tr</td><td class="num">68 tr</td><td><span class="health-dot h-good">●92</span></td><td><span class="tup">▲ 21%</span></td><td>2'</td><td><button class="btn btn-ghost btn-sm">Chi tiết →</button></td></tr>
+        <tr><td><span class="rank-cell top">2</span></td><td><strong>Pharmacity</strong></td><td><span class="mode-pill mode-deposit" title="Trả trước (ký quỹ): Account nạp tiền vào, hệ thống trừ dần khi đổi quà">Trả trước</span></td><td class="num">520 tr</td><td class="num">52 tr</td><td><span class="health-dot h-good">●88</span></td><td><span class="tup">▲ 15%</span></td><td>8'</td><td><button class="btn btn-ghost btn-sm">Chi tiết →</button></td></tr>
+        <tr><td><span class="rank-cell top">3</span></td><td><strong>FPT Shop</strong></td><td><span class="mode-pill mode-credit" title="Trả sau (công nợ): CNV ứng tiền, account thanh toán định kỳ">Trả sau</span></td><td class="num">410 tr</td><td class="num">41 tr</td><td><span class="health-dot h-good">●85</span></td><td><span class="tup">▲ 9%</span></td><td>14'</td><td><button class="btn btn-ghost btn-sm">Chi tiết →</button></td></tr>
+        <tr><td><span class="rank-cell">4</span></td><td><strong>GS25 Việt Nam</strong></td><td><span class="mode-pill mode-hybrid" title="Kết hợp: Vừa có ký quỹ vừa có hạn mức công nợ">Kết hợp</span></td><td class="num">385 tr</td><td class="num">38.5 tr</td><td><span class="health-dot h-good">●90</span></td><td><span class="tup">▲ 28%</span> 🔥</td><td>3'</td><td><button class="btn btn-ghost btn-sm">Chi tiết →</button></td></tr>
+        <tr><td><span class="rank-cell">5</span></td><td><strong>Highlands Coffee</strong></td><td><span class="mode-pill mode-deposit" title="Trả trước (ký quỹ): Account nạp tiền vào, hệ thống trừ dần khi đổi quà">Trả trước</span></td><td class="num">320 tr</td><td class="num">32 tr</td><td><span class="health-dot h-watch">●78</span></td><td><span class="tup">▲ 5%</span></td><td>25'</td><td><button class="btn btn-ghost btn-sm">Chi tiết →</button></td></tr>
+        <tr><td><span class="rank-cell">6</span></td><td><strong>Galaxy Cinema</strong></td><td><span class="mode-pill mode-deposit" title="Trả trước (ký quỹ): Account nạp tiền vào, hệ thống trừ dần khi đổi quà">Trả trước</span></td><td class="num">285 tr</td><td class="num">28.5 tr</td><td><span class="health-dot h-good">●82</span></td><td><span class="tup">▲ 12%</span></td><td>1h</td><td><button class="btn btn-ghost btn-sm">Chi tiết →</button></td></tr>
+        <tr><td><span class="rank-cell">7</span></td><td><strong>AEON Mall</strong> ⚠</td><td><span class="mode-pill mode-credit" title="Trả sau (công nợ): CNV ứng tiền, account thanh toán định kỳ">Trả sau</span></td><td class="num">260 tr</td><td class="num">26 tr</td><td><span class="health-dot h-watch">●70</span></td><td><span class="tdown">▼ 3%</span></td><td>2h</td><td><button class="btn btn-ghost btn-sm">Chi tiết →</button></td></tr>
+        <tr><td><span class="rank-cell">8</span></td><td><strong>Bách Hóa Xanh</strong> ⚠</td><td><span class="mode-pill mode-deposit" title="Trả trước (ký quỹ): Account nạp tiền vào, hệ thống trừ dần khi đổi quà">Trả trước</span></td><td class="num">245 tr</td><td class="num">24.5 tr</td><td><span class="health-dot h-watch">●68</span></td><td><span class="tdown">▼ 8%</span></td><td>3h</td><td><button class="btn btn-ghost btn-sm">Chi tiết →</button></td></tr>
+        <tr><td><span class="rank-cell">9</span></td><td><strong>Vietjet Air</strong></td><td><span class="mode-pill mode-hybrid" title="Kết hợp: Vừa có ký quỹ vừa có hạn mức công nợ">Kết hợp</span></td><td class="num">220 tr</td><td class="num">22 tr</td><td><span class="health-dot h-good">●88</span></td><td><span class="tup">▲ 14%</span></td><td>45'</td><td><button class="btn btn-ghost btn-sm">Chi tiết →</button></td></tr>
+        <tr><td><span class="rank-cell">10</span></td><td><strong>Vinasoy</strong></td><td><span class="mode-pill mode-deposit" title="Trả trước (ký quỹ): Account nạp tiền vào, hệ thống trừ dần khi đổi quà">Trả trước</span></td><td class="num">195 tr</td><td class="num">19.5 tr</td><td><span class="health-dot h-watch">●72</span></td><td><span class="tup">▲ 2%</span></td><td>4h</td><td><button class="btn btn-ghost btn-sm">Chi tiết →</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2 col: Urgent + Opportunities -->
+  <div class="grid grid-2eq">
+    <div class="card">
+      <div class="card-title">
+        <span class="label"><span class="ico">🚨</span> Cần xử lý NGAY</span>
+        <span class="btn-link">Xem hết →</span>
+      </div>
+      <div class="insight-list">
+        <div class="insight red">
+          <span>🔴</span>
+          <div class="body"><strong>Tiệm Bún Bò 79</strong> — UrBox sync FAIL 2h, 5 đơn fail</div>
+          <button class="btn btn-sm btn-bad">Xử lý</button>
+        </div>
+        <div class="insight red">
+          <span>🔴</span>
+          <div class="body"><strong>Cộng Cà Phê</strong> — ký quỹ 0đ 4 ngày, churn risk cao</div>
+          <button class="btn btn-sm btn-bad">Liên hệ</button>
+        </div>
+        <div class="insight red">
+          <span>🔴</span>
+          <div class="body"><strong>5 RecoveryTask</strong> CAPTURE_BALANCE retry &gt; 5 lần</div>
+          <button class="btn btn-sm btn-bad">Investigate</button>
+        </div>
+        <div class="insight yellow">
+          <span>🟡</span>
+          <div class="body"><strong>AEON Mall</strong> GMV ▼3%, chưa nạp 67 ngày — gọi CSM</div>
+        </div>
+        <div class="insight yellow">
+          <span>🟡</span>
+          <div class="body"><strong>Bách Hóa Xanh</strong> không hoạt động 3h — kiểm tra sync</div>
+        </div>
+        <div class="insight yellow">
+          <span>🟡</span>
+          <div class="body"><strong>GotIt Mapping</strong> sync partial 2 items</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="label"><span class="ico">💡</span> Cơ hội kinh doanh (AI gợi ý)</span>
+      </div>
+      <div class="insight-list">
+        <div class="insight green">
+          <span>🟢</span>
+          <div class="body"><strong>GS25</strong> GMV ▲28%/MoM — pitch gói VIP (rate 8%, mở rộng catalog)</div>
+          <button class="btn btn-sm btn-good">Pitch</button>
+        </div>
+        <div class="insight green">
+          <span>🟢</span>
+          <div class="body"><strong>Coffee House</strong> công nợ đầy 97% → nâng credit 50tr → 100tr</div>
+          <button class="btn btn-sm btn-good">Đề xuất</button>
+        </div>
+        <div class="insight green">
+          <span>🟢</span>
+          <div class="body"><strong>12 account dùng UrBox-only</strong> — pitch thêm GotIt mở rộng catalog</div>
+        </div>
+        <div class="insight green">
+          <span>🟢</span>
+          <div class="body"><strong>8 account sắp hết quỹ &lt; 7d</strong> → cơ hội upsell topup gói lớn</div>
+        </div>
+        <div class="insight blue">
+          <span>🔵</span>
+          <div class="body">Lịch Tết 2027 còn ~8 tháng — <strong>5 account F&B</strong> năm ngoái GMV Tết tăng 3x, chuẩn bị tăng quỹ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SCREEN 2 — ACCOUNT MANAGEMENT LIST
+     ========================================================= -->
+<section class="screen" id="screen-accounts">
+
+  <div class="section-header">
+    <div class="section-title"><span class="ico">🏢</span> Quản lý Account</div>
+    <div class="flex-row">
+      <button class="btn">+ Thêm Account</button>
+      <button class="btn btn-ghost">Xuất Excel ↓</button>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <input class="filter-input" type="search" placeholder="🔍 Tìm theo tên, ID, CSM..." />
+    <select class="filter-select"><option>Sức khỏe: tất cả</option><option>Khỏe (80–100)</option><option>Cần theo dõi (60–79)</option><option>Có rủi ro (40–59)</option><option>Nguy hiểm (&lt;40)</option></select>
+    <select class="filter-select"><option>Hình thức: tất cả</option><option>Trả trước (Deposit)</option><option>Trả sau (Credit)</option><option>Kết hợp (Hybrid)</option></select>
+    <select class="filter-select"><option>Nhà cung cấp: tất cả</option><option>UrBox</option><option>GotIt</option><option>CNV tự cung cấp</option></select>
+    <select class="filter-select"><option>Nguy cơ: tất cả</option><option>Có dấu hiệu rời bỏ</option><option>An toàn</option></select>
+    <select class="filter-select"><option>Ngành: tất cả</option><option>F&B (Ăn uống)</option><option>Retail (Bán lẻ)</option><option>Bank (Ngân hàng)</option><option>Telco (Viễn thông)</option><option>Ecommerce (TMĐT)</option></select>
+    <select class="filter-select"><option>Hạng: tất cả</option><option>Gold</option><option>Silver</option><option>Bronze</option></select>
+    <select class="filter-select" style="margin-left:auto"><option>Sắp xếp: GMV giảm dần</option><option>Sắp xếp: Sức khỏe giảm dần</option><option>Sắp xếp: GMV tăng dần</option><option>Sắp xếp: Onboard mới nhất</option></select>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px"><input type="checkbox" /></th>
+          <th>Account</th>
+          <th><span class="term" title="Hạng account theo doanh thu: Gold (>200tr/th), Silver (50-200tr/th), Bronze (<50tr/th)">Hạng</span></th>
+          <th><span class="term" title="Hình thức thanh toán: Deposit = ký quỹ, Credit = công nợ, Hybrid = kết hợp">Hình thức</span></th>
+          <th>Số dư</th>
+          <th class="num"><span class="term" title="Tổng doanh số (Gross Merchandise Value) tháng 5/2026">GMV T05</span></th>
+          <th class="num">Đơn T05</th>
+          <th><span class="term" title="Điểm sức khỏe account 0-100">Sức khỏe</span></th>
+          <th><span class="term" title="Tháng thứ N từ khi onboard (gia nhập hệ thống)">Tháng onboard</span></th>
+          <th>Lần nạp gần nhất</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><strong>Coffee House</strong></td>
+          <td><span class="badge gold">GOLD</span></td>
+          <td><span class="mode-pill mode-hybrid" title="Kết hợp: Vừa có ký quỹ vừa có hạn mức công nợ">Kết hợp</span></td>
+          <td>
+            <div class="small">85.6/100 tr</div>
+            <div class="pbar" style="width:100px"><div class="pbar-fill" style="width:86%; background:var(--good)"></div></div>
+          </td>
+          <td class="num"><strong>680 tr</strong></td>
+          <td class="num">1,247</td>
+          <td><span class="health-dot h-good">●92</span> <span class="tup">↑</span></td>
+          <td>14th</td>
+          <td>3 ngày</td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><strong>Pharmacity</strong></td>
+          <td><span class="badge gold">GOLD</span></td>
+          <td><span class="mode-pill mode-deposit" title="Trả trước (ký quỹ): Account nạp tiền vào, hệ thống trừ dần khi đổi quà">Trả trước</span></td>
+          <td>
+            <div class="small">120/200 tr</div>
+            <div class="pbar" style="width:100px"><div class="pbar-fill" style="width:60%; background:var(--good)"></div></div>
+          </td>
+          <td class="num"><strong>520 tr</strong></td>
+          <td class="num">856</td>
+          <td><span class="health-dot h-good">●88</span> <span class="tflat">→</span></td>
+          <td>9th</td>
+          <td>1 ngày</td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><strong>FPT Shop</strong></td>
+          <td><span class="badge gold">GOLD</span></td>
+          <td><span class="mode-pill mode-credit" title="Trả sau (công nợ): CNV ứng tiền, account thanh toán định kỳ">Trả sau</span></td>
+          <td>
+            <div class="small">42 tr nợ / 100 tr</div>
+            <div class="pbar" style="width:100px"><div class="pbar-fill" style="width:42%; background:#eab308"></div></div>
+          </td>
+          <td class="num"><strong>410 tr</strong></td>
+          <td class="num">642</td>
+          <td><span class="health-dot h-good">●85</span> <span class="tup">↑</span></td>
+          <td>7th</td>
+          <td>Hôm qua</td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><strong>GS25 Việt Nam</strong></td>
+          <td><span class="badge silver">SILVER</span></td>
+          <td><span class="mode-pill mode-hybrid" title="Kết hợp: Vừa có ký quỹ vừa có hạn mức công nợ">Kết hợp</span></td>
+          <td>
+            <div class="small">210/300 tr</div>
+            <div class="pbar" style="width:100px"><div class="pbar-fill" style="width:70%; background:var(--good)"></div></div>
+          </td>
+          <td class="num"><strong>385 tr</strong></td>
+          <td class="num">589</td>
+          <td><span class="health-dot h-good">●90</span> <span class="tup">↑</span></td>
+          <td>11th</td>
+          <td>2 ngày</td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><strong>AEON Mall</strong> ⚠</td>
+          <td><span class="badge silver">SILVER</span></td>
+          <td><span class="mode-pill mode-credit" title="Trả sau (công nợ): CNV ứng tiền, account thanh toán định kỳ">Trả sau</span></td>
+          <td>
+            <div class="small">31 tr nợ</div>
+            <div class="pbar" style="width:100px"><div class="pbar-fill" style="width:31%; background:#eab308"></div></div>
+          </td>
+          <td class="num">260 tr</td>
+          <td class="num">412</td>
+          <td><span class="health-dot h-watch">●70</span> <span class="tdown">↓</span></td>
+          <td>18th</td>
+          <td>8 ngày</td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><strong>Bách Hóa Xanh</strong> ⚠</td>
+          <td><span class="badge silver">SILVER</span></td>
+          <td><span class="mode-pill mode-deposit" title="Trả trước (ký quỹ): Account nạp tiền vào, hệ thống trừ dần khi đổi quà">Trả trước</span></td>
+          <td>
+            <div class="small">18/100 tr</div>
+            <div class="pbar" style="width:100px"><div class="pbar-fill" style="width:18%; background:var(--bad)"></div></div>
+          </td>
+          <td class="num">245 tr</td>
+          <td class="num">389</td>
+          <td><span class="health-dot h-watch">●68</span> <span class="tdown">↓</span></td>
+          <td>6th</td>
+          <td>14 ngày</td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr style="background:#fef2f2">
+          <td><input type="checkbox" /></td>
+          <td><strong>Cộng Cà Phê</strong> 🔴</td>
+          <td><span class="badge bronze">BRONZE</span></td>
+          <td><span class="mode-pill mode-deposit" title="Trả trước (ký quỹ): Account nạp tiền vào, hệ thống trừ dần khi đổi quà">Trả trước</span></td>
+          <td>
+            <div class="small">0 đ</div>
+            <div class="pbar" style="width:100px"><div class="pbar-fill" style="width:0%; background:var(--bad)"></div></div>
+          </td>
+          <td class="num">12 tr</td>
+          <td class="num">21</td>
+          <td><span class="health-dot h-crit">●35</span> <span class="tdown">↓</span></td>
+          <td>4th</td>
+          <td>62 ngày</td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr style="background:#fef2f2">
+          <td><input type="checkbox" /></td>
+          <td><strong>Tiệm Bún Bò 79</strong> 🔴</td>
+          <td><span class="badge bronze">BRONZE</span></td>
+          <td><span class="mode-pill mode-deposit" title="Trả trước (ký quỹ): Account nạp tiền vào, hệ thống trừ dần khi đổi quà">Trả trước</span></td>
+          <td>
+            <div class="small">3.2/10 tr</div>
+            <div class="pbar" style="width:100px"><div class="pbar-fill" style="width:32%; background:var(--bad)"></div></div>
+          </td>
+          <td class="num">2.4 tr</td>
+          <td class="num">8</td>
+          <td><span class="health-dot h-crit">●28</span> <span class="tdown">↓</span></td>
+          <td>2th</td>
+          <td>45 ngày</td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><strong>Vietjet Air</strong></td>
+          <td><span class="badge gold">GOLD</span></td>
+          <td><span class="mode-pill mode-hybrid" title="Kết hợp: Vừa có ký quỹ vừa có hạn mức công nợ">Kết hợp</span></td>
+          <td>
+            <div class="small">85/150 tr</div>
+            <div class="pbar" style="width:100px"><div class="pbar-fill" style="width:57%; background:var(--good)"></div></div>
+          </td>
+          <td class="num">220 tr</td>
+          <td class="num">352</td>
+          <td><span class="health-dot h-good">●88</span> <span class="tup">↑</span></td>
+          <td>13th</td>
+          <td>5 ngày</td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><strong>Vinasoy</strong></td>
+          <td><span class="badge silver">SILVER</span></td>
+          <td><span class="mode-pill mode-deposit" title="Trả trước (ký quỹ): Account nạp tiền vào, hệ thống trừ dần khi đổi quà">Trả trước</span></td>
+          <td>
+            <div class="small">42/100 tr</div>
+            <div class="pbar" style="width:100px"><div class="pbar-fill" style="width:42%; background:#eab308"></div></div>
+          </td>
+          <td class="num">195 tr</td>
+          <td class="num">298</td>
+          <td><span class="health-dot h-watch">●72</span> <span class="tflat">→</span></td>
+          <td>8th</td>
+          <td>4 ngày</td>
+          <td><button class="btn btn-ghost btn-sm">⋯</button></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <span>Hiển thị <strong>1–10</strong> / 51 account</span>
+      <span>
+        <button class="page-btn">‹</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">4</button>
+        <button class="page-btn">5</button>
+        <button class="page-btn">6</button>
+        <button class="page-btn">›</button>
+      </span>
+    </div>
+
+    <div class="bulk-actions">
+      <strong>Hành động hàng loạt (0 đã chọn):</strong>
+      <button class="btn btn-ghost btn-sm">📧 Gửi báo cáo</button>
+      <button class="btn btn-ghost btn-sm">⚠ Đánh dấu Risk</button>
+      <button class="btn btn-ghost btn-sm">💰 Đề xuất Topup</button>
+      <button class="btn btn-ghost btn-sm">📞 Tạo task CSM</button>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SCREEN 3 — ACCOUNT DETAIL (Coffee House)
+     ========================================================= -->
+<section class="screen" id="screen-detail">
+
+  <div class="account-hero">
+    <h2>☕ Coffee House <span class="badge gold" style="margin-left:8px">GOLD</span> <span class="health-dot h-good" style="background:rgba(255,255,255,0.15); padding:3px 8px; border-radius:10px; color:white">●92 Health</span></h2>
+    <div class="meta">
+      <span>ID: <strong>ACC-2024-0142</strong></span>
+      <span>CNV: <strong>1042</strong></span>
+      <span>Industry: <strong>F&B</strong></span>
+      <span>CSM: <strong>Hoa N.</strong></span>
+      <span>Onboard: <strong>14th</strong></span>
+      <span>Mode: <strong>Hybrid</strong></span>
+    </div>
+    <div class="actions">
+      <button class="btn btn-ghost">✏ Sửa</button>
+      <button class="btn">💰 Tạo TopUp</button>
+      <button class="btn btn-ghost">📞 Liên hệ</button>
+      <button class="btn btn-ghost">📊 Tải báo cáo</button>
+      <button class="btn btn-ghost">⚠ Mark Risk</button>
+      <button class="btn btn-ghost" style="border-color:rgba(220,38,38,0.5)">🚪 Offboard</button>
+    </div>
+  </div>
+
+  <!-- 4 stat cards -->
+  <div class="grid grid-4 mb-16">
+    <div class="card">
+      <div class="stat-card-title">💳 Tài chính</div>
+      <div class="stat-row"><span class="muted">Hình thức</span><span class="v">Kết hợp</span></div>
+      <div class="stat-row"><span class="muted">Ký quỹ (Deposit)</span><span class="v">85.6 / 100 tr (86%)</span></div>
+      <div class="pbar mb-8"><div class="pbar-fill" style="width:86%; background:var(--good)"></div></div>
+      <div class="stat-row"><span class="muted">Công nợ (Credit)</span><span class="v">12.4 / 50 tr (25%)</span></div>
+      <div class="pbar mb-8"><div class="pbar-fill" style="width:25%; background:var(--accent)"></div></div>
+      <div class="stat-row"><span class="muted">Lần nạp gần nhất</span><span class="v">200 tr (3 ngày trước)</span></div>
+      <div class="stat-row"><span class="muted">Dự kiến hết quỹ</span><span class="v" style="color:var(--bad)">12 ngày nữa</span></div>
+    </div>
+
+    <div class="card">
+      <div class="stat-card-title">📈 Hoạt động</div>
+      <div class="stat-row"><span class="muted">Tổng doanh số T05</span><span class="v">680 tr</span></div>
+      <div class="stat-row"><span class="muted">Số đơn T05</span><span class="v">1,247</span></div>
+      <div class="stat-row"><span class="muted">Tỷ lệ thành công</span><span class="v" style="color:var(--good)">95.3%</span></div>
+      <div class="stat-row"><span class="muted"><span class="term" title="Average Order Value — Giá trị trung bình mỗi đơn">Giá trị đơn TB</span></span><span class="v">545,000 đ</span></div>
+      <div class="stat-row"><span class="muted">Tăng trưởng tháng</span><span class="v" style="color:var(--good)">▲ 21% 🔥</span></div>
+    </div>
+
+    <div class="card">
+      <div class="stat-card-title">🎁 Quà tặng (Reward)</div>
+      <div class="stat-row"><span class="muted">Sản phẩm đang bán</span><span class="v">156</span></div>
+      <div class="stat-row"><span class="muted">Nhà cung cấp</span><span class="v">UrBox + CNV</span></div>
+      <div class="stat-row"><span class="muted">Brand bán chạy</span><span class="v">Highlands</span></div>
+      <div class="stat-row"><span class="muted">Ngành chính</span><span class="v">Ăn uống (71%)</span></div>
+      <div class="stat-row"><span class="muted">Voucher đã phát</span><span class="v">1,247</span></div>
+    </div>
+
+    <div class="card">
+      <div class="stat-card-title">👥 Người dùng cuối</div>
+      <div class="stat-row"><span class="muted">Tổng thành viên</span><span class="v">12,450</span></div>
+      <div class="stat-row"><span class="muted">Đã đổi quà</span><span class="v">3,891 (31%)</span></div>
+      <div class="stat-row"><span class="muted">Quay lại 30 ngày</span><span class="v" style="color:var(--good)">68%</span></div>
+      <div class="stat-row"><span class="muted">Hạng VIP</span><span class="v">312</span></div>
+      <div class="stat-row"><span class="muted">Thành viên mới T05</span><span class="v" style="color:var(--good)">+234</span></div>
+    </div>
+  </div>
+
+  <!-- GMV trend + Opportunities -->
+  <div class="grid grid-2 mb-16">
+    <div class="card">
+      <div class="card-title"><span class="label"><span class="ico">📊</span> GMV trend (12 tháng)</span></div>
+      <div class="chart-wrap"><canvas id="accountGmvChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="label"><span class="ico">🎯</span> Cơ hội kinh doanh</span></div>
+      <div class="insight-list">
+        <div class="insight green">
+          <span>🟢</span>
+          <div class="body">
+            <strong>Đầy hạn mức công nợ 97%</strong>
+            <div class="small muted">• Nâng credit 50tr → 100tr (Sales)<br />• Pitch gói VIP (rate 8%)</div>
+          </div>
+        </div>
+        <div class="insight green">
+          <span>🟢</span>
+          <div class="body">
+            <strong>Topup pattern đều 30d</strong>
+            <div class="small muted">Đề xuất Auto-topup 200tr/30d</div>
+          </div>
+        </div>
+        <div class="insight yellow">
+          <span>🟡</span>
+          <div class="body"><strong>Voucher chưa dùng 22%</strong> → đề xuất push notification</div>
+        </div>
+        <div class="insight blue">
+          <span>🔵</span>
+          <div class="body"><strong>Pitch GotIt</strong> để mở rộng catalog (hiện chỉ UrBox + CNV)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- History + CSM Notes -->
+  <div class="card mb-16">
+    <div class="card-title">
+      <span class="label"><span class="ico">📜</span> Lịch sử gần đây</span>
+      <span class="btn-link">Xem hết →</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Time</th><th>Loại</th><th>Chi tiết</th>
+          <th class="num">Số tiền</th><th>Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Hôm nay</td><td><span class="badge info">Redeem</span></td><td>1,247 đơn (95.3% success, 22 fail)</td><td class="num" style="color:var(--bad)">−45.2 tr</td><td><span class="badge good">✅</span></td></tr>
+        <tr><td>3d trước</td><td><span class="badge purple">TopUp</span></td><td>Hùng Phạm tạo, CNV approve</td><td class="num" style="color:var(--good)">+200 tr</td><td><span class="badge good">✅ Approved</span></td></tr>
+        <tr><td>3d trước</td><td><span class="badge warn">Payment</span></td><td>Trả công nợ T04</td><td class="num" style="color:var(--bad)">−15 tr</td><td><span class="badge good">✅</span></td></tr>
+        <tr><td>18d trước</td><td><span class="badge info">Adjust</span></td><td>Hoàn voucher Highlands lỗi</td><td class="num" style="color:var(--good)">+1.2 tr</td><td><span class="badge good">✅</span></td></tr>
+        <tr><td>02/05/26</td><td><span class="badge info">Redeem</span></td><td>892 đơn (96.1% success)</td><td class="num" style="color:var(--bad)">−32.8 tr</td><td><span class="badge good">✅</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <span class="label"><span class="ico">📞</span> Tương tác CSM (Notes)</span>
+      <button class="btn btn-sm">+ Thêm note</button>
+    </div>
+    <div class="note-item">
+      <span class="note-date">02/05/2026</span>
+      <span class="note-author">Hoa N.</span>
+      <span>📞 Call định kỳ Q2. KH hài lòng, định mở thêm chi nhánh HCM → đề xuất gói VIP. Đã gửi proposal qua email.</span>
+    </div>
+    <div class="note-item">
+      <span class="note-date">18/04/2026</span>
+      <span class="note-author">Hoa N.</span>
+      <span>📧 Email gửi báo cáo T03 + đối soát PDF. KH phản hồi tích cực, hỏi thêm về integration POS.</span>
+    </div>
+    <div class="note-item">
+      <span class="note-date">05/04/2026</span>
+      <span class="note-author">Hoa N.</span>
+      <span>💬 Họp Zoom với chị Mai (Marketing Head Coffee House). Trao đổi về UI app: muốn customize banner reward theo chi nhánh.</span>
+    </div>
+    <div class="note-item">
+      <span class="note-date">22/03/2026</span>
+      <span class="note-author">Hùng (Lead)</span>
+      <span>🤝 Onsite visit HQ Coffee House. Demo dashboard mới. Đã giới thiệu thêm 2 brand voucher (Phúc Long, Galaxy CGV).</span>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SCREEN 4 — ĐƠN QUÀ & VẬN HÀNH
+     ========================================================= -->
+<section class="screen" id="screen-orders">
+
+  <div class="section-header">
+    <div class="section-title"><span class="ico">🎁</span> Quản lý đơn đổi quà (toàn hệ thống)</div>
+    <button class="btn btn-ghost">Xuất Excel ↓</button>
+  </div>
+
+  <div class="filter-bar">
+    <select class="filter-select"><option>Account: tất cả</option></select>
+    <select class="filter-select"><option>Nhà cung cấp: tất cả</option><option>UrBox</option><option>GotIt</option><option>CNV tự cung cấp</option></select>
+    <select class="filter-select"><option>Trạng thái: tất cả</option><option>Thành công</option><option>Đang xử lý</option><option>Thất bại</option></select>
+    <select class="filter-select"><option>Khoảng thời gian: T05/2026</option><option>Hôm nay</option><option>7 ngày qua</option><option>30 ngày qua</option></select>
+    <input class="filter-input" placeholder="💰 Khoảng giá trị" />
+    <input class="filter-input" placeholder="👤 Tìm theo user" />
+    <button class="btn btn-ghost btn-sm">Đặt lại</button>
+  </div>
+
+  <div class="total-bar">
+    <span><strong>Tổng:</strong> 12,450 đơn</span>
+    <span>✅ Thành công: <strong>95.3%</strong></span>
+    <span>⏳ Đang xử lý: <strong>1.2%</strong></span>
+    <span>❌ Thất bại: <strong>3.5%</strong></span>
+    <span>Tổng doanh số: <strong>4.82 tỷ đ</strong></span>
+    <span style="margin-left:auto">Thời gian xử lý TB: <strong>1.8 giây</strong></span>
+  </div>
+
+  <div class="card mb-16">
+    <table>
+      <thead>
+        <tr>
+          <th>Thời gian</th>
+          <th>Mã đơn</th>
+          <th>Account</th>
+          <th>Khách hàng</th>
+          <th>Voucher</th>
+          <th>Nhà cung cấp</th>
+          <th class="num">Mệnh giá</th>
+          <th>Trạng thái</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>14:32</td><td><code>ORD-7K8M</code></td><td>Coffee House</td><td>Anh Minh</td><td>Highlands 50k</td><td><span class="badge info">UrBox</span></td><td class="num">50k</td><td><span class="badge good">✅ Thành công</span></td><td><button class="btn-link">Xem</button></td></tr>
+        <tr><td>14:30</td><td><code>ORD-7K8L</code></td><td>Pharmacity</td><td>Chị Lan</td><td>GS25 30k</td><td><span class="badge info">UrBox</span></td><td class="num">30k</td><td><span class="badge good">✅ Thành công</span></td><td><button class="btn-link">Xem</button></td></tr>
+        <tr><td>14:28</td><td><code>ORD-7K8K</code></td><td>Coffee House</td><td>Anh Tuấn</td><td>Phúc Long 100k</td><td><span class="badge info">UrBox</span></td><td class="num">100k</td><td><span class="badge warn">⏳ Đang xử lý 4'</span></td><td><button class="btn-link">Xem</button></td></tr>
+        <tr><td>14:25</td><td><code>ORD-7K8J</code></td><td>AEON Mall</td><td>Chị Hoa</td><td>Lotte CGV 80k</td><td><span class="badge purple">GotIt</span></td><td class="num">80k</td><td><span class="badge good">✅ Thành công</span></td><td><button class="btn-link">Xem</button></td></tr>
+        <tr class="row-failed"><td>14:22</td><td><code>ORD-7K8I</code></td><td>GS25 Việt Nam</td><td>Anh Nam</td><td>Highlands 50k</td><td><span class="badge info">UrBox</span></td><td class="num">50k</td><td><span class="badge bad">❌ Thất bại</span></td><td><button class="btn-link">Xem</button></td></tr>
+        <tr class="row-detail"><td colspan="9">↳ <strong>Lý do lỗi:</strong> Nhà cung cấp phản hồi quá chậm (timeout) — Hệ thống đã lên lịch chạy lại lúc 14:27 &nbsp;&nbsp;<button class="btn btn-sm btn-warn">Buộc xử lý ngay</button> <button class="btn btn-sm btn-ghost">Điều tra</button></td></tr>
+        <tr><td>14:20</td><td><code>ORD-7K8H</code></td><td>FPT Shop</td><td>Chị Yến</td><td>Grab Food 50k</td><td><span class="badge" title="CNV tự cung cấp voucher">CNV</span></td><td class="num">50k</td><td><span class="badge good">✅ Thành công</span></td><td><button class="btn-link">Xem</button></td></tr>
+        <tr><td>14:18</td><td><code>ORD-7K8G</code></td><td>Pharmacity</td><td>Anh Long</td><td>Tous les Jours 100k</td><td><span class="badge info">UrBox</span></td><td class="num">100k</td><td><span class="badge good">✅ Thành công</span></td><td><button class="btn-link">Xem</button></td></tr>
+        <tr><td>14:15</td><td><code>ORD-7K8F</code></td><td>GS25 Việt Nam</td><td>Chị Trang</td><td>AEON 200k</td><td><span class="badge purple">GotIt</span></td><td class="num">200k</td><td><span class="badge good">✅ Thành công</span></td><td><button class="btn-link">Xem</button></td></tr>
+      </tbody>
+    </table>
+    <div class="pagination">
+      <span>Hiển thị <strong>1–10</strong> / 12,450 đơn</span>
+      <span>
+        <button class="page-btn">‹</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">…</button>
+        <button class="page-btn">1245</button>
+        <button class="page-btn">›</button>
+      </span>
+    </div>
+  </div>
+
+  <!-- Recovery Tasks -->
+  <div class="card mb-16">
+    <div class="card-title">
+      <span class="label"><span class="ico">⚙</span> <span class="term" title="Tác vụ tự động chạy lại các bước thanh toán/cấp voucher bị lỗi, có giới hạn số lần thử lại">Tác vụ tự động khôi phục (Recovery Tasks)</span> <span class="badge bad">12 đang xử lý</span></span>
+      <div class="flex-row">
+        <button class="btn btn-sm" title="Buộc chạy lại ngay không đợi lịch">▶ Chạy ngay</button>
+        <button class="btn btn-sm btn-ghost">⏸ Tạm dừng</button>
+        <button class="btn btn-sm btn-ghost">🚫 Hủy bỏ</button>
+        <button class="btn btn-sm btn-ghost">📋 Xuất file</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Mã tác vụ</th><th>Mã đơn</th>
+          <th><span class="term" title="Hành động cần thực hiện lại">Loại tác vụ</span></th>
+          <th><span class="term" title="Số lần đã thử / tối đa cho phép">Lần thử</span></th>
+          <th>Lần kế tiếp</th><th>Account</th><th>Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><code>TSK-2841</code></td><td><code>ORD-7K8I</code></td><td><span class="badge warn" title="Khấu trừ số dư account để cấp voucher">Khấu trừ số dư</span></td><td>3/10</td><td>2 phút nữa</td><td>GS25 Việt Nam</td><td><span class="badge warn">🟡 Đang thử lại</span></td></tr>
+        <tr><td><code>TSK-2840</code></td><td><code>ORD-7K71</code></td><td><span class="badge purple" title="Trừ điểm tích lũy của user">Trừ điểm user</span></td><td>6/10</td><td>18 phút nữa</td><td>Bách Hóa Xanh</td><td><span class="badge bad">🔴 Đang điều tra ⚠</span></td></tr>
+        <tr><td><code>TSK-2837</code></td><td><code>ORD-7J9X</code></td><td><span class="badge info" title="Hoàn lại số dư đã giữ chỗ (do giao dịch lỗi)">Hoàn số dư</span></td><td>2/10</td><td>5 phút nữa</td><td>AEON Mall</td><td><span class="badge warn">🟡 Đang thử lại</span></td></tr>
+        <tr><td><code>TSK-2835</code></td><td><code>ORD-7J7P</code></td><td><span class="badge warn" title="Khấu trừ số dư account để cấp voucher">Khấu trừ số dư</span></td><td>1/10</td><td>1 phút nữa</td><td>Coffee House</td><td><span class="badge warn">🟡 Đang thử lại</span></td></tr>
+        <tr><td><code>TSK-2832</code></td><td><code>ORD-7J5K</code></td><td><span class="badge purple" title="Hoàn voucher đã cấp về user (do lỗi/khiếu nại)">Hoàn voucher</span></td><td>4/10</td><td>12 phút nữa</td><td>Vietjet Air</td><td><span class="badge warn">🟡 Đang thử lại</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Vendor Sync Status -->
+  <div class="card">
+    <div class="card-title"><span class="label"><span class="ico">🔌</span> Trạng thái đồng bộ với nhà cung cấp (Vendor Sync)</span></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Nhà cung cấp / Loại dữ liệu</th>
+          <th>Đồng bộ lần cuối</th>
+          <th class="num"><span class="term" title="Số bản ghi mới được thêm vào">Mới</span></th>
+          <th class="num"><span class="term" title="Số bản ghi đã có được cập nhật lại">Cập nhật</span></th>
+          <th class="num"><span class="term" title="Số bản ghi bị lỗi không đồng bộ được">Lỗi</span></th>
+          <th>Trạng thái</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>UrBox</strong> — Voucher</td><td>12 phút trước</td><td class="num">+18</td><td class="num">+156</td><td class="num">0</td><td><span class="badge good">✅ Bình thường</span></td><td><button class="btn btn-sm btn-ghost">Đồng bộ ngay</button></td></tr>
+        <tr><td><strong>UrBox</strong> — Brand</td><td>2 giờ trước</td><td class="num">+2</td><td class="num">+14</td><td class="num">0</td><td><span class="badge good">✅ Bình thường</span></td><td><button class="btn btn-sm btn-ghost">Đồng bộ ngay</button></td></tr>
+        <tr><td><strong>UrBox</strong> — Danh mục</td><td>4 giờ trước</td><td class="num">0</td><td class="num">+3</td><td class="num">0</td><td><span class="badge good">✅ Bình thường</span></td><td><button class="btn btn-sm btn-ghost">Đồng bộ ngay</button></td></tr>
+        <tr><td><strong>GotIt</strong> — Danh mục</td><td>Hôm qua 23:00</td><td class="num">+12</td><td class="num">+89</td><td class="num">0</td><td><span class="badge good">✅ Bình thường</span></td><td><button class="btn btn-sm btn-ghost">Đồng bộ ngay</button></td></tr>
+        <tr><td><strong>GotIt</strong> — Brand</td><td>Hôm qua 23:30</td><td class="num">+3</td><td class="num">+24</td><td class="num">0</td><td><span class="badge good">✅ Bình thường</span></td><td><button class="btn btn-sm btn-ghost">Đồng bộ ngay</button></td></tr>
+        <tr style="background:#fef3c7"><td><strong>GotIt</strong> — Mapping (liên kết SP)</td><td>Hôm qua 24:00</td><td class="num">−</td><td class="num">+156</td><td class="num" style="color:var(--bad); font-weight:600">2</td><td><span class="badge warn">⚠ Đồng bộ một phần</span></td><td><button class="btn btn-sm btn-warn">Điều tra</button></td></tr>
+        <tr><td><strong>GotIt</strong> — Sản phẩm</td><td>Hôm nay 00:00</td><td class="num">+28</td><td class="num">+312</td><td class="num">0</td><td><span class="badge good">✅ Bình thường</span></td><td><button class="btn btn-sm btn-ghost">Đồng bộ ngay</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- =========================================================
+     SCREEN 5 — ĐỐI SOÁT & TÀI CHÍNH
+     ========================================================= -->
+<section class="screen" id="screen-finance">
+
+  <div class="section-header">
+    <div class="section-title"><span class="ico">💼</span> Đối soát tài chính (T04/2026)</div>
+    <div class="flex-row">
+      <select class="filter-select"><option>T04/2026</option><option>T03/2026</option><option>T02/2026</option></select>
+      <button class="btn btn-ghost">Tải PDF ↓</button>
+      <button class="btn btn-ghost">Xuất CSV ↓</button>
+    </div>
+  </div>
+
+  <div class="grid grid-3 mb-16">
+    <div class="kpi good">
+      <div class="kpi-label">📥 Tiền CNV thu được (từ Account)</div>
+      <div class="kpi-value">408 <span class="muted small">tr đ</span></div>
+      <div class="kpi-sub"><span class="delta-up">▲ 22%</span> so với tháng trước</div>
+      <div class="stat-row mt-12"><span class="muted">Đã thực thu</span><span class="v">386 / 408 tr (95%)</span></div>
+      <div class="pbar"><div class="pbar-fill" style="width:95%; background:var(--good)"></div></div>
+    </div>
+    <div class="kpi warn">
+      <div class="kpi-label">📤 Tiền CNV chi (trả cho nhà cung cấp)</div>
+      <div class="kpi-value">368 <span class="muted small">tr đ</span></div>
+      <div class="kpi-sub"><span class="delta-up">▲ 18%</span> so với tháng trước</div>
+      <div class="stat-row mt-12"><span class="muted">Đã thực trả</span><span class="v">340 / 368 tr (92%)</span></div>
+      <div class="pbar"><div class="pbar-fill" style="width:92%; background:var(--warn)"></div></div>
+    </div>
+    <div class="kpi purple">
+      <div class="kpi-label">💰 <span class="term" title="Doanh thu thuần = Tiền thu − Tiền chi cho vendor. Margin = lợi nhuận / doanh thu">Lợi nhuận gộp</span> (biên 9.8%)</div>
+      <div class="kpi-value">40 <span class="muted small">tr đ</span></div>
+      <div class="kpi-sub"><span class="delta-up">▲ 65%</span> so với tháng trước</div>
+      <div class="stat-row mt-12"><span class="muted">Dự báo Quý 2</span><span class="v">145 tr</span></div>
+      <div class="pbar"><div class="pbar-fill" style="width:60%; background:var(--purple)"></div></div>
+    </div>
+  </div>
+
+  <!-- Reconciliation with Vendor -->
+  <div class="card mb-16">
+    <div class="card-title"><span class="label"><span class="ico">📊</span> <span class="term" title="So khớp số liệu giữa CNV và nhà cung cấp voucher (UrBox/GotIt) — đảm bảo không có chênh lệch">Đối soát với nhà cung cấp</span> (T04/2026)</span></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Nhà cung cấp</th>
+          <th class="num">Voucher CNV ghi nhận</th>
+          <th class="num">Vendor báo về</th>
+          <th class="num">Sai lệch</th>
+          <th>Trạng thái</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>UrBox</strong></td>
+          <td class="num">8,420 voucher (310 tr)</td>
+          <td class="num">8,420 (310 tr)</td>
+          <td class="num">0</td>
+          <td><span class="badge good">✅ Khớp 100%</span></td>
+          <td><button class="btn btn-sm btn-ghost">Tải PDF</button></td>
+        </tr>
+        <tr style="background:#fef3c7">
+          <td><strong>GotIt</strong></td>
+          <td class="num">2,180 voucher (58 tr)</td>
+          <td class="num">2,178 (57.8 tr)</td>
+          <td class="num" style="color:var(--bad); font-weight:700">2 voucher</td>
+          <td><span class="badge warn">⚠ Cần kiểm tra</span></td>
+          <td><button class="btn btn-sm btn-warn">Chi tiết →</button></td>
+        </tr>
+        <tr class="row-detail">
+          <td colspan="6">
+            ↳ <strong>Discrepancy:</strong>
+            <code>ORD-7H3K</code> (50k), <code>ORD-7H51</code> (150k) — vendor báo voided sau khi cấp
+            &nbsp;&nbsp;<button class="btn btn-sm btn-warn">Tạo claim</button>
+            <button class="btn btn-sm btn-ghost">Bỏ qua</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Account Debt -->
+  <div class="card mb-16">
+    <div class="card-title">
+      <span class="label"><span class="ico">💳</span> Công nợ Account (đang nợ CNV)</span>
+      <span class="small muted">Tổng đang nợ: <strong style="color:var(--text)">156 tr</strong> · Quá hạn: <strong style="color:var(--good)">0</strong> · <span class="term" title="Days Sales Outstanding — số ngày trung bình để thu hồi công nợ. Càng thấp càng tốt.">DSO (số ngày thu nợ TB)</span>: <strong style="color:var(--text)">12 ngày</strong></span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th class="num">Hạn mức</th>
+          <th class="num">Đang nợ</th>
+          <th class="num">% sử dụng</th>
+          <th>Hạn thanh toán</th>
+          <th>Trạng thái</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#fef2f2">
+          <td><strong>Coffee House</strong></td>
+          <td class="num">50 tr</td>
+          <td class="num">48.6 tr</td>
+          <td class="num">
+            <div class="flex-row" style="justify-content:flex-end; gap:6px">
+              <span style="color:var(--bad); font-weight:600">97%</span>
+              <div class="pbar" style="width:50px"><div class="pbar-fill" style="width:97%; background:var(--bad)"></div></div>
+            </div>
+          </td>
+          <td>T+2 ngày</td>
+          <td><span class="badge bad">🔴 Sắp đầy</span></td>
+          <td><button class="btn btn-sm">Nâng limit</button></td>
+        </tr>
+        <tr>
+          <td><strong>FPT Shop</strong></td>
+          <td class="num">100 tr</td>
+          <td class="num">42 tr</td>
+          <td class="num">
+            <div class="flex-row" style="justify-content:flex-end; gap:6px">
+              <span style="color:#92400e; font-weight:600">42%</span>
+              <div class="pbar" style="width:50px"><div class="pbar-fill" style="width:42%; background:#eab308"></div></div>
+            </div>
+          </td>
+          <td>T+5 ngày</td>
+          <td><span class="badge warn">🟡 Cần thu</span></td>
+          <td><button class="btn btn-sm btn-ghost">Nhắc thanh toán</button></td>
+        </tr>
+        <tr>
+          <td><strong>AEON Mall</strong></td>
+          <td class="num">100 tr</td>
+          <td class="num">31.4 tr</td>
+          <td class="num">
+            <div class="flex-row" style="justify-content:flex-end; gap:6px">
+              <span style="color:#166534; font-weight:600">31%</span>
+              <div class="pbar" style="width:50px"><div class="pbar-fill" style="width:31%; background:var(--good)"></div></div>
+            </div>
+          </td>
+          <td>T+15 ngày</td>
+          <td><span class="badge good">🟢 Healthy</span></td>
+          <td><button class="btn btn-sm btn-ghost">Xem</button></td>
+        </tr>
+        <tr>
+          <td><strong>Highlands Coffee</strong></td>
+          <td class="num">50 tr</td>
+          <td class="num">18.2 tr</td>
+          <td class="num">
+            <div class="flex-row" style="justify-content:flex-end; gap:6px">
+              <span style="color:#166534; font-weight:600">36%</span>
+              <div class="pbar" style="width:50px"><div class="pbar-fill" style="width:36%; background:var(--good)"></div></div>
+            </div>
+          </td>
+          <td>T+8 ngày</td>
+          <td><span class="badge good">🟢 Healthy</span></td>
+          <td><button class="btn btn-sm btn-ghost">Xem</button></td>
+        </tr>
+        <tr>
+          <td><strong>Vietjet Air</strong></td>
+          <td class="num">80 tr</td>
+          <td class="num">15.8 tr</td>
+          <td class="num">
+            <div class="flex-row" style="justify-content:flex-end; gap:6px">
+              <span style="color:#166534; font-weight:600">20%</span>
+              <div class="pbar" style="width:50px"><div class="pbar-fill" style="width:20%; background:var(--good)"></div></div>
+            </div>
+          </td>
+          <td>T+22 ngày</td>
+          <td><span class="badge good">🟢 Healthy</span></td>
+          <td><button class="btn btn-sm btn-ghost">Xem</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="footnote">
+      📑 <strong>DSO (Số ngày thu công nợ trung bình) = 12 ngày</strong> — tốt hơn mức tham chiếu ngành (21 ngày).
+      <span class="btn-link" style="margin-left:8px">Xem 12 account →</span>
+    </div>
+  </div>
+
+  <!-- TopUp Pending -->
+  <div class="card">
+    <div class="card-title">
+      <span class="label"><span class="ico">💸</span> Yêu cầu nạp tiền (TopUp) đang chờ duyệt <span class="badge warn">3 yêu cầu</span></span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th class="num">Số tiền</th>
+          <th>Tạo lúc</th>
+          <th>Phương thức</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Pharmacity</strong></td>
+          <td class="num" style="font-size:14px; color:var(--good); font-weight:700">+300 tr</td>
+          <td>5'</td>
+          <td><span class="badge info" title="Chuyển khoản ngân hàng">Chuyển khoản</span></td>
+          <td>
+            <div class="flex-row">
+              <button class="btn btn-sm btn-good">✅ Approve</button>
+              <button class="btn btn-sm btn-bad">❌ Reject</button>
+              <button class="btn btn-sm btn-ghost">👁 Xem chứng từ</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Tiệm Bún Bò 79</strong></td>
+          <td class="num" style="font-size:14px; color:var(--good); font-weight:700">+20 tr</td>
+          <td>2h</td>
+          <td><span class="badge info" title="Chuyển khoản ngân hàng">Chuyển khoản</span></td>
+          <td>
+            <div class="flex-row">
+              <button class="btn btn-sm btn-good">✅ Approve</button>
+              <button class="btn btn-sm btn-bad">❌ Reject</button>
+              <button class="btn btn-sm btn-ghost">👁 Xem chứng từ</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Vinasoy</strong></td>
+          <td class="num" style="font-size:14px; color:var(--good); font-weight:700">+150 tr</td>
+          <td>4h</td>
+          <td><span class="badge info" title="Chuyển khoản ngân hàng">Chuyển khoản</span></td>
+          <td>
+            <div class="flex-row">
+              <button class="btn btn-sm btn-good">✅ Approve</button>
+              <button class="btn btn-sm btn-bad">❌ Reject</button>
+              <button class="btn btn-sm btn-ghost">👁 Xem chứng từ</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* =========================================================
+   TAB SWITCHING
+   ========================================================= */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('screen-' + tab.dataset.screen).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+/* =========================================================
+   CHART DEFAULTS
+   ========================================================= */
+Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Roboto", sans-serif';
+Chart.defaults.font.size = 11.5;
+Chart.defaults.color = '#64748b';
+
+const COLOR_BRAND = '#1e3a5f';
+const COLOR_ACCENT = '#3182ce';
+const COLOR_LIGHT = '#90cdf4';
+const COLOR_GOOD = '#16a34a';
+
+/* =========================================================
+   1. GMV CHART (Overview)
+   ========================================================= */
+const months = ['T6/25','T7/25','T8/25','T9/25','T10/25','T11/25','T12/25','T1/26','T2/26','T3/26','T4/26','T5/26'];
+const gmv  = [1.2, 1.4, 1.5, 1.7, 2.1, 2.3, 3.2, 2.8, 3.5, 3.9, 4.1, 4.82];
+const dtCnv = gmv.map(v => +(v * 0.1).toFixed(2));
+
+new Chart(document.getElementById('gmvChart'), {
+  data: {
+    labels: months,
+    datasets: [
+      {
+        type: 'bar',
+        label: 'GMV (tỷ đ)',
+        data: gmv,
+        backgroundColor: 'rgba(49,130,206,0.85)',
+        borderRadius: 5,
+        order: 2
+      },
+      {
+        type: 'line',
+        label: 'DT CNV (tỷ đ)',
+        data: dtCnv,
+        borderColor: '#16a34a',
+        backgroundColor: 'rgba(22,163,74,0.1)',
+        tension: 0.35, fill: false,
+        pointRadius: 3, pointBackgroundColor: '#16a34a',
+        borderWidth: 2.5,
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 10 } } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { callback: v => v + ' tỷ' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+/* =========================================================
+   2. ACCOUNT GMV TREND (Detail)
+   ========================================================= */
+const accGmv = [120, 145, 165, 195, 235, 280, 340, 395, 445, 510, 560, 680];
+
+new Chart(document.getElementById('accountGmvChart'), {
+  type: 'line',
+  data: {
+    labels: months,
+    datasets: [{
+      label: 'GMV Coffee House (tr đ)',
+      data: accGmv,
+      borderColor: COLOR_ACCENT,
+      backgroundColor: 'rgba(49,130,206,0.15)',
+      tension: 0.3, fill: true,
+      pointRadius: 4, pointBackgroundColor: COLOR_ACCENT,
+      borderWidth: 2.5
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { callback: v => v + ' tr' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

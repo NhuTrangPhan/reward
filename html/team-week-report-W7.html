@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reward V2 — Báo cáo tuần W7 (11-15/05/2026) theo tính năng</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #e2e8f0;
+    line-height: 1.55;
+    padding: 24px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1280px; margin: 0 auto; }
+
+  header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 28px;
+    background: linear-gradient(135deg, rgba(59,130,246,.18), rgba(139,92,246,.18));
+    border: 1px solid rgba(148,163,184,.22);
+    border-radius: 16px;
+  }
+  header h1 {
+    font-size: 26px;
+    background: linear-gradient(90deg, #60a5fa, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  header .meta { font-size: 13px; color: #94a3b8; }
+  header .badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 4px 14px;
+    background: rgba(244,114,182,.15);
+    color: #f9a8d4;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .kpi {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+  .kpi.t::before { background: #38bdf8; }
+  .kpi.h::before { background: #a78bfa; }
+  .kpi.l::before { background: #ec4899; }
+  .kpi.s::before { background: linear-gradient(180deg,#10b981,#34d399); }
+  .kpi-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+  .kpi-value { font-size: 30px; font-weight: 700; color: #f1f5f9; }
+  .kpi-sub { font-size: 11px; color: #64748b; margin-top: 4px; }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 28px 0 16px;
+    color: #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::before {
+    content: "";
+    width: 5px;
+    height: 24px;
+    background: linear-gradient(180deg,#60a5fa,#c084fc);
+    border-radius: 3px;
+  }
+
+  /* Feature card */
+  .feature-card {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.18);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 16px;
+    border-left: 4px solid;
+  }
+  .feature-card.f1 { border-left-color: #f59e0b; }
+  .feature-card.f2 { border-left-color: #06b6d4; }
+  .feature-card.f3 { border-left-color: #10b981; }
+  .feature-card.f4 { border-left-color: #8b5cf6; }
+  .feature-card.f5 { border-left-color: #ef4444; }
+  .feature-card.f6 { border-left-color: #ec4899; }
+  .feature-card.f7 { border-left-color: #14b8a6; }
+  .feature-card.f8 { border-left-color: #f97316; }
+  .feature-card.f9 { border-left-color: #64748b; }
+
+  .feature-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .feature-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: #f1f5f9;
+    flex: 1;
+  }
+  .feature-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tag-repo {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(15,23,42,.6);
+    color: #cbd5e1;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    border: 1px solid rgba(148,163,184,.2);
+  }
+  .tag-status {
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .status-done { background: rgba(16,185,129,.15); color: #6ee7b7; }
+  .status-progress { background: rgba(245,158,11,.15); color: #fcd34d; }
+  .status-new { background: rgba(99,102,241,.15); color: #a5b4fc; }
+
+  .contributors {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .contributor {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(15,23,42,.6);
+    border: 1px solid rgba(148,163,184,.2);
+  }
+  .contributor .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .contributor.t .dot { background: #38bdf8; }
+  .contributor.h .dot { background: #a78bfa; }
+  .contributor.l .dot { background: #ec4899; }
+  .contributor .count { color: #94a3b8; font-size: 11px; margin-left: 4px; }
+
+  .feature-desc {
+    font-size: 13.5px;
+    color: #cbd5e1;
+    margin-bottom: 14px;
+    padding: 10px 14px;
+    background: rgba(15,23,42,.4);
+    border-radius: 8px;
+    border-left: 2px solid rgba(148,163,184,.2);
+  }
+
+  .commit-list {
+    list-style: none;
+    margin: 0;
+  }
+  .commit-list li {
+    font-size: 12.5px;
+    padding: 5px 0 5px 22px;
+    color: #cbd5e1;
+    position: relative;
+    line-height: 1.55;
+  }
+  .commit-list li::before {
+    content: "▸";
+    position: absolute;
+    left: 4px;
+    font-size: 11px;
+    top: 6px;
+  }
+  .commit-list li.t::before { color: #38bdf8; }
+  .commit-list li.h::before { color: #a78bfa; }
+  .commit-list li.l::before { color: #ec4899; }
+  .commit-list li .author {
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .commit-list li .author.t { color: #7dd3fc; }
+  .commit-list li .author.h { color: #c4b5fd; }
+  .commit-list li .author.l { color: #f9a8d4; }
+  .commit-list li .date {
+    color: #64748b;
+    font-size: 10.5px;
+    font-family: ui-monospace, monospace;
+    margin-left: 4px;
+  }
+  .commit-list li b { color: #f1f5f9; font-weight: 600; }
+  .commit-list li code {
+    background: rgba(15,23,42,.6);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 11px;
+    color: #fbbf24;
+  }
+
+  /* Person summary */
+  .person-card {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.18);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+  .person-card.t { border-left: 4px solid #38bdf8; }
+  .person-card.h { border-left: 4px solid #a78bfa; }
+  .person-card.l { border-left: 4px solid #ec4899; }
+  .person-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+    color: #0f172a;
+  }
+  .avatar.t { background: linear-gradient(135deg, #38bdf8, #0ea5e9); }
+  .avatar.h { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
+  .avatar.l { background: linear-gradient(135deg, #f472b6, #ec4899); }
+  .person-name { font-size: 17px; font-weight: 600; color: #f1f5f9; }
+  .person-meta { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+  .person-pills {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .person-pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(15,23,42,.5);
+    border: 1px solid rgba(148,163,184,.2);
+    color: #cbd5e1;
+  }
+  .focus-list {
+    list-style: none;
+    margin-left: 4px;
+  }
+  .focus-list li {
+    font-size: 13px;
+    padding: 5px 0 5px 22px;
+    position: relative;
+    line-height: 1.5;
+    color: #cbd5e1;
+  }
+  .focus-list li::before {
+    content: "◆";
+    position: absolute;
+    left: 4px;
+    color: #f472b6;
+    font-size: 10px;
+    top: 6px;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 28px;
+    padding: 20px;
+    color: #64748b;
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .feature-header { flex-direction: column; align-items: stretch; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>📊 Reward V2 — Báo cáo tuần W7 theo tính năng</h1>
+    <div class="meta">Trang · Huy · Hải · Khoảng thời gian: <b>11/05 → 15/05/2026</b> (Thứ 2 → Thứ 6, ISO W20)</div>
+    <span class="badge">Sprint 7 In-Progress · 5d / 5d</span>
+  </header>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi t">
+      <div class="kpi-label">Trang (Tech Lead)</div>
+      <div class="kpi-value">23</div>
+      <div class="kpi-sub">commits · rewards-v2 only · Architecture + Reconciliation + K8s</div>
+    </div>
+    <div class="kpi h">
+      <div class="kpi-label">Huy (Full-stack)</div>
+      <div class="kpi-value">15</div>
+      <div class="kpi-sub">commits · 3 repo · Reconciliation feature owner</div>
+    </div>
+    <div class="kpi l">
+      <div class="kpi-label">Hải (Full-stack + Mobile)</div>
+      <div class="kpi-value">33</div>
+      <div class="kpi-sub">commits · 4 repo · GotIt Credential + Sync + Mini App</div>
+    </div>
+    <div class="kpi s">
+      <div class="kpi-label">Tổng nhóm tuần W7</div>
+      <div class="kpi-value">71</div>
+      <div class="kpi-sub">commits · ~14 commits/day · 9 tính năng</div>
+    </div>
+  </div>
+
+  <!-- ==================== TÍNH NĂNG ==================== -->
+  <div class="section-title">🎯 Tính năng ship trong tuần</div>
+
+  <!-- F1: Per-Account GotIt Credential -->
+  <div class="feature-card f1">
+    <div class="feature-header">
+      <div class="feature-name">🔐 F1 — Per-Account GotIt Credential Management (AES-256)</div>
+      <div class="feature-tags">
+        <span class="tag-repo">rewards-v2</span>
+        <span class="tag-repo">cdp-backend</span>
+        <span class="tag-repo">cdp-frontend</span>
+        <span class="tag-status status-new">NEW</span>
+      </div>
+    </div>
+    <div class="contributors">
+      <span class="contributor t"><span class="dot"></span>Trang<span class="count">4 commits</span></span>
+      <span class="contributor l"><span class="dot"></span>Hải<span class="count">7 commits</span></span>
+    </div>
+    <div class="feature-desc">
+      <b>Lý do nghiệp vụ:</b> Mỗi Account giờ có credential GotIt riêng (account-scoped) thay vì share global. Cho phép nhiều brand/account dùng GotIt với cấu hình độc lập. Credential mã hoá AES-256-CBC, decrypt runtime khi gọi vendor API.
+    </div>
+    <ul class="commit-list">
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> <b>Implement per-account GotIt credential management</b> với AES-256 encryption + update integration services <span class="date">12/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> Integrate <code>AccountVendorMapping</code> vào <code>GotItRecoveryStrategy</code> để enforce per-account credential validation + AES v2 config support <span class="date">12/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> Migrate to <code>AES256Utils</code> (fail-late initialization pattern) <span class="date">12-13/05</span></li>
+      <li class="l"><span class="author l">[Hải/rewards-v2]</span> <b>AccountGotItCredentialController</b>: refactor vendor mapping connection handling + credential management <span class="date">13/05</span></li>
+      <li class="l"><span class="author l">[Hải/rewards-v2]</span> Replace <code>LogicErrorException</code> → <code>ValidationErrorException</code> cho input validation trong AccountGotItCredentialController <span class="date">13/05</span></li>
+      <li class="l"><span class="author l">[Hải/rewards-v2]</span> Update error messages trong AccountGotItCredentialController <b>sang tiếng Việt</b> <span class="date">13/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-backend]</span> Add GotIt credential management + vendor connection config vào <code>RewardV2Client</code> + <code>RewardV2Controller</code> <span class="date">13/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-backend]</span> Add <code>IntegrationErrorException</code> handling cho validation errors trong RewardV2Client <span class="date">13/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-frontend]</span> <b>Partner credentials form</b> + update connection handling + inline error handling + server validation <span class="date">13/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-frontend]</span> Update placeholder text cho transaction prefix trong partner credentials form <span class="date">14/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-frontend]</span> Normalize vendor code handling trong <code>resolvePartnerAuthMethod</code> function <span class="date">14/05</span></li>
+    </ul>
+  </div>
+
+  <!-- F2: Reconciliation Phase 2 -->
+  <div class="feature-card f2">
+    <div class="feature-header">
+      <div class="feature-name">📊 F2 — Reconciliation Vendor Voucher (Phase 1b/2) — End-to-end</div>
+      <div class="feature-tags">
+        <span class="tag-repo">rewards-v2</span>
+        <span class="tag-repo">cdp-backend</span>
+        <span class="tag-repo">cdp-frontend</span>
+        <span class="tag-status status-progress">IN-PROGRESS</span>
+      </div>
+    </div>
+    <div class="contributors">
+      <span class="contributor h"><span class="dot"></span>Huy<span class="count">11 commits</span></span>
+      <span class="contributor t"><span class="dot"></span>Trang<span class="count">5 commits</span></span>
+    </div>
+    <div class="feature-desc">
+      <b>Lý do nghiệp vụ:</b> CRM Admin upload Excel voucher từ vendor để đối soát với ledger nội bộ. Phát hiện drift (số lượng/tổng tiền không khớp) + report status. Mở rộng Phase 1a (BALANCE_LEDGER) sang Phase 1b/2 (VOUCHER + cross-vendor).
+    </div>
+    <ul class="commit-list">
+      <li class="h"><span class="author h">[Huy/cdp-backend]</span> <b>Implement Account Reconciliation API</b> — endpoint hoàn chỉnh <span class="date">14/05</span></li>
+      <li class="h"><span class="author h">[Huy/cdp-backend]</span> Add filtering options (failed/pending items) trong reconciliation reports <span class="date">14/05</span></li>
+      <li class="h"><span class="author h">[Huy/rewards-v2]</span> <b>Optional filtering theo keyword + brandId</b> trong reconciliation services + controllers <span class="date">14/05</span></li>
+      <li class="h"><span class="author h">[Huy/rewards-v2]</span> <b>Atomic finalize method</b> để prevent race conditions trong report status updates <span class="date">14/05</span></li>
+      <li class="h"><span class="author h">[Huy/rewards-v2]</span> <b>Hard-skip guard</b> cho terminal state reports trong <code>finalizeAccountSelfUploadReport</code> <span class="date">14/05</span></li>
+      <li class="h"><span class="author h">[Huy/rewards-v2]</span> Enhance <b>duplicate detection logic</b> trong <code>ReconciliationVoucherRowRepository</code> để xử lý re-uploads + prevent false positives <span class="date">14/05</span></li>
+      <li class="h"><span class="author h">[Huy/rewards-v2]</span> Enhance user + vendor services với <b>batch loading + search capabilities</b> <span class="date">14/05</span></li>
+      <li class="h"><span class="author h">[Huy/cdp-frontend]</span> <b>Implement Reconciliation module FE</b> + enhance error handling trên reward network pages <span class="date">14/05</span></li>
+      <li class="h"><span class="author h">[Huy/cdp-frontend]</span> Keyword + brandId filtering cho pending/failed endpoints <span class="date">14/05</span></li>
+      <li class="h"><span class="author h">[Huy/cdp-frontend]</span> Refactor: rename <b>"reconciliation row" → "transaction"</b> terminology trong models + UI components <span class="date">14/05</span></li>
+      <li class="h"><span class="author h">[Huy/cdp-frontend]</span> Fix: dùng <code>totalRows</code> property thay vì manual sum cho reconciliation total count <span class="date">14/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> <b>Centralize ReconciliationEvent model to domain module</b> + standardize Kafka producer configuration <span class="date">11/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> Centralize reconciliation + audit DTOs vào domain module <span class="date">13/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> <b>Branch-specific success match pair retrieval</b> cho CNV + partner reconciliation flows <span class="date">14/05</span></li>
+      <li class="h"><span class="author h">[Huy/rewards-v2]</span> Add <code>merchantCode</code> vào <code>VoucherRowResponse</code> + update tests cho discrepancy resolution <span class="date">15/05</span></li>
+      <li class="h"><span class="author h">[Huy/rewards-v2]</span> Remove <code>merchantCode</code> + <code>brandLogo</code> khỏi VoucherRowResponse (rollback partial) <span class="date">15/05</span></li>
+    </ul>
+  </div>
+
+  <!-- F3: GotIt Sync Async -->
+  <div class="feature-card f3">
+    <div class="feature-header">
+      <div class="feature-name">🔄 F3 — Sync với GotIt (Async + Progress Polling)</div>
+      <div class="feature-tags">
+        <span class="tag-repo">rewards-v2</span>
+        <span class="tag-repo">cdp-backend</span>
+        <span class="tag-repo">cdp-frontend</span>
+        <span class="tag-status status-done">DONE</span>
+      </div>
+    </div>
+    <div class="contributors">
+      <span class="contributor l"><span class="dot"></span>Hải<span class="count">8 commits</span></span>
+    </div>
+    <div class="feature-desc">
+      <b>Lý do nghiệp vụ:</b> Account Admin nhấn "Đồng bộ với GotIt" để pull brand/category mới nhất từ vendor API. Backend xử lý async + frontend poll progress để hiển thị progress bar (tránh request timeout với account có nhiều product).
+    </div>
+    <ul class="commit-list">
+      <li class="l"><span class="author l">[Hải/rewards-v2]</span> <b>Sync account brand/category config từ GotIt API key</b> (async + progress) <span class="date">14/05</span></li>
+      <li class="l"><span class="author l">[Hải/rewards-v2]</span> <b>Orphan brand handling</b>: gom brand mồ côi vào category "Khác" trong GotIt synchronization process <span class="date">14/05</span></li>
+      <li class="l"><span class="author l">[Hải/rewards-v2]</span> Enhance GotIt synchronization với <b>deactivation sweeps + active item filtering</b> <span class="date">15/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-backend]</span> <b>Gateway forward reward-config sync endpoints</b> (async + status polling) <span class="date">14/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-frontend]</span> <b>"Đồng bộ với GotIt" button</b> + progress polling trên config pages <span class="date">14/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-frontend]</span> Refactor sync handling trong Config + ConnectionDetail components <span class="date">14/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-frontend]</span> Remove sync functionality + UI elements (rollback partial 15/5 — chờ confirm spec) <span class="date">15/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-frontend]</span> Update button styles + accessibility attributes cho sync actions <span class="date">15/05</span></li>
+    </ul>
+  </div>
+
+  <!-- F4: CRM Admin Module Migration -->
+  <div class="feature-card f4">
+    <div class="feature-header">
+      <div class="feature-name">🏗️ F4 — CRM Admin Module Migration (Microservice Split)</div>
+      <div class="feature-tags">
+        <span class="tag-repo">rewards-v2</span>
+        <span class="tag-status status-done">DONE</span>
+      </div>
+    </div>
+    <div class="contributors">
+      <span class="contributor t"><span class="dot"></span>Trang<span class="count">2 commits</span></span>
+    </div>
+    <div class="feature-desc">
+      <b>Lý do nghiệp vụ:</b> Tách CRM Admin (port 9091) khỏi internal-api (port 9090) thành microservice riêng. Cho phép scale độc lập 2 luồng (user/account redemption vs CRM admin operations). Chuẩn bị cho K8s deployment riêng biệt.
+    </div>
+    <ul class="commit-list">
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> <b>Migrate crm-admin controllers + services</b> từ internal-api module → crm-admin module <span class="date">12/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> <b>Kubernetes deployment configurations</b> cho crm-admin + worker-sync-cnv-customer <span class="date">12/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> <b>CrmTopUpFilter</b>: replace BaseObjectFilter cho granular top-up request filtering <span class="date">14/05</span></li>
+    </ul>
+  </div>
+
+  <!-- F5: RedemptionOrder Price Snapshotting -->
+  <div class="feature-card f5">
+    <div class="feature-header">
+      <div class="feature-name">💰 F5 — RedemptionOrder Enhancements (Price Snapshot + Partner Skip Balance)</div>
+      <div class="feature-tags">
+        <span class="tag-repo">rewards-v2</span>
+        <span class="tag-repo">cdp-backend</span>
+        <span class="tag-repo">cdp-frontend</span>
+        <span class="tag-status status-done">DONE</span>
+      </div>
+    </div>
+    <div class="contributors">
+      <span class="contributor t"><span class="dot"></span>Trang<span class="count">3 commits</span></span>
+      <span class="contributor h"><span class="dot"></span>Huy<span class="count">2 commits</span></span>
+      <span class="contributor l"><span class="dot"></span>Hải<span class="count">2 commits</span></span>
+    </div>
+    <div class="feature-desc">
+      <b>Lý do nghiệp vụ:</b> RedemptionOrder snapshot giá tại thời điểm đặt (tránh sai giá khi reward.price thay đổi sau). PARTNER orders (vendor direct) skip balance flows. <code>pointsRequired</code> chuyển Integer→Long để hỗ trợ point lớn.
+    </div>
+    <ul class="commit-list">
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> <b>Add price snapshotting to RedemptionOrder entities</b> + update logic service để handle price normalization <span class="date">15/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> Add <code>VendorConnectionType</code> vào RedemptionOrder + <b>skip balance flows cho PARTNER orders</b> trong recovery service <span class="date">14/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> Decouple redemption limit validation: introduce <code>sumSuccessQuantityByAccountAndReward</code> service method <span class="date">15/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> Replace direct repository calls với typed service interface cho redemption order aggregation logic <span class="date">15/05</span></li>
+      <li class="l"><span class="author l">[Hải/rewards-v2]</span> <b>Change <code>pointsRequired</code> Integer → Long</b> trong RewardItem + update related logic <span class="date">15/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-backend]</span> Change <code>pointsRequired</code> Integer → Long trong RewardItemDto + RewardItemV2 <span class="date">15/05</span></li>
+      <li class="l"><span class="author l">[Hải/rewards-v2]</span> Update order name formatting trong <code>GotItRedeemStrategy</code> + remove unused properties <span class="date">14/05</span></li>
+      <li class="l"><span class="author l">[Hải/rewards-v2]</span> Update order name prefix trong GotItRedeemStrategyTest để match new specification <span class="date">14/05</span></li>
+      <li class="h"><span class="author h">[Huy/cdp-frontend]</span> <b>Update redemption order calculation</b> để dùng item price + clean up voucher row model metadata <span class="date">15/05</span></li>
+      <li class="h"><span class="author h">[Huy/cdp-backend]</span> Remove unused <code>brandLogo</code> + add <code>price</code> field vào RedemptionOrderDto <span class="date">15/05</span></li>
+    </ul>
+  </div>
+
+  <!-- F6: Mini App Reward/Voucher Detail UX -->
+  <div class="feature-card f6">
+    <div class="feature-header">
+      <div class="feature-name">📱 F6 — Mini App: Collapsible Sections cho Reward/Voucher Detail</div>
+      <div class="feature-tags">
+        <span class="tag-repo">mini-app</span>
+        <span class="tag-status status-done">DONE</span>
+      </div>
+    </div>
+    <div class="contributors">
+      <span class="contributor l"><span class="dot"></span>Hải<span class="count">3 commits</span></span>
+    </div>
+    <div class="feature-desc">
+      <b>Lý do nghiệp vụ:</b> Reward/Voucher detail có nhiều thông tin (hotline, content, store list) → cần collapsible UI để user xem khi cần. StorePreviewItem hiển thị mini-preview cửa hàng trong list trước khi user click vào.
+    </div>
+    <ul class="commit-list">
+      <li class="l"><span class="author l">[Hải/mini-app]</span> <b>Collapsible sections cho reward + voucher details</b>: hotline + content rendering <span class="date">12/05</span></li>
+      <li class="l"><span class="author l">[Hải/mini-app]</span> <b>StorePreviewItem component</b> + update styles cho reward + voucher detail pages <span class="date">12/05</span></li>
+      <li class="l"><span class="author l">[Hải/mini-app]</span> Clean up comments + improve styles cho collapsible sections + store previews <span class="date">13/05</span></li>
+    </ul>
+  </div>
+
+  <!-- F7: Kafka Shared Cluster Config -->
+  <div class="feature-card f7">
+    <div class="feature-header">
+      <div class="feature-name">📡 F7 — Kafka Shared Cluster Config + Customer Sync</div>
+      <div class="feature-tags">
+        <span class="tag-repo">rewards-v2</span>
+        <span class="tag-status status-done">DONE</span>
+      </div>
+    </div>
+    <div class="contributors">
+      <span class="contributor t"><span class="dot"></span>Trang<span class="count">1 commit</span></span>
+      <span class="contributor l"><span class="dot"></span>Hải<span class="count">4 commits</span></span>
+    </div>
+    <div class="feature-desc">
+      <b>Lý do nghiệp vụ:</b> Shared Kafka cluster giữa các CNV services → cần externalize topic name + consumer group ID. Reward-v2 subscribe topic <code>cnv_sync_ecommerce_customer</code> để sync customer data từ CDP backend.
+    </div>
+    <ul class="commit-list">
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> <b>Externalize Kafka topic names + consumer group IDs</b> sang property-based config để hỗ trợ shared cluster environments <span class="date">13/05</span></li>
+      <li class="l"><span class="author l">[Hải/rewards-v2]</span> Add <code>CNV_SYNC_ECOMMERCE_CUSTOMER</code> topic + update consumer config + refactor <code>ContactPayload</code> + <code>KafkaCnvMessage</code> <span class="date">11/05</span></li>
+      <li class="l"><span class="author l">[Hải/rewards-v2]</span> Integrate <code>AccountRewardItemStatsService</code> per-vendor filtering trong reward item retrieval <span class="date">11/05</span></li>
+      <li class="l"><span class="author l">[Hải/rewards-v2]</span> <b>Customer sync logging</b> với Kafka message handling + persistence <span class="date">13/05</span></li>
+      <li class="l"><span class="author l">[Hải/rewards-v2]</span> Remove <code>AUTO_OFFSET_RESET_CONFIG</code> from consumer properties <span class="date">13/05</span></li>
+    </ul>
+  </div>
+
+  <!-- F8: Staging Config + Security -->
+  <div class="feature-card f8">
+    <div class="feature-header">
+      <div class="feature-name">🔐 F8 — Staging Config + Security Hardening</div>
+      <div class="feature-tags">
+        <span class="tag-repo">rewards-v2</span>
+        <span class="tag-status status-done">DONE</span>
+      </div>
+    </div>
+    <div class="contributors">
+      <span class="contributor t"><span class="dot"></span>Trang<span class="count">8 commits</span></span>
+    </div>
+    <div class="feature-desc">
+      <b>Lý do nghiệp vụ:</b> Chuẩn bị môi trường staging cho UAT — config Kafka, AES secret, public key file-based signature verification. Fail-late init pattern: app không crash khi config thiếu, chỉ fail khi thực sự dùng tới.
+    </div>
+    <ul class="commit-list">
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> <b>Update staging configurations</b> với static database, Kafka, AES secret credentials <span class="date">13/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> Add <b>default Kafka + integration config values</b> + update AES256Utils sang <b>fail-late initialization pattern</b> <span class="date">13/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> Transition to <b>file-based public key configuration</b> cho signature verification + make service properties optional để prevent startup failures <span class="date">13/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> Enable <b>CnvConnect mock mode</b> trong staging configuration <span class="date">14/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> Update loyalty service URL + mock flags trong staging env config <span class="date">14/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> Remove AES configuration properties + add environment-specific <code>.gitignore</code> files <span class="date">14/05</span></li>
+      <li class="t"><span class="author t">[Trang/rewards-v2]</span> Delete ingress + add properties <span class="date">13-14/05</span></li>
+    </ul>
+  </div>
+
+  <!-- F9: FE Polish & Loading UX -->
+  <div class="feature-card f9">
+    <div class="feature-header">
+      <div class="feature-name">✨ F9 — Frontend Polish (Loading UX + GOTIT_OTHER + Vendor Display)</div>
+      <div class="feature-tags">
+        <span class="tag-repo">cdp-frontend</span>
+        <span class="tag-status status-done">DONE</span>
+      </div>
+    </div>
+    <div class="contributors">
+      <span class="contributor l"><span class="dot"></span>Hải<span class="count">5 commits</span></span>
+    </div>
+    <div class="feature-desc">
+      <b>Lý do nghiệp vụ:</b> UX nâng cao trên Account Admin — skeleton loaders, context-aware save button, dynamic badge cho connection status, GOTIT_OTHER brand logo (placeholder cho brand chưa map).
+    </div>
+    <ul class="commit-list">
+      <li class="l"><span class="author l">[Hải/cdp-frontend]</span> <b>Skeleton loaders + context-aware save button</b> — enhance loading experience <span class="date">15/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-frontend]</span> Update connection status display với <b>dynamic badge classes</b> <span class="date">13/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-frontend]</span> Add <b>brand logo cho 'GOTIT_OTHER'</b> trong config + connection detail components <span class="date">15/05</span></li>
+      <li class="l"><span class="author l">[Hải/cdp-frontend]</span> Correct optional chaining cho vendor hotline display <span class="date">14/05</span></li>
+    </ul>
+  </div>
+
+  <!-- ==================== PER PERSON SUMMARY ==================== -->
+  <div class="section-title">👥 Tóm tắt theo thành viên</div>
+
+  <div class="person-card t">
+    <div class="person-header">
+      <div class="avatar t">T</div>
+      <div>
+        <div class="person-name">Trang (Như Trang)</div>
+        <div class="person-meta">23 commits · rewards-v2 only · Architecture + Reconciliation backbone</div>
+      </div>
+    </div>
+    <div class="person-pills">
+      <span class="person-pill">F1 Per-Account GotIt Credential (AES-256)</span>
+      <span class="person-pill">F2 Reconciliation centralize event/DTO</span>
+      <span class="person-pill">F4 CRM Admin module split</span>
+      <span class="person-pill">F5 Price Snapshot + PARTNER skip balance</span>
+      <span class="person-pill">F7 Kafka shared cluster</span>
+      <span class="person-pill">F8 Staging + K8s + Security</span>
+    </div>
+    <ul class="focus-list">
+      <li><b>Trục lớn nhất:</b> Hoàn thiện infrastructure cho UAT — K8s deployment configs, AES256 secret management, Kafka externalize, public key file-based signature, fail-late init pattern.</li>
+      <li><b>Architecture quan trọng:</b> Split <code>crm-admin</code> ra microservice riêng (port 9091); centralize ReconciliationEvent + audit DTO vào <code>domain</code> module để share giữa modules.</li>
+      <li><b>Reconciliation enable:</b> Branch-specific success match pair (CNV vs partner), tách logic đối soát theo từng vendor flow.</li>
+      <li><b>Redemption refinement:</b> Price snapshotting vào RedemptionOrder (giá tại thời điểm đặt) + VendorConnectionType partner skip balance + decouple validation qua typed service interface.</li>
+    </ul>
+  </div>
+
+  <div class="person-card h">
+    <div class="person-header">
+      <div class="avatar h">H</div>
+      <div>
+        <div class="person-name">Huy (Trần Lê Huy)</div>
+        <div class="person-meta">15 commits · rewards-v2 + cdp-backend + cdp-frontend · Reconciliation feature end-to-end</div>
+      </div>
+    </div>
+    <div class="person-pills">
+      <span class="person-pill">F2 Reconciliation API + UI (E2E owner)</span>
+      <span class="person-pill">F5 RedemptionOrder price cleanup</span>
+    </div>
+    <ul class="focus-list">
+      <li><b>Đỉnh tuần:</b> Ship trọn vẹn feature <b>Reconciliation Vendor Voucher</b> end-to-end — BE service trong rewards-v2 (atomic finalize, hard-skip guard, duplicate detection), Gateway API trong cdp-backend (Account Reconciliation API + filtering), FE module trong cdp-frontend (Reconciliation module + keyword/brandId filter + transaction terminology rename).</li>
+      <li><b>Race-safe:</b> Atomic finalize method để tránh race condition khi 2 worker cùng finalize 1 report; hard-skip guard cho terminal state report (đã COMPLETED/FAILED không bị re-finalize).</li>
+      <li><b>UX:</b> Rename "reconciliation row" → "transaction" để user dễ hiểu trên UI.</li>
+      <li><b>Iteration:</b> merchantCode field add → rollback (15/5) — chờ confirm spec.</li>
+    </ul>
+  </div>
+
+  <div class="person-card l">
+    <div class="person-header">
+      <div class="avatar l">L</div>
+      <div>
+        <div class="person-name">Hải (Hoàng Tuấn Hải / haiht1)</div>
+        <div class="person-meta">33 commits · rewards-v2 + cdp-backend + cdp-frontend + mini-app · Pace cao nhất tuần</div>
+      </div>
+    </div>
+    <div class="person-pills">
+      <span class="person-pill">F1 GotIt Credential Controller + FE form</span>
+      <span class="person-pill">F3 Sync GotIt Async owner E2E</span>
+      <span class="person-pill">F5 pointsRequired Long</span>
+      <span class="person-pill">F6 Mini App Collapsible UX</span>
+      <span class="person-pill">F7 Kafka Customer Sync</span>
+      <span class="person-pill">F9 FE Loading UX + GOTIT_OTHER</span>
+    </div>
+    <ul class="focus-list">
+      <li><b>Đỉnh tuần:</b> Ship trọn vẹn feature <b>Sync với GotIt async</b> end-to-end — BE async sync trong rewards-v2 (orphan brand → "Khác", deactivation sweeps), Gateway forward trong cdp-backend (status polling), FE button + progress polling trong cdp-frontend.</li>
+      <li><b>Partner Credentials Form:</b> Owner trục FE cho F1 Per-Account GotIt — inline error handling + server validation + normalize vendor code + transaction prefix placeholder.</li>
+      <li><b>Reward type fix:</b> <code>pointsRequired Integer → Long</b> xuyên 2 repo (rewards-v2 + cdp-backend).</li>
+      <li><b>Mini App polish:</b> Collapsible sections cho reward/voucher detail + StorePreviewItem component — cải thiện UX list cửa hàng.</li>
+      <li><b>Customer sync foundation:</b> Subscribe Kafka <code>cnv_sync_ecommerce_customer</code> + integrate per-vendor filter cho reward item retrieval.</li>
+    </ul>
+  </div>
+
+  <footer>
+    Generated 15/05/2026 (ISO W20) · Khoảng <b>11/05 → 15/05</b> · Lọc theo author: Như Trang/Trang Phan, huy, haiht1 · 5 repository: rewards-v2, cdp-backend, cdp-frontend, mini-app, net-core-platform-cnv (net-core: 0 commits tuần này)<br>
+    Phương pháp: <code>git log --all --since=2026-05-11 --until=2026-05-16 --no-merges</code> · Đã fetch origin trước khi tổng hợp.
+  </footer>
+
+</div>
+</body>
+</html>

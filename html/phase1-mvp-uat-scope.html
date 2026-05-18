@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Phase 1 MVP — UAT Scope · Reward v2</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding: 24px;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1400px; margin: 0 auto; }
+
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding: 28px;
+    background: linear-gradient(135deg, rgba(34,197,94,.15), rgba(59,130,246,.15));
+    border: 1px solid rgba(148,163,184,.2);
+    border-radius: 16px;
+  }
+  header h1 {
+    font-size: 28px;
+    background: linear-gradient(90deg, #34d399, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  header p { color: #94a3b8; font-size: 14px; }
+  header .breadcrumb { color: #64748b; font-size: 12px; margin-top: 6px; }
+  header .breadcrumb a { color: #60a5fa; text-decoration: none; }
+
+  /* Top KPIs */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .kpi {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+  .kpi.green::before { background: #10b981; }
+  .kpi.blue::before  { background: #3b82f6; }
+  .kpi.purple::before{ background: #a78bfa; }
+  .kpi.pink::before  { background: #ec4899; }
+  .kpi-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; }
+  .kpi-value { font-size: 30px; font-weight: 700; color: #f1f5f9; }
+  .kpi-sub   { font-size: 12px; color: #64748b; margin-top: 4px; }
+
+  /* Cards */
+  .card {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .card h2 {
+    font-size: 18px;
+    color: #f1f5f9;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card h2::before {
+    content: "";
+    width: 4px; height: 20px;
+    background: linear-gradient(180deg, #34d399, #60a5fa);
+    border-radius: 2px;
+  }
+  .card h3 {
+    font-size: 14px;
+    color: #cbd5e1;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .card .sub {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  /* Two-column compare */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 980px) { .compare { grid-template-columns: 1fr; } }
+
+  .pane {
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid;
+  }
+  .pane.mvp {
+    background: linear-gradient(135deg, rgba(16,185,129,.08), rgba(59,130,246,.08));
+    border-color: rgba(34,197,94,.3);
+  }
+  .pane.defer {
+    background: linear-gradient(135deg, rgba(148,163,184,.06), rgba(100,116,139,.06));
+    border-color: rgba(148,163,184,.25);
+  }
+  .pane h2 { margin-bottom: 6px; }
+  .pane .pane-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 12px;
+  }
+  .pane.mvp .pane-tag { background: rgba(34,197,94,.18); color: #6ee7b7; border: 1px solid rgba(34,197,94,.3); }
+  .pane.defer .pane-tag { background: rgba(148,163,184,.15); color: #cbd5e1; border: 1px solid rgba(148,163,184,.25); }
+  .pane .pane-meta {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    background: rgba(15,23,42,.5);
+    border-radius: 8px;
+  }
+
+  .task {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 12px;
+    background: rgba(15,23,42,.4);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    border-left: 3px solid transparent;
+  }
+  .task.t-trang  { border-left-color: #38bdf8; }
+  .task.t-huy    { border-left-color: #a78bfa; }
+  .task.t-hai    { border-left-color: #ec4899; }
+  .task.t-team   { border-left-color: #94a3b8; }
+  .task .who {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 11px;
+    color: #0f172a;
+  }
+  .who.trang { background: #38bdf8; }
+  .who.huy   { background: #a78bfa; }
+  .who.hai   { background: #ec4899; }
+  .who.team  { background: #94a3b8; }
+  .task .body { color: #e2e8f0; }
+  .task .body small { display: block; color: #64748b; font-size: 11px; margin-top: 2px; }
+  .task .meta {
+    font-size: 11px;
+    color: #94a3b8;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .task .week {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(244,114,182,.15);
+    color: #f9a8d4;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .task.deferred .week { background: rgba(148,163,184,.15); color: #cbd5e1; }
+
+  /* Timeline diagram */
+  .timeline {
+    background: rgba(15,23,42,.4);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .tl-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .tl-label { font-size: 12px; color: #cbd5e1; font-weight: 600; }
+  .tl-bar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    height: 32px;
+    position: relative;
+  }
+  .tl-cell {
+    background: rgba(30,41,59,.6);
+    border-radius: 4px;
+    border: 1px solid rgba(148,163,184,.1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #94a3b8;
+  }
+  .tl-cell.dev      { background: linear-gradient(90deg, rgba(59,130,246,.4), rgba(139,92,246,.4)); color: #e0e7ff; font-weight: 600; }
+  .tl-cell.uat      { background: linear-gradient(90deg, rgba(34,197,94,.45), rgba(16,185,129,.45)); color: #d1fae5; font-weight: 600; }
+  .tl-cell.harden   { background: linear-gradient(90deg, rgba(245,158,11,.35), rgba(249,115,22,.35)); color: #fed7aa; font-weight: 600; }
+  .tl-cell.golive   { background: linear-gradient(90deg, rgba(244,114,182,.5), rgba(236,72,153,.5)); color: #fce7f3; font-weight: 700; }
+  .tl-cell.empty    { opacity: .3; }
+  .tl-cell.dev-light { background: rgba(59,130,246,.18); color: #93c5fd; }
+
+  .tl-axis {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 12px;
+    margin-bottom: 8px;
+    color: #64748b;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .tl-axis-bar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    text-align: center;
+  }
+  .tl-saved {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: rgba(34,197,94,.1);
+    border-left: 3px solid #34d399;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #d1fae5;
+  }
+
+  /* Checklist */
+  .checklist { display: flex; flex-direction: column; gap: 8px; }
+  .check-item {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 10px;
+    align-items: start;
+    padding: 12px 14px;
+    background: rgba(15,23,42,.4);
+    border-radius: 8px;
+    border-left: 3px solid;
+    font-size: 13px;
+  }
+  .check-item.entry  { border-color: #34d399; }
+  .check-item.exit   { border-color: #60a5fa; }
+  .check-item.risk   { border-color: #f59e0b; }
+  .check-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .check-item.entry .check-icon { background: rgba(34,197,94,.2); color: #34d399; }
+  .check-item.exit .check-icon  { background: rgba(96,165,250,.2); color: #60a5fa; }
+  .check-item.risk .check-icon  { background: rgba(245,158,11,.2); color: #fbbf24; }
+  .check-body strong { color: #f1f5f9; display: block; margin-bottom: 2px; }
+  .check-body span { color: #94a3b8; font-size: 12px; }
+
+  /* Dependency lines */
+  .dep-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .dep {
+    padding: 14px;
+    background: rgba(15,23,42,.4);
+    border-radius: 8px;
+    border-left: 3px solid #f59e0b;
+    font-size: 13px;
+  }
+  .dep strong { color: #fbbf24; display: block; margin-bottom: 6px; font-size: 13px; }
+  .dep span { color: #cbd5e1; }
+  .dep .arrow { color: #f59e0b; margin: 0 4px; }
+
+  /* Owner allocation */
+  .alloc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 900px) { .alloc-grid { grid-template-columns: 1fr; } }
+  .alloc {
+    padding: 16px;
+    background: rgba(15,23,42,.4);
+    border-radius: 10px;
+    border-top: 3px solid;
+  }
+  .alloc.trang { border-color: #38bdf8; }
+  .alloc.huy   { border-color: #a78bfa; }
+  .alloc.hai   { border-color: #ec4899; }
+  .alloc-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .alloc-head .who { width: 32px; height: 32px; font-size: 13px; }
+  .alloc-head .name { font-weight: 700; color: #f1f5f9; font-size: 14px; }
+  .alloc-head .role { color: #94a3b8; font-size: 11px; }
+  .alloc ul { list-style: none; padding: 0; margin: 0; }
+  .alloc li {
+    padding: 6px 0;
+    border-top: 1px solid rgba(148,163,184,.08);
+    font-size: 12px;
+    color: #cbd5e1;
+    display: grid;
+    grid-template-columns: 38px 1fr;
+    gap: 8px;
+  }
+  .alloc li:first-child { border-top: none; }
+  .alloc li .wk {
+    font-size: 10px;
+    color: #f9a8d4;
+    background: rgba(244,114,182,.12);
+    padding: 1px 5px;
+    border-radius: 4px;
+    text-align: center;
+    height: fit-content;
+    font-weight: 600;
+  }
+  .alloc-total {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(148,163,184,.15);
+    font-size: 11px;
+    color: #94a3b8;
+  }
+  .alloc-total strong { color: #f1f5f9; }
+
+  /* Decision footer */
+  .decision {
+    background: linear-gradient(135deg, rgba(244,114,182,.1), rgba(139,92,246,.1));
+    border: 1px solid rgba(244,114,182,.3);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 20px;
+  }
+  .decision h2 {
+    color: #f9a8d4;
+    margin-bottom: 12px;
+  }
+  .decision h2::before { background: linear-gradient(180deg, #f472b6, #a78bfa); }
+  .decision-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .decision-card {
+    padding: 12px 14px;
+    background: rgba(15,23,42,.5);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .decision-card strong { color: #f9a8d4; display: block; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .decision-card span { color: #cbd5e1; }
+
+  footer {
+    text-align: center;
+    padding: 16px;
+    color: #64748b;
+    font-size: 12px;
+    margin-top: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Phase 1 MVP — UAT Scope · Reward v2</h1>
+    <p>Cắt 17 task xuống 11 task UAT-blocking để QC team chạy UAT sớm hơn 1.5 tuần</p>
+    <div class="breadcrumb">Tham chiếu: <a href="team-performance-dashboard.html">team-performance-dashboard.html</a> · Cập nhật 05/05/2026</div>
+  </header>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi green">
+      <div class="kpi-label">MVP UAT-blocking</div>
+      <div class="kpi-value">15</div>
+      <div class="kpi-sub">11 feature + 3 UAT readiness + 1 Web Account Dashboard</div>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-label">Defer Phase 1.5</div>
+      <div class="kpi-value">14</div>
+      <div class="kpi-sub">infra · ops · hardening + Web Account Đối soát</div>
+    </div>
+    <div class="kpi purple">
+      <div class="kpi-label">UAT có thể start</div>
+      <div class="kpi-value">19/5</div>
+      <div class="kpi-sub">W8 thay vì 30/5 (sớm 1.5 tuần)</div>
+    </div>
+    <div class="kpi pink">
+      <div class="kpi-label">Go-live target</div>
+      <div class="kpi-value">30/5</div>
+      <div class="kpi-sub">không đổi · UAT + hardening song song</div>
+    </div>
+  </div>
+
+  <!-- Timeline diagram -->
+  <div class="card">
+    <h2>So sánh timeline: Plan hiện tại vs MVP-first</h2>
+    <p class="sub">Tách MVP để UAT chạy song song với hardening — không kéo dài tổng thời gian, mở rộng cửa sổ phát hiện bug.</p>
+    <div class="timeline">
+      <div class="tl-axis">
+        <div></div>
+        <div class="tl-axis-bar">
+          <div>W6 · 5/5</div>
+          <div>W7 · 12/5</div>
+          <div>W8 · 19/5</div>
+          <div>W9 · 26/5</div>
+          <div>W10 · 2/6</div>
+        </div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-label">Plan cũ (mixed)</div>
+        <div class="tl-bar">
+          <div class="tl-cell dev">Dev all 17</div>
+          <div class="tl-cell dev">Dev all 17</div>
+          <div class="tl-cell dev">Dev all 17</div>
+          <div class="tl-cell golive">Hardening + Go-live</div>
+          <div class="tl-cell empty">—</div>
+        </div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-label">MVP-first (đề xuất)</div>
+        <div class="tl-bar">
+          <div class="tl-cell dev">MVP dev (11)</div>
+          <div class="tl-cell dev">MVP dev (11) + smoke</div>
+          <div class="tl-cell uat">UAT bắt đầu</div>
+          <div class="tl-cell uat">UAT + hot-fix</div>
+          <div class="tl-cell golive">Go-live</div>
+        </div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-label">Phase 1.5 hardening</div>
+        <div class="tl-bar">
+          <div class="tl-cell empty">—</div>
+          <div class="tl-cell dev-light">Dev parallel</div>
+          <div class="tl-cell harden">Migration · Audit · Load test</div>
+          <div class="tl-cell harden">Docker · Replay · Reconcile</div>
+          <div class="tl-cell golive">Ship</div>
+        </div>
+      </div>
+
+      <div class="tl-saved">
+        <strong>Lợi:</strong> UAT có 8 ngày làm việc thay vì 5 (W8+W9 thay vì chỉ W9). Bug phát hiện sớm có thời gian fix mà không lùi go-live. Hardening không cản UAT vì chạy ở môi trường tách.
+      </div>
+    </div>
+  </div>
+
+  <!-- Two-column compare -->
+  <div class="compare">
+    <!-- MVP scope -->
+    <div class="pane mvp">
+      <h2>Phase 1 MVP — UAT Scope</h2>
+      <span class="pane-tag">15 tasks · ~31.5 dev-day · close W7-W8</span>
+      <div class="pane-meta">
+        Toàn bộ user-facing flow + integration GotIt + auto-refund + 3 task UAT readiness W6 + Web Account Dashboard.
+        Đây là tập tối thiểu để QC chạy được kịch bản end-to-end:
+        <strong style="color:#6ee7b7;">redeem → check giá → đẩy GotIt → nhận voucher → refund khi hết hàng → notification + admin xem dashboard</strong>.
+        <br><br>
+        <strong style="color:#fbbf24;">⚠️ Update FE Account Admin:</strong> không phải 100% (7/7) như báo cáo W4 — còn thiếu <strong>Dashboard</strong> (MVP) và <strong>Đối soát Account</strong> (Phase 1.5).
+      </div>
+
+      <h3 style="color:#fbbf24;">🆕 UAT Readiness W6 (5/5–9/5) — 3 task</h3>
+      <div class="task t-trang">
+        <div class="who trang">T</div>
+        <div class="body">Đồng bộ server (config + data sync local/staging/UAT)<small>Tuần này — gate trước khi promote build</small></div>
+        <div class="meta"><span class="week">W6</span><br>1d</div>
+      </div>
+      <div class="task t-huy">
+        <div class="who huy">H</div>
+        <div class="body">Chuẩn bị data UAT (seed user, vendor mock, fixtures)<small>Tuần này — QC cần data ready trước W8</small></div>
+        <div class="meta"><span class="week">W6</span><br>1.5d</div>
+      </div>
+      <div class="task t-trang">
+        <div class="who trang">T</div>
+        <div class="body">Refactor module worker (cleanup tech debt)<small>Tuần này — Trang lead + Hải pair review · giảm risk worker bug trong UAT</small></div>
+        <div class="meta"><span class="week">W6</span><br>1.5d</div>
+      </div>
+
+      <h3 style="color:#6ee7b7; margin-top:14px;">Miniapp (User-facing) — 4 task</h3>
+      <div class="task t-huy">
+        <div class="who huy">H</div>
+        <div class="body">1.5 Giỏ Quà E-Voucher<small>FE + Miniapp badge trạng thái</small></div>
+        <div class="meta"><span class="week">W6</span><br>2d</div>
+      </div>
+      <div class="task t-hai">
+        <div class="who hai">L</div>
+        <div class="body">1.6 Popup "Chờ Xử Lý"<small>WebSocket / polling</small></div>
+        <div class="meta"><span class="week">W6</span><br>1.5d</div>
+      </div>
+      <div class="task t-hai">
+        <div class="who hai">L</div>
+        <div class="body">1.7 + 1.8 Alert Hết Hàng + Disclaimer<small>Edge case bắt buộc UAT</small></div>
+        <div class="meta"><span class="week">W6</span><br>1.5d</div>
+      </div>
+      <div class="task t-huy">
+        <div class="who huy">H</div>
+        <div class="body">C4 Voucher Detail page<small>Màn hình chi tiết voucher</small></div>
+        <div class="meta"><span class="week">W7</span><br>2d</div>
+      </div>
+
+      <h3 style="color:#6ee7b7; margin-top:14px;">Integration GotIt — 2 task</h3>
+      <div class="task t-trang">
+        <div class="who trang">T</div>
+        <div class="body">4.3 API Check giá realtime GotIt<small>Mọi đơn redeem đều gọi</small></div>
+        <div class="meta"><span class="week">W6</span><br>1d</div>
+      </div>
+      <div class="task t-huy">
+        <div class="who huy">H</div>
+        <div class="body">4.10 Webhook GotIt integration test<small>Voucher trả về user</small></div>
+        <div class="meta"><span class="week">W6</span><br>1d</div>
+      </div>
+
+      <h3 style="color:#6ee7b7; margin-top:14px;">Business Logic — 2 task</h3>
+      <div class="task t-trang">
+        <div class="who trang">T</div>
+        <div class="body">4.7 Auto-Refund Engine<small>Deny points + release balance + status</small></div>
+        <div class="meta"><span class="week">W7</span><br>2d</div>
+      </div>
+      <div class="task t-hai">
+        <div class="who hai">L</div>
+        <div class="body">4.8 Out-of-Stock Handler BE<small>Pair với 1.7 alert</small></div>
+        <div class="meta"><span class="week">W6</span><br>1d</div>
+      </div>
+
+      <h3 style="color:#6ee7b7; margin-top:14px;">Notification — 2 task</h3>
+      <div class="task t-hai">
+        <div class="who hai">L</div>
+        <div class="body">4.9 Push Notification full luồng + Fix ZNS<small>UAT confirm thông báo</small></div>
+        <div class="meta"><span class="week">W7</span><br>2d</div>
+      </div>
+      <div class="task t-hai">
+        <div class="who hai">L</div>
+        <div class="body">C2 Notification BE<small>Email/SMS top-up event</small></div>
+        <div class="meta"><span class="week">W7</span><br>2d</div>
+      </div>
+
+      <h3 style="color:#6ee7b7; margin-top:14px;">Web Account Admin — 1 task 🆕</h3>
+      <div class="task t-huy">
+        <div class="who huy">H</div>
+        <div class="body">Web Account Dashboard (KPI overview, balance, redeem stats)<small>Gap mới phát hiện · admin cần dashboard cho UAT · 7/7 màn cũ chưa cover</small></div>
+        <div class="meta"><span class="week">W7</span><br>2.5d</div>
+      </div>
+
+      <h3 style="color:#6ee7b7; margin-top:14px;">Smoke Gate — 1 task</h3>
+      <div class="task t-team">
+        <div class="who team">★</div>
+        <div class="body">E2E Smoke Test toàn flow GotIt + Dashboard<small>Gate vào UAT — tất cả 14 task trên đã merge</small></div>
+        <div class="meta"><span class="week">W7-W8</span><br>1.5d</div>
+      </div>
+    </div>
+
+    <!-- Defer scope -->
+    <div class="pane defer">
+      <h2>Phase 1.5 — Hardening (post-UAT entry)</h2>
+      <span class="pane-tag">14 tasks · chạy song song UAT · close W9</span>
+      <div class="pane-meta">
+        Không block UAT. Có thể ship lên môi trường staging sau hoặc release pack riêng trước go-live.
+        UAT env có config flag để off audit log + replay prevention tránh test data bị block.
+      </div>
+
+      <h3 style="color:#cbd5e1;">Infra & Migration — 4 task</h3>
+      <div class="task t-trang deferred">
+        <div class="who trang">T</div>
+        <div class="body">A1 Flyway Migration Tool<small>Setup + baseline + rollback</small></div>
+        <div class="meta"><span class="week">W8</span><br>2d</div>
+      </div>
+      <div class="task t-trang deferred">
+        <div class="who trang">T</div>
+        <div class="body">A3 Actuator + Healthcheck<small>Ops monitoring</small></div>
+        <div class="meta"><span class="week">W8</span><br>1d</div>
+      </div>
+      <div class="task t-trang deferred">
+        <div class="who trang">T</div>
+        <div class="body">E1 Dockerfile cho 12 modules<small>10 worker + 2 API · UAT chỉ cần subset</small></div>
+        <div class="meta"><span class="week">W9</span><br>1.5d</div>
+      </div>
+      <div class="task t-trang deferred">
+        <div class="who trang">T</div>
+        <div class="body">E3 Secret Management<small>K8s Secrets / Vault</small></div>
+        <div class="meta"><span class="week">W9</span><br>1d</div>
+      </div>
+
+      <h3 style="color:#cbd5e1; margin-top:14px;">Security & Audit — 3 task</h3>
+      <div class="task t-trang deferred">
+        <div class="who trang">T</div>
+        <div class="body">A2 Audit Log CRM admin actions<small>Admin-only · không block user UAT</small></div>
+        <div class="meta"><span class="week">W8</span><br>2d</div>
+      </div>
+      <div class="task t-hai deferred">
+        <div class="who hai">L</div>
+        <div class="body">C6 Webhook Replay Prevention<small>Timestamp + nonce · post-UAT</small></div>
+        <div class="meta"><span class="week">W9</span><br>1d</div>
+      </div>
+      <div class="task t-hai deferred">
+        <div class="who hai">L</div>
+        <div class="body">C9 Data Retention Policy + cleanup<small>Compliance · post go-live ok</small></div>
+        <div class="meta"><span class="week">W9</span><br>1d</div>
+      </div>
+
+      <h3 style="color:#cbd5e1; margin-top:14px;">Performance & Test — 3 task</h3>
+      <div class="task t-huy deferred">
+        <div class="who huy">H</div>
+        <div class="body">D1 Load Test (k6) script + execution<small>Performance · không phải user UAT</small></div>
+        <div class="meta"><span class="week">W8-W9</span><br>3.5d</div>
+      </div>
+      <div class="task t-trang deferred">
+        <div class="who trang">T</div>
+        <div class="body">A6 Multi-tenant Isolation Test<small>Automated test · không phải QC UAT</small></div>
+        <div class="meta"><span class="week">W7</span><br>2d</div>
+      </div>
+      <div class="task t-huy deferred">
+        <div class="who huy">H</div>
+        <div class="body">Performance optimization Miniapp<small>Lazy load · sau khi UAT confirm flow</small></div>
+        <div class="meta"><span class="week">W7+W9</span><br>4d</div>
+      </div>
+
+      <h3 style="color:#cbd5e1; margin-top:14px;">Back-office & Ops Tool — 4 task</h3>
+      <div class="task t-trang deferred">
+        <div class="who trang">T</div>
+        <div class="body">4.12 Reconciliation BE<small>Đối soát · finance dùng sau khi có data UAT</small></div>
+        <div class="meta"><span class="week">W8-W9</span><br>3.5d</div>
+      </div>
+      <div class="task t-huy deferred">
+        <div class="who huy">H</div>
+        <div class="body">🆕 Web Account Đối soát UI<small>Pair với 4.12 BE · ship sau khi BE close W9 · gap mới phát hiện trong Web Account</small></div>
+        <div class="meta"><span class="week">W9</span><br>2.5d</div>
+      </div>
+      <div class="task t-trang deferred">
+        <div class="who trang">T</div>
+        <div class="body">C1 Refund Manual Tool BE<small>Admin tool · dùng Swagger tạm</small></div>
+        <div class="meta"><span class="week">W7</span><br>1d</div>
+      </div>
+      <div class="task t-huy deferred">
+        <div class="who huy">H</div>
+        <div class="body">C10 Worker Heartbeat dashboard<small>Ops monitoring · simple HTML</small></div>
+        <div class="meta"><span class="week">W8</span><br>2d</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Owner allocation -->
+  <div class="card">
+    <h2>Phân bổ MVP theo người (W6–W7)</h2>
+    <p class="sub">Workload cân bằng giữa 3 dev. Hải gánh nhiều UI/UX nhất do scope MVP nặng user-facing.</p>
+    <div class="alloc-grid">
+      <div class="alloc trang">
+        <div class="alloc-head">
+          <div class="who trang">T</div>
+          <div>
+            <div class="name">Trang</div>
+            <div class="role">BE Critical · Integration · Infra</div>
+          </div>
+        </div>
+        <ul>
+          <li><span class="wk">W6</span><span>🆕 Đồng bộ server (config + data sync) — 1d</span></li>
+          <li><span class="wk">W6</span><span>🆕 Refactor module worker (lead + Hải pair) — 1.5d</span></li>
+          <li><span class="wk">W6</span><span>4.3 API Check giá realtime GotIt — 1d</span></li>
+          <li><span class="wk">W7</span><span>4.7 Auto-Refund Engine — 2d</span></li>
+        </ul>
+        <div class="alloc-total"><strong>4 MVP tasks · 5.5d</strong> · W6 đầy (3.5d) → buffer 1.5d cho UAT prep · Phase 1.5: Migration, Audit, Reconcile, Docker</div>
+      </div>
+
+      <div class="alloc huy">
+        <div class="alloc-head">
+          <div class="who huy">H</div>
+          <div>
+            <div class="name">Huy</div>
+            <div class="role">FE/Miniapp · Web Account · UAT Data</div>
+          </div>
+        </div>
+        <ul>
+          <li><span class="wk">W6</span><span>1.5 Giỏ Quà E-Voucher — 2d</span></li>
+          <li><span class="wk">W6</span><span>4.10 Webhook GotIt integration test — 1d</span></li>
+          <li><span class="wk">W6</span><span>🆕 Chuẩn bị data UAT (seed + mock + fixtures) — 1.5d</span></li>
+          <li><span class="wk">W7</span><span>C4 Voucher Detail page — 2d</span></li>
+          <li><span class="wk">W7</span><span>🆕 Web Account Dashboard — 2.5d</span></li>
+          <li><span class="wk">W9</span><span>🆕 Web Account Đối soát UI (Phase 1.5) — 2.5d</span></li>
+        </ul>
+        <div class="alloc-total"><strong>5 MVP tasks · 9d</strong> + Đối soát 2.5d · <strong style="color:#fbbf24;">⚠️ W7 quá tải (4.5d)</strong> → cần Hải pair Voucher Detail HOẶC defer Performance optimization · Phase 1.5: Load test, Heartbeat, Đối soát UI</div>
+      </div>
+
+      <div class="alloc hai">
+        <div class="alloc-head">
+          <div class="who hai">L</div>
+          <div>
+            <div class="name">Hải</div>
+            <div class="role">Miniapp UX · Notification · Worker</div>
+          </div>
+        </div>
+        <ul>
+          <li><span class="wk">W6</span><span>1.6 Popup Chờ Xử Lý — 1.5d</span></li>
+          <li><span class="wk">W6</span><span>1.7 + 1.8 Alert + Disclaimer — 1.5d</span></li>
+          <li><span class="wk">W6</span><span>4.8 Out-of-Stock Handler BE — 1d</span></li>
+          <li><span class="wk">W6</span><span>🆕 Pair review Refactor worker (với Trang) — 0.5d</span></li>
+          <li><span class="wk">W7</span><span>4.9 Push + Fix ZNS — 2d</span></li>
+          <li><span class="wk">W7</span><span>C2 Notification BE — 2d</span></li>
+        </ul>
+        <div class="alloc-total"><strong>5 MVP tasks + 1 pair · 8.5d</strong> · W6 full (4.5d) · Phase 1.5: Replay Prevention, Data Retention</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UAT entry/exit criteria -->
+  <div class="compare">
+    <div class="card" style="margin-bottom:0;">
+      <h2 style="color:#34d399;">UAT Entry Criteria (gate vào W8)</h2>
+      <p class="sub">Phải đạt 100% trước khi promote build lên UAT env và bàn giao QC.</p>
+      <div class="checklist">
+        <div class="check-item entry">
+          <div class="check-icon">✓</div>
+          <div class="check-body"><strong>15/15 MVP task merged + smoke pass</strong><span>11 feature + 3 UAT readiness (đồng bộ server, data UAT, refactor worker) + 1 Web Account Dashboard · E2E flow GotIt thông từ redeem → check giá → webhook → voucher → refund · Admin xem được dashboard</span></div>
+        </div>
+        <div class="check-item entry">
+          <div class="check-icon">✓</div>
+          <div class="check-body"><strong>Server đồng bộ + UAT env stable</strong><span>Config + data sync giữa local/staging/UAT đã verify · không drift schema · Trang ship trong W6</span></div>
+        </div>
+        <div class="check-item entry">
+          <div class="check-icon">✓</div>
+          <div class="check-body"><strong>Data UAT seed sẵn</strong><span>Test user, vendor mock GotIt, voucher fixtures, balance baseline · Huy ship trong W6 · QC dùng từ ngày đầu W8</span></div>
+        </div>
+        <div class="check-item entry">
+          <div class="check-icon">✓</div>
+          <div class="check-body"><strong>Worker module đã refactor</strong><span>Cleanup tech debt trước UAT để tránh false-positive bug · Trang lead, Hải pair · ship W6</span></div>
+        </div>
+        <div class="check-item entry">
+          <div class="check-icon">✓</div>
+          <div class="check-body"><strong>OAuth2 GotIt enable</strong><span>Vendor đã reply + scaffold đã wire-up · nếu chưa thì 4.7 Auto-Refund không kích hoạt được</span></div>
+        </div>
+        <div class="check-item entry">
+          <div class="check-icon">✓</div>
+          <div class="check-body"><strong>UAT env tách biệt</strong><span>Config flag off audit log + replay prevention · seed data UAT có sẵn</span></div>
+        </div>
+        <div class="check-item entry">
+          <div class="check-icon">✓</div>
+          <div class="check-body"><strong>QC test plan match scope</strong><span>11 task MVP phải có test case tương ứng · PM/QC ký duyệt trước W6 kết thúc</span></div>
+        </div>
+        <div class="check-item entry">
+          <div class="check-icon">✓</div>
+          <div class="check-body"><strong>Notification channel sandbox</strong><span>ZNS + email staging account ready · không spam user thật</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:0;">
+      <h2 style="color:#60a5fa;">UAT Exit Criteria (gate vào go-live)</h2>
+      <p class="sub">Đạt đủ trước go-live 30/5. Hardening Phase 1.5 phải close song song.</p>
+      <div class="checklist">
+        <div class="check-item exit">
+          <div class="check-icon">✓</div>
+          <div class="check-body"><strong>0 critical bug · ≤3 medium bug</strong><span>Critical = block redeem flow · Medium có workaround chấp nhận được</span></div>
+        </div>
+        <div class="check-item exit">
+          <div class="check-icon">✓</div>
+          <div class="check-body"><strong>Phase 1.5 hardening closed</strong><span>Migration, Audit Log, Docker, Secret Mgmt, Replay, Reconcile · 13 task</span></div>
+        </div>
+        <div class="check-item exit">
+          <div class="check-icon">✓</div>
+          <div class="check-body"><strong>Load test pass 1k user/sec</strong><span>D1 Huy chạy + report · không degrade quá 20%</span></div>
+        </div>
+        <div class="check-item exit">
+          <div class="check-icon">✓</div>
+          <div class="check-body"><strong>Production deploy dry-run</strong><span>DevOps deploy thử lên staging giống production · rollback plan ready</span></div>
+        </div>
+        <div class="check-item exit">
+          <div class="check-icon">✓</div>
+          <div class="check-body"><strong>Docs handover xong</strong><span>PM viết user guide + ops runbook · CRM admin biết dùng Swagger tạm</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dependencies & Risks -->
+  <div class="card">
+    <h2>Dependencies & Risks của cách cắt MVP</h2>
+    <p class="sub">Những điểm có thể làm vỡ kế hoạch — cần monitor weekly.</p>
+    <div class="dep-grid">
+      <div class="dep">
+        <strong>🔗 OAuth2 GotIt unblock W6</strong>
+        <span>Vendor reply <span class="arrow">→</span> wire-up scaffold <span class="arrow">→</span> 4.7 Auto-Refund chạy được. Nếu vendor không reply trong W6 đầu tuần, escalate qua PM/Total.</span>
+      </div>
+      <div class="dep">
+        <strong>🔗 Hải overload tuần W6</strong>
+        <span>5 MVP task / 8d trong 2 tuần — cao nhất team. Nếu 1.6 Popup block trên WebSocket → Huy pair sau khi đóng 1.5.</span>
+      </div>
+      <div class="dep">
+        <strong>🔗 UAT env sẵn sàng</strong>
+        <span>DevOps cần chuẩn bị UAT env trước W8 <span class="arrow">→</span> nếu E1 Dockerfile chưa xong, dùng deploy bare-metal staging cũ tạm.</span>
+      </div>
+      <div class="dep">
+        <strong>🔗 QC headcount + test plan</strong>
+        <span>QC team phải xác nhận có người chạy UAT tuần W8-W9. Test plan match 11 task MVP — PM viết trong W6.</span>
+      </div>
+      <div class="dep">
+        <strong>🔗 Trang phòng thủ UAT bug</strong>
+        <span>Trang giữ 1d/tuần W8-W9 buffer hot-fix UAT findings. Nếu không có buffer, Reconciliation BE có thể trễ — chấp nhận được vì là back-office.</span>
+      </div>
+      <div class="dep">
+        <strong>🔗 Context switch giữa MVP & Phase 1.5</strong>
+        <span>Trang & Hải làm cả 2 luồng. Khi UAT phát hiện bug user-facing <span class="arrow">→</span> ưu tiên fix MVP trước, push Phase 1.5 sang cuối tuần nếu cần.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decision summary -->
+  <div class="decision">
+    <h2>Khuyến nghị quyết định</h2>
+    <p class="sub" style="color:#fbcfe8;">3 quyết định cần chốt trong tuần W6 để cách cắt này đi vào hiệu lực.</p>
+    <div class="decision-grid">
+      <div class="decision-card">
+        <strong>1. Chốt MVP scope với PM/QC</strong>
+        <span>Confirm 11 task MVP + 13 task Phase 1.5. QC team bắt đầu viết test plan ngay đầu W6.</span>
+      </div>
+      <div class="decision-card">
+        <strong>2. Escalate OAuth2 GotIt</strong>
+        <span>Đầu W6 ping vendor lần 2. Nếu không reply trong 3 ngày, PM/Total escalate cấp quản lý GotIt.</span>
+      </div>
+      <div class="decision-card">
+        <strong>3. UAT env + DevOps brief</strong>
+        <span>DevOps chuẩn bị UAT env + config flag staging. Brief sớm để không block W8 promote build.</span>
+      </div>
+      <div class="decision-card">
+        <strong>4. Daily standup MVP-focus</strong>
+        <span>Tuần W6-W7 standup chỉ track 11 task MVP. Phase 1.5 track riêng kanban async.</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Phase 1 MVP Scope · Reward v2 · Cập nhật 05/05/2026 · Tham chiếu team-performance-dashboard.html
+  </footer>
+</div>
+</body>
+</html>

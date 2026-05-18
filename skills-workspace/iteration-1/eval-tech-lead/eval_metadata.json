@@ -1,0 +1,12 @@
+{
+  "eval_id": 0,
+  "eval_name": "tech-lead-evaluate-reward-v2",
+  "prompt": "Đánh giá trình độ kỹ thuật của team dev dựa trên báo cáo tiến độ dự án Reward v2",
+  "assertions": [
+    {"text": "Dashboard HTML có tồn tại", "type": "file_exists"},
+    {"text": "Text analysis nhận diện được patterns (Strategy, Idempotency, Retry, Self-Healing)", "type": "qualitative"},
+    {"text": "Có chấm điểm theo 6 trục với evidence", "type": "qualitative"},
+    {"text": "Raise flag về thiếu testing/observability", "type": "qualitative"},
+    {"text": "Có caveats rõ ràng", "type": "qualitative"}
+  ]
+}

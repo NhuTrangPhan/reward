@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Reward v2 — Performance Cumulative Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #0f172a; --panel: #1e293b; --panel2: #334155;
+  --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8;
+  --green: #22c55e; --yellow: #facc15; --red: #ef4444; --purple: #a855f7;
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding: 24px; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+h1, h2, h3 { margin: 0 0 12px; }
+h1 { font-size: 28px; color: var(--accent); }
+h2 { font-size: 20px; color: var(--text); margin-top: 32px; padding-bottom: 8px; border-bottom: 1px solid var(--panel2); }
+.subtitle { color: var(--muted); margin-bottom: 24px; }
+.grid { display: grid; gap: 16px; }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.card { background: var(--panel); padding: 20px; border-radius: 12px; border: 1px solid var(--panel2); }
+.kpi { text-align: center; }
+.kpi-value { font-size: 32px; font-weight: 700; color: var(--accent); }
+.kpi-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+.chart-box { position: relative; height: 300px; }
+.chart-box-sm { position: relative; height: 240px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--panel2); }
+th { color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.badge-green { background: rgba(34, 197, 94, 0.2); color: var(--green); }
+.badge-yellow { background: rgba(250, 204, 21, 0.2); color: var(--yellow); }
+.badge-red { background: rgba(239, 68, 68, 0.2); color: var(--red); }
+.insight { background: var(--panel); padding: 16px 20px; border-left: 3px solid var(--accent); border-radius: 8px; margin-bottom: 12px; }
+.insight-red { border-left-color: var(--red); }
+.insight-yellow { border-left-color: var(--yellow); }
+.insight h4 { margin: 0 0 6px; font-size: 14px; }
+.insight p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.footer { color: var(--muted); font-size: 12px; margin-top: 32px; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>Reward v2 — Performance Cumulative</h1>
+<p class="subtitle">Team: Trang, Huy, Hải · Tracking từ tuần 17/2026 · Cập nhật: 25/04/2026</p>
+
+<!-- ============ KPI ROW ============ -->
+<div class="grid grid-4">
+  <div class="card kpi">
+    <div class="kpi-value" id="kpiWeeks">1</div>
+    <div class="kpi-label">Weeks tracked</div>
+  </div>
+  <div class="card kpi">
+    <div class="kpi-value" id="kpiVelocity">125%</div>
+    <div class="kpi-label">Avg velocity</div>
+  </div>
+  <div class="card kpi">
+    <div class="kpi-value" id="kpiTL">6.7</div>
+    <div class="kpi-label">Tech Lead score avg</div>
+  </div>
+  <div class="card kpi">
+    <div class="kpi-value" id="kpiPD">6.0</div>
+    <div class="kpi-label">Product thinking avg</div>
+  </div>
+</div>
+
+<!-- ============ VELOCITY TREND ============ -->
+<h2>Velocity trend (theo tuần)</h2>
+<div class="card">
+  <div class="chart-box">
+    <canvas id="velocityChart"></canvas>
+  </div>
+</div>
+
+<!-- ============ 3-LENS RADAR ============ -->
+<h2>3-lens scoring (radar)</h2>
+<div class="grid grid-3">
+  <div class="card">
+    <h3 style="color: var(--accent); font-size: 14px;">Tech Lead</h3>
+    <div class="chart-box-sm"><canvas id="tlRadar"></canvas></div>
+  </div>
+  <div class="card">
+    <h3 style="color: var(--yellow); font-size: 14px;">Project Manager — Risk zone</h3>
+    <div class="chart-box-sm"><canvas id="pmChart"></canvas></div>
+  </div>
+  <div class="card">
+    <h3 style="color: var(--purple); font-size: 14px;">Product Thinking</h3>
+    <div class="chart-box-sm"><canvas id="pdRadar"></canvas></div>
+  </div>
+</div>
+
+<!-- ============ WEEKLY LOG TABLE ============ -->
+<h2>Weekly log</h2>
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Tuần</th>
+        <th>Planned</th>
+        <th>Done</th>
+        <th>Velocity</th>
+        <th>Health</th>
+        <th>TL</th>
+        <th>PD</th>
+        <th>Top achievement</th>
+        <th>Top red flag</th>
+      </tr>
+    </thead>
+    <tbody id="weeklyTable">
+      <tr>
+        <td><strong>W17 / 2026</strong><br><span style="color: var(--muted); font-size: 11px;">21–25/04</span></td>
+        <td>4</td>
+        <td>3 + 1 bonus</td>
+        <td>125%</td>
+        <td><span class="badge badge-yellow">Yellow</span></td>
+        <td>6.7</td>
+        <td>6.0</td>
+        <td>2-tier brand/category E2E · Miniapp 2.5/3 màn</td>
+        <td>0 test cho scaffold mới · CRM stuck ở spec</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============ INSIGHTS W17 ============ -->
+<h2>Insights tuần mới nhất (W17)</h2>
+<div class="grid grid-2">
+  <div>
+    <div class="insight">
+      <h4>Senior signals xuất hiện</h4>
+      <p>Feature flag cho OAuth2 scaffold, non-breaking architecture, DB-level filter (NOT EXISTS) thay vì JPA in-memory — 3 patterns đủ nhận diện Mid-Senior level.</p>
+    </div>
+    <div class="insight">
+      <h4>Miniapp de-risk timeline</h4>
+      <p>2.5/3 màn user-facing đã xong trước kế hoạch. Team tăng khả năng ship miniapp trong sprint tới.</p>
+    </div>
+  </div>
+  <div>
+    <div class="insight insight-red">
+      <h4>🚩 Test debt đang tích lũy</h4>
+      <p>OAuth2 scaffold + balance endpoints mới — 0 unit test. Ship velocity đang nhanh hơn test discipline. Nếu W18 vẫn 0 test → đẩy lên Red.</p>
+    </div>
+    <div class="insight insight-yellow">
+      <h4>🚩 CRM spec-then-silence</h4>
+      <p>2,500 dòng markdown + 3 HTML mockup cho 5 CRM feature, 0 dòng code. Dấu hiệu scope chưa refined — cần chốt 1 feature cụ thể trước Thứ 3 tuần 18.</p>
+    </div>
+    <div class="insight insight-yellow">
+      <h4>🚩 Thiếu data trong report</h4>
+      <p>Không có metric: accounts đang dùng, voucher đã đổi, funnel conversion. Team đang report "làm gì" thay vì "kết quả gì" — Product Thinking score trục Data-Informed chỉ 4/10.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ACTION ITEMS ============ -->
+<h2>Action items W18</h2>
+<div class="card">
+  <ol style="margin: 0; padding-left: 20px; line-height: 1.8;">
+    <li>Chốt 1 CRM feature cụ thể (đề xuất: Reconciliation voucher-vs-ledger) trước Thứ 3.</li>
+    <li>Viết unit test cho OAuth2 scaffold + balance query — Huy/Hải claim, 1-2 ngày.</li>
+    <li>Smoke test 2 worker sync mới (store + product-store).</li>
+    <li>Close miniapp đổi điểm 50% còn lại.</li>
+    <li>Ping GotIt nếu sau 5 ngày không có reply OAuth2.</li>
+    <li>Định nghĩa metric cho miniapp launch (redemption rate, account adoption) trước sprint planning.</li>
+  </ol>
+</div>
+
+<p class="footer">Performance dashboard cumulative · Mỗi tuần paste data mới trong chat để append vào bảng.</p>
+
+<script>
+// =====================================================
+// DATA — mỗi tuần paste data mới sẽ push vào array này
+// =====================================================
+const WEEKS = [
+  {
+    week: "W17/2026",
+    label: "W17",
+    velocity: 125,
+    health: "yellow",
+    tlScore: {
+      "Technical Execution": 7,
+      "System Design": 8,
+      "Domain Depth": 8,
+      "Testing & Quality": 4,
+      "Communication": 7,
+      "Ownership": 6
+    },
+    pmRisks: { green: 2, yellow: 3, red: 0 },
+    pdScore: {
+      "User Focus": 7,
+      "Outcome Orientation": 5,
+      "Prioritization": 6,
+      "UX Maturity": 7,
+      "Data-Informed": 4,
+      "Business Alignment": 7
+    }
+  }
+  // W18, W19... sẽ push thêm vào đây
+];
+
+// =====================================================
+// CHART BUILDERS
+// =====================================================
+const CHART_COLORS = {
+  accent: '#38bdf8', yellow: '#facc15', purple: '#a855f7',
+  green: '#22c55e', red: '#ef4444', muted: '#64748b'
+};
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#334155';
+
+// Velocity line chart
+new Chart(document.getElementById('velocityChart'), {
+  type: 'line',
+  data: {
+    labels: WEEKS.map(w => w.label),
+    datasets: [{
+      label: 'Velocity (%)',
+      data: WEEKS.map(w => w.velocity),
+      borderColor: CHART_COLORS.accent,
+      backgroundColor: 'rgba(56, 189, 248, 0.15)',
+      fill: true,
+      tension: 0.3,
+      pointRadius: 6,
+      pointBackgroundColor: CHART_COLORS.accent
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, suggestedMax: 150, ticks: { callback: v => v + '%' } }
+    }
+  }
+});
+
+// Tech Lead radar (average across weeks)
+const tlAxes = Object.keys(WEEKS[0].tlScore);
+const tlAvg = tlAxes.map(ax => {
+  const sum = WEEKS.reduce((s, w) => s + w.tlScore[ax], 0);
+  return sum / WEEKS.length;
+});
+new Chart(document.getElementById('tlRadar'), {
+  type: 'radar',
+  data: {
+    labels: tlAxes,
+    datasets: [{
+      label: 'Avg score',
+      data: tlAvg,
+      backgroundColor: 'rgba(56, 189, 248, 0.25)',
+      borderColor: CHART_COLORS.accent,
+      pointBackgroundColor: CHART_COLORS.accent
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: { r: { min: 0, max: 10, ticks: { stepSize: 2 } } }
+  }
+});
+
+// PM risk zones stacked bar
+new Chart(document.getElementById('pmChart'), {
+  type: 'bar',
+  data: {
+    labels: WEEKS.map(w => w.label),
+    datasets: [
+      { label: 'Green', data: WEEKS.map(w => w.pmRisks.green), backgroundColor: CHART_COLORS.green, stack: 'risks' },
+      { label: 'Yellow', data: WEEKS.map(w => w.pmRisks.yellow), backgroundColor: CHART_COLORS.yellow, stack: 'risks' },
+      { label: 'Red', data: WEEKS.map(w => w.pmRisks.red), backgroundColor: CHART_COLORS.red, stack: 'risks' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+    scales: {
+      x: { stacked: true },
+      y: { stacked: true, ticks: { stepSize: 1 } }
+    }
+  }
+});
+
+// Product Thinking radar
+const pdAxes = Object.keys(WEEKS[0].pdScore);
+const pdAvg = pdAxes.map(ax => {
+  const sum = WEEKS.reduce((s, w) => s + w.pdScore[ax], 0);
+  return sum / WEEKS.length;
+});
+new Chart(document.getElementById('pdRadar'), {
+  type: 'radar',
+  data: {
+    labels: pdAxes,
+    datasets: [{
+      label: 'Avg score',
+      data: pdAvg,
+      backgroundColor: 'rgba(168, 85, 247, 0.25)',
+      borderColor: CHART_COLORS.purple,
+      pointBackgroundColor: CHART_COLORS.purple
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: { r: { min: 0, max: 10, ticks: { stepSize: 2 } } }
+  }
+});
+
+// Update KPI values from data
+document.getElementById('kpiWeeks').textContent = WEEKS.length;
+document.getElementById('kpiVelocity').textContent = Math.round(WEEKS.reduce((s, w) => s + w.velocity, 0) / WEEKS.length) + '%';
+document.getElementById('kpiTL').textContent = (tlAvg.reduce((s, v) => s + v, 0) / tlAxes.length).toFixed(1);
+document.getElementById('kpiPD').textContent = (pdAvg.reduce((s, v) => s + v, 0) / pdAxes.length).toFixed(1);
+</script>
+
+</body>
+</html>

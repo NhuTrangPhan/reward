@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward v2 - Product Evaluation Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+    <style>
+        :root { color-scheme: light; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #3498db;
+        }
+
+        .card.success { border-left-color: #27ae60; }
+        .card.warning { border-left-color: #f39c12; }
+        .card.danger { border-left-color: #e74c3c; }
+        .card.info { border-left-color: #9b59b6; }
+
+        .card h2 {
+            font-size: 1.3em;
+            margin-bottom: 16px;
+            color: #2c3e50;
+        }
+
+        .card h3 {
+            font-size: 1em;
+            color: #34495e;
+            margin-top: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .card ul li {
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #555;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .card ul li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .card.warning ul li:before {
+            content: "⚠";
+            color: #f39c12;
+        }
+
+        .card.danger ul li:before {
+            content: "✕";
+            color: #e74c3c;
+        }
+
+        .score-display {
+            margin: 20px 0;
+            padding: 16px;
+            background: #ecf0f1;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .score-max {
+            color: #7f8c8d;
+            font-size: 1em;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-container h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .matrix-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .matrix-container h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .score-cell {
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .score-5 { color: #27ae60; }
+        .score-4 { color: #2ecc71; }
+        .score-3 { color: #f39c12; }
+        .score-2 { color: #e67e22; }
+        .score-1 { color: #e74c3c; }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .metric-box {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #ecf0f1;
+        }
+
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .metric-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 8px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .timeline {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .timeline h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .phase {
+            padding: 16px;
+            margin: 12px 0;
+            border-left: 4px solid #3498db;
+            background: #ecf0f1;
+            border-radius: 4px;
+        }
+
+        .phase strong {
+            color: #2c3e50;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 2px;
+        }
+
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-warning { background: #fff3cd; color: #856404; }
+        .badge-danger { background: #f8d7da; color: #721c24; }
+        .badge-info { background: #d1ecf1; color: #0c5460; }
+
+        footer {
+            text-align: center;
+            color: #555;
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Reward v2 - Product Evaluation</h1>
+            <p>Đánh giá giá trị sản phẩm và product thinking | 30/3 - 17/4</p>
+        </header>
+
+        <!-- Overall Score -->
+        <div class="section">
+            <div class="chart-container">
+                <h2>🎯 Tổng Thể Đánh Giá Product Thinking</h2>
+                <div class="score-display">
+                    <div class="score-number">3.5<span class="score-max"> / 5.0</span></div>
+                    <p style="color: #7f8c8d; margin-top: 8px;">Kỹ thuật tốt nhưng alignment kinh doanh còn lỏng</p>
+                </div>
+                <div style="position: relative; height: 250px; margin-top: 20px;">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="section">
+            <h2 style="color: #2c3e50; margin-bottom: 20px;">📈 Thống Kê Tiến Độ</h2>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-value">19</div>
+                    <div class="metric-label">Deliverables Hoàn Thành</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">2</div>
+                    <div class="metric-label">Vendor Integrated</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">6</div>
+                    <div class="metric-label">API Endpoints</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">4</div>
+                    <div class="metric-label">Known Blockers</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strengths -->
+        <div class="dashboard-grid">
+            <div class="card success">
+                <h2>✅ Ưu Điểm Kỹ Thuật</h2>
+                <ul>
+                    <li><strong>Problem-Driven:</strong> Workaround cho Urbox (worker 1 ngày 1 lần) thay vì block</li>
+                    <li><strong>Architecture:</strong> Strategy pattern, Integration Hub generic, dễ add vendor</li>
+                    <li><strong>Resilience:</strong> Webhook + retry + inquiry + idempotency key</li>
+                    <li><strong>API Complete:</strong> Tất cả endpoint miniapp cần đều có</li>
+                    <li><strong>Chịu Lỗi:</strong> Self-healing worker xử lý timeout PENDING</li>
+                </ul>
+            </div>
+
+            <div class="card danger">
+                <h2>⚠️ Lỗ Hổng Product Thinking</h2>
+                <ul>
+                    <li><strong>Không KPI:</strong> Không define conversion rate, redemption time, target</li>
+                    <li><strong>Scope Mờ:</strong> Dev tự decide 3 payment modes → Risk không cần</li>
+                    <li><strong>UI Chưa Lock:</strong> Không biết user sẽ accept hay không</li>
+                    <li><strong>Đối Soát Thiếu:</strong> Không có flow xác minh chi phí vs. doanh thu</li>
+                    <li><strong>Blocker Plan B:</strong> GotIt OAuth, ZNS error chưa có solution timeline</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Product Value Assessment -->
+        <div class="section">
+            <h2 style="color: #2c3e50; margin-bottom: 20px;">💰 Giá Trị Sản Phẩm Được Tạo Ra</h2>
+            <div class="dashboard-grid">
+                <div class="card info">
+                    <h2>📊 Giá Trị Kinh Doanh</h2>
+                    <h3>Tích Cực:</h3>
+                    <ul>
+                        <li>2 vendor → Mở rộng lựa chọn quà</li>
+                        <li>3 payment modes → Linh hoạt cash flow</li>
+                        <li>Tự động hóa → Giảm chi phí vận hành</li>
+                    </ul>
+                    <h3>Chưa Có:</h3>
+                    <ul style="color: #e74c3c;">
+                        <li>Luồng đối soát</li>
+                        <li>Proof conversion user</li>
+                    </ul>
+                </div>
+
+                <div class="card info">
+                    <h2>👥 Giá Trị User Experience</h2>
+                    <h3>Hoàn Thành:</h3>
+                    <ul>
+                        <li>Miniapp API đầy đủ</li>
+                        <li>Retry + idempotency</li>
+                        <li>Lịch sử đổi quà tracking</li>
+                    </ul>
+                    <h3>Đang Chờ:</h3>
+                    <ul style="color: #e74c3c;">
+                        <li>UI/UX mockup finalize</li>
+                        <li>CRM integration</li>
+                    </ul>
+                </div>
+
+                <div class="card info">
+                    <h2>🏗️ Giá Trị Kỹ Thuật</h2>
+                    <h3>Architecture:</h3>
+                    <ul>
+                        <li>Scalable design (add vendor dễ)</li>
+                        <li>Separation of concerns (strategy)</li>
+                        <li>Error recovery built-in</li>
+                    </ul>
+                    <h3>Code Quality:</h3>
+                    <ul>
+                        <li>Idempotency thinking</li>
+                        <li>Webhook integration pattern</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Scoring Matrix -->
+        <div class="matrix-container">
+            <h2>📋 Chi Tiết Đánh Giá Theo Tiêu Chí</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tiêu Chí</th>
+                        <th class="score-cell">Điểm</th>
+                        <th>Ghi Chú</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Problem-Solving Mindset</strong></td>
+                        <td class="score-cell score-4">4.5/5</td>
+                        <td>Chủ động workaround, không wait passively</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Scalability & Architecture</strong></td>
+                        <td class="score-cell score-4">4.0/5</td>
+                        <td>Good pattern nhưng chưa proven với 3+ vendor</td>
+                    </tr>
+                    <tr>
+                        <td><strong>User Experience Focus</strong></td>
+                        <td class="score-cell score-3">3.5/5</td>
+                        <td>API complete nhưng UI/mockup chưa lock</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Business Alignment</strong></td>
+                        <td class="score-cell score-2">2.5/5</td>
+                        <td>Dev self-decide 3 modes, chưa evidence PO alignment</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Metrics & Success Definition</strong></td>
+                        <td class="score-cell score-1">2.0/5</td>
+                        <td>Không thấy OKRs, metrics, success criteria</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Risk Management</strong></td>
+                        <td class="score-cell score-3">3.0/5</td>
+                        <td>Identify blocker nhưng chưa mitigation plan</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Process Transparency</strong></td>
+                        <td class="score-cell score-3">3.5/5</td>
+                        <td>Detail timeline nhưng short on strategy docs</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Blockers & Risk -->
+        <div class="section">
+            <h2 style="color: #2c3e50; margin-bottom: 20px;">🚨 Blockers & Risk</h2>
+            <div class="dashboard-grid">
+                <div class="card danger">
+                    <h2>Critical Blockers</h2>
+                    <ul>
+                        <li><strong>GotIt OAuth2:</strong> Chưa phản hồi - Cần escalate, set deadline 25/4</li>
+                        <li><strong>ZNS Channel Error:</strong> Đang lỗi nhưng chưa fix - User sẽ see error</li>
+                        <li><strong>Luồng Đối Soát:</strong> Không tracking chi phí vs doanh thu</li>
+                    </ul>
+                </div>
+
+                <div class="card warning">
+                    <h2>Medium Risk</h2>
+                    <ul>
+                        <li>3 payment modes → Liệu business dùng cả 3 không?</li>
+                        <li>UI chưa finalize → API design có diverge không?</li>
+                        <li>CRM chưa integrate → Support team chưa ready</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="timeline">
+            <h2>📅 Khuyến Nghị (Priority Order)</h2>
+            <div class="phase" style="border-left-color: #e74c3c;">
+                <strong style="color: #e74c3c;">🔴 P0 - Ngay (Tuần này)</strong>
+                <ul style="margin-top: 8px; margin-left: 16px;">
+                    <li>Chốt Success Metrics: conversion, redemption time, SLA target</li>
+                    <li>Redefine Payment Modes: lock 1-2 mode cho MVP (đừng 3 cái)</li>
+                    <li>UI/UX Lock: Design team deliver mockup, dev align API không diverge</li>
+                    <li>GotIt OAuth2 Escalate: deadline 25/4, nếu không → Plan B</li>
+                </ul>
+            </div>
+
+            <div class="phase" style="border-left-color: #f39c12;">
+                <strong style="color: #f39c12;">🟠 P1 - 1-2 Tuần</strong>
+                <ul style="margin-top: 8px; margin-left: 16px;">
+                    <li>Luồng Đối Soát: mapping chi phí quà vs doanh thu → accounting</li>
+                    <li>ZNS Fix: prioritize fix hoặc disable, đừng để user thấy error</li>
+                    <li>E2E Test: checkout → redeem → vendor deliver → reconciliation</li>
+                    <li>CRM Integration: setup support team workflow</li>
+                </ul>
+            </div>
+
+            <div class="phase" style="border-left-color: #27ae60;">
+                <strong style="color: #27ae60;">🟢 P2 - Long-term (Post-MVP)</strong>
+                <ul style="margin-top: 8px; margin-left: 16px;">
+                    <li>Roadmap v2.1: add vendor thứ 3, optimize conversion, web platform</li>
+                    <li>Monitor Metrics: track conversion rate, redemption time, user satisfaction</li>
+                    <li>Refactor Payment Modes: dựa vào business feedback sau launch</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Conclusion -->
+        <div class="section">
+            <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <h2 style="color: #2c3e50; margin-bottom: 16px;">📝 Kết Luận</h2>
+                <p style="color: #555; line-height: 1.8; margin-bottom: 12px;">
+                    <strong>Reward v2 là dự án được thực hiện kỹ lưỡng về mặt kỹ thuật</strong>, với team chủ động giải quyết vấn đề thay vì block. Architecture rõ ràng, resilience tốt, API đầy đủ.
+                </p>
+                <p style="color: #555; line-height: 1.8; margin-bottom: 12px;">
+                    <strong>Tuy nhiên, product thinking còn thiếu chiều sâu</strong> về business alignment, metrics, và prioritization. Chưa rõ "Chúng ta building cái gì để giải quyết bài toán gì?".
+                </p>
+                <p style="color: #555; line-height: 1.8;">
+                    <strong>Action cần thiết:</strong> PM/PO tổ chức lại goal/metrics/scope trước khi launch. Đừng để dev work in a vacuum. Chốt KPI, lock UI, redefine scope → mới confident về success.
+                </p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Generated: 2026-04-21 | Reward v2 Product Evaluation</p>
+        </footer>
+    </div>
+
+    <script>
+        // Radar Chart
+        const radarCtx = document.getElementById('radarChart').getContext('2d');
+        const radarChart = new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: [
+                    'Problem-Solving',
+                    'Scalability',
+                    'UX Focus',
+                    'Business Alignment',
+                    'Metrics',
+                    'Risk Management'
+                ],
+                datasets: [{
+                    label: 'Product Thinking Score',
+                    data: [4.5, 4.0, 3.5, 2.5, 2.0, 3.0],
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#3498db',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        min: 0,
+                        max: 5,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: '#555'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
