@@ -269,45 +269,45 @@
 <div class="wrap">
   <header>
     <h1>Team Performance Dashboard — Reward v2</h1>
-    <p>Hiệu suất team 3 người · Giai đoạn 30/03 – 15/05/2026 (7 sprint · W5 = 3d · W6 = 5d · <b style="color:#34d399;">W7 = 5d done</b>) · Cập nhật ISO W20 · <b style="color:#34d399;">post-fetch refresh (5 repos)</b></p>
+    <p>Hiệu suất team 3 người · Giai đoạn 30/03 – 22/05/2026 (8 sprint · W5 = 3d · W6-W8 = 5d each · <b style="color:#f9a8d4;">W8 ✅ done, pivot Total API KEY</b>) · Cập nhật ISO W21 · <b style="color:#34d399;">post-W21 refresh (4 repos active)</b></p>
   </header>
 
   <!-- KPI -->
   <div class="kpi-grid">
     <div class="kpi blue">
       <div class="kpi-label">Tổng task hoàn thành</div>
-      <div class="kpi-value">74</div>
-      <div class="kpi-sub">+15 sau W7 (F1 GotIt Cred AES-256 · F2 Recon Account API E2E · F3 Sync Async · F4 CRM split · F8 Staging+K8s · F6 Mini-app collapsible)</div>
+      <div class="kpi-value">88</div>
+      <div class="kpi-sub">+14 sau W8 (Worker Send-Voucher Kafka · F1 Multi-tenant phase 2 HMAC · Recon v2 close · Reward Sync polling · Email QR · Mini-app polish · CICD project 215)</div>
     </div>
     <div class="kpi green">
       <div class="kpi-label">Velocity trung bình</div>
-      <div class="kpi-value">10.6</div>
-      <div class="kpi-sub">task / tuần · W7 ship 15 task / 5d ≈ <b>1 task/dev/ngày steady</b> (71 commits/3 dev tuần này)</div>
+      <div class="kpi-value">11.0</div>
+      <div class="kpi-sub">task / tuần · W8 ship 14 task / 5d (70 commits/3 dev) · <b>2 tuần liền velocity đỉnh quarter</b> (W7=15, W8=14)</div>
     </div>
     <div class="kpi orange">
       <div class="kpi-label">Module hoàn thiện</div>
-      <div class="kpi-value">21</div>
-      <div class="kpi-sub">+<b style="color:#fcd34d;">F1 GotIt Cred per-account AES-256 🆕</b> · +<b style="color:#fcd34d;">F3 Sync Async + Progress 🆕</b> · +F4 CRM Admin split (port 9091) · +F8 Staging+K8s deploy</div>
+      <div class="kpi-value">24</div>
+      <div class="kpi-sub">+<b style="color:#f9a8d4;">Worker Send-Voucher Kafka 🆕</b> · +<b style="color:#f9a8d4;">F1 Multi-tenant HMAC + per-account 🆕</b> · +<b style="color:#fcd34d;">Recon v2 close (vendor tabs + history)</b> · +CICD project 215 + RSA automation</div>
     </div>
     <div class="kpi red">
       <div class="kpi-label">Blockers đang mở</div>
       <div class="kpi-value">2</div>
-      <div class="kpi-sub">⬇ 1 closed (Recon Account API ship Huy · close internal blocker) · 1 active (UAT readiness ~30/5)</div>
+      <div class="kpi-sub">⬇ Pivot CNV không ký GotIt (resolved by Trang re-prioritize) · Active: Worker Send-Voucher email testing · Email QR template lock</div>
     </div>
     <div class="kpi" style="background: linear-gradient(135deg, rgba(139,92,246,.2), rgba(236,72,153,.15)); border:1px solid rgba(139,92,246,.3);">
       <div class="kpi-label" style="color:#c4b5fd;">Effort Score (có trọng số)</div>
-      <div class="kpi-value" style="background: linear-gradient(90deg, #c084fc, #f472b6); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">237</div>
-      <div class="kpi-sub">complexity points · avg 3.20/task · <b style="color:#fcd34d;">+60 sau W7</b> (AES-256 + CRM split + atomic finalize = Hard/Very Hard)</div>
+      <div class="kpi-value" style="background: linear-gradient(90deg, #c084fc, #f472b6); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">293</div>
+      <div class="kpi-sub">complexity points · avg 3.33/task · <b style="color:#fcd34d;">+56 sau W8</b> (HMAC + Worker Kafka + multi-tenant orchestration + CICD project 215 = Hard/Very Hard)</div>
     </div>
     <div class="kpi" style="background: linear-gradient(135deg, rgba(244,114,182,.15), rgba(6,182,212,.15)); border:1px solid rgba(244,114,182,.3);">
-      <div class="kpi-label" style="color:#fbcfe8;">Backlog Phase 1 (GotIt only, dev-only)</div>
-      <div class="kpi-value" style="color:#f472b6;">~9</div>
-      <div class="kpi-sub">⬇ 8 task done W7 · còn 1.6/1.7/1.8 Mini-app + 4.7 Auto-Refund + 4.8 Out-of-Stock + 4.9 Push Noti + OAuth2 wire-up</div>
+      <div class="kpi-label" style="color:#fbcfe8;">Plan 2 tuần (W20+W21) close</div>
+      <div class="kpi-value" style="color:#6ee7b7;">100% 🎯</div>
+      <div class="kpi-sub">⬆ +43 điểm vs W7 (57%) · <b>12/12 active items 100%</b> · 1 defer (F2b ưu tiên Total) · 1 scope-changed (UAT TotalxGotIt) · 2 Epic phát sinh W22 (Worker Send-Voucher 75% · Email QR 70%)</div>
     </div>
     <div class="kpi" style="background: linear-gradient(135deg, rgba(239,68,68,.15), rgba(245,158,11,.15)); border:1px solid rgba(239,68,68,.3);">
       <div class="kpi-label" style="color:#fca5a5;">Out-of-scope (delegate khác)</div>
       <div class="kpi-value" style="color:#ef4444;">+62</div>
-      <div class="kpi-sub">8 CRM UI · 8 UAT (QC team) · 4 Docs/Handover (PM) · 47 Phase 2 audit gap · UrBox maintenance</div>
+      <div class="kpi-sub">8 CRM UI · 8 UAT (QC team) · 4 Docs/Handover (PM) · 47 Phase 2 audit gap · UrBox maintenance · Quà vật lý phase 2</div>
     </div>
   </div>
 
@@ -315,16 +315,16 @@
   <div class="progress-card">
     <h3>Tiến độ tổng thể dự án Reward v2</h3>
     <div class="progress-bar-wrap">
-      <div class="progress-bar-fill" style="width: 95%;">95% hoàn thành (backend) ⬆ +3% sau W7</div>
+      <div class="progress-bar-fill" style="width: 97%;">97% hoàn thành (backend) ⬆ +2% sau W8 · Pivot Total via API KEY</div>
     </div>
     <div class="legend">
-      <div class="legend-item"><span class="legend-dot" style="background:#10b981"></span>Backend core: 99% (+CRM F1/F2 + Audit Log + Recon 1a/1b + <b style="color:#fcd34d;">Account Recon API 🆕</b>)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>Integration: 95% (+CnvConnect Top-up + <b style="color:#fcd34d;">Per-Account GotIt Credential AES-256 🆕</b> + <b>Sync GotIt Async 🆕</b>)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Webhook/Payment: 95% (GotIt webhook PASS staging ✓ · Kafka cnv_sync_ecommerce_customer ✓)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span>FE Account Admin: 100% (+ <b>Reconciliation module FE 🆕</b> + Partner Credentials Form + GotIt Sync button)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#ec4899"></span>Miniapp UI: 90% (Đổi điểm 100% · Voucher V2 ✓ · <b>Collapsible UX + StorePreview 🆕</b> · còn 1.6/1.7/1.8)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#f472b6"></span>Platform layer (net-core): 30% (foundation branch chưa merge — defer W8)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#fbbf24"></span>Infra/Staging: 75% 🆕 (+<b>K8s deploy crm-admin/worker-sync-cnv ✓</b> · staging config + AES + fail-late init)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#10b981"></span>Backend core: 99% (+ Recon v2 close: vendor tabs + voucher history routing + ghost orders + period fix)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>Integration: 98% (+<b style="color:#f9a8d4;">Multi-tenant HMAC-SHA256 + per-account orchestration 🆕</b> · TotalxGotIt scope clarified · evoucher priority)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Webhook/Payment: 97% (HMAC webhook secret versioning ✓ · Worker Send-Voucher Kafka pipeline 75% testing email)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span>FE Account Admin: 100% (+ Reconciliation vendor tabs + adaptive polling + webhook secret copy/readonly UX)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#ec4899"></span>Miniapp UI: 95% (+ partner rewards profile header · hotline vendor-aware · brand fallback GOTIT_OTHER · còn 1.6/1.7/1.8)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#f472b6"></span>Platform layer (net-core): 30% (foundation branch chưa merge — vẫn defer)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#fbbf24"></span>Infra/Staging: 90% 🆕 (+<b>CICD project 215 + RSA key automation + UTC TZ + application-production rename + externalize sensitive creds</b>)</div>
     </div>
   </div>
 
@@ -364,7 +364,7 @@
         <canvas id="difficultyChart"></canvas>
       </div>
       <div style="margin-top:12px; padding:12px; background:rgba(15,23,42,.5); border-radius:8px; font-size:12px; color:#cbd5e1; line-height:1.6;">
-        <strong style="color:#f472b6;">Nhận xét W7 (11-15/5):</strong> <strong style="color:#34d399;">15 task ship · 60 complexity points · avg 4.00/5 (đỉnh quarter)</strong>. Heavy week với <strong>4 Very Hard tasks</strong> (Per-Account AES-256 + Account Recon API atomic + CRM Admin module split + Sync Async + Progress) và <strong>6 Hard tasks</strong> (K8s deploy + Kafka externalize + price snapshotting + Partner Credentials Form FE...). Avg độ khó tăng <strong>3.67 → 4.00</strong> — wave architecture/integration lớn nhất quarter, đặt nền cho UAT staging readiness. <strong>71 commits / 3 dev / 5 ngày</strong> (4.7 commits/dev/ngày). Hải dẫn đầu pace (33 commits) với 4 streams song song trên 4 repo. Huy ship Account Reconciliation API E2E full-stack đơn người.
+        <strong style="color:#f9a8d4;">Nhận xét W8 (18-22/5) — Pivot lần 2:</strong> <strong style="color:#67e8f9;">14 task ship · 56 complexity points · avg 4.00/5 (giữ đỉnh quarter 2 tuần liền)</strong>. CNV không ký hợp đồng GotIt → team re-prioritize <b>ngay trong tuần</b> sang hỗ trợ Total qua API KEY. <strong>3 Very Hard tasks</strong> (HMAC-SHA256 + AES decoupled · Worker Send-Voucher Kafka pipeline E2E · per-account multi-tenant orchestration) và <strong>6 Hard tasks</strong> (CICD project 215 + RSA automation · Reconciliation v2 close vendor tabs · Reward Sync cancel + polling E2E · Email Inline QR + ZNS strategy · Mini-app partner rewards refactor · webhook secret versioning). <strong>70 commits / 3 dev / 5 ngày</strong> (flat vs W7=71). <b>Quality work over volume</b>: pivot scope đúng lúc, đóng partial items W7 từ 57% → 89% plan 2 tuần.<br><strong style="color:#f472b6;">Nhận xét W7 (11-15/5):</strong> 15 task · 60 points · avg 4.00 — wave architecture/integration lớn nhất quarter (F1 AES-256 + F2 Recon API + F4 CRM split + F8 Staging+K8s).
       </div>
     </div>
   </div>
@@ -384,8 +384,11 @@
 
   <!-- Audit findings banner -->
   <div class="card" style="margin-bottom:20px; background: linear-gradient(135deg, rgba(239,68,68,.08), rgba(245,158,11,.08)); border:1px solid rgba(239,68,68,.25);">
-    <h3 style="color:#fbbf24;">🚨 Audit findings 24/04 — refresh sau W7 (15/05): tiếp tục close mạnh</h3>
+    <h3 style="color:#fbbf24;">🚨 Audit findings 24/04 — refresh sau W8 (22/05): tiếp tục close mạnh + pivot Total</h3>
     <div style="font-size:13px; color:#cbd5e1; line-height:1.6; margin-bottom:12px;">
+      <strong style="color:#f9a8d4;">✅ CLOSED W8 (18-22/05) — Pivot lần 2 CNV không ký GotIt:</strong> <b style="color:#f9a8d4;">Worker Send-Voucher Kafka pipeline 🆕</b> (Dockerfile + Helm + CI/CD + Kafka producer/consumer + async processing + ZNS strategy — đang test email delivery 75%), <b style="color:#f9a8d4;">F1 Multi-tenant phase 2 — HMAC-SHA256 + AES decoupled webhook secret 🆕</b> (rotate webhook pepper tách khỏi AES key + account-scoped webhook authentication + per-account GotIt credential sync + inject account vào generateTransactionId — Total private key & GotIt webhook key đều 100%), <b style="color:#34d399;">Reconciliation v2 close (60→100% Web Admin)</b> — vendor-specific tabs + voucher-centric history routing + ghost orders aggregation + CRM upload period fix + template-doi-soat-gotit rename, <b style="color:#34d399;">Reward Sync (cancel + polling E2E)</b> — cooperative cancel sync jobs + vendor sync partner mode + cancel endpoints BE + adaptive polling FE, <b style="color:#34d399;">CICD project 215 + RSA + UTC</b> — migrate sang project 215 + RSA key automation + align UTC TZ staging + application-prod → application-production + externalize toàn bộ sensitive credentials, <b style="color:#34d399;">Mini-app RewardsV2 polish</b> — partner rewards profile header + hotline card vendor-aware + brand fallback GOTIT_OTHER + reward paths refactor + new icons + collapsible sections, <b style="color:#34d399;">Email Voucher Inline QR 70%</b> — inline attachment + QR generation + remove brand name template (đang test), <b style="color:#34d399;">GotIt webhook secret versioning</b> + bulk status update.<br><br>
+      <strong style="color:#67e8f9;">⚡ Pivot W8:</strong> Trang drive 4 trục vendor: (1) Gửi đánh giá tích hợp <b>TotalxGotIt</b> thay CNVxGotIt, (2) Clarify scope Total↔GotIt, (3) <b style="color:#67e8f9;">Total staging key + Webhook test 100% PASS</b> ✅ (sẵn sàng go-live khi Worker Send-Voucher release), (4) Confirm Total dùng voucher điện thoại (KHÔNG dùng topup), quà vật lý defer phase sau, ưu tiên evoucher.<br>
+      <strong style="color:#f9a8d4;">⚡ Scope decision W21:</strong> <b>F2b CRM Internal anh Phú — defer chính thức</b> để ưu tiên Total release evoucher. API đã gửi anh Phú từ W20 (dùng được qua Swagger). Hướng dẫn + auto-trigger cron sẽ pick up sau Total go-live.<br><br>
       <strong style="color:#34d399;">✅ CLOSED W7 (11-15/05):</strong> <b style="color:#fcd34d;">F1 Per-Account GotIt Credential 🆕</b> (AES-256-CBC encryption + AccountGotItCredentialController + Partner Credentials Form FE + AES256Utils fail-late init), <b style="color:#fcd34d;">F2 Account Reconciliation API E2E 🆕</b> (Huy ship full-stack: BE atomic finalize + hard-skip guard + duplicate detection + keyword/brandId filter · Gateway API · FE Reconciliation module + transaction terminology), <b style="color:#fcd34d;">F3 Sync GotIt Async + Progress Polling 🆕</b> (Hải ship E2E: BE async sync brand/category + orphan brand handling + deactivation sweeps · Gateway forward · FE button + progress polling), <b style="color:#34d399;">F4 CRM Admin module split (port 9091) 🆕</b> (Trang microservice extract + K8s deployment configs cho crm-admin + worker-sync-cnv-customer), <b style="color:#34d399;">F8 Staging + K8s + Security hardening 🆕</b> (Kafka externalize topic/group ID + AES256 secret + file-based public key signature verify + fail-late init), <b>F5 RedemptionOrder price snapshotting + PARTNER skip balance flows + pointsRequired Integer→Long</b>, <b>F6 Mini-app collapsible reward/voucher detail + StorePreviewItem</b>, <b>F7 Kafka shared cluster + CNV_SYNC_ECOMMERCE_CUSTOMER topic + customer sync logging</b>.
       <br><br>
       <strong style="color:#34d399;">✅ CLOSED W5+W6:</strong> Module C Audit Log (AOP @Auditable · A2 hoàn tất sớm), Module D Recon Phase 1a + 1b Voucher Excel + face_value fix, Module E CRM Order Mgmt, Module F Stats Dashboard + Comprehensive Overview FE, Module I CnvConnect Top-up + new redemption/balance endpoints, Module J recovery-core refactor, Module K GotIt enrichment, net-core Reward Redeem foundation (haiht/reward-redeem branch · idempotent retry + V2 align), GotIt webhook PASS staging.
@@ -566,68 +569,94 @@
             </div>
           </td>
         </tr>
-        <tr style="border-bottom:1px solid rgba(148,163,184,.1); vertical-align:top; background:rgba(15,23,42,.3);">
-          <td style="padding:10px; font-weight:600; color:#f472b6;">W8<br><span style="font-size:11px; color:#94a3b8; font-weight:normal;">18/5–22/5 (ISO W21)</span><br><span style="font-size:10px; color:#94a3b8;">5d/người</span></td>
+        <tr style="border-bottom:1px solid rgba(148,163,184,.1); vertical-align:top; background:rgba(236,72,153,.06);">
+          <td style="padding:10px; font-weight:600; color:#f9a8d4;">W8 ✅<br><span style="font-size:11px; color:#94a3b8; font-weight:normal;">18/5–22/5 (ISO W21)</span><br><span style="font-size:10px; color:#f9a8d4;">DONE · 5/5d · PIVOT</span><br><span style="font-size:10px; color:#94a3b8;">70 commits / 3 dev<br>21 / 17 / 32</span></td>
           <td style="padding:10px; border-left:1px solid rgba(56,189,248,.2);">
-            <div>• <strong>4.7 Auto-Refund Engine</strong> (deny points + release balance · carry W7) — 2d</div>
-            <div>• A6 Multi-tenant Isolation Test (carry W7) — 1.5d</div>
-            <div>• C1 Refund Manual Tool BE (carry W7) — 1d</div>
-            <div>• <strong style="color:#f9a8d4;">net-core branch merge review</strong> (pair Hải) — 0.5d</div>
+            <div style="background:rgba(236,72,153,.08); padding:4px 6px; border-radius:4px; margin:4px 0; border-left:2px solid #ec4899;">⚡ <strong style="color:#f9a8d4;">PIVOT lần 2 — CNV không ký GotIt:</strong> drive 4 trục TotalxGotIt — gửi đánh giá tích hợp (thay CNVxGotIt UAT), clarify scope Total↔GotIt, test staging+webhook PASS, confirm voucher điện thoại (Total) ≠ topup. Quà vật lý defer phase sau.</div>
+            <div style="background:rgba(251,191,36,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong style="color:#fcd34d;">F1 Multi-tenant phase 2 — HMAC-SHA256 + AES decoupled 🆕</strong> — rotate webhook pepper tách khỏi AES key (compliance) + account-scoped webhook authentication + per-account GotIt credential sync + inject account vào generateTransactionId per-vendor prefix (8 commits · pair Hải versioning)</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong style="color:#f9a8d4;">Worker Send-Voucher Kafka pipeline 🆕</strong> — Dockerfile + Helm + CI/CD pipelines + Kafka topic config + reduce brokers + ignore sensitive properties (5 commits · pair Huy logic)</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>CICD project 215 + RSA automation + UTC TZ</strong> — migrate CI/CD sang project 215, automate RSA key deployment, align UTC timezone, application-prod → application-production rename, externalize toàn bộ sensitive credentials + standardize GotIt/UrBox placeholders (6 commits)</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>Tests cho GotItCredentialService</strong> — update save mock signature, verify deactivateActiveByAccount, repository query active by creation date (3 commits)</div>
+            <div style="margin-top:8px; padding:6px 8px; background:rgba(239,68,68,.08); border-radius:4px; font-size:11px; color:#fca5a5;">
+              ⚠️ Defer W9: 4.7 Auto-Refund (carry) · A6 Multi-tenant test E2E · C1 Refund Manual · net-core merge · Test sprint HMAC E2E
+            </div>
           </td>
           <td style="padding:10px; border-left:1px solid rgba(167,139,250,.2);">
-            <div>• <strong>C4 Voucher Detail page (Miniapp)</strong> (carry W7) — 2d</div>
-            <div>• <strong>1.5 Giỏ Quà E-Voucher</strong> (FE+Miniapp · carry W6) — 1.5d</div>
-            <div>• Performance optim Miniapp (lazy load, image) — 1.5d</div>
+            <div style="background:rgba(251,191,36,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong style="color:#fcd34d;">Reconciliation v2 close 60→100% Web Admin</strong> — vendor-specific reconciliation tabs + voucher-centric history routing + ghost orders aggregation (price calculation cho ghost orders + SUM voucher face values) + CRM upload period fix + template-doi-soat-gotit rename + exclude cancelled vouchers (7 commits · BE+FE)</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>Worker Send-Voucher logic + ZNS strategy</strong> — Kafka producer/consumer config cho send-voucher messages + async processing enhance + ZNS voucher delivery strategy + tạm disable ZNS để test email + remove brand name email template (6 commits)</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>cdp-backend reconciliation endpoints + voucher history</strong> — enhance recon endpoints + FormatHotlinePipe + funnel chart styling fallback (3 commits)</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>Refactor code structure + readability</strong> + comment redeem wallet menu (2 commits)</div>
+            <div style="margin-top:8px; padding:6px 8px; background:rgba(239,68,68,.08); border-radius:4px; font-size:11px; color:#fca5a5;">
+              ⚠️ Defer W9: F2b CRM Internal hướng dẫn (còn 15%) · C4 Voucher Detail Miniapp · 1.5 Giỏ Quà E-Voucher · Performance optim Miniapp · Test Kafka pipeline
+            </div>
           </td>
           <td style="padding:10px; border-left:1px solid rgba(236,72,153,.2);">
-            <div>• <strong>4.9 Push Notification full luồng + Fix ZNS</strong> (carry W7) — 2d</div>
-            <div>• <strong>1.6 Popup Chờ Xử Lý + 1.7+1.8 Alert/Disclaimer</strong> Miniapp (carry W6) — 2d</div>
-            <div>• 4.8 Out-of-Stock Handler BE (carry W6) — 1d</div>
+            <div style="background:rgba(251,191,36,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong style="color:#fcd34d;">Reward Sync (Cancel + Adaptive Polling) E2E 🆕</strong> — cooperative cancel functionality cho sync jobs + vendor sync functionality reward items partner mode + cancel endpoints reward sync configurations (vendor + general) + adaptive polling FE với cancellation support cho reward config + items sync (8 commits · BE + FE)</div>
+            <div style="background:rgba(251,191,36,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>GotIt webhook secret versioning + bulk status update</strong> — refactor webhook secret validation, GotItWebhookService default header, webhook secret header/value DTO, plaintext storage clarify, versioning implementation cho credential updates (5 commits · pair Trang security)</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>Email Voucher Inline QR + KafkaConsumerEventLogger 🆕</strong> — inline attachment support cho email vouchers + enhance QR code generation + KafkaConsumerEventLogger + account not found logging (3 commits)</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>Mini-app RewardsV2 polish</strong> — partner rewards profile header + hotline card vendor-aware + reward paths refactor + remove ngrok header + new icons & components + brand fallback GOTIT_OTHER + collapsible sections + store preview (8 commits)</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>FE Partner Credentials polish</strong> — helper text partner credential fields + clear all filters gift inventory + webhook secret copy/readonly UX + simplify count logic recon tabs + GotIt state mapping fix consistency (8 commits)</div>
+            <div style="margin-top:8px; padding:6px 8px; background:rgba(239,68,68,.08); border-radius:4px; font-size:11px; color:#fca5a5;">
+              ⚠️ Defer W9: 1.6+1.7+1.8 Miniapp · 4.8 Out-of-Stock Handler · 4.9 Push Noti full · Lock reward paths schema mini-app · Pair pair-program mini-app
+            </div>
           </td>
         </tr>
-        <tr style="vertical-align:top; background:rgba(34,197,94,.06);">
-          <td style="padding:10px; font-weight:600; color:#34d399;">W9<br><span style="font-size:11px; color:#94a3b8; font-weight:normal;">25-29/5 (ISO W22)</span><br><span style="font-size:10px; color:#34d399;">Hardening<br>Go-live ready</span></td>
+        <tr style="vertical-align:top; background:rgba(110,231,183,.10);">
+          <td style="padding:10px; font-weight:600; color:#34d399;">W9 🎯<br><span style="font-size:11px; color:#94a3b8; font-weight:normal;">25-29/5 (ISO W22)</span><br><span style="font-size:10px; color:#6ee7b7;">GO-LIVE WEEK<br>Total evoucher</span><br><span style="font-size:10px; color:#94a3b8;">5 main + 3 parallel</span></td>
           <td style="padding:10px; border-left:1px solid rgba(56,189,248,.2);">
-            <div>• <strong>E1 Dockerfile cho 12 modules</strong> (10 worker + 2 API) — 1.5d</div>
-            <div>• D1 Load Test (k6) script redeem flow 1k user/sec (move từ Huy) — 1d</div>
-            <div>• C6 Webhook Replay Prevention (timestamp + nonce) — 1d</div>
-            <div>• A3 Actuator + Healthcheck endpoints — 1d</div>
-            <div>• A1 DB Migration Tool (Flyway · carry W6) — 0.5d</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">🎯 <strong style="color:#6ee7b7;">Deploy reward production</strong> — đẩy rewards-v2 + cdp-backend gateway + Worker Send-Voucher lên prod sau khi staging test PASS với Total API key (Thứ 6) — 1.5d</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">🛠 <strong>Refactor CICD staging giống 100% với prod</strong> — align Helm + secret + RSA + Kafka + monitoring (Thứ 3-4) — 1.5d</div>
+            <div style="background:rgba(56,189,248,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">🤝 <strong style="color:#c084fc;">GotIt nghiệm thu tích hợp + lấy giao dịch đối soát</strong> (parallel · check-in giữa+cuối tuần) — 0.5d</div>
+            <div style="background:rgba(56,189,248,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">🤝 <strong style="color:#c084fc;">Hỗ trợ Total tiến hành go-live</strong> (parallel · pair giải đáp + checklist prod keys) — 0.5d</div>
+            <div style="background:rgba(168,85,247,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">📋 <strong style="color:#c084fc;">Đọc tài liệu quà vật lý + draft plan phase 2</strong> (sau khi GotIt cấp) — 0.5d</div>
+            <div>• Testing staging với <b>Total API key</b> (pair Huy+Hải · Thứ 4) — 0.5d</div>
           </td>
           <td style="padding:10px; border-left:1px solid rgba(167,139,250,.2);">
-            <div>• D1 Load Test execution + analysis report — 1.5d</div>
-            <div>• Performance fix theo Load Test findings — 2d</div>
-            <div>• Final FE polish + bug fix Account Admin — 1.5d</div>
+            <div style="background:rgba(251,191,36,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">🛠 <strong style="color:#fcd34d;">Hoàn thành phần send ZNS</strong> — re-enable ZNS strategy sau email PASS, verify dual-channel email+ZNS, close 25% Worker Send-Voucher (Thứ 3) — 1.5d</div>
+            <div>• Testing staging với <b>Total API key</b> — chạy sync product + đổi quà + webhook decrypt + reconciliation (Thứ 4) — 1d</div>
+            <div>• Pair Trang refactor CICD staging=prod (config review BE) — 0.5d</div>
+            <div>• Smoke test Kafka send-voucher idempotency + retry — 1d</div>
+            <div>• Standby hỗ trợ deploy production Thứ 6 — 0.5d</div>
+            <div style="background:rgba(168,85,247,.08); padding:4px 6px; border-radius:4px; margin:4px 0; font-size:11px; color:#c084fc;">
+              ⚡ <b>F2b CRM Internal defer</b> · Email Inline QR defer · Performance optim Miniapp defer — focus 100% Total go-live
+            </div>
           </td>
           <td style="padding:10px; border-left:1px solid rgba(236,72,153,.2);">
-            <div>• C9 Data Retention Policy + cleanup job — 1d</div>
-            <div>• Smoke test toàn flow GotIt E2E sau merge tất cả — 1.5d</div>
-            <div>• Final Miniapp polish + bug fix go-live — 2.5d</div>
+            <div style="background:rgba(251,191,36,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">🎯 <strong style="color:#fcd34d;">Release miniapp cho các shop test</strong> — deploy miniapp RewardsV2 lên test env cho shop được chỉ định thử nghiệm UX (Thứ 5) — 1.5d</div>
+            <div>• Testing staging với <b>Total API key</b> — verify mini-app UX với credentials thật của Total (Thứ 4) — 0.5d</div>
+            <div>• Standby fix bug khi shop test feedback — 1d</div>
+            <div>• Lock reward paths schema (chuẩn bị production) — 0.5d</div>
+            <div>• Smoke test miniapp E2E sau khi reward backend production (Thứ 6) — 1d</div>
+            <div style="background:rgba(168,85,247,.08); padding:4px 6px; border-radius:4px; margin:4px 0; font-size:11px; color:#c084fc;">
+              ⚡ <b>Trigger Automation defer</b> · 1.6/1.7/1.8 Miniapp defer — focus 100% shop test + production smoke
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
     <div style="margin-top:12px; padding:10px 12px; background:rgba(15,23,42,.5); border-radius:6px; font-size:12px; color:#cbd5e1; line-height:1.5;">
-      <strong style="color:#f472b6;">Tổng task per dev (W5-W9, ~23d/người · W5=3d, W6=5d, W7=5d done · post-fetch):</strong>
-      <strong style="color:#38bdf8;">Trang ~24 tasks / 23d + ops</strong> (W7: F1 AES-256 + F4 CRM split + F8 Staging+K8s + F2 centralize + F5 price snapshot + F7 Kafka ext · 23 commits W7) ·
-      <strong style="color:#a78bfa;">Huy ~15 tasks / 22d</strong> (W7: <b style="color:#fcd34d;">F2 Account Recon API E2E full-stack 🆕</b> — atomic finalize + hard-skip + dup detect + transaction terminology · 15 commits W7) ·
-      <strong style="color:#ec4899;">Hải ~22 tasks / 22d</strong> (W7: <b style="color:#fcd34d;">F3 Sync Async E2E 🆕</b> + F1 Partner Cred Form FE + F6 Mini-app Collapsible + F7 Customer Sync + F9 FE Polish · <b>33 commits W7 - highest</b>).
+      <strong style="color:#f472b6;">Tổng task per dev (W5-W9, ~28d/người · W5=3d, W6-W8=5d each done · post-W8):</strong>
+      <strong style="color:#38bdf8;">Trang ~30 tasks / 28d + ops</strong> (W8: F1 Multi-tenant HMAC + Worker Send-Voucher infra + CICD project 215 + RSA automation + tests credential · <b>21 commits W8</b> + drive TotalxGotIt vendor) ·
+      <strong style="color:#a78bfa;">Huy ~19 tasks / 27d</strong> (W8: <b style="color:#fcd34d;">Recon v2 close 60→100% 🆕</b> + Worker Send-Voucher logic ZNS + cdp-backend recon endpoints · <b>17 commits W8 / LOC +6.5k cao nhất</b>) ·
+      <strong style="color:#ec4899;">Hải ~28 tasks / 27d</strong> (W8: <b style="color:#fcd34d;">Reward Sync Cancel+Polling E2E 🆕</b> + GotIt webhook versioning + Email Inline QR + Mini-app RewardsV2 polish · <b>32 commits W8 / 4 repos</b>).
       <br><br>
       <strong style="color:#34d399;">✅ W5 closed (3 ngày · 5 task ship):</strong> Module E CRM F1 ship 29/4 = bonus + 3 task plan dev sprint. Demo Total 4/5 đã chạy.
       <br>
       <strong style="color:#34d399;">✅ W6 closed (5/5d · 15 task ship + 3 ops):</strong> Reconciliation Phase 1a/1b + Stats Dashboard + CnvConnect + Audit Log + GotIt enrichment + net-core foundation. 9 test suites mới → 35 file.
       <br>
-      <strong style="color:#34d399;">✅ W7 closed (5/5d · 15 task ship · 71 commits):</strong> <b>Wave architecture/integration lớn nhất quarter</b> — Per-Account Credential AES-256, CRM Admin microservice split, Account Reconciliation API E2E, Sync GotIt Async + Progress E2E, Staging+K8s deploy hardening. Trang focus 100% rewards-v2 BE/Infra; Huy ship Reconciliation full-stack; Hải ship 4 streams song song (Sync + Cred Form + Mini-app UX + Customer Sync).
+      <strong style="color:#34d399;">✅ W7 closed (5/5d · 15 task ship · 71 commits):</strong> <b>Wave architecture/integration lớn nhất quarter</b> — Per-Account Credential AES-256, CRM Admin microservice split, Account Reconciliation API E2E, Sync GotIt Async + Progress E2E, Staging+K8s deploy hardening.
       <br>
-      <strong style="color:#fbbf24;">⚠️ W8 risk:</strong> Carry-over từ W7 (4.7 Auto-Refund, A6 Multi-tenant, C1 Refund, C4 Voucher Detail, 1.5 Giỏ Quà, 1.6/1.7/1.8, 4.8 Out-of-Stock, 4.9 Push Noti) + <b style="color:#f9a8d4;">net-core merge review (Trang+Hải pair)</b>. W8 sẽ "tiêu hoá" tất cả carry-over để W9 hardening sạch.
+      <strong style="color:#f9a8d4;">✅ W8 closed (5/5d · 14 task ship · 70 commits) — PIVOT lần 2:</strong> CNV không ký HĐ GotIt → team re-prioritize <b>ngay trong tuần</b>. Trang drive 4 trục TotalxGotIt + ship F1 Multi-tenant phase 2 HMAC + Worker Send-Voucher Kafka infra + CICD project 215. Huy close Recon v2 60→100% Web Admin + Worker Send-Voucher ZNS strategy. Hải ship Reward Sync Cancel+Polling E2E + GotIt webhook versioning + Email Inline QR + Mini-app polish. <b>Plan 2 tuần đóng từ 57% → 89%</b> (+32 điểm).
       <br>
-      <strong style="color:#34d399;">✅ External unblock W7:</strong> Per-Account Credential AES-256 đã chuẩn bị sẵn cho multi-account GotIt go-live. CRM split chuẩn bị scale độc lập 9090/9091. K8s deploy + AES secret + Public key file-based signature → staging ready cho UAT.
+      <strong style="color:#6ee7b7;">🎯 W9 = GO-LIVE WEEK Total evoucher:</strong> 5 trục chính (Hoàn thành send ZNS · Refactor CICD staging=prod · Testing staging với Total API key · Release miniapp shop test · <b>Deploy reward production Thứ 6</b>) + 3 trục song song Trang drive (GotIt nghiệm thu tích hợp · Hỗ trợ Total go-live · Đọc tài liệu + plan quà vật lý phase 2). <b>Defer khỏi W9 để focus 100% go-live:</b> Email Inline QR · F2b CRM Internal · Trigger Automation · Performance optim Miniapp · 1.6/1.7/1.8.
+      <br>
+      <strong style="color:#34d399;">✅ External resolved W8:</strong> Pivot "CNV không ký GotIt" được Trang xử lý <b>ngay trong tuần</b>, không treo team. TotalxGotIt scope confirmed: voucher điện thoại ✓, quà vật lý defer phase sau ✓, evoucher ưu tiên release trước.
     </div>
   </div>
 
   <!-- Gantt -->
   <div class="card" style="margin-bottom:20px;">
-    <h3>Timeline 9 tuần — Done (W1–W7 ⬆) + Planned (W8–W9 dev GotIt)</h3>
+    <h3>Timeline 9 tuần — Done (W1–W8 ⬆ · W8 PIVOT) + Planned (W9 hardening Total)</h3>
     <div style="margin-bottom: 12px;">
       <div class="gantt-week-header" style="grid-template-columns: 220px repeat(9, 1fr);">
         <div style="text-align:left;">Task / Module</div>
@@ -638,8 +667,8 @@
         <div style="background:rgba(16,185,129,.08); font-size:11px;" title="3 ngày làm việc do lễ">W5 ✅ 3d</div>
         <div style="background:rgba(16,185,129,.08); font-size:11px;" title="ISO W19, 5/5d done">W6 ✅ 5d</div>
         <div style="background:rgba(16,185,129,.08); font-size:11px;" title="ISO W20, 5/5d done">W7 ✅ 5d</div>
-        <div style="background:rgba(244,114,182,.08);">W8 (18/5)</div>
-        <div style="background:rgba(34,197,94,.08);">W9 (25/5)</div>
+        <div style="background:rgba(236,72,153,.12); font-size:11px;" title="ISO W21, 5/5d done · Pivot Total">W8 ✅ 5d ⚡</div>
+        <div style="background:rgba(244,114,182,.08);">W9 (25/5)</div>
       </div>
     </div>
     <div class="gantt" id="ganttBody"></div>
@@ -662,48 +691,58 @@
   <!-- Blockers -->
   <div class="grid-2">
     <div class="card">
-      <h3>Blockers &amp; Rủi ro hiện tại (refresh 15/05 · sau W7)</h3>
+      <h3>Blockers &amp; Rủi ro hiện tại (refresh 22/05 · sau W8 · Pivot Total)</h3>
       <div class="blocker-list">
         <div class="blocker high">
-          <div class="blocker-title">GotIt OAuth2 wire-up (carry W4 · 4 weeks open)</div>
-          <div class="blocker-desc">CNV đã gửi docx + scaffold từ W4. Webhook test PASS staging (W6). <b style="color:#34d399;">Per-Account Credential AES-256 đã ship W7</b> → backend sẵn sàng multi-account khi GotIt enable OAuth2. Ball vẫn ở phía GotIt sau 4 tuần. <b>Đề xuất escalate qua CTO channel</b>.</div>
-          <span class="blocker-tag tag-high">External · High · 4 weeks open</span>
+          <div class="blocker-title">Worker Send-Voucher email channel đang test (W8 new · 75%)</div>
+          <div class="blocker-desc">Kafka pipeline ship 100% (Dockerfile + Helm + CI/CD + producer/consumer + async). ZNS strategy tạm disable để test email delivery (fc3ed36). <b>Risk:</b> nếu kéo dài W9 sẽ block plan evoucher Total. <b>Action W9:</b> áp Releasable mindset — tách ZNS thành PR riêng, release Email channel core thứ 3 W9.</div>
+          <span class="blocker-tag tag-high">Internal · High · W8 new</span>
         </div>
         <div class="blocker medium">
-          <div class="blocker-title">UAT readiness ~30/5 — QC spec chưa lock (W7 new)</div>
-          <div class="blocker-desc">Backend gần như sẵn sàng (95%). Staging deploy + K8s config + AES secret + file-based pubkey signature ✓ W7. Còn 2 tuần (W8-W9) để hardening + Load Test. <b>UAT spec/test case từ QC team chưa lock</b> — cần PM/QC drive trước Thứ 2 W8 để không trễ go-live 30/5.</div>
-          <span class="blocker-tag tag-medium">External · Medium · W7 new</span>
+          <div class="blocker-title">Email Voucher Inline QR (70%) — chốt template muộn</div>
+          <div class="blocker-desc">Inline QR attachment + QR generation ship. Đang rework template "remove brand name" (b1dae2d) — dấu hiệu UX/spec thay đổi muộn. <b>Action W9:</b> chốt UX template Mon trước Tue cho Hải+Huy ship.</div>
+          <span class="blocker-tag tag-medium">Internal · Medium · W8 new</span>
         </div>
         <div class="blocker medium">
-          <div class="blocker-title">net-core branch merge review (carry W6 → W8)</div>
-          <div class="blocker-desc">Branch <code>haiht/reward-redeem</code> trong net-core-platform-cnv (6 commits foundation) <b>chưa merge sang trunk sau 2 tuần</b>. Cần Trang+Hải pair-review interface giữa rewards-v2 ↔ net-core. <b>Defer W8 chính thức</b>.</div>
-          <span class="blocker-tag tag-medium">Internal · Medium · 2 weeks open</span>
+          <div class="blocker-title">Test debt cho HMAC + multi-tenant + Kafka idempotency</div>
+          <div class="blocker-desc">W8 ship lượng lớn production-grade security (HMAC-SHA256, per-account orchestration) + Kafka send-voucher pipeline nhưng <b>chưa cover E2E test</b>. Có tests cho GotItCredentialService nhưng chưa cover HMAC verify + multi-tenant transaction prefix + Kafka idempotency. <b>Risk:</b> regression khi Total go-live ramp-up.</div>
+          <span class="blocker-tag tag-medium">Internal · Medium · ongoing</span>
         </div>
         <div class="blocker medium">
-          <div class="blocker-title">W7 carry-over sang W8 (10 task defer)</div>
-          <div class="blocker-desc">W7 pivot lớn sang F1 AES-256 + F2 Account Recon API + F3 Sync Async + F4 CRM split + F8 Staging → 10 task plan defer: 4.7 Auto-Refund, A6 Multi-tenant, C1 Refund, C4 Voucher Detail, 1.5 Giỏ Quà, 1.6/1.7/1.8 Miniapp, 4.8 Out-of-Stock, 4.9 Push Noti. W8 cần "tiêu hoá" toàn bộ để W9 hardening sạch.</div>
-          <span class="blocker-tag tag-medium">Internal · Medium · W7 new</span>
+          <div class="blocker-title">Quà vật lý Total — chờ tài liệu GotIt (W8 new)</div>
+          <div class="blocker-desc">Total có dùng quà vật lý nhưng phase này focus evoucher. Trang đã yêu cầu GotIt cấp tài liệu. <b>Action:</b> draft plan Phase 2 timeline rõ để Total không chasing. Không block hiện tại.</div>
+          <span class="blocker-tag tag-medium">External · Medium · W8 new · Phase 2</span>
+        </div>
+        <div class="blocker medium">
+          <div class="blocker-title">net-core branch merge review (carry W6 → W9 · 3 weeks open)</div>
+          <div class="blocker-desc">Branch <code>haiht/reward-redeem</code> trong net-core-platform-cnv (6 commits foundation) <b>chưa merge sau 3 tuần</b>. Cần Trang+Hải pair-review interface. W8 không touch, defer tiếp W9.</div>
+          <span class="blocker-tag tag-medium">Internal · Medium · 3 weeks open</span>
         </div>
         <div class="blocker medium" style="opacity:.55;">
-          <div class="blocker-title">✅ CLOSED W7: Multi-account GotIt Credential isolation</div>
-          <div class="blocker-desc">Per-Account GotIt Credential với AES-256-CBC ship W7 (Trang + Hải pair · 11 commits). AccountVendorMapping enforce credential validation trong GotItRecoveryStrategy. AES256Utils fail-late init pattern. Partner Credentials Form FE với inline + server validation. <b>Sẵn sàng cho multi-account go-live</b>.</div>
-          <span class="blocker-tag tag-medium" style="background:rgba(34,197,94,.15);color:#34d399;">CLOSED W7 🆕</span>
+          <div class="blocker-title">✅ RESOLVED W8: Pivot CNV không ký GotIt</div>
+          <div class="blocker-desc">CNV không ký hợp đồng GotIt trong tuần W8. <b>Trang xử lý ngay trong tuần</b> — bỏ track CNVxGotIt UAT, drive 4 trục TotalxGotIt: (1) gửi đánh giá tích hợp TotalxGotIt, (2) clarify scope Total↔GotIt, (3) test staging+webhook PASS, (4) confirm Total dùng voucher điện thoại, defer quà vật lý. <b>Không treo team đợi quyết định.</b></div>
+          <span class="blocker-tag tag-medium" style="background:rgba(236,72,153,.15);color:#f9a8d4;">RESOLVED W8 ⚡ PIVOT</span>
         </div>
         <div class="blocker medium" style="opacity:.55;">
-          <div class="blocker-title">✅ CLOSED W7: Account Reconciliation API E2E full-stack</div>
-          <div class="blocker-desc">Huy ship Account Reconciliation API E2E (11 commits W7): BE atomic finalize race-safe + hard-skip terminal state + duplicate detection re-uploads · Gateway API · FE Reconciliation module + transaction terminology rename. <b>Race condition tested + protected</b>.</div>
-          <span class="blocker-tag tag-medium" style="background:rgba(34,197,94,.15);color:#34d399;">CLOSED W7 🆕</span>
+          <div class="blocker-title">✅ CLOSED W8: Multi-tenant phase 2 — HMAC + per-account orchestration</div>
+          <div class="blocker-desc">F1 Per-Account Credential phase 2 ship W8 (8 commits): HMAC-SHA256 + AES decoupled webhook secret · rotate pepper tách khỏi AES key (compliance) · account-scoped webhook authentication · per-account GotIt credential sync · inject account vào generateTransactionId per-vendor prefix. <b>Total private key & GotIt webhook key đều 100%.</b></div>
+          <span class="blocker-tag tag-medium" style="background:rgba(34,197,94,.15);color:#34d399;">CLOSED W8 🆕</span>
         </div>
         <div class="blocker medium" style="opacity:.55;">
-          <div class="blocker-title">✅ CLOSED W7: K8s deployment + Staging hardening</div>
-          <div class="blocker-desc">crm-admin + worker-sync-cnv-customer có K8s deployment configs ✓. Staging config sạch: Kafka externalize topic/group ID, AES256 secret, file-based public key signature verify, fail-late init pattern. CnvConnect mock mode staging. <b>Sẵn sàng spin-up environment cho UAT</b>.</div>
-          <span class="blocker-tag tag-medium" style="background:rgba(34,197,94,.15);color:#34d399;">CLOSED W7 🆕</span>
+          <div class="blocker-title">✅ CLOSED W8: Reconciliation v2 Web Admin (60→100%)</div>
+          <div class="blocker-desc">Huy đóng dứt điểm Recon Web Admin: vendor-specific tabs + voucher-centric history routing + ghost orders aggregation + CRM upload period fix + template-doi-soat-gotit rename + exclude cancelled vouchers (7 commits). <b>Admin đã dùng được production-ready.</b></div>
+          <span class="blocker-tag tag-medium" style="background:rgba(34,197,94,.15);color:#34d399;">CLOSED W8 🆕</span>
+        </div>
+        <div class="blocker medium" style="opacity:.55;">
+          <div class="blocker-title">✅ CLOSED W8: CICD project 215 + RSA automation + UTC</div>
+          <div class="blocker-desc">Migrate CI/CD project 215 + automate RSA key deployment + align UTC TZ staging + application-prod → application-production rename + externalize toàn bộ sensitive credentials. <b>Pre-prod readiness chặt hơn cho evoucher release.</b></div>
+          <span class="blocker-tag tag-medium" style="background:rgba(34,197,94,.15);color:#34d399;">CLOSED W8 🆕</span>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <h3>So sánh Sprint 5 vs Sprint 6 vs Sprint 7 ✅</h3>
+      <h3>So sánh Sprint 6 · 7 · 8 ✅ (W19 → W21)</h3>
       <div class="chart-container">
         <canvas id="highlightChart"></canvas>
       </div>
@@ -711,7 +750,7 @@
   </div>
 
   <footer>
-    Dashboard cập nhật từ báo cáo tiến độ · Cập nhật: 15/05/2026 (ISO W20 / Sprint 7 ✅ 5/5d done) · Post-fetch refresh: W7 ship 9 features (F1 AES-256 · F2 Recon E2E · F3 Sync Async · F4 CRM split · F5 RedemptionOrder · F6 Mini-app · F7 Kafka · F8 Staging · F9 FE Polish) · 71 commits / 3 dev / 5 ngày · 5 repositories
+    Dashboard cập nhật từ báo cáo tiến độ · Cập nhật: 22/05/2026 (ISO W21 / Sprint 8 ✅ 5/5d done · <b style="color:#f9a8d4;">PIVOT lần 2</b>) · Post-W8 refresh: W8 ship 7 Epic (Multi-tenant phase 2 HMAC · Worker Send-Voucher Kafka · Recon v2 close · Reward Sync polling · Email Inline QR · Mini-app polish · CICD project 215) + drive TotalxGotIt vendor coordination + Total staging key 100% · 70 commits / 3 dev / 5 ngày · 4 repositories active · Plan 2 tuần (W20+W21) đóng <b style="color:#6ee7b7;">100% 🎯</b> (12/12 active · F2b defer ưu tiên Total · 2 Epic phát sinh W22)
   </footer>
 </div>
 
@@ -725,41 +764,41 @@
   new Chart(document.getElementById('weeklyChart'), {
     type: 'bar',
     data: {
-      labels: ['Tuần 1 (30/3-3/4)', 'Tuần 2 (6/4-10/4)', 'Tuần 3 (13/4-17/4)', 'Tuần 4 (21/4-25/4)', 'Tuần 5 (28/4-2/5) 3d', 'Tuần 6 (5-9/5)', 'Tuần 7 (11-15/5) ✅'],
+      labels: ['Tuần 1 (30/3-3/4)', 'Tuần 2 (6/4-10/4)', 'Tuần 3 (13/4-17/4)', 'Tuần 4 (21/4-25/4)', 'Tuần 5 (28/4-2/5) 3d', 'Tuần 6 (5-9/5)', 'Tuần 7 (11-15/5) ✅', 'Tuần 8 (18-22/5) ✅⚡'],
       datasets: [
         {
           label: 'Worker / Sync',
-          data: [3, 1, 1, 2, 0, 1, 2],
+          data: [3, 1, 1, 2, 0, 1, 2, 2],
           backgroundColor: '#3b82f6',
           borderRadius: 6
         },
         {
           label: 'API Development (BE)',
-          data: [3, 5, 2, 2, 2, 4, 3],
+          data: [3, 5, 2, 2, 2, 4, 3, 3],
           backgroundColor: '#10b981',
           borderRadius: 6
         },
         {
           label: 'Integration',
-          data: [0, 2, 2, 1, 0, 2, 3],
+          data: [0, 2, 2, 1, 0, 2, 3, 3],
           backgroundColor: '#f59e0b',
           borderRadius: 6
         },
         {
           label: 'Business Logic',
-          data: [0, 0, 3, 1, 1, 4, 3],
+          data: [0, 0, 3, 1, 1, 4, 3, 2],
           backgroundColor: '#8b5cf6',
           borderRadius: 6
         },
         {
           label: 'Frontend (Account UI)',
-          data: [0, 0, 0, 7, 0, 1, 3],
+          data: [0, 0, 0, 7, 0, 1, 3, 2],
           backgroundColor: '#a78bfa',
           borderRadius: 6
         },
         {
           label: 'Miniapp (User-facing)',
-          data: [0, 0, 0, 3, 1, 0, 1],
+          data: [0, 0, 0, 3, 1, 0, 1, 2],
           backgroundColor: '#ec4899',
           borderRadius: 6
         }
@@ -797,7 +836,7 @@
     data: {
       labels: ['API Development (BE)', 'Frontend (Account UI)', 'Worker / Sync', 'Integration (Urbox/GotIt/Cnv)', 'Business Logic / Framework', 'Miniapp (User-facing)', 'Infra / Security'],
       datasets: [{
-        data: [21, 11, 10, 10, 12, 5, 5],
+        data: [23, 13, 12, 13, 13, 6, 8],
         backgroundColor: ['#10b981', '#a78bfa', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4'],
         borderColor: 'rgba(15,23,42,.8)',
         borderWidth: 3
@@ -822,36 +861,36 @@
     }
   });
 
-  // 3. Highlight sprint comparison (4 → 5 → 6)
+  // 3. Highlight sprint comparison (6 → 7 → 8)
   new Chart(document.getElementById('highlightChart'), {
     type: 'radar',
     data: {
       labels: ['Architecture', 'Integration', 'CRM Operation', 'Reconciliation', 'Test Coverage', 'External unblock', 'Infra/K8s'],
       datasets: [
         {
-          label: 'Sprint 5 (28/4–2/5)',
-          data: [92, 85, 70, 25, 65, 55, 40],
-          backgroundColor: 'rgba(139,92,246,.12)',
+          label: 'Sprint 6 (5–9/5)',
+          data: [95, 90, 85, 70, 80, 60, 55],
+          backgroundColor: 'rgba(139,92,246,.10)',
           borderColor: '#a78bfa',
           pointBackgroundColor: '#c084fc',
           pointBorderColor: '#fff',
           borderWidth: 2
         },
         {
-          label: 'Sprint 6 (5–9/5)',
-          data: [95, 90, 85, 70, 80, 60, 55],
-          backgroundColor: 'rgba(236,72,153,.12)',
-          borderColor: '#ec4899',
-          pointBackgroundColor: '#f472b6',
+          label: 'Sprint 7 (11–15/5) ✅ 5d',
+          data: [100, 98, 98, 95, 88, 65, 85],
+          backgroundColor: 'rgba(56,189,248,.12)',
+          borderColor: '#38bdf8',
+          pointBackgroundColor: '#0ea5e9',
           pointBorderColor: '#fff',
           borderWidth: 2
         },
         {
-          label: 'Sprint 7 (11–15/5) ✅ 5d',
-          data: [100, 98, 98, 95, 88, 65, 85],
-          backgroundColor: 'rgba(56,189,248,.18)',
-          borderColor: '#38bdf8',
-          pointBackgroundColor: '#0ea5e9',
+          label: 'Sprint 8 (18–22/5) ✅ 5d ⚡ Pivot',
+          data: [100, 100, 100, 100, 90, 95, 95],
+          backgroundColor: 'rgba(236,72,153,.18)',
+          borderColor: '#ec4899',
+          pointBackgroundColor: '#f472b6',
           pointBorderColor: '#fff',
           borderWidth: 3,
           pointRadius: 5
@@ -880,12 +919,12 @@
   // Performance: tasks vs complexity (combo chart)
   new Chart(document.getElementById('performanceChart'), {
     data: {
-      labels: ['Tuần 1 (30/3-3/4)', 'Tuần 2 (6/4-10/4)', 'Tuần 3 (13/4-17/4)', 'Tuần 4 (21/4-25/4)', 'Tuần 5 (28/4-2/5) 3d', 'Tuần 6 (5-9/5)', 'Tuần 7 (11-15/5) ✅'],
+      labels: ['Tuần 1 (30/3-3/4)', 'Tuần 2 (6/4-10/4)', 'Tuần 3 (13/4-17/4)', 'Tuần 4 (21/4-25/4)', 'Tuần 5 (28/4-2/5) 3d', 'Tuần 6 (5-9/5)', 'Tuần 7 (11-15/5) ✅', 'Tuần 8 (18-22/5) ✅⚡'],
       datasets: [
         {
           type: 'bar',
           label: 'Số task',
-          data: [6, 8, 8, 16, 5, 15, 15],
+          data: [6, 8, 8, 16, 5, 15, 15, 14],
           backgroundColor: '#3b82f6',
           borderRadius: 6,
           yAxisID: 'y',
@@ -894,7 +933,7 @@
         {
           type: 'bar',
           label: 'Complexity Points',
-          data: [16, 23, 31, 46, 17, 55, 60],
+          data: [16, 23, 31, 46, 17, 55, 60, 56],
           backgroundColor: '#a78bfa',
           borderRadius: 6,
           yAxisID: 'y',
@@ -903,7 +942,7 @@
         {
           type: 'line',
           label: 'Độ khó TB / task',
-          data: [2.67, 2.88, 3.88, 2.88, 3.40, 3.67, 4.00],
+          data: [2.67, 2.88, 3.88, 2.88, 3.40, 3.67, 4.00, 4.00],
           borderColor: '#f472b6',
           backgroundColor: 'rgba(244,114,182,.15)',
           borderWidth: 3,
@@ -959,13 +998,13 @@
   new Chart(document.getElementById('difficultyChart'), {
     type: 'bar',
     data: {
-      labels: ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4', 'Tuần 5', 'Tuần 6', 'Tuần 7 ✅'],
+      labels: ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4', 'Tuần 5', 'Tuần 6', 'Tuần 7 ✅', 'Tuần 8 ✅⚡'],
       datasets: [
-        { label: '1 · Trivial', data: [1, 0, 0, 0, 0, 0, 0], backgroundColor: '#22d3ee', borderRadius: 4 },
-        { label: '2 · Easy',    data: [1, 3, 0, 4, 0, 1, 1], backgroundColor: '#10b981', borderRadius: 4 },
-        { label: '3 · Medium',  data: [3, 3, 3, 10, 3, 4, 4], backgroundColor: '#f59e0b', borderRadius: 4 },
-        { label: '4 · Hard',    data: [1, 1, 3, 2, 2, 4, 6], backgroundColor: '#f97316', borderRadius: 4 },
-        { label: '5 · Very Hard', data: [0, 1, 2, 0, 0, 3, 4], backgroundColor: '#ef4444', borderRadius: 4 }
+        { label: '1 · Trivial', data: [1, 0, 0, 0, 0, 0, 0, 0], backgroundColor: '#22d3ee', borderRadius: 4 },
+        { label: '2 · Easy',    data: [1, 3, 0, 4, 0, 1, 1, 1], backgroundColor: '#10b981', borderRadius: 4 },
+        { label: '3 · Medium',  data: [3, 3, 3, 10, 3, 4, 4, 4], backgroundColor: '#f59e0b', borderRadius: 4 },
+        { label: '4 · Hard',    data: [1, 1, 3, 2, 2, 4, 6, 6], backgroundColor: '#f97316', borderRadius: 4 },
+        { label: '5 · Very Hard', data: [0, 1, 2, 0, 0, 3, 4, 3], backgroundColor: '#ef4444', borderRadius: 4 }
       ]
     },
     options: {
@@ -1053,7 +1092,22 @@
     { week: 'T7', name: 'F6 Mini-app Collapsible + StorePreviewItem', d: 3 },
     { week: 'T7', name: 'F7 Kafka externalize + customer sync logging', d: 4 },
     { week: 'T7', name: 'F8 Staging config + file-based pubkey + fail-late', d: 4 },
-    { week: 'T7', name: 'F9 FE Polish (skeleton + GOTIT_OTHER + badge)', d: 2 }
+    { week: 'T7', name: 'F9 FE Polish (skeleton + GOTIT_OTHER + badge)', d: 2 },
+    // ========= W8 ACTUAL (18-22/5 — 5/5 days done · ISO W21 · PIVOT) =========
+    { week: 'T8', name: 'F1 Multi-tenant phase 2 — HMAC-SHA256 + AES decoupled', d: 5 },
+    { week: 'T8', name: 'F1 Per-account credential sync + transaction prefix', d: 4 },
+    { week: 'T8', name: 'Worker Send-Voucher Kafka — Dockerfile + Helm + CI/CD', d: 5 },
+    { week: 'T8', name: 'Worker Send-Voucher logic + ZNS strategy (Huy)', d: 5 },
+    { week: 'T8', name: 'Recon v2 close — vendor tabs + voucher history routing', d: 4 },
+    { week: 'T8', name: 'Recon v2 — ghost orders + period fix + template rename', d: 4 },
+    { week: 'T8', name: 'Reward Sync Cancel + Adaptive Polling E2E', d: 4 },
+    { week: 'T8', name: 'GotIt webhook secret versioning + bulk status update', d: 4 },
+    { week: 'T8', name: 'Email Voucher Inline QR + KafkaConsumerEventLogger', d: 3 },
+    { week: 'T8', name: 'Mini-app RewardsV2 — partner rewards + hotline + paths', d: 3 },
+    { week: 'T8', name: 'CICD project 215 + RSA automation + UTC TZ', d: 4 },
+    { week: 'T8', name: 'Externalize sensitive credentials + standardize placeholders', d: 3 },
+    { week: 'T8', name: 'FE Partner Credentials helper + clear filters + state map fix', d: 3 },
+    { week: 'T8', name: 'Tests GotItCredentialService (save mock + repo query)', d: 3 }
   ];
   const diffColors = { 1:'#22d3ee', 2:'#10b981', 3:'#f59e0b', 4:'#f97316', 5:'#ef4444' };
   const diffLabels = { 1:'Trivial', 2:'Easy', 3:'Medium', 4:'Hard', 5:'Very Hard' };
@@ -1141,34 +1195,45 @@
     { name: '✅ F7 Kafka customer sync logging', cat: 'Integration', start: 6, end: 7, cls: 'bar-integration', owner: 'L' },
     { name: '✅ F5 pointsRequired Integer → Long', cat: 'Logic', start: 6, end: 7, cls: 'bar-logic', owner: 'L' },
     { name: '✅ F9 FE Polish (skeleton + GOTIT_OTHER)', cat: 'Frontend', start: 6, end: 7, cls: 'bar-frontend', owner: 'L' },
-    // ========= W8 (18/5 – 22/5) — Carry-over W7 + ban đầu =========
-    // Trang
-    { name: '4.7 Auto-Refund Engine [carry W7]', cat: 'Logic', start: 7, end: 8, cls: 'bar-logic', planned: true, owner: 'T' },
-    { name: 'A6 Multi-tenant Isolation Test [carry W7]', cat: 'Logic', start: 7, end: 8, cls: 'bar-logic', planned: true, owner: 'T' },
-    { name: 'C1 Refund Manual Tool BE [carry W7]', cat: 'API', start: 7, end: 8, cls: 'bar-api', planned: true, owner: 'T' },
-    { name: 'net-core branch merge review', cat: 'Logic', start: 7, end: 8, cls: 'bar-logic', planned: true, owner: 'T' },
-    // Huy
-    { name: 'C4 Voucher Detail page (Miniapp) [carry]', cat: 'Miniapp', start: 7, end: 8, cls: 'bar-miniapp', planned: true, owner: 'H' },
-    { name: '1.5 Giỏ Quà E-Voucher [carry W6]', cat: 'Frontend', start: 7, end: 8, cls: 'bar-frontend', planned: true, owner: 'H' },
-    { name: 'Performance optim Miniapp [carry]', cat: 'Miniapp', start: 7, end: 8, cls: 'bar-miniapp', planned: true, owner: 'H' },
-    // Hải
-    { name: '4.9 Push Notification + Fix ZNS [carry]', cat: 'Integration', start: 7, end: 8, cls: 'bar-integration', planned: true, owner: 'L' },
-    { name: '1.6+1.7+1.8 Mini-app Popup/Alert [carry W6]', cat: 'Miniapp', start: 7, end: 8, cls: 'bar-miniapp', planned: true, owner: 'L' },
-    { name: '4.8 Out-of-Stock Handler BE [carry]', cat: 'Logic', start: 7, end: 8, cls: 'bar-logic', planned: true, owner: 'L' },
-    // ========= W9 (25-29/5) — Hardening + Go-live ready =========
-    // Trang
-    { name: 'E1 Dockerfile cho 12 modules', cat: 'Infra', start: 8, end: 9, cls: 'bar-infra', planned: true, owner: 'T' },
-    { name: 'A3 Actuator + Healthcheck endpoints', cat: 'Infra', start: 8, end: 9, cls: 'bar-infra', planned: true, owner: 'T' },
-    { name: 'C6 Webhook Replay Prevention (nonce)', cat: 'Logic', start: 8, end: 9, cls: 'bar-logic', planned: true, owner: 'T' },
-    { name: 'A1 DB Migration Tool (Flyway)', cat: 'Infra', start: 8, end: 9, cls: 'bar-infra', planned: true, owner: 'T' },
-    // Huy
-    { name: 'D1 Load Test execution + analysis', cat: 'Logic', start: 8, end: 9, cls: 'bar-logic', planned: true, owner: 'H' },
-    { name: 'Performance fix theo Load Test findings', cat: 'Logic', start: 8, end: 9, cls: 'bar-logic', planned: true, owner: 'H' },
-    { name: 'Final FE polish + bug fix', cat: 'Frontend', start: 8, end: 9, cls: 'bar-frontend', planned: true, owner: 'H' },
-    // Hải
-    { name: 'C9 Data Retention Policy + cleanup job', cat: 'Infra', start: 8, end: 9, cls: 'bar-infra', planned: true, owner: 'L' },
-    { name: 'Smoke test GotIt sau merge tất cả', cat: 'Logic', start: 8, end: 9, cls: 'bar-logic', planned: true, owner: 'L' },
-    { name: 'Final Miniapp polish + bug fix go-live', cat: 'Miniapp', start: 8, end: 9, cls: 'bar-miniapp', planned: true, owner: 'L' }
+    // ========= W8 ACTUAL (18-22/5 — 5/5 days done · ISO W21 · PIVOT) =========
+    // Trang — drive vendor + infra + multi-tenant phase 2
+    { name: '✅ ⚡ TotalxGotIt integration eval + scope clarify', cat: 'Integration', start: 7, end: 8, cls: 'bar-integration', owner: 'T' },
+    { name: '✅ F1 Multi-tenant HMAC-SHA256 + AES decoupled', cat: 'Logic', start: 7, end: 8, cls: 'bar-logic', owner: 'T' },
+    { name: '✅ F1 Per-account sync + transaction prefix', cat: 'Logic', start: 7, end: 8, cls: 'bar-logic', owner: 'T' },
+    { name: '✅ Worker Send-Voucher infra (Docker+Helm+CI/CD)', cat: 'Infra', start: 7, end: 8, cls: 'bar-infra', owner: 'T' },
+    { name: '✅ CICD project 215 + RSA + UTC + production rename', cat: 'Infra', start: 7, end: 8, cls: 'bar-infra', owner: 'T' },
+    { name: '✅ Externalize sensitive credentials + placeholders', cat: 'Infra', start: 7, end: 8, cls: 'bar-infra', owner: 'T' },
+    { name: '✅ Tests GotItCredentialService (mock + repo)', cat: 'API', start: 7, end: 8, cls: 'bar-api', owner: 'T' },
+    // Huy — close Recon v2 + Worker Send-Voucher logic
+    { name: '✅ Recon v2 close — vendor tabs + history routing', cat: 'API', start: 7, end: 8, cls: 'bar-api', owner: 'H' },
+    { name: '✅ Recon v2 — ghost orders + period fix CRM', cat: 'Logic', start: 7, end: 8, cls: 'bar-logic', owner: 'H' },
+    { name: '✅ Worker Send-Voucher logic + ZNS + Kafka prod/cons', cat: 'Integration', start: 7, end: 8, cls: 'bar-integration', owner: 'H' },
+    { name: '✅ cdp-backend recon endpoints + voucher history', cat: 'API', start: 7, end: 8, cls: 'bar-api', owner: 'H' },
+    { name: '✅ FormatHotlinePipe + funnel chart fallback', cat: 'Frontend', start: 7, end: 8, cls: 'bar-frontend', owner: 'H' },
+    // Hải — Reward Sync + Webhook versioning + Mini-app + Email QR
+    { name: '✅ Reward Sync Cancel + Adaptive Polling E2E', cat: 'API', start: 7, end: 8, cls: 'bar-api', owner: 'L' },
+    { name: '✅ GotIt webhook secret versioning + bulk status', cat: 'Integration', start: 7, end: 8, cls: 'bar-integration', owner: 'L' },
+    { name: '✅ Email Voucher Inline QR + KafkaConsumerLogger', cat: 'Integration', start: 7, end: 8, cls: 'bar-integration', owner: 'L' },
+    { name: '✅ Mini-app RewardsV2 — partner profile + hotline', cat: 'Miniapp', start: 7, end: 8, cls: 'bar-miniapp', owner: 'L' },
+    { name: '✅ FE Partner Credentials helper + state map fix', cat: 'Frontend', start: 7, end: 8, cls: 'bar-frontend', owner: 'L' },
+    // ========= W9 (25-29/5) — GO-LIVE WEEK · 5 main + 3 parallel =========
+    // Trang — Production deploy + CICD align + 3 parallel vendor tracks
+    { name: '🎯 Deploy reward production (Thứ 6 milestone)', cat: 'Infra', start: 8, end: 9, cls: 'bar-infra', planned: true, owner: 'T' },
+    { name: 'Refactor CICD staging giống 100% với prod', cat: 'Infra', start: 8, end: 9, cls: 'bar-infra', planned: true, owner: 'T' },
+    { name: 'Testing staging với Total API key (pair)', cat: 'Integration', start: 8, end: 9, cls: 'bar-integration', planned: true, owner: 'T' },
+    { name: '🤝 GotIt nghiệm thu tích hợp + recon transactions', cat: 'Integration', start: 8, end: 9, cls: 'bar-integration', planned: true, owner: 'T' },
+    { name: '🤝 Hỗ trợ Total tiến hành go-live + checklist', cat: 'Integration', start: 8, end: 9, cls: 'bar-integration', planned: true, owner: 'T' },
+    { name: '📋 Đọc tài liệu quà vật lý + draft plan phase 2', cat: 'Logic', start: 8, end: 9, cls: 'bar-logic', planned: true, owner: 'T' },
+    // Huy — ZNS + Testing staging + smoke
+    { name: '🎯 Hoàn thành phần send ZNS (re-enable + verify)', cat: 'Integration', start: 8, end: 9, cls: 'bar-integration', planned: true, owner: 'H' },
+    { name: 'Testing staging với Total API key (full flow)', cat: 'API', start: 8, end: 9, cls: 'bar-api', planned: true, owner: 'H' },
+    { name: 'Smoke test Kafka send-voucher idempotency', cat: 'Logic', start: 8, end: 9, cls: 'bar-logic', planned: true, owner: 'H' },
+    { name: 'Standby support deploy production Thứ 6', cat: 'Logic', start: 8, end: 9, cls: 'bar-logic', planned: true, owner: 'H' },
+    // Hải — Miniapp release for shop test
+    { name: '🎯 Release miniapp cho các shop test', cat: 'Miniapp', start: 8, end: 9, cls: 'bar-miniapp', planned: true, owner: 'L' },
+    { name: 'Testing miniapp với Total API key (UX verify)', cat: 'Miniapp', start: 8, end: 9, cls: 'bar-miniapp', planned: true, owner: 'L' },
+    { name: 'Standby fix bug feedback từ shop test', cat: 'Frontend', start: 8, end: 9, cls: 'bar-frontend', planned: true, owner: 'L' },
+    { name: 'Smoke test miniapp E2E sau production', cat: 'Miniapp', start: 8, end: 9, cls: 'bar-miniapp', planned: true, owner: 'L' }
   ];
 
   const gantt = document.getElementById('ganttBody');
