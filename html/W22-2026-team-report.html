@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>W22/2026 — Reward V2 Team Report (GO-LIVE Total evoucher · First production release)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding: 24px;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 1400px; margin: 0 auto; }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding: 28px 24px;
+    background: linear-gradient(135deg, rgba(16,185,129,.22), rgba(59,130,246,.22));
+    border: 1px solid rgba(16,185,129,.4);
+    border-radius: 16px;
+  }
+  header .eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #6ee7b7;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  header h1 {
+    font-size: 30px;
+    background: linear-gradient(90deg, #6ee7b7, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+  }
+  header p { color: #94a3b8; font-size: 14px; }
+  header .meta { margin-top: 12px; display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; font-size: 12px; color: #cbd5e1; }
+  header .meta span { background: rgba(15,23,42,.5); padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(148,163,184,.15); }
+  header .meta .golive { background: rgba(16,185,129,.18); border-color: rgba(16,185,129,.5); color: #6ee7b7; font-weight: 600; }
+
+  /* KPI grid */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .kpi {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
+  .kpi.blue::before { background: #3b82f6; }
+  .kpi.green::before { background: #10b981; }
+  .kpi.orange::before { background: #f59e0b; }
+  .kpi.purple::before { background: #a855f7; }
+  .kpi.red::before { background: #ef4444; }
+  .kpi.cyan::before { background: #06b6d4; }
+  .kpi-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+  .kpi-value { font-size: 28px; font-weight: 700; color: #f1f5f9; }
+  .kpi-sub { font-size: 12px; color: #64748b; margin-top: 4px; }
+
+  /* Strategy banner */
+  .strategy-banner {
+    background: linear-gradient(135deg, rgba(16,185,129,.14), rgba(59,130,246,.14));
+    border: 1px solid rgba(16,185,129,.35);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 28px;
+  }
+  .strategy-banner .label {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #6ee7b7;
+    text-transform: uppercase;
+    background: rgba(16,185,129,.2);
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .strategy-banner h2 {
+    font-size: 17px;
+    color: #f1f5f9;
+    margin-bottom: 8px;
+  }
+  .strategy-banner p { color: #cbd5e1; font-size: 13.5px; line-height: 1.65; }
+  .strategy-banner b { color: #6ee7b7; }
+  .strategy-banner .golive-tag {
+    display: inline-block;
+    background: rgba(16,185,129,.2);
+    color: #6ee7b7;
+    border: 1px solid rgba(16,185,129,.5);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Section heading */
+  .section-title {
+    display: flex; align-items: baseline; gap: 10px;
+    margin: 28px 0 16px 0;
+  }
+  .section-title h2 { font-size: 18px; color: #f1f5f9; }
+  .section-title .hint { font-size: 12px; color: #64748b; }
+  .section-title h2::before {
+    content: ""; display: inline-block;
+    width: 4px; height: 18px;
+    background: linear-gradient(180deg, #10b981, #3b82f6);
+    border-radius: 2px;
+    margin-right: 10px;
+    transform: translateY(2px);
+  }
+
+  /* Cards generic */
+  .card {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  /* Person overview */
+  .people-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .person {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .person-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 18px; color: #fff;
+  }
+  .av-trang { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
+  .av-huy   { background: linear-gradient(135deg, #10b981, #06b6d4); }
+  .av-hai   { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+  .person h3 { font-size: 16px; color: #f1f5f9; }
+  .person .role { font-size: 12px; color: #94a3b8; }
+  .repo-stack { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .repo-pill {
+    font-size: 11px;
+    padding: 3px 10px; border-radius: 12px;
+    background: rgba(15,23,42,.6);
+    border: 1px solid rgba(148,163,184,.2);
+    color: #cbd5e1;
+  }
+  .repo-pill b { color: #60a5fa; }
+  .person .total { font-size: 13px; color: #94a3b8; margin-bottom: 8px; }
+  .person .total b { color: #f1f5f9; font-size: 16px; }
+  .bar { height: 8px; background: rgba(15,23,42,.6); border-radius: 4px; overflow: hidden; display: flex; }
+  .bar > div { height: 100%; }
+  .b-rewards { background: #3b82f6; }
+  .b-cdpbe   { background: #10b981; }
+  .b-cdpfe   { background: #f59e0b; }
+  .b-mini    { background: #a855f7; }
+  .legend { display: flex; gap: 12px; font-size: 11px; color: #94a3b8; margin-top: 8px; flex-wrap: wrap; }
+  .legend i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; margin-right: 4px; vertical-align: middle; }
+
+  /* Goal progress */
+  .goals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .goal-card {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 16px 18px;
+    border-left: 4px solid;
+  }
+  .goal-card.done { border-left-color: #10b981; }
+  .goal-card.partial { border-left-color: #f59e0b; }
+  .goal-card.progress { border-left-color: #3b82f6; }
+  .goal-card.deferred { border-left-color: #ef4444; }
+  .goal-card.changed { border-left-color: #a855f7; }
+  .goal-card.bonus { border-left-color: #06b6d4; }
+
+  /* Category tags */
+  .cat-tag {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+    margin-bottom: 8px;
+  }
+  .cat-release  { background: rgba(16,185,129,.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,.35); }
+  .cat-feature  { background: rgba(16,185,129,.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,.35); }
+  .cat-tech     { background: rgba(59,130,246,.15); color: #93c5fd; border: 1px solid rgba(59,130,246,.35); }
+  .cat-infra    { background: rgba(168,85,247,.15); color: #c084fc; border: 1px solid rgba(168,85,247,.35); }
+  .cat-ux       { background: rgba(236,72,153,.15); color: #f9a8d4; border: 1px solid rgba(236,72,153,.35); }
+  .cat-vendor   { background: rgba(245,158,11,.15); color: #fcd34d; border: 1px solid rgba(245,158,11,.35); }
+  .cat-bonus    { background: rgba(6,182,212,.15); color: #67e8f9; border: 1px solid rgba(6,182,212,.35); }
+  .cat-phase2   { background: rgba(168,85,247,.18); color: #c4b5fd; border: 1px solid rgba(168,85,247,.45); }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    background: rgba(15,23,42,.5);
+    padding: 6px;
+    border-radius: 10px;
+    border: 1px solid rgba(148,163,184,.15);
+  }
+  .tab-btn {
+    flex: 1;
+    min-width: 150px;
+    padding: 10px 14px;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: inherit;
+  }
+  .tab-btn:hover {
+    background: rgba(30,41,59,.6);
+    color: #e2e8f0;
+  }
+  .tab-btn.active {
+    background: rgba(30,41,59,.9);
+    color: #f1f5f9;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  }
+  .tab-btn.active.tab-all     { border: 1px solid rgba(148,163,184,.3); }
+  .tab-btn.active.tab-plan    { border: 1px solid rgba(16,185,129,.5); color:#6ee7b7; }
+  .tab-btn.active.tab-bonus   { border: 1px solid rgba(6,182,212,.5); color:#67e8f9; }
+  .tab-btn.active.tab-phase2  { border: 1px solid rgba(168,85,247,.5); color:#c4b5fd; }
+  .tab-btn .count {
+    display: inline-block;
+    min-width: 20px;
+    padding: 1px 6px;
+    background: rgba(148,163,184,.2);
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .tab-btn.active .count { background: rgba(148,163,184,.35); }
+
+  .goal-card.hidden { display: none; }
+  .goal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px; gap:10px; }
+  .goal-name { font-size:14px; color:#f1f5f9; font-weight:600; flex:1; }
+  .goal-pct {
+    font-size: 22px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .goal-pct.done { color: #6ee7b7; }
+  .goal-pct.partial { color: #fcd34d; }
+  .goal-pct.progress { color: #93c5fd; }
+  .goal-pct.deferred { color: #fca5a5; }
+  .goal-pct.changed { color: #f9a8d4; }
+  .goal-pct.bonus { color: #67e8f9; }
+  .goal-bar { height:6px; background: rgba(15,23,42,.6); border-radius:3px; overflow:hidden; margin-bottom: 8px; }
+  .goal-bar > div { height:100%; }
+  .goal-bar.done > div { background: linear-gradient(90deg,#10b981,#34d399); }
+  .goal-bar.partial > div { background: linear-gradient(90deg,#f59e0b,#fbbf24); }
+  .goal-bar.progress > div { background: linear-gradient(90deg,#3b82f6,#60a5fa); }
+  .goal-bar.deferred > div { background: linear-gradient(90deg,#ef4444,#f87171); }
+  .goal-bar.changed > div { background: linear-gradient(90deg,#a855f7,#ec4899); }
+  .goal-bar.bonus > div { background: linear-gradient(90deg,#06b6d4,#67e8f9); }
+  .goal-desc { font-size: 12px; color: #94a3b8; line-height:1.5; }
+  .goal-desc b { color: #cbd5e1; }
+  .goal-owners { margin-top:6px; display:flex; gap:4px; flex-wrap:wrap; }
+
+  /* Feature cards */
+  .feature {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 18px 20px;
+    border-left: 4px solid;
+    margin-bottom: 14px;
+  }
+  .feature.f1 { border-left-color: #10b981; }
+  .feature.f2 { border-left-color: #06b6d4; }
+  .feature.f3 { border-left-color: #a855f7; }
+  .feature.f4 { border-left-color: #3b82f6; }
+
+  .feature-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .feature-title { font-size: 16px; color: #f1f5f9; font-weight: 600; }
+  .feature-title .tag {
+    font-size: 10px; color: #94a3b8; margin-right: 8px;
+    background: rgba(15,23,42,.6); padding: 2px 8px; border-radius: 4px;
+  }
+  .badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge {
+    font-size: 11px; padding: 3px 10px; border-radius: 10px;
+    background: rgba(15,23,42,.6); border: 1px solid rgba(148,163,184,.2);
+    color: #cbd5e1;
+  }
+  .badge.trang { border-color: rgba(59,130,246,.5); color: #93c5fd; }
+  .badge.huy   { border-color: rgba(16,185,129,.5); color: #6ee7b7; }
+  .badge.hai   { border-color: rgba(245,158,11,.5); color: #fcd34d; }
+  .badge.status-green  { background: rgba(16,185,129,.15); border-color: rgba(16,185,129,.4); color: #6ee7b7; }
+  .badge.status-yellow { background: rgba(245,158,11,.15); border-color: rgba(245,158,11,.4); color: #fcd34d; }
+  .badge.status-red    { background: rgba(239,68,68,.15); border-color: rgba(239,68,68,.4); color: #fca5a5; }
+  .badge.status-blue   { background: rgba(59,130,246,.15); border-color: rgba(59,130,246,.4); color: #93c5fd; }
+  .badge.status-golive { background: rgba(16,185,129,.2); border-color: rgba(16,185,129,.55); color: #6ee7b7; font-weight: 700; }
+  .badge.priority      { background: rgba(168,85,247,.15); border-color: rgba(168,85,247,.5); color: #c084fc; font-weight:600; }
+
+  .feature-desc { color: #cbd5e1; font-size: 13px; margin-bottom: 12px; }
+  .feature-desc b { color: #f1f5f9; }
+
+  .sub-progress { margin-top: 10px; }
+  .sub-progress .progress-line {
+    display: grid;
+    grid-template-columns: 1fr 60px 100px;
+    gap: 10px;
+    align-items: center;
+    padding: 4px 0;
+    font-size: 12.5px;
+  }
+  .sub-progress .progress-line .name { color: #cbd5e1; }
+  .sub-progress .progress-line .pct { color: #f1f5f9; font-weight: 600; text-align: right; }
+  .sub-progress .progress-line .bar {
+    height: 5px;
+  }
+  .sub-progress .progress-line .bar > div { height:100%; border-radius:3px; }
+
+  /* Scoring table */
+  .scoring {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .score-card {
+    background: rgba(30,41,59,.6);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .score-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .score-head .total-score { margin-left: auto; font-size: 22px; font-weight: 700; color: #f1f5f9; }
+  .score-head .total-score small { font-size: 12px; color: #64748b; font-weight: 400; }
+  .score-row {
+    display: grid;
+    grid-template-columns: 130px 60px 1fr;
+    gap: 8px;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 12px;
+  }
+  .score-row .axis { color: #cbd5e1; }
+  .score-row .num { color: #f1f5f9; font-weight: 600; text-align: right; padding-right: 8px; }
+  .score-bar { height: 6px; background: rgba(15,23,42,.6); border-radius: 3px; overflow: hidden; }
+  .score-bar > div { height: 100%; background: linear-gradient(90deg, #3b82f6, #8b5cf6); }
+  .score-row.warn .num { color: #fca5a5; }
+  .score-row.warn .score-bar > div { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+  .score-row.good .num { color: #6ee7b7; }
+  .score-row.good .score-bar > div { background: linear-gradient(90deg, #10b981, #06b6d4); }
+  .score-card .verdict {
+    margin-top: 12px; padding-top: 12px; border-top: 1px dashed rgba(148,163,184,.15);
+    font-size: 12px; color: #94a3b8;
+  }
+  .score-card .verdict b { color: #f1f5f9; }
+
+  /* Two-column grid for highlights/red flags */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .list-card h3 { font-size: 15px; color: #f1f5f9; margin-bottom: 12px; display:flex; align-items:center; gap:8px; }
+  .list-card h3::before {
+    content: ""; width: 4px; height: 16px;
+    background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+    border-radius: 2px;
+  }
+  .list-card.red h3::before    { background: linear-gradient(180deg, #ef4444, #f59e0b); }
+  .list-card.green h3::before  { background: linear-gradient(180deg, #10b981, #06b6d4); }
+  .list-card.orange h3::before { background: linear-gradient(180deg, #f59e0b, #ec4899); }
+  .list-card.purple h3::before { background: linear-gradient(180deg, #a855f7, #ec4899); }
+
+  .list-card ol, .list-card ul { padding-left: 20px; }
+  .list-card li { color: #cbd5e1; font-size: 13px; margin-bottom: 8px; line-height: 1.55; }
+  .list-card li b { color: #f1f5f9; }
+  .list-card li small { color: #64748b; }
+
+  /* Charts */
+  .chart-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 900px) { .chart-row { grid-template-columns: 1fr; } }
+  .chart-card { background: rgba(30,41,59,.6); border: 1px solid rgba(148,163,184,.15); border-radius: 12px; padding: 20px; }
+  .chart-card h3 { font-size: 15px; color: #f1f5f9; margin-bottom: 12px; }
+  .chart-wrap { position: relative; height: 280px; }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    color: #64748b;
+    font-size: 12px;
+    padding: 16px 0;
+    border-top: 1px solid rgba(148,163,184,.1);
+    margin-top: 24px;
+  }
+  footer .caveats {
+    text-align: left;
+    background: rgba(15,23,42,.5);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  footer .caveats b { color: #cbd5e1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Weekly Performance Report · GO-LIVE Week · Total evoucher first production release</div>
+    <h1>W22 / 2026 — Reward V2 Team</h1>
+    <p>Tuần 22, 2026 · 25 → 29/05 (5 ngày làm việc) · 3 contributors · 4 repos · 86 commits · Production release đầu tiên</p>
+    <div class="meta">
+      <span>📦 rewards-v2</span>
+      <span>🏗 cdp-backend</span>
+      <span>🎨 cdp-frontend</span>
+      <span>📱 mini-app</span>
+      <span class="golive">🚀 GO-LIVE PRODUCTION ✅</span>
+    </div>
+  </header>
+
+  <!-- Strategy banner: GO-LIVE achieved -->
+  <div class="strategy-banner">
+    <span class="label">🚀 GO-LIVE Week · W22 · First production release</span>
+    <h2>Đích đến tuần đạt: <span style="color:#6ee7b7;">Release reward production + Total evoucher live + 2 shop test deploy mini-app (1168, 3188)</span></h2>
+    <p>
+      W22 là tuần <b>release production đầu tiên</b>. Team đóng full 5 trục chính (dev+release) + 3 trục song song (vendor) đặt ra ở W21. <b>Testing PASS, không bug nghiêm trọng</b> → quyết định release đúng deadline T6 (29/05). Total đã có thể chạy full flow evoucher production qua API key riêng.
+      <br><br>
+      <b>5 trục chính (dev + release) — DONE:</b>
+      <span class="golive-tag">SHIPPED</span>
+      <b>(1)</b> <b>Hoàn thành ZNS</b> — Huy ship `RewardEventZnsDeliveryStrategy` + remove `AccountDeliveryConfig`, đóng 25% còn lại Worker Send-Voucher ·
+      <b>(2)</b> <b>CICD staging = prod</b> — Trang simplify CI/CD keys, manual deploy jobs cho worker-sync-gotit-product-store, refactor cron job ·
+      <b>(3)</b> <b>Testing staging với API key Total</b> — Trang+Huy+Hải pair, fix bug critical "Query did not return unique result" khi 2 shop chung API KEY ·
+      <b>(4)</b> <b>Deploy mini-app cho shop 1168, 3188</b> — Hải ship navigation rewards-v2 route mapping + polish VoucherDetail badges/categories ·
+      <b>(5)</b> <b>Deploy reward production</b> — Trang merge stable, không có hotfix sau release.
+      <br><br>
+      <b>3 trục song song vendor (Trang drive) — DONE:</b>
+      <b>(6)</b> Làm việc GotIt Total nghiệm thu tích hợp — <b>Golive approved</b> ·
+      <b>(7)</b> Hỗ trợ Total đến go-live — flow voucher điện thoại chạy thật ·
+      <b>(8)</b> <b>Hỏi GotIt về campaignId</b> — <span style="color:#6ee7b7;">đã có response ✅</span>, không còn vendor blocker.
+      <br><br>
+      <b>🎁 Bonus W22:</b> <span style="color:#c4b5fd;">Quà vật lý phase 2 đã START IMPLEMENT</span> (không chỉ research) — Hải đã code physical gift redemption flow + address management trên mini-app (branch `haiht/rewards-v2-physical`). Vượt scope W21 đề ra (chỉ "đọc tài liệu + plan").
+    </p>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi blue">
+      <div class="kpi-label">Total commits W22</div>
+      <div class="kpi-value">86</div>
+      <div class="kpi-sub">Trang 31 · Huy 27 · Hải 28 · <span style="color:#6ee7b7;">+23% vs W21 (70)</span></div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-label">Release production</div>
+      <div class="kpi-value" style="color:#6ee7b7;">✅ GO-LIVE</div>
+      <div class="kpi-sub">Testing PASS · Reward + Total evoucher · 2 shop test (1168, 3188) · No critical bug sau release</div>
+    </div>
+    <div class="kpi cyan">
+      <div class="kpi-label">% Đạt mục tiêu W22</div>
+      <div class="kpi-value" style="color:#6ee7b7;">100% 🎯</div>
+      <div class="kpi-sub">8/8 plan items DONE — full (5 dev + 3 vendor, GotIt campaignId đã có response) · +1 vượt scope (Quà vật lý đã start implement)</div>
+    </div>
+    <div class="kpi orange">
+      <div class="kpi-label">Repos touched</div>
+      <div class="kpi-value">4</div>
+      <div class="kpi-sub">rewards-v2 + cdp-backend + cdp-frontend + mini-app · Hải trải 4 repo · Huy full-stack 3 repo</div>
+    </div>
+    <div class="kpi purple">
+      <div class="kpi-label">Bonus features ship</div>
+      <div class="kpi-value">8</div>
+      <div class="kpi-sub">Brand filter voucher history · GotIt voucher expiry config · Overview Excel export · Voucher notification channel · Vendor management enhance · Funnel chart · DB perf cleanup · Sequential GotIt sync</div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-label">Health</div>
+      <div class="kpi-value">🟢++</div>
+      <div class="kpi-sub">Green++ — go-live thành công, không trễ deadline, testing kỹ, phase 2 đã kick-off sớm</div>
+    </div>
+  </div>
+
+  <!-- Person overview -->
+  <div class="section-title">
+    <h2>Phân bố theo người &amp; repo · W22</h2>
+    <span class="hint">Output volume per contributor, theo repo</span>
+  </div>
+
+  <div class="people-grid">
+
+    <div class="person">
+      <div class="person-head">
+        <div class="avatar av-trang">NT</div>
+        <div>
+          <h3>Như Trang (Trang)</h3>
+          <div class="role">Tech Lead — Production deploy + Critical bug fix + Vendor coordination Total</div>
+        </div>
+      </div>
+      <div class="repo-stack">
+        <span class="repo-pill">rewards-v2 · <b>25</b></span>
+        <span class="repo-pill">cdp-backend · <b>4</b></span>
+        <span class="repo-pill">cdp-frontend · <b>2</b></span>
+        <span class="repo-pill" style="border-color:rgba(16,185,129,.5);color:#6ee7b7;">🚀 GO-LIVE drive</span>
+      </div>
+      <div class="total">W22 commits: <b>31</b> <span style="color:#6ee7b7;font-size:12px;">+10 vs W21 (21) · cao nhất quý cho Trang · gánh production deploy</span></div>
+      <div class="bar">
+        <div class="b-rewards" style="width:81%"></div>
+        <div class="b-cdpbe"   style="width:13%"></div>
+        <div class="b-cdpfe"   style="width:6%"></div>
+      </div>
+      <div class="legend">
+        <span><i class="b-rewards"></i>rewards-v2</span>
+        <span><i class="b-cdpbe"></i>cdp-backend</span>
+        <span><i class="b-cdpfe"></i>cdp-frontend</span>
+      </div>
+    </div>
+
+    <div class="person">
+      <div class="person-head">
+        <div class="avatar av-huy">H</div>
+        <div>
+          <h3>Trần Lê Huy (huy)</h3>
+          <div class="role">Full-stack — ZNS close + 4 bonus full-stack features</div>
+        </div>
+      </div>
+      <div class="repo-stack">
+        <span class="repo-pill">rewards-v2 · <b>14</b></span>
+        <span class="repo-pill">cdp-backend · <b>5</b></span>
+        <span class="repo-pill">cdp-frontend · <b>8</b></span>
+      </div>
+      <div class="total">W22 commits: <b>27</b> <span style="color:#6ee7b7;font-size:12px;">+10 vs W21 (17) · full-stack 3 repos · ZNS shipped</span></div>
+      <div class="bar">
+        <div class="b-rewards" style="width:52%"></div>
+        <div class="b-cdpbe"   style="width:18%"></div>
+        <div class="b-cdpfe"   style="width:30%"></div>
+      </div>
+      <div class="legend">
+        <span><i class="b-rewards"></i>rewards-v2</span>
+        <span><i class="b-cdpbe"></i>cdp-backend</span>
+        <span><i class="b-cdpfe"></i>cdp-frontend</span>
+      </div>
+    </div>
+
+    <div class="person">
+      <div class="person-head">
+        <div class="avatar av-hai">H1</div>
+        <div>
+          <h3>Hồ Trung Hải (haiht1)</h3>
+          <div class="role">Full-stack — Mini-app deploy + Physical Gift Phase 2 kick-off + GotIt sync perf</div>
+        </div>
+      </div>
+      <div class="repo-stack">
+        <span class="repo-pill">rewards-v2 · <b>12</b></span>
+        <span class="repo-pill">cdp-frontend · <b>3</b></span>
+        <span class="repo-pill">mini-app · <b>13</b></span>
+        <span class="repo-pill" style="border-color:rgba(168,85,247,.5);color:#c4b5fd;">🎁 Physical Gift Phase 2</span>
+      </div>
+      <div class="total">W22 commits: <b>28</b> <span style="color:#fcd34d;font-size:12px;">−4 vs W21 (32) · giữ pace · drive 2 stream (deploy + phase 2)</span></div>
+      <div class="bar">
+        <div class="b-rewards" style="width:43%"></div>
+        <div class="b-cdpfe"   style="width:11%"></div>
+        <div class="b-mini"    style="width:46%"></div>
+      </div>
+      <div class="legend">
+        <span><i class="b-rewards"></i>rewards-v2</span>
+        <span><i class="b-cdpfe"></i>cdp-frontend</span>
+        <span><i class="b-mini"></i>mini-app</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Charts -->
+  <div class="chart-row">
+    <div class="chart-card">
+      <h3>📊 Commit theo người × repo · W22</h3>
+      <div class="chart-wrap"><canvas id="chart-stack"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>📊 Commit theo Epic · W22</h3>
+      <div class="chart-wrap"><canvas id="chart-feature"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ============ Goal achievement W22 ============ -->
+  <div class="section-title">
+    <h2>🎯 % Đạt mục tiêu W22 · GO-LIVE Total evoucher</h2>
+    <span class="hint">8 plan items (5 dev + 3 vendor) + 1 bonus implement vượt scope · 100%</span>
+  </div>
+
+  <!-- Tab navigation -->
+  <div class="tabs">
+    <button class="tab-btn tab-all active" data-filter="all">📋 Tất cả <span class="count">12</span></button>
+    <button class="tab-btn tab-plan" data-filter="plan">🎯 Plan W22 <span class="count">8</span></button>
+    <button class="tab-btn tab-bonus" data-filter="bonus">🎁 Bonus shipped <span class="count">3</span></button>
+    <button class="tab-btn tab-phase2" data-filter="phase2">🚀 Phase 2 kickoff <span class="count">1</span></button>
+  </div>
+
+  <!-- Tab descriptions -->
+  <div style="margin-bottom: 14px; padding: 8px 14px; background: rgba(15,23,42,.3); border-radius: 6px; font-size: 11.5px; color: #94a3b8; line-height: 1.6;">
+    <b style="color:#cbd5e1;">Phân loại:</b>
+    <span class="cat-tag cat-release" style="margin:0;">🚀 Release</span> ·
+    <span class="cat-tag cat-vendor" style="margin:0;">🤝 Vendor</span> ·
+    <span class="cat-tag cat-bonus" style="margin:0;">🎁 Bonus shipped</span> ·
+    <span class="cat-tag cat-phase2" style="margin:0;">🚀 Phase 2 kickoff</span>
+  </div>
+
+  <div class="goals-grid">
+
+    <!-- 5 trục chính (dev + release) -->
+    <div class="goal-card done" data-category="plan">
+      <span class="cat-tag cat-release">🚀 PLAN W22 · DEV+RELEASE #1</span>
+      <div class="goal-head">
+        <div class="goal-name">Hoàn thành phần send ZNS</div>
+        <div class="goal-pct done">100%</div>
+      </div>
+      <div class="goal-bar done"><div style="width:100%"></div></div>
+      <div class="goal-desc">
+        <b>Huy drive — ship 7 commits:</b> remove `AccountDeliveryConfig` + implement `RewardEventZnsDeliveryStrategy` (677226a), `Voucher Notification Channel` management API (2694a10), simplify notification logic SendVoucherPublisher (bebfb05), account delivery config voucher sending (a4f0010), Kafka topic config voucher_sent event tránh staging/prod overlap (18fdff3), remove `VendorCode` from SendVoucherMessage (ae65633). Trang cleanup ZNS config (e0c698c). <b>Đóng 25% còn lại của Worker Send-Voucher từ W21 → 100%.</b>
+      </div>
+      <div class="goal-owners">
+        <span class="badge huy">Huy (drive)</span>
+        <span class="badge trang">Trang (cleanup)</span>
+        <span class="badge status-green">Shipped ✅</span>
+      </div>
+    </div>
+
+    <div class="goal-card done" data-category="plan">
+      <span class="cat-tag cat-infra">🚀 PLAN W22 · DEV+RELEASE #2</span>
+      <div class="goal-head">
+        <div class="goal-name">Refactor CICD staging giống 100% với prod</div>
+        <div class="goal-pct done">100%</div>
+      </div>
+      <div class="goal-bar done"><div style="width:100%"></div></div>
+      <div class="goal-desc">
+        <b>Trang drive:</b> simplify CI/CD keys download single crm-admin signature key (2a15dfe), Add CI/CD + Helm deployment cho worker-sync-gotit-product-store (ee76ade), Add manual deploy jobs worker-sync-gotit + product-store (dccacd0), delete deploy worker-sync-gotit-staging/master jobs (8586171). Align staging ↔ prod config, không drift.
+      </div>
+      <div class="goal-owners">
+        <span class="badge trang">Trang (lead)</span>
+        <span class="badge status-green">Shipped ✅</span>
+      </div>
+    </div>
+
+    <div class="goal-card done" data-category="plan">
+      <span class="cat-tag cat-feature">🚀 PLAN W22 · DEV+RELEASE #3</span>
+      <div class="goal-head">
+        <div class="goal-name">Testing staging với API key Total</div>
+        <div class="goal-pct done">100%</div>
+      </div>
+      <div class="goal-bar done"><div style="width:100%"></div></div>
+      <div class="goal-desc">
+        <b>Trang+Huy+Hải pair:</b> Full flow test trên staging — sync product → đổi quà → webhook decrypt → reconciliation. <b>Phát hiện + fix bug critical:</b> "Query did not return unique result: 2 results" khi 2 shop chung API KEY (27ccdf7). Privacy: rm phone/email khi redeem GotIt voucher (2cff2b4). DB perf cleanup: delete `rewriteBatchedStatements=true` (cacfaf9 — không bulk insert thật được vì IDENTITY). <b>Testing PASS, không bug nghiêm trọng.</b>
+      </div>
+      <div class="goal-owners">
+        <span class="badge trang">Trang (bug fix)</span>
+        <span class="badge huy">Huy (test)</span>
+        <span class="badge hai">Hải (test)</span>
+        <span class="badge status-green">PASS ✅</span>
+      </div>
+    </div>
+
+    <div class="goal-card done" data-category="plan">
+      <span class="cat-tag cat-release">🚀 PLAN W22 · DEV+RELEASE #4</span>
+      <div class="goal-head">
+        <div class="goal-name">Release miniapp cho shop 1168, 3188</div>
+        <div class="goal-pct done">100%</div>
+      </div>
+      <div class="goal-bar done"><div style="width:100%"></div></div>
+      <div class="goal-desc">
+        <b>Hải drive — ship 9 commits mini-app:</b> add rewards-v2 route mapping + update category labels translations icons (55964992), VoucherCard add first category display + improve vendor icon rendering (d866eed5), VoucherDetailV2 dynamically render badges based on categories (e7cdf88d), update translation keys reward labels (7adf3f4a), badges-row layout + chip padding (62a250f7), add optional orderCode IRedemptionOrderV2 + transaction code RewardRedeemSuccessV2Page (9dc8c797), enable refetchOnMount reward item voucher queries (ba8c014a), VoucherDetailV2 update pointsRequired calculation use actual redeemed points (5b650f0e). <b>Deploy thành công 2 shop test.</b>
+      </div>
+      <div class="goal-owners">
+        <span class="badge hai">Hải (drive)</span>
+        <span class="badge status-green">Deployed shop 1168 + 3188 ✅</span>
+      </div>
+    </div>
+
+    <div class="goal-card done" data-category="plan">
+      <span class="cat-tag cat-release">🚀 PLAN W22 · DEV+RELEASE #5 · MILESTONE</span>
+      <div class="goal-head">
+        <div class="goal-name">Deploy reward production · GO-LIVE</div>
+        <div class="goal-pct done">100%</div>
+      </div>
+      <div class="goal-bar done"><div style="width:100%"></div></div>
+      <div class="goal-desc">
+        <b>Trang drive — 29/05 GO-LIVE:</b> merge `common/rewards-v2` → `staging` (ee2519f, 41cdf46, 2cda415), refactor cron job production (467f7f7). <b>Testing PASS từ trục #3, không bug nghiêm trọng phát hiện</b> → quyết định release. Reward backend (rewards-v2 + cdp-backend gateway + Worker Send-Voucher) lên production. Total có thể chạy full flow evoucher qua API key riêng.
+      </div>
+      <div class="goal-owners">
+        <span class="badge trang">Trang (lead)</span>
+        <span class="badge status-golive">🚀 GO-LIVE PRODUCTION ✅</span>
+      </div>
+    </div>
+
+    <!-- 3 trục song song (vendor) -->
+    <div class="goal-card done" data-category="plan">
+      <span class="cat-tag cat-vendor">🤝 PLAN W22 · VENDOR #6</span>
+      <div class="goal-head">
+        <div class="goal-name">Làm việc GotIt Total nghiệm thu tích hợp · Golive</div>
+        <div class="goal-pct done">100%</div>
+      </div>
+      <div class="goal-bar done"><div style="width:100%"></div></div>
+      <div class="goal-desc">
+        <b>Trang drive vendor:</b> Hoàn thành đánh giá tích hợp TotalxGotIt → <b>signoff Golive</b>. Total đã có thể chạy production qua API key riêng. Confirm voucher điện thoại flow (Total dùng) — không topup. <b>Vendor signoff đạt → khai thông cho production release.</b>
+      </div>
+      <div class="goal-owners">
+        <span class="badge trang">Trang (drive)</span>
+        <span class="badge status-green">Golive signoff ✅</span>
+      </div>
+    </div>
+
+    <div class="goal-card done" data-category="plan">
+      <span class="cat-tag cat-vendor">🤝 PLAN W22 · VENDOR #7</span>
+      <div class="goal-head">
+        <div class="goal-name">Hỗ trợ Total tiến hành đến giai đoạn go-live</div>
+        <div class="goal-pct done">100%</div>
+      </div>
+      <div class="goal-bar done"><div style="width:100%"></div></div>
+      <div class="goal-desc">
+        <b>Trang pair với Total ongoing cả tuần:</b> giải đáp câu hỏi tích hợp, support khi họ test API key thật, chuẩn bị checklist go-live (production keys, monitoring, hotline khi có incident). <b>Total đã đến golive thành công.</b>
+      </div>
+      <div class="goal-owners">
+        <span class="badge trang">Trang (ongoing)</span>
+        <span class="badge status-green">Total live ✅</span>
+      </div>
+    </div>
+
+    <div class="goal-card done" data-category="plan">
+      <span class="cat-tag cat-vendor">🤝 PLAN W22 · VENDOR #8</span>
+      <div class="goal-head">
+        <div class="goal-name">Hỏi GotIt về campaignId</div>
+        <div class="goal-pct done">100%</div>
+      </div>
+      <div class="goal-bar done"><div style="width:100%"></div></div>
+      <div class="goal-desc">
+        <b>Trang gửi câu hỏi + GotIt đã phản hồi:</b> đã có response về cơ chế campaignId phục vụ multi-campaign tracking cho Total. <b>Không còn vendor blocker</b> — sẵn sàng plan implement campaignId tracking ở W23 theo guideline GotIt trả.
+      </div>
+      <div class="goal-owners">
+        <span class="badge trang">Trang (drive)</span>
+        <span class="badge status-green">GotIt response ✅</span>
+      </div>
+    </div>
+
+    <!-- BONUS shipped ngoài plan -->
+    <div class="goal-card bonus" data-category="bonus">
+      <span class="cat-tag cat-bonus">🎁 BONUS · Full-stack feature</span>
+      <div class="goal-head">
+        <div class="goal-name">Brand filter cho Voucher History + Redeem History</div>
+        <div class="goal-pct bonus">100%</div>
+      </div>
+      <div class="goal-bar bonus"><div style="width:100%"></div></div>
+      <div class="goal-desc">
+        <b>Huy ship full-stack:</b> rewards-v2 add brand filtering to voucher history + distinct brand retrieval account history (fbdc716), cdp-backend BrandOptionDto + endpoints redemption order brands (b2c76913e), cdp-frontend implement brand filter in redeem history với dropdown + API integration (53acd7c0c). Admin/User filter được voucher theo từng brand.
+      </div>
+      <div class="goal-owners">
+        <span class="badge huy">Huy</span>
+      </div>
+    </div>
+
+    <div class="goal-card bonus" data-category="bonus">
+      <span class="cat-tag cat-bonus">🎁 BONUS · Full-stack feature</span>
+      <div class="goal-head">
+        <div class="goal-name">GotIt Voucher Expiry Configuration</div>
+        <div class="goal-pct bonus">100%</div>
+      </div>
+      <div class="goal-bar bonus"><div style="width:100%"></div></div>
+      <div class="goal-desc">
+        <b>Huy ship full-stack:</b> rewards-v2 implement GotIt voucher expiry config management + update logic (60e11ee), cdp-backend GotItVoucherExpiryConfig endpoints + DTOs (4a6fbdca7), cdp-frontend GotIt voucher expiry config UI với validation + API integration (44d77341e). Account admin set được expiry policy riêng cho voucher GotIt.
+      </div>
+      <div class="goal-owners">
+        <span class="badge huy">Huy</span>
+      </div>
+    </div>
+
+    <div class="goal-card bonus" data-category="bonus">
+      <span class="cat-tag cat-bonus">🎁 BONUS · Reporting</span>
+      <div class="goal-head">
+        <div class="goal-name">Account Overview Excel Report + Funnel chart</div>
+        <div class="goal-pct bonus">100%</div>
+      </div>
+      <div class="goal-bar bonus"><div style="width:100%"></div></div>
+      <div class="goal-desc">
+        <b>Huy ship full-stack:</b> rewards-v2 AccountOverviewReportService cho generating Excel reports account rewards overview (ac085c5) + distinct user count for redeemed vouchers redemption stats (5c86d8f), cdp-backend export overview report endpoint RewardV2Controller (ecbd943d6) + distinctVoucherUsedUserCount RedemptionStatsDto (3a155cd5e), cdp-frontend export report functionality with loading state + filename handling (f46767f5e) + refactor funnel chart component (dfc91017c) + simplify currency formatting (66f4c0713). + enhance header/sidebar với query params (665767dce).
+      </div>
+      <div class="goal-owners">
+        <span class="badge huy">Huy</span>
+      </div>
+    </div>
+
+    <!-- PHASE 2 KICK-OFF -->
+    <div class="goal-card changed" data-category="phase2">
+      <span class="cat-tag cat-phase2">🚀 PHASE 2 KICKOFF · vượt scope W21 plan</span>
+      <div class="goal-head">
+        <div class="goal-name">Quà vật lý (Physical Gift) — đã START IMPLEMENT</div>
+        <div class="goal-pct changed">Implement ~40%</div>
+      </div>
+      <div class="goal-bar changed"><div style="width:40%"></div></div>
+      <div class="goal-desc">
+        <b>⚡ Vượt scope W21 đề ra:</b> Plan ban đầu chỉ "đọc tài liệu quà vật lý + plan phase 2", nhưng <b>Hải đã start implement</b> trong tuần. Branch `haiht/rewards-v2-physical` + commits: mini-app add physical gift redemption flow with address management (051fd9d9), Refactor physical gift redemption flow + remove fake data (b1255990), Navigation add rewards-v2 route mapping (55964992), Merge prep (d3ea95c9, 11140163). <b>Phase 2 kick-off sớm hơn dự kiến → tận dụng knowledge fresh từ GotIt evoucher.</b>
+      </div>
+      <div class="goal-owners">
+        <span class="badge hai">Hải (drive phase 2)</span>
+        <span class="badge status-blue">Implement bắt đầu</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- W22 summary -->
+  <div style="background: rgba(15,23,42,.5); border:1px solid rgba(16,185,129,.3); border-radius: 12px; padding:18px 22px; margin-bottom: 28px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px; flex-wrap:wrap; gap:10px;">
+      <div style="font-size:14px; color:#cbd5e1;"><b style="color:#f1f5f9;">📊 Tổng kết W22</b> · 8 plan items + 3 bonus shipped + 1 phase 2 kickoff · GO-LIVE production đầu tiên</div>
+      <div style="font-size:28px; font-weight:700; color:#6ee7b7;">100% 🎯 <small style="font-size:12px; color:#94a3b8; font-weight:400;">+ bonus vượt scope</small></div>
+    </div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:10px; font-size:12px;">
+      <div style="padding:8px 10px; background: rgba(16,185,129,.1); border-left:3px solid #10b981; border-radius:4px;">
+        <div style="color:#6ee7b7; font-weight:600;">✅ Plan Done — 8/8</div>
+        <div style="color:#94a3b8; margin-top:2px;">ZNS · CICD prod-align · Testing PASS · Mini-app deploy 1168+3188 · Reward production deploy · GotIt signoff · Total go-live support · CampaignId GotIt response</div>
+      </div>
+      <div style="padding:8px 10px; background: rgba(6,182,212,.1); border-left:3px solid #06b6d4; border-radius:4px;">
+        <div style="color:#67e8f9; font-weight:600;">🎁 Bonus shipped — 3</div>
+        <div style="color:#94a3b8; margin-top:2px;">Brand filter full-stack · GotIt expiry config full-stack · Excel report + funnel chart</div>
+      </div>
+      <div style="padding:8px 10px; background: rgba(168,85,247,.1); border-left:3px solid #a855f7; border-radius:4px;">
+        <div style="color:#c4b5fd; font-weight:600;">🚀 Phase 2 kickoff</div>
+        <div style="color:#94a3b8; margin-top:2px;">Quà vật lý — implement bắt đầu (Hải), vượt scope plan W21. Continue W23+.</div>
+      </div>
+      <div style="padding:8px 10px; background: rgba(110,231,183,.12); border-left:3px solid #34d399; border-radius:4px;">
+        <div style="color:#6ee7b7; font-weight:600;">🎯 W23 focus</div>
+        <div style="color:#94a3b8; margin-top:2px;">Post go-live stabilize · Phase 2 BE schema · Implement campaignId tracking theo GotIt guideline</div>
+      </div>
+    </div>
+    <div style="margin-top:12px; padding:10px 12px; background:rgba(15,23,42,.6); border-radius:6px; font-size:12px; color:#94a3b8; line-height:1.55;">
+      <b style="color:#cbd5e1;">Tính toán W22:</b> 8/8 plan items 100% done (kể cả CampaignId GotIt đã có response) = <b style="color:#6ee7b7;">100% full plan</b>. Bonus: +3 full-stack features ship ngoài plan + Phase 2 quà vật lý kick-off sớm.
+      <b style="color:#6ee7b7;">⚡ Milestone:</b> GO-LIVE production lần đầu sau 8 tuần dev (W5 → W22). Total đã chạy evoucher thật qua hệ thống CNV.
+      <b style="color:#cbd5e1;">Watch W23:</b> (1) Implement campaignId tracking theo guideline GotIt vừa cấp, (2) Quà vật lý implement tiếp + BE schema design, (3) Hotfix nếu phát hiện bug sau release.
+    </div>
+  </div>
+
+  <!-- Strategic Initiative W22: Production Release -->
+  <div class="section-title">
+    <h2>🚀 Strategic Initiative · Production Release Total evoucher (Team drive)</h2>
+    <span class="hint">5 dev trục + 3 vendor trục · Go-live milestone</span>
+  </div>
+
+  <div class="feature f1">
+    <div class="feature-head">
+      <div class="feature-title"><span class="tag">GO-LIVE W22</span>Reward V2 + Total evoucher Production Release — 8/8 plan items</div>
+      <div class="badges">
+        <span class="badge priority">MILESTONE · Production</span>
+        <span class="badge status-golive">SHIPPED ✅</span>
+        <span class="badge trang">Trang (lead)</span>
+      </div>
+    </div>
+    <div class="feature-desc">
+      <b>Đích đến W22:</b> Đẩy reward backend lên production, Total có thể chạy full flow evoucher qua API key riêng. <b>5 trục dev/release + 3 trục vendor parallel</b>, đóng đủ trong tuần. Quyết định release dựa trên testing PASS T4 — không bug nghiêm trọng.
+    </div>
+    <div class="sub-progress">
+      <div class="progress-line"><span class="name"><b>Hoàn thành ZNS</b> (Huy — Worker Send-Voucher 75%→100%)</span><span class="pct" style="color:#6ee7b7;">100%</span><div class="bar"><div style="width:100%; background:#10b981;"></div></div></div>
+      <div class="progress-line"><span class="name"><b>CICD staging = prod</b> (Trang — align Helm, CI/CD keys, manual deploy)</span><span class="pct" style="color:#6ee7b7;">100%</span><div class="bar"><div style="width:100%; background:#10b981;"></div></div></div>
+      <div class="progress-line"><span class="name"><b>Testing staging Total API key</b> (3 dev pair — fix bug critical 2 shops chung key)</span><span class="pct" style="color:#6ee7b7;">100%</span><div class="bar"><div style="width:100%; background:#10b981;"></div></div></div>
+      <div class="progress-line"><span class="name"><b>Mini-app deploy shop 1168, 3188</b> (Hải — VoucherDetailV2 + Navigation rewards-v2)</span><span class="pct" style="color:#6ee7b7;">100%</span><div class="bar"><div style="width:100%; background:#10b981;"></div></div></div>
+      <div class="progress-line"><span class="name"><b>Deploy reward production</b> (Trang — merge, no critical hotfix sau release)</span><span class="pct" style="color:#6ee7b7;">100%</span><div class="bar"><div style="width:100%; background:#10b981;"></div></div></div>
+      <div class="progress-line"><span class="name"><b>GotIt nghiệm thu tích hợp</b> (Trang — TotalxGotIt signoff Golive)</span><span class="pct" style="color:#6ee7b7;">100%</span><div class="bar"><div style="width:100%; background:#10b981;"></div></div></div>
+      <div class="progress-line"><span class="name"><b>Hỗ trợ Total đến go-live</b> (Trang — ongoing cả tuần)</span><span class="pct" style="color:#6ee7b7;">100%</span><div class="bar"><div style="width:100%; background:#10b981;"></div></div></div>
+      <div class="progress-line"><span class="name"><b>Hỏi GotIt về campaignId</b> (Trang — GotIt đã phản hồi, ready implement W23)</span><span class="pct" style="color:#6ee7b7;">100%</span><div class="bar"><div style="width:100%; background:#10b981;"></div></div></div>
+    </div>
+  </div>
+
+  <!-- Phase 2 Physical Gift kickoff -->
+  <div class="feature f3">
+    <div class="feature-head">
+      <div class="feature-title"><span class="tag">PHASE 2 W22 🟣</span>Quà vật lý (Physical Gift) — Phase 2 kick-off sớm</div>
+      <div class="badges">
+        <span class="badge status-blue">Implement ~40%</span>
+        <span class="badge hai">Hải (drive)</span>
+      </div>
+    </div>
+    <div class="feature-desc">
+      <b>Vượt scope W21 plan:</b> Đáng lẽ chỉ "đọc tài liệu + plan phase 2", nhưng Hải đã start implement <b>physical gift redemption flow + address management</b> trên mini-app. Branch riêng `haiht/rewards-v2-physical`. <b>Tận dụng knowledge fresh sau khi vừa ship evoucher GO-LIVE.</b>
+    </div>
+    <div class="sub-progress">
+      <div class="progress-line"><span class="name">Mini-app physical gift redemption flow + address management (051fd9d9)</span><span class="pct" style="color:#6ee7b7;">100%</span><div class="bar"><div style="width:100%; background:#10b981;"></div></div></div>
+      <div class="progress-line"><span class="name">Refactor physical gift flow + remove fake data (b1255990)</span><span class="pct" style="color:#6ee7b7;">100%</span><div class="bar"><div style="width:100%; background:#10b981;"></div></div></div>
+      <div class="progress-line"><span class="name">Navigation add rewards-v2 route mapping + category labels (55964992)</span><span class="pct" style="color:#6ee7b7;">100%</span><div class="bar"><div style="width:100%; background:#10b981;"></div></div></div>
+      <div class="progress-line"><span class="name">BE schema physical gift (kho, vận chuyển, dispute) — chưa start</span><span class="pct" style="color:#fcd34d;">0%</span><div class="bar"><div style="width:0%; background:#a855f7;"></div></div></div>
+      <div class="progress-line"><span class="name">Integration với GotIt physical gift API — chờ tài liệu vendor</span><span class="pct" style="color:#fcd34d;">0%</span><div class="bar"><div style="width:0%; background:#a855f7;"></div></div></div>
+    </div>
+  </div>
+
+  <!-- ============ Per-person Evaluation W22 ============ -->
+  <div class="section-title">
+    <h2>Đánh giá per-person · W22</h2>
+    <span class="hint">Cùng rubric với W20/W21 (6 trục, scale 1–10)</span>
+  </div>
+
+  <div class="scoring">
+
+    <!-- Trang -->
+    <div class="score-card">
+      <div class="score-head">
+        <div class="avatar av-trang" style="width:36px;height:36px;font-size:14px;">NT</div>
+        <div>
+          <div style="color:#f1f5f9;font-weight:600;">Như Trang — Tech Lead</div>
+          <div style="color:#94a3b8;font-size:11px;">Production deploy + Bug fix critical + Total go-live · 31 commits / 3 repos · <span style="color:#6ee7b7;">cao nhất quý cho Trang</span></div>
+        </div>
+        <div class="total-score">8.7 <small>/10</small></div>
+      </div>
+      <div class="score-row good"><span class="axis">Technical Execution</span><span class="num">9</span><div class="score-bar"><div style="width:90%"></div></div></div>
+      <div class="score-row good"><span class="axis">System Design</span><span class="num">9</span><div class="score-bar"><div style="width:90%"></div></div></div>
+      <div class="score-row good"><span class="axis">Domain Depth</span><span class="num">10</span><div class="score-bar"><div style="width:100%"></div></div></div>
+      <div class="score-row warn"><span class="axis">Testing &amp; Quality</span><span class="num">7</span><div class="score-bar"><div style="width:70%"></div></div></div>
+      <div class="score-row good"><span class="axis">Communication</span><span class="num">9</span><div class="score-bar"><div style="width:90%"></div></div></div>
+      <div class="score-row good"><span class="axis">Ownership</span><span class="num">10</span><div class="score-bar"><div style="width:100%"></div></div></div>
+      <div class="verdict">
+        <b>GO-LIVE production lần đầu — Tech Lead delivery tuyệt vời:</b> drive 5/8 đầu mục plan (CICD prod-align, Testing pair, Deploy production, GotIt signoff, Total support, CampaignId follow-up). <b>Bug fix critical 2 shops chung API KEY</b> (27ccdf7) — phát hiện ở staging test trước khi go-live → tránh incident production. <b>DB perf cleanup root-cause</b>: delete `rewriteBatchedStatements=true` vì không bulk insert thật được do IDENTITY (cacfaf9) — knowledge sâu. <b>Privacy hardening:</b> rm phone/email khi redeem GotIt voucher (2cff2b4). <b>Senior signals:</b> Worker product-store deploy infra (ee76ade, dccacd0), simplify CI/CD keys single signature key (2a15dfe), refactor cron job production-ready (467f7f7). <b>Improvement vs W21:</b> Testing 6→7 (đã test pair với Huy/Hải trên staging). <b>Gap còn:</b> Testing 7/10 — chưa thấy automated E2E test cho HMAC + multi-tenant transaction prefix (gap từ W21 chưa fix). <b>Watch W23:</b> sau go-live là hotfix readiness — monitor production + on-call rotation.
+      </div>
+    </div>
+
+    <!-- Huy -->
+    <div class="score-card">
+      <div class="score-head">
+        <div class="avatar av-huy" style="width:36px;height:36px;font-size:14px;">H</div>
+        <div>
+          <div style="color:#f1f5f9;font-weight:600;">Trần Lê Huy — Full-stack</div>
+          <div style="color:#94a3b8;font-size:11px;">ZNS close + 3 bonus full-stack features · 27 commits / 3 repos · <span style="color:#6ee7b7;">+10 commits vs W21</span></div>
+        </div>
+        <div class="total-score">8.3 <small>/10</small></div>
+      </div>
+      <div class="score-row good"><span class="axis">Technical Execution</span><span class="num">9</span><div class="score-bar"><div style="width:90%"></div></div></div>
+      <div class="score-row good"><span class="axis">System Design</span><span class="num">8</span><div class="score-bar"><div style="width:80%"></div></div></div>
+      <div class="score-row good"><span class="axis">Domain Depth</span><span class="num">9</span><div class="score-bar"><div style="width:90%"></div></div></div>
+      <div class="score-row warn"><span class="axis">Testing &amp; Quality</span><span class="num">6</span><div class="score-bar"><div style="width:60%"></div></div></div>
+      <div class="score-row good"><span class="axis">Communication</span><span class="num">8</span><div class="score-bar"><div style="width:80%"></div></div></div>
+      <div class="score-row good"><span class="axis">Ownership</span><span class="num">10</span><div class="score-bar"><div style="width:100%"></div></div></div>
+      <div class="verdict">
+        <b>ZNS shipped + 3 bonus full-stack — tuần đỉnh quarter:</b> Đóng 25% còn lại của Worker Send-Voucher từ W21 với refactor đúng pattern (`RewardEventZnsDeliveryStrategy`, remove `AccountDeliveryConfig` deprecated, fix Kafka topic prod/staging overlap). <b>3 bonus features full-stack ship ngoài plan:</b> Brand filter voucher history (BE+Gateway+FE), GotIt voucher expiry config (BE+Gateway+FE), Account Overview Excel export + Funnel chart refactor (BE+Gateway+FE). <b>Senior signals:</b> vendor management enhance với vendorId + inventory count computation (1bf3d87), distinct user count redemption stats (5c86d8f, 3a155cd5e) — domain depth analytics. <b>Improvement vs W21:</b> Domain Depth 8→9, Ownership 9→10 (chủ động pick bonus features), không còn LOC bất thường +6.5k. <b>Gap:</b> Testing 5→6 — có viết test cho VendorMappingControllerTest (97d9a2d Hải support) nhưng vẫn chưa cover end-to-end Kafka pipeline. <b>Watch W23:</b> volume bonus cao → đề phòng feature creep, ưu tiên hotfix nếu có.
+      </div>
+    </div>
+
+    <!-- Hải -->
+    <div class="score-card">
+      <div class="score-head">
+        <div class="avatar av-hai" style="width:36px;height:36px;font-size:14px;">H1</div>
+        <div>
+          <div style="color:#f1f5f9;font-weight:600;">Hồ Trung Hải — Full-stack</div>
+          <div style="color:#94a3b8;font-size:11px;">Mini-app deploy + Physical Gift Phase 2 kick-off + GotIt sync perf · 28 commits / 4 repos · <span style="color:#c4b5fd;">Phase 2 owner</span></div>
+        </div>
+        <div class="total-score">8.5 <small>/10</small></div>
+      </div>
+      <div class="score-row good"><span class="axis">Technical Execution</span><span class="num">9</span><div class="score-bar"><div style="width:90%"></div></div></div>
+      <div class="score-row good"><span class="axis">System Design</span><span class="num">9</span><div class="score-bar"><div style="width:90%"></div></div></div>
+      <div class="score-row good"><span class="axis">Domain Depth</span><span class="num">9</span><div class="score-bar"><div style="width:90%"></div></div></div>
+      <div class="score-row warn"><span class="axis">Testing &amp; Quality</span><span class="num">6</span><div class="score-bar"><div style="width:60%"></div></div></div>
+      <div class="score-row good"><span class="axis">Communication</span><span class="num">8</span><div class="score-bar"><div style="width:80%"></div></div></div>
+      <div class="score-row good"><span class="axis">Ownership</span><span class="num">10</span><div class="score-bar"><div style="width:100%"></div></div></div>
+      <div class="verdict">
+        <b>Deploy mini-app shop 1168+3188 + kick-off Phase 2 sớm — Ownership đỉnh:</b> ship 9 commits mini-app polish (Navigation rewards-v2 route, VoucherDetailV2 categories/badges/pointsRequired, VoucherCard vendor icon, badges layout) → deploy thành công 2 shop test. <b>Vượt scope W21 plan:</b> chủ động start implement <b>physical gift redemption flow + address management</b> (051fd9d9, b1255990, 55964992) trên branch riêng `haiht/rewards-v2-physical` — phase 2 đã có code. <b>GotIt sync performance refactor:</b> switch to sequential processing để giảm tải GotIt API (8847da4), Refactor GotIt sync + separate product-store mapping (8b2f8c8). <b>Account self-service UX:</b> enhance UserVoucherController attach GotIt usage methods (eeb01bf), calculate points required per voucher (d3c5704), refactor UserRewardCategoryController (957d8ca), fix cnvAccountId in SendVoucherService (17de20f). <b>Improvement vs W21:</b> System Design 8→9, Domain Depth 8→9, Ownership 9→10 (drive 2 stream song song). <b>Test signal:</b> chủ động add mocks cho VendorMappingControllerTest (97d9a2d) — đã start phục hồi test coverage. <b>Gap:</b> Testing 5→6 — cải thiện nhẹ nhưng phase 2 sẽ cần test design ngay từ đầu. <b>Watch W23:</b> drive Phase 2 không nên bỏ post-release support evoucher cho shop 1168/3188.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Highlights / Red flags / Next week -->
+  <div class="grid-2">
+    <div class="card list-card green">
+      <h3>✨ Điểm nhấn tuần W22</h3>
+      <ol>
+        <li><b>🚀 GO-LIVE production lần đầu sau 8 tuần dev</b> (W5 → W22) — Total chạy evoucher thật qua hệ thống CNV. Testing PASS, không bug nghiêm trọng phát hiện. <small>MILESTONE</small></li>
+        <li><b>100% plan W22</b> (8/8 done — full · campaignId GotIt đã có response) + <b>3 bonus features ship</b> + <b>Phase 2 quà vật lý kick-off sớm</b>. <small>Goal achievement</small></li>
+        <li><b>Bug critical bắt được ở staging trước go-live</b> (Trang — 27ccdf7): 2 shops chung API KEY → "Query did not return unique result". Fix kịp trước production → tránh incident lớn. <small>Critical save</small></li>
+        <li><b>ZNS shipped đúng pattern</b> (Huy — 677226a): remove `AccountDeliveryConfig` deprecated, implement `RewardEventZnsDeliveryStrategy`. Đóng 25% còn lại Worker Send-Voucher. <small>F-NEW1 close</small></li>
+        <li><b>Hải proactive — drive 2 stream song song:</b> deploy mini-app shop test + start implement Phase 2 quà vật lý cùng tuần. <b>Vượt scope W21 plan.</b> <small>Ownership 10/10</small></li>
+        <li><b>Huy ship 3 bonus full-stack features</b> ngoài plan: Brand filter, GotIt expiry config, Excel report — tận dụng momentum tuần go-live. <small>Bonus shipped</small></li>
+        <li><b>DB performance root-cause cleanup</b> (Trang — cacfaf9): xác định `rewriteBatchedStatements=true` không có tác dụng do IDENTITY, remove để rõ ràng. <small>Tech debt</small></li>
+        <li><b>Privacy hardening trước go-live:</b> rm phone/email khi redeem GotIt voucher (Trang — 2cff2b4) — compliance ready. <small>Security</small></li>
+        <li><b>86 commits team tổng — +23% so W21</b> (70). Volume tăng nhưng quality work giữ vững — bug critical bắt được, không churn lớn. <small>Velocity</small></li>
+      </ol>
+    </div>
+
+    <div class="card list-card red">
+      <h3>🚩 Red flags · cần theo dõi W23</h3>
+      <ul>
+        <li><b>Post go-live monitor:</b> production lần đầu → cần on-call rotation rõ ràng + dashboard monitor (order PENDING stuck, recovery task fail, webhook signature mismatch, balance hold leak). <b>Action:</b> Trang setup runbook + on-call ngay đầu W23. <small>Production readiness</small></li>
+        <li><b>Quà vật lý — start implement nhưng chưa có BE schema</b> (mới chỉ FE flow trên mini-app). Risk: rework nếu BE schema khác giả định FE. <b>Action:</b> Hải pair với Trang design BE schema (kho, vận chuyển, dispute) trước khi mở rộng FE. <small>Phase 2 design</small></li>
+        <li><b>Test coverage vẫn 6–7/10 toàn team:</b> đặc biệt thiếu E2E test cho HMAC verify + multi-tenant transaction prefix + Kafka send-voucher pipeline. Sau go-live có user thật → regression khó debug. <b>Action W23:</b> dành 1 day/tuần viết test (gap từ W21 chưa fix). <small>Quality debt</small></li>
+        <li><b>Trang gánh production + vendor + bug fix + infra</b> = 31 commits cao nhất quý cho Trang. Có dấu hiệu single-point. <b>Action:</b> delegate post-release monitoring + runbook cho Huy/Hải pair. <small>Process</small></li>
+        <li><b>Huy volume bonus features cao</b> (3 full-stack ngoài plan): tốt cho velocity nhưng cần đảm bảo không block ZNS hotfix nếu phát sinh. <b>Action:</b> ưu tiên production support trước bonus features W23. <small>Priority</small></li>
+        <li><b>Mini-app shop 1168, 3188 mới deploy</b> — cần thu thập feedback UX từ shop test trong W23 trước khi rollout rộng. <b>Action:</b> Hải pair với PM/QC để gom feedback. <small>UAT loop</small></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Action items W23 -->
+  <div class="card list-card purple" style="margin-bottom:28px;">
+    <h3>🎯 Mục tiêu tuần W23 (01-05/06) · Post go-live stabilize + Phase 2 design</h3>
+    <div style="margin-bottom:14px; padding:10px 14px; background:rgba(110,231,183,.08); border-left:3px solid #34d399; border-radius:6px; font-size:12.5px; color:#cbd5e1; line-height:1.6;">
+      <b style="color:#6ee7b7;">🎯 Focus W23:</b> Tuần đầu sau GO-LIVE → <b>stabilize production</b> + <b>thiết kế Phase 2 quà vật lý</b> + <b>vendor follow-up</b>. Đề xuất plan rebalance để Trang không single-point post-release.
+    </div>
+
+    <div style="font-size:13px; color:#fcd34d; font-weight:600; margin-bottom:8px;">🛡 5 trục chính (post go-live + phase 2)</div>
+    <ol style="margin-bottom:18px;">
+      <li><b>Setup production monitoring + on-call runbook</b> — Dashboard monitor order PENDING stuck, recovery task fail, webhook signature mismatch, balance hold leak. On-call rotation rõ giữa 3 dev. <b>Owner: Trang + Hải pair</b>. Deadline: Thứ 2-3.</li>
+      <li><b>Thu thập feedback shop test 1168 + 3188</b> — Pair với PM/QC, ghi nhận UX issue + bug từ user thật. <b>Owner: Hải</b>. Deadline: ongoing cả tuần, summary T6.</li>
+      <li><b>Design BE schema quà vật lý (Phase 2)</b> — Domain model: kho, vận chuyển, dispute, hoàn trả. Integration điểm với GotIt physical gift API. <b>Owner: Hải drive + Trang review</b>. Deadline: T4 — design doc + ERD.</li>
+      <li><b>Implement campaignId tracking theo guideline GotIt</b> — GotIt đã phản hồi cơ chế campaignId trong W22. Design schema + implement BE+integration cho multi-campaign tracking (Total cần). <b>Owner: Trang lead, Huy support BE</b>. Deadline: T4.</li>
+      <li><b>Hotfix readiness + test coverage</b> — Dedicated 1 day để viết E2E test cho HMAC verify + multi-tenant transaction prefix + Kafka pipeline. <b>Owner: Huy lead, Hải support</b>. Deadline: T5.</li>
+    </ol>
+
+    <div style="font-size:13px; color:#c084fc; font-weight:600; margin-bottom:8px;">🤝 3 trục song song (vendor + product strategy)</div>
+    <ol start="6">
+      <li><b>Đọc tài liệu quà vật lý GotIt (deferred từ W22)</b> — Sau khi GotIt cấp tài liệu, review + integrate vào BE schema design (trục #3). <b>Owner: Hải</b>. Output: 1 spec doc cuối tuần.</li>
+      <li><b>Hỗ trợ Total sau go-live</b> — Pair khi Total ramp-up user thật, support troubleshooting webhook + reconciliation. <b>Owner: Trang ongoing.</b></li>
+      <li><b>Plan rollout mini-app cho shop kế tiếp</b> — Sau khi 1168/3188 stable, plan deploy thêm 5-10 shop. Checklist + criteria pick shop. <b>Owner: Hải</b>. Output: rollout plan cuối tuần.</li>
+    </ol>
+
+    <div style="margin-top:14px; padding:10px 14px; background:rgba(245,158,11,.08); border-left:3px solid #f59e0b; border-radius:6px; font-size:12px; color:#cbd5e1; line-height:1.55;">
+      <b style="color:#fcd34d;">⚠️ Lưu ý áp skill teamleader W23:</b>
+      <b>(1) Post-release discipline:</b> ưu tiên hotfix &gt; bonus features. Nếu có incident, drop bonus ngay ·
+      <b>(2) Delegate monitoring:</b> Trang không nên là single-point on-call → setup rotation 3 dev ·
+      <b>(3) Phase 2 design trước implement:</b> tránh rework — Hải pause FE physical gift đến khi BE schema xong ·
+      <b>(4) Test debt fix:</b> dành 1 day/tuần cho test (gap đã carry 2 tuần liền — W21 và W22).
+    </div>
+  </div>
+
+  <!-- Challenges from team -->
+  <div class="card list-card orange" style="margin-bottom:28px;">
+    <h3>⚠️ Khó khăn ghi nhận · W22</h3>
+    <ul>
+      <li><b>Bug critical "2 shops chung API KEY"</b> — phát hiện khi test staging với Total API key. May là test trước go-live, fix kịp (27ccdf7). <b>Lesson:</b> multi-tenant case khó cover bằng unit test thông thường — cần test scenario "shared key across accounts". <small>Test gap exposed</small></li>
+      <li><b>DB perf: `rewriteBatchedStatements=true` không có tác dụng</b> do IDENTITY column. Root-cause sau khi monitor — đã remove (cacfaf9). <b>Lesson:</b> performance config phải verify thực tế chứ không dựa giả định. <small>Tech debt</small></li>
+      <li><b>Phase 2 quà vật lý kick-off mà BE schema chưa thiết kế</b> — Hải đã implement FE flow nhưng BE chưa có. Risk rework. <b>Action W23:</b> pause FE, design BE schema trước. <small>Phase 2 process</small></li>
+      <li><b>Test coverage chưa cải thiện</b> (gap từ W21 carry sang W22 chưa fix). Sau go-live có user thật → regression khó debug. <small>Quality debt carried</small></li>
+    </ul>
+  </div>
+
+  <footer>
+    <div class="caveats">
+      <b>Caveats:</b> Data dựa trên git log từ 4 repos (<code>rewards-v2, cdp-backend, cdp-frontend, mini-app</code>) trong khoảng 25-29/05/2026, lọc theo 3 author: Như Trang (<code>trangptn@cnv.vn</code> + <code>phanthinhutranghahl@gmail.com</code>), huy (<code>huytl@cnv.vn</code>), haiht1 (<code>haiht1@cnv.vn</code>).
+      <b>Scope:</b> 8 đầu mục plan W22 (5 dev/release + 3 vendor) + 3 bonus features full-stack shipped ngoài plan + 1 Phase 2 kickoff (Quà vật lý implement sớm).
+      <b>Plan W22 references:</b> kéo từ W21-2026-team-report.html section "Mục tiêu tuần W22" — 5 trục chính (ZNS, CICD prod-align, Testing API Total, Deploy mini-app shop test, Deploy production) + 3 trục Trang drive (GotIt nghiệm thu, Total support, Đọc tài liệu quà vật lý).
+      <b>Manual items reported by team (ngoài git):</b> Clean performance ✅ (DB perf cleanup + ZNS config cleanup), Hoàn thành ZNS ✅ (Huy 7 commits), Deploy mini-app shop 1168/3188 ✅ (Hải 9 commits), GotIt Total Đánh giá tích hợp Golive ✅ (Trang vendor), Testing PASS không bug nghiêm trọng → Release ✅, Hỏi GotIt campaignId ✅ (GotIt đã phản hồi cuối tuần — ready implement W23).
+      <b>Goal % methodology W22:</b> 8/8 plan items 100% done = <b style="color:#6ee7b7;">100% full plan</b>. Bonus: +3 full-stack features + Quà vật lý phase 2 kick-off sớm.
+      <b>Strategic context W22:</b> GO-LIVE production lần đầu sau 8 tuần dev cycle (W5 → W22, 30/3 → 29/5). Tổng kết 2-month sprint: từ pivot CNV → Total (W20), pivot CNV không ký GotIt (W21), đến release Total evoucher production (W22). <b>3 lần re-prioritize trong 3 tuần liên tiếp, vẫn ship đúng deadline.</b>
+      <b>Đính chính từ team:</b> Quà vật lý đã chuyển từ "Trang đọc tài liệu" → "Hải implement luôn" (theo quyết định trong tuần). Hải đã start code physical gift flow trên branch riêng `haiht/rewards-v2-physical`.
+      Score per-person tuần đơn lẻ; cần ≥4 tuần tích lũy để thấy trend cá nhân chính xác. Báo cáo so sánh format với W20/W21 cho consistency.
+    </div>
+    Generated for Reward V2 team · W22/2026 (25–29/05) · GO-LIVE Total evoucher · First production release
+  </div>
+
+</div>
+
+<script>
+  // ========== Tab filter for Goals section ==========
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.goal-card').forEach(card => {
+        const cat = card.dataset.category;
+        if (filter === 'all' || cat === filter) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  const ctx1 = document.getElementById('chart-stack').getContext('2d');
+  new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: ['Trang', 'Huy', 'Hải'],
+      datasets: [
+        { label: 'rewards-v2',   data: [25, 14, 12], backgroundColor: '#3b82f6' },
+        { label: 'cdp-backend',  data: [4,  5,  0],  backgroundColor: '#10b981' },
+        { label: 'cdp-frontend', data: [2,  8,  3],  backgroundColor: '#f59e0b' },
+        { label: 'mini-app',     data: [0,  0,  13], backgroundColor: '#a855f7' }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#cbd5e1', font: { size: 11 } } },
+        tooltip: { backgroundColor: 'rgba(15,23,42,.95)' }
+      },
+      scales: {
+        x: { stacked: true, ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148,163,184,.08)' } },
+        y: { stacked: true, beginAtZero: true, ticks: { color: '#94a3b8', precision: 0 }, grid: { color: 'rgba(148,163,184,.08)' } }
+      }
+    }
+  });
+
+  const ctx2 = document.getElementById('chart-feature').getContext('2d');
+  new Chart(ctx2, {
+    type: 'doughnut',
+    data: {
+      labels: [
+        'Production deploy + bug fix critical (12)',
+        'ZNS close + Worker Send-Voucher (10)',
+        'Mini-app deploy shop 1168/3188 (9)',
+        'CICD prod-align + Worker product-store (8)',
+        'Physical Gift Phase 2 kickoff [NEW] (5)',
+        'GotIt Expiry Config full-stack [BONUS] (4)',
+        'Brand filter full-stack [BONUS] (4)',
+        'Excel report + Funnel chart [BONUS] (8)',
+        'GotIt sync perf + Vendor management (8)',
+        'Mini-app UX polish (VoucherDetail) (10)',
+        'Misc (DB perf, privacy, merges) (8)'
+      ],
+      datasets: [{
+        data: [12, 10, 9, 8, 5, 4, 4, 8, 8, 10, 8],
+        backgroundColor: ['#10b981', '#06b6d4', '#a855f7', '#3b82f6', '#c084fc', '#67e8f9', '#fbbf24', '#ec4899', '#84cc16', '#f59e0b', '#64748b'],
+        borderColor: 'rgba(15,23,42,.8)', borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { color: '#cbd5e1', font: { size: 11 }, boxWidth: 14 } },
+        tooltip: { backgroundColor: 'rgba(15,23,42,.95)' }
+      }
+    }
+  });
+</script>
+</body>
+</html>
