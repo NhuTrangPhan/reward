@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>W23/2026 — Reward V2 Team Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F8FAFC;
+    --bg-soft: #F1F5F9;
+    --card: #FFFFFF;
+    --border: #E5E7EB;
+    --border-soft: #F1F5F9;
+
+    --ink: #111827;
+    --ink-soft: #374151;
+    --muted: #6B7280;
+    --muted-light: #9CA3AF;
+
+    --primary: #4F46E5;
+    --primary-soft: #EEF2FF;
+    --success: #10B981;
+    --success-soft: #D1FAE5;
+    --danger: #EF4444;
+    --danger-soft: #FEE2E2;
+    --warning: #F59E0B;
+    --warning-soft: #FEF3C7;
+    --info: #3B82F6;
+    --info-soft: #DBEAFE;
+    --purple: #8B5CF6;
+    --purple-soft: #EDE9FE;
+    --pink: #EC4899;
+    --pink-soft: #FCE7F3;
+
+    --m-trang: #4F46E5;
+    --m-huy:   #10B981;
+    --m-hai:   #F59E0B;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 28px;
+    line-height: 1.65;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1280px; margin: 0 auto; }
+
+  /* ===== Header ===== */
+  header {
+    background: linear-gradient(135deg, #EEF2FF 0%, #FCE7F3 100%);
+    border: 1px solid #DDD6FE;
+    border-radius: 16px;
+    padding: 32px 28px;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  header .eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 2.5px;
+    color: var(--primary);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  header h1 {
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.8px;
+    margin-bottom: 8px;
+  }
+  header p {
+    color: var(--muted);
+    font-size: 15px;
+  }
+  header .meta {
+    margin-top: 16px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  header .meta span {
+    background: rgba(255,255,255,.7);
+    border: 1px solid rgba(79,70,229,.15);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  /* ===== Strategy banner ===== */
+  .strategy-banner {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FED7AA 100%);
+    border: 1px solid #FBBF24;
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .strategy-banner .label {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #92400E;
+    text-transform: uppercase;
+    background: rgba(255,255,255,.6);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .strategy-banner h2 {
+    font-size: 19px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .strategy-banner p {
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .strategy-banner b { color: #B45309; font-weight: 700; }
+  .strategy-banner .arrow { color: #B45309; font-weight: 800; }
+
+  /* ===== KPI ===== */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .kpi {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+  }
+  .kpi.success::before { background: var(--success); }
+  .kpi.danger::before  { background: var(--danger); }
+  .kpi.warning::before { background: var(--warning); }
+  .kpi.info::before    { background: var(--info); }
+  .kpi.primary::before { background: var(--primary); }
+  .kpi.pink::before    { background: var(--pink); }
+
+  .kpi-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .kpi-value {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 4px;
+  }
+  .kpi-sub {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ===== Section title ===== */
+  .section { margin-bottom: 36px; }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    user-select: none;
+    padding: 4px 8px 4px 0;
+    border-radius: 8px;
+    transition: background 0.15s;
+  }
+  .section-title:hover {
+    background: var(--bg-soft);
+  }
+  .section-title h2 {
+    font-size: 24px;
+    color: var(--ink);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+  }
+  .section-title h2::before {
+    content: "";
+    display: inline-block;
+    width: 5px;
+    height: 22px;
+    background: linear-gradient(180deg, var(--primary), var(--pink));
+    border-radius: 3px;
+    margin-right: 12px;
+  }
+  .section-title .hint {
+    font-size: 14px;
+    color: var(--muted);
+    flex: 1;
+  }
+  .section-toggle {
+    width: 32px;
+    height: 32px;
+    background: var(--bg-soft);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: transform 0.25s ease, background 0.15s, color 0.15s;
+  }
+  .section-title:hover .section-toggle {
+    background: var(--primary-soft);
+    color: var(--primary);
+  }
+  .section.collapsed .section-toggle {
+    transform: rotate(-90deg);
+  }
+  .section > *:not(.section-title) {
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.2s ease, margin 0.3s ease;
+    max-height: 6000px;
+    opacity: 1;
+  }
+  .section.collapsed > *:not(.section-title) {
+    max-height: 0;
+    opacity: 0;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+  }
+
+  /* Collapse-all toolbar */
+  .collapse-toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .collapse-toolbar .toolbar-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .collapse-toolbar .toolbar-btn:hover {
+    background: var(--primary-soft);
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+  .collapse-toolbar .toolbar-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* ===== Cards generic ===== */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+  }
+  .card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 14px;
+    letter-spacing: -0.2px;
+  }
+
+  /* ===== CTO/PO Dashboard ===== */
+  .cto-dash {
+    background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+    border: 1px solid #BFDBFE;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+  .cto-dash > h3 {
+    font-size: 14px;
+    color: var(--info);
+    margin-bottom: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+  }
+  .cto-dash > h3::before {
+    content: "👁  ";
+  }
+  .chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .chart-card h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .chart-card .chart-sub {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .chart-wrap {
+    position: relative;
+    height: 240px;
+  }
+  .chart-wrap.tall { height: 280px; }
+
+  /* Big number callout */
+  .big-callout {
+    text-align: center;
+    padding: 14px 0 8px;
+  }
+  .big-callout .num {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+  .big-callout .num.success { color: var(--success); }
+  .big-callout .num.warning { color: var(--warning); }
+  .big-callout .num.danger { color: var(--danger); }
+  .big-callout .num.primary { color: var(--primary); }
+  .big-callout .label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* ===== Member task table ===== */
+  .member-row {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+  }
+  .member-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .av-trang { background: var(--m-trang); }
+  .av-huy   { background: var(--m-huy); }
+  .av-hai   { background: var(--m-hai); }
+  .member-head h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .member-head .role {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .member-head .meta-pills {
+    margin-left: auto;
+    display: flex; gap: 8px;
+  }
+  .pill {
+    padding: 5px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .pill.task    { background: var(--info-soft); color: var(--info); }
+  .pill.effort  { background: var(--purple-soft); color: var(--purple); }
+
+  .member-stats-row {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  @media (max-width: 768px) {
+    .member-stats-row { grid-template-columns: 1fr; }
+  }
+  .member-tasks {
+    list-style: none;
+  }
+  .member-tasks li {
+    padding: 8px 0;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.55;
+  }
+  .member-tasks li::before {
+    content: "✓";
+    color: var(--success);
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+    width: 18px;
+    height: 18px;
+    background: var(--success-soft);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .member-tasks li b { color: var(--ink); font-weight: 700; }
+  .member-tasks li .desc {
+    display: block;
+    margin-top: 3px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .difficulty-bar {
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-soft);
+  }
+
+  /* ===== Tabbed feature list ===== */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    background: var(--card);
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    flex: 1;
+    min-width: 180px;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+  }
+  .tab-btn:hover {
+    background: var(--bg-soft);
+    color: var(--ink);
+  }
+  .tab-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--purple));
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(79,70,229,.25);
+  }
+  .tab-btn .count {
+    display: inline-block;
+    min-width: 22px;
+    padding: 2px 8px;
+    background: rgba(255,255,255,.25);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .tab-btn:not(.active) .count {
+    background: var(--bg-soft);
+    color: var(--muted);
+  }
+
+  /* ===== Feat list (cards stacked vertically) ===== */
+  .feat-list { display: flex; flex-direction: column; gap: 10px; }
+  .feat-list.hidden { display: none; }
+  .feat-row {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: all 0.15s;
+  }
+  .feat-row:hover {
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(79,70,229,.08);
+  }
+  .feat-check {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--success);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-weight: 800;
+    font-size: 15px;
+    margin-top: 1px;
+  }
+  .feat-content { flex: 1; min-width: 0; }
+  .feat-content h4 {
+    font-size: 16.5px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 5px;
+    letter-spacing: -0.2px;
+  }
+  .feat-content p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .feat-content .feat-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .feat-content .feat-meta span {
+    background: var(--bg-soft);
+    color: var(--ink-soft);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+  }
+  .feat-content .feat-meta span b { color: var(--ink); }
+  .feat-content .feat-meta .badge-owner-trang { background: #EEF2FF; color: var(--m-trang); }
+  .feat-content .feat-meta .badge-owner-huy   { background: #ECFDF5; color: #047857; }
+  .feat-content .feat-meta .badge-owner-hai   { background: #FEF3C7; color: #B45309; }
+
+  /* ===== Vertical Timeline ===== */
+  .timeline {
+    position: relative;
+    padding: 12px 0 12px 12px;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 28px;
+    top: 14px;
+    bottom: 14px;
+    width: 3px;
+    background: linear-gradient(180deg,
+      var(--success) 0%,
+      var(--success) 18%,
+      var(--warning) 18%,
+      var(--warning) 50%,
+      var(--info) 50%,
+      var(--info) 75%,
+      var(--purple) 75%,
+      var(--purple) 100%);
+    border-radius: 3px;
+  }
+  .timeline-item {
+    position: relative;
+    padding-left: 76px;
+    padding-bottom: 22px;
+  }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-dot {
+    position: absolute;
+    left: 16px;
+    top: 6px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: white;
+    border: 4px solid var(--success);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 4px white, 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .timeline-dot::after {
+    content: "";
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+  }
+  .timeline-item.done .timeline-dot { border-color: var(--success); }
+  .timeline-item.done .timeline-dot::after { background: var(--success); }
+  .timeline-item.current .timeline-dot { border-color: var(--warning); animation: pulse 2s infinite; }
+  .timeline-item.current .timeline-dot::after { background: var(--warning); }
+  .timeline-item.upcoming .timeline-dot { border-color: var(--info); }
+  .timeline-item.upcoming .timeline-dot::after { background: var(--info); }
+  .timeline-item.future .timeline-dot { border-color: var(--purple); }
+  .timeline-item.future .timeline-dot::after { background: var(--purple); }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 4px white, 0 0 0 0 rgba(245,158,11,0.4); }
+    50% { box-shadow: 0 0 0 4px white, 0 0 0 8px rgba(245,158,11,0); }
+  }
+
+  .timeline-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    border-left: 4px solid var(--success);
+  }
+  .timeline-item.current .timeline-card { border-left-color: var(--warning); background: linear-gradient(135deg, #FFFBEB 0%, var(--card) 80%); }
+  .timeline-item.upcoming .timeline-card { border-left-color: var(--info); }
+  .timeline-item.future .timeline-card { border-left-color: var(--purple); }
+
+  .timeline-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  .timeline-item.done .timeline-date { background: var(--success-soft); color: #047857; }
+  .timeline-item.current .timeline-date { background: var(--warning-soft); color: #B45309; }
+  .timeline-item.upcoming .timeline-date { background: var(--info-soft); color: #1D4ED8; }
+  .timeline-item.future .timeline-date { background: var(--purple-soft); color: #5B21B6; }
+
+  .timeline-card h4 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    letter-spacing: -0.2px;
+  }
+  .timeline-card p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .timeline-card p + p { margin-top: 6px; }
+  .timeline-card .sub-milestones {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .timeline-card .sub-milestones .sub-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .timeline-card .sub-milestones .sub-item .sub-date {
+    background: var(--bg-soft);
+    color: var(--ink);
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    font-size: 12px;
+  }
+  .timeline-card .note {
+    background: var(--warning-soft);
+    color: #92400E;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .timeline-card .note b { color: #B45309; }
+
+  /* ===== Result grids ===== */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    border-left: 5px solid;
+  }
+  .result-card.success { border-left-color: var(--success); }
+  .result-card.danger  { border-left-color: var(--danger); }
+  .result-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .result-card.success h3 { color: var(--success); }
+  .result-card.danger h3  { color: var(--danger); }
+  .result-card ul { list-style: none; }
+  .result-card li {
+    padding: 8px 0;
+    font-size: 15px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .result-card.success li::before { content: "✓"; color: var(--success); font-weight: 800; }
+  .result-card.danger li::before { content: "✕"; color: var(--danger); font-weight: 800; }
+
+  /* ===== Risk heatmap ===== */
+  .risk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .risk-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    border-top: 4px solid;
+  }
+  .risk-item.high   { border-top-color: var(--danger); background: linear-gradient(180deg, #FEF2F2 0%, var(--card) 60%); }
+  .risk-item.medium { border-top-color: var(--warning); background: linear-gradient(180deg, #FFFBEB 0%, var(--card) 60%); }
+  .risk-item.low    { border-top-color: var(--success); background: linear-gradient(180deg, #F0FDF4 0%, var(--card) 60%); }
+  .risk-item .risk-level {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .risk-item.high .risk-level   { background: var(--danger-soft); color: var(--danger); }
+  .risk-item.medium .risk-level { background: var(--warning-soft); color: #B45309; }
+  .risk-item.low .risk-level    { background: var(--success-soft); color: #047857; }
+  .risk-item h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .risk-item p {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .risk-item p b { color: var(--ink); }
+
+  /* ===== Plan W24 ===== */
+  .plan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .plan-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    border-top: 4px solid var(--primary);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .plan-checkbox {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    background: var(--primary-soft);
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-weight: 800;
+    font-size: 12px;
+    margin-top: 2px;
+  }
+  .plan-item .plan-content h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .plan-item .plan-content p {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ===== Health metric gauges (CSS conic) ===== */
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .metric-card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 22px 20px;
+    text-align: center;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .metric-card.danger  { border-top: 4px solid var(--danger); }
+  .metric-card.warning { border-top: 4px solid var(--warning); }
+  .metric-card.success { border-top: 4px solid var(--success); }
+
+  .gauge {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 8px auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .gauge::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    background: var(--card);
+    border-radius: 50%;
+    z-index: 0;
+  }
+  .gauge-value {
+    position: relative;
+    z-index: 1;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+  .gauge-value .unit {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-left: 2px;
+  }
+  .gauge-sub {
+    position: relative;
+    z-index: 1;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+  }
+  .gauge.danger  { background: conic-gradient(var(--danger) calc(var(--pct, 0) * 1%), var(--bg-soft) 0); }
+  .gauge.warning { background: conic-gradient(var(--warning) calc(var(--pct, 0) * 1%), var(--bg-soft) 0); }
+  .gauge.success { background: conic-gradient(var(--success) calc(var(--pct, 0) * 1%), var(--bg-soft) 0); }
+  .gauge.info    { background: conic-gradient(var(--info) calc(var(--pct, 0) * 1%), var(--bg-soft) 0); }
+
+  .metric-card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    letter-spacing: -0.2px;
+  }
+  .metric-card p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .metric-card .verdict {
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: var(--bg-soft);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .metric-card.danger  .verdict { background: var(--danger-soft);  color: var(--danger); }
+  .metric-card.warning .verdict { background: var(--warning-soft); color: #B45309; }
+  .metric-card.success .verdict { background: var(--success-soft); color: #047857; }
+
+  /* ===== CTO Recommendation ===== */
+  .reco-card {
+    background: linear-gradient(135deg, #F0F9FF 0%, #EFF6FF 100%);
+    border: 1px solid #BFDBFE;
+    border-radius: 14px;
+    padding: 24px 26px;
+  }
+  .reco-card h3 {
+    font-size: 19px;
+    color: var(--info);
+    margin-bottom: 14px;
+    font-weight: 700;
+  }
+  .reco-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+  }
+  .reco-item {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 16px 18px;
+    border-left: 3px solid var(--info);
+  }
+  .reco-item .reco-num {
+    display: inline-block;
+    width: 28px; height: 28px;
+    background: var(--info);
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 28px;
+    font-weight: 800;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .reco-item h4 {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .reco-item p {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    text-align: center;
+    padding: 24px 0;
+    color: var(--muted);
+    font-size: 12.5px;
+    border-top: 1px solid var(--border);
+    margin-top: 36px;
+  }
+  footer code {
+    background: var(--bg-soft);
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: var(--ink-soft);
+    font-family: "SF Mono", Monaco, monospace;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="eyebrow">Weekly Report · Sprint 10 · W23</div>
+    <h1>Reward V2 — Team Weekly Report</h1>
+    <p>Tuần 23 / 2026 · 01 → 07 / 06 · 3 contributors · 3 repositories</p>
+    <div class="meta">
+      <span>📦 rewards-v2</span>
+      <span>🎨 cdp-frontend</span>
+      <span>📱 mini-app</span>
+      <span>🟢 Production LIVE (từ W22)</span>
+      <span>⚡ Pivot lần 3 — UAT Total feedback</span>
+    </div>
+  </header>
+
+  <!-- Strategy banner -->
+  <div class="strategy-banner">
+    <span class="label">📌 Bối cảnh &amp; định hướng tuần</span>
+    <h2>Phát sinh feedback UAT evoucher từ Total — Team ưu tiên xử lý ngay trong tuần</h2>
+    <p><b>Điều chỉnh mục tiêu tuần:</b> tạm hoãn kế hoạch quà vật lý + quản lý gara để tập trung 3 Epic mới phục vụ Total go-live.</p>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi success">
+      <div class="kpi-label">Tỉ lệ đạt mục tiêu kế hoạch</div>
+      <div class="kpi-value">33%</div>
+      <div class="kpi-sub">1 / 3 mục tiêu đầu tuần hoàn thành</div>
+    </div>
+    <div class="kpi danger">
+      <div class="kpi-label">Mục tiêu chưa hoàn thành</div>
+      <div class="kpi-value">2</div>
+      <div class="kpi-sub">Quà vật lý · Quản lý gara</div>
+    </div>
+    <div class="kpi warning">
+      <div class="kpi-label">Mục tiêu phát sinh ngoài kế hoạch</div>
+      <div class="kpi-value">16</div>
+      <div class="kpi-sub">Từ feedback Total trong UAT</div>
+    </div>
+    <div class="kpi primary">
+      <div class="kpi-label">Tỉ lệ hoàn thành phát sinh</div>
+      <div class="kpi-value">100%</div>
+      <div class="kpi-sub">16 / 16 hạng mục bàn giao</div>
+    </div>
+    <div class="kpi info">
+      <div class="kpi-label">Tổng hạng mục hoàn thành</div>
+      <div class="kpi-value">17</div>
+      <div class="kpi-sub">1 theo kế hoạch + 16 phát sinh</div>
+    </div>
+    <div class="kpi pink">
+      <div class="kpi-label">Tổng effort points</div>
+      <div class="kpi-value">58</div>
+      <div class="kpi-sub">Trung bình 3.6 / task — mức Hard</div>
+    </div>
+  </div>
+
+  <!-- ============== 🎯 Tổng quan điều hành ============== -->
+  <div class="cto-dash">
+    <h3>Tổng quan điều hành</h3>
+
+    <div class="chart-grid">
+
+      <!-- Chart 1: Goal Achievement -->
+      <div class="chart-card">
+        <h4>🎯 Cơ cấu mục tiêu — kế hoạch vs phát sinh</h4>
+        <div class="chart-sub">3 mục tiêu đầu tuần (1 đạt · 2 chưa đạt) và 16 task phát sinh từ feedback Total (đạt 100%).</div>
+        <div class="chart-wrap"><canvas id="goalChart"></canvas></div>
+      </div>
+
+      <!-- Chart 2: % Achievement -->
+      <div class="chart-card">
+        <h4>📊 Tỉ lệ hoàn thành tổng thể</h4>
+        <div class="chart-sub">Tổng phạm vi 19 task (3 kế hoạch + 16 phát sinh). Hoàn thành 17, còn 2 task chuyển sang W24.</div>
+        <div class="big-callout">
+          <div class="num success">89%</div>
+          <div class="label">17 / 19 task ship · 2 defer W24</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; font-size:13px;">
+          <div style="text-align:center; padding:10px; background:var(--success-soft); border-radius:8px;">
+            <div style="font-size:22px; font-weight:800; color:#047857;">33%</div>
+            <div style="color:var(--muted); margin-top:2px;">Mục tiêu cũ (1/3)</div>
+          </div>
+          <div style="text-align:center; padding:10px; background:var(--primary-soft); border-radius:8px;">
+            <div style="font-size:22px; font-weight:800; color:var(--primary);">100%</div>
+            <div style="color:var(--muted); margin-top:2px;">Phát sinh (16/16)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart 3: Effort allocation -->
+      <div class="chart-card">
+        <h4>⚖️ Cơ cấu phân bổ effort theo nhóm công việc</h4>
+        <div class="chart-sub">Effort points (1-5 mỗi task) chia 3 nhóm chính: phát triển mới · cải tiến &amp; refactor · trao đổi đối tác &amp; UAT.</div>
+        <div class="chart-wrap"><canvas id="effortChart"></canvas></div>
+      </div>
+
+      <!-- Chart 4: Customer feedback loop -->
+      <div class="chart-card">
+        <h4>🔁 Thời gian xử lý phản hồi khách hàng</h4>
+        <div class="chart-sub">Tốc độ từ lúc Total đưa ra feedback đến khi giải pháp được ship — chỉ số chăm sóc khách hàng cốt lõi.</div>
+        <div style="padding:14px 0;">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:13px;">
+            <span style="background:var(--warning-soft); color:#B45309; padding:6px 12px; border-radius:20px; font-weight:700;">📨 Total feedback (Mon)</span>
+            <span style="color:var(--muted);">→</span>
+            <span style="background:var(--info-soft); color:var(--info); padding:6px 12px; border-radius:20px; font-weight:700;">🔧 Code (Tue-Thu)</span>
+            <span style="color:var(--muted);">→</span>
+            <span style="background:var(--success-soft); color:#047857; padding:6px 12px; border-radius:20px; font-weight:700;">✅ Ship (Fri)</span>
+          </div>
+          <div style="margin-top:18px; text-align:center;">
+            <div style="font-size:42px; font-weight:800; color:var(--primary); line-height:1;">5 ngày</div>
+            <div style="font-size:13px; color:var(--muted); margin-top:6px;">Từ feedback → giải pháp ship · <b style="color:var(--success);">tốc độ xuất sắc</b></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toolbar Expand/Collapse all -->
+  <div class="collapse-toolbar">
+    <button class="toolbar-btn" id="btn-expand-all" title="Mở tất cả section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      Mở tất cả
+    </button>
+    <button class="toolbar-btn" id="btn-collapse-all" title="Đóng tất cả section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+      Đóng tất cả
+    </button>
+    <span style="font-size:12px; color:var(--muted); align-self:center; margin-left:6px;">💡 Click vào tiêu đề mỗi section để mở/đóng</span>
+  </div>
+
+  <!-- ============== 👥 Hiệu suất theo thành viên ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>👥 Hiệu suất theo thành viên</h2>
+      <span class="hint">Dựa trên số task &amp; độ khó (1-5) — không quy đổi từ commit</span>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h4>📋 Số task &amp; độ khó trung bình</h4>
+        <div class="chart-sub">
+          <b>Cột:</b> Số task hoàn thành.
+          <b>Đường:</b> Độ khó trung bình mỗi task (effort points / task count, thang 1-5 từ Easy → Very Hard).
+        </div>
+        <div class="chart-wrap tall"><canvas id="taskComboChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h4>🧩 Cơ cấu task theo nhóm công việc</h4>
+        <div class="chart-sub">Số lượng task mỗi người đảm nhận trong 3 nhóm: phát triển mới · cải tiến &amp; refactor · trao đổi đối tác &amp; UAT.</div>
+        <div class="chart-wrap tall"><canvas id="categoryStackChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 🚀 Tính năng & hạng mục hoàn thành ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🚀 Tính năng &amp; hạng mục hoàn thành</h2>
+      <span class="hint">11 hạng mục bàn giao trong tuần · phân loại theo 3 nhóm</span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="feature">🆕 Tính năng <span class="count">7</span></button>
+      <button class="tab-btn" data-tab="vendor">🤝 Đối tác &amp; Khách hàng <span class="count">2</span></button>
+      <button class="tab-btn" data-tab="improve">✨ Fix bug &amp; Improve <span class="count">2</span></button>
+    </div>
+
+    <!-- Tab content: Tính năng (7) -->
+    <div class="feat-list" id="tab-feature">
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Tìm kiếm thông minh</h4>
+          <p>User search "cà phê" → ra toàn bộ quà trong brand Highland hoặc category cafe &amp; bánh. Có spec đầy đủ + keyword data được Trang xây từ ngữ nghĩa.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang + Huy</b></span>
+            <span>📦 BE + FE</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Personalized Search — Ranking Engine</h4>
+          <p>Bộ máy xếp hạng quà thông minh, recommend quà theo hành vi người dùng. Có tiered scoring cho brand/category, handle empty profile không lỗi SQL.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>📦 rewards-v2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Auto bật/tắt Category &amp; Brand</h4>
+          <p>Tự động ẩn category/brand khi không có quà, tự động hiển lại khi có quà. Có dual-mode (GotIt hỗ trợ + không hỗ trợ API) — giải pháp cho UAT issue #1.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>📦 rewards-v2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Drag &amp; Drop Category trên web</h4>
+          <p>Admin có thể kéo thả để sắp xếp thứ tự category hiển thị cho user. Kèm theo checkbox master + checkbox placeholder icon.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>📦 cdp-frontend</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Đổi tên &amp; hình ảnh Category</h4>
+          <p>Mỗi account có thể override tên và hình ảnh category theo nhu cầu riêng (Category Override Modal account-level).</p>
+          <div class="feat-meta">
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>📦 cdp-frontend</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Partner Webview cho đổi quà</h4>
+          <p>Một số partner bắt buộc user phải vào link riêng để đổi quà → mini-app hiện webview ngay trong app, UX liền mạch không phải nhảy browser.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 mini-app + BE</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Filter Brand theo kênh sử dụng</h4>
+          <p>User có thể lọc brand theo phương thức sử dụng (voucher điện thoại, topup, partner webview...). Phục vụ UX tìm quà nhanh hơn.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 BE + mini-app</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab content: Đối tác & Khách hàng (2) -->
+    <div class="feat-list hidden" id="tab-vendor">
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>UAT GotIt + Họp Total nhận feedback</h4>
+          <p>Trang drive vendor coordination cả tuần: nhận feedback Total UAT evoucher, phát hiện 3 vấn đề (category trách nhiệm, mapping bất đồng bộ, productID mismatch) → định hướng giải pháp ngay trong tuần.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b></span>
+            <span>🗣 Vendor coordination</span>
+            <span>📅 Cả tuần</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Deploy production hỗ trợ Total demo</h4>
+          <p>Đúng kế hoạch tuần — đã deploy reward backend lên production phục vụ Total demo. Đây là mục tiêu duy nhất đạt được trong 3 mục tiêu đầu tuần.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b></span>
+            <span>📦 Infra · Production</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab content: Fix bug & Improve (2) -->
+    <div class="feat-list hidden" id="tab-improve">
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Fix bug + Improve UI mini-app</h4>
+          <p>Đợt polish lớn cho mini-app: collapsible reward detail, brand filter UX, voucher card icons, redemption limits, display name pipe đồng bộ toàn app.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 mini-app</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Refactor logic Worker category inactive</h4>
+          <p>Refactor worker xử lý category inactive — không bật lại nếu đã tắt toàn hệ thống. <em>Đây là phương án cũ của CNV, hiện tại không work do đã có phương án thay thế (dual-mode).</em></p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 rewards-v2</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 🎯 Đối chiếu mục tiêu kế hoạch ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🎯 Đối chiếu mục tiêu kế hoạch</h2>
+      <span class="hint">So sánh kết quả thực tế với mục tiêu đặt ra đầu tuần</span>
+    </div>
+    <div class="grid-2">
+      <div class="result-card success">
+        <h3>✅ Đạt mục tiêu (1)</h3>
+        <ul>
+          <li>Dựng production hỗ trợ Total</li>
+        </ul>
+      </div>
+      <div class="result-card danger">
+        <h3>❌ Không đạt mục tiêu (2)</h3>
+        <ul>
+          <li>Hoàn thiện quà tặng vật lý</li>
+          <li>Quản lý gara</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 🛡️ Đánh giá rủi ro ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🛡️ Đánh giá rủi ro</h2>
+      <span class="hint">Các rủi ro &amp; điểm cần ưu tiên theo dõi trong giai đoạn tới</span>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-item high">
+        <span class="risk-level">🔥 HIGH</span>
+        <h4>ProductID Excel ≠ API (UAT GotIt)</h4>
+        <p>Danh sách productID GotIt qua mail Excel và data từ API bị mismatch. <b>Nếu không fix W24, đối soát voucher có thể lệch → ảnh hưởng tài chính Total.</b></p>
+      </div>
+      <div class="risk-item high">
+        <span class="risk-level">⚠️ HIGH</span>
+        <h4>Suy giảm tin tưởng GotIt data</h4>
+        <p>Quyết định lớn: <b>CNV lấy raw data và tự xử lý mọi thứ ở hệ thống</b>. Tăng workload CNV nhưng giảm dependency vendor. Cần monitor scope creep.</p>
+      </div>
+      <div class="risk-item medium">
+        <span class="risk-level">🟡 MEDIUM</span>
+        <h4>Quà vật lý defer 3 tuần liên tiếp</h4>
+        <p>Đã defer từ W8 (đọc tài liệu) → W10. Total có thể chasing nếu kéo dài. Cần action tuần W24 hoặc chính thức push timeline.</p>
+      </div>
+      <div class="risk-item low">
+        <span class="risk-level">✅ APPROACH READY</span>
+        <h4>Quản lý gara — Vibe code approach</h4>
+        <p>Mục tiêu W10 chưa start, nhưng <b>team đã xác định phương án triển khai</b>: dùng <b>vibe code</b> — leverage AI để prototype nhanh, không cần spec chi tiết upfront. Phù hợp với feature có scope linh hoạt. <b>Risk còn lại:</b> kiểm soát rework + edge cases khi iterate.</p>
+      </div>
+      <div class="risk-item medium">
+        <span class="risk-level">🟡 MEDIUM</span>
+        <h4>Pivot lần 3 trong 4 tuần</h4>
+        <p>W8 (CNV ko ký GotIt) · W9 (go-live) · W10 (UAT feedback). Tốc độ adapt tốt nhưng <b>kiểm tra team có mệt không</b>. Burn-out risk.</p>
+      </div>
+      <div class="risk-item low">
+        <span class="risk-level">✅ LOW</span>
+        <h4>Production stability</h4>
+        <p>Reward backend LIVE từ W22. Chưa có incident production trong W23. Hệ thống đang chạy ổn với UAT load Total.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 🗓 Timeline kế hoạch ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🗺️ Lộ trình sản phẩm</h2>
+      <span class="hint">Các mốc triển khai chính từ W23 đến đầu Q3</span>
+    </div>
+
+    <div class="card" style="padding: 28px 24px;">
+      <div class="timeline">
+
+        <!-- 1. Evoucher + thẻ điện thoại — current (W23) -->
+        <div class="timeline-item current">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">⏳ ĐANG TRIỂN KHAI · DEADLINE 05/06</div>
+            <h4>Evoucher + Thẻ điện thoại</h4>
+            <p>Đang <b>testing lại trên môi trường production</b> với API KEY của Total, improve và phát triển thêm 1 số tính năng từ feedback UAT của Total trong tuần này.</p>
+            <div class="note">
+              ⚠️ <b>Deadline 05/06 — đã trễ 2 ngày</b>. Việc trễ do feedback Total phát sinh trong tuần. Cần xác nhận với Total về timeline mới.
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Quà vật lý — upcoming (19-24/6) -->
+        <div class="timeline-item upcoming">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">📦 SẮP TỚI · 19/06 → 24/06</div>
+            <h4>Quà vật lý</h4>
+            <p>Triển khai phase 2 với product quà vật lý (giao nhận, kho, hoàn trả). Chia 2 mốc:</p>
+            <div class="sub-milestones">
+              <div class="sub-item">
+                <span class="sub-date">19/06</span>
+                <span>Deploy production phase quà vật lý</span>
+              </div>
+              <div class="sub-item">
+                <span class="sub-date">24/06</span>
+                <span>UAT production với GotIt + improve + fixbug</span>
+              </div>
+            </div>
+            <div class="note">
+              💡 <b>Lý do làm UAT lại trên production:</b> Data môi trường staging và production ở GotIt khác nhau → cần làm bước UAT prod kỹ trước khi release sản phẩm cho khách. Tránh lặp lại issue như đã gặp với Evoucher.
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Location MCO — future (25/6 - 8/7) -->
+        <div class="timeline-item future">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">📍 SCHEDULED · 25/06 → 08/07</div>
+            <h4>Location MCO</h4>
+            <p>Triển khai feature Location MCO. Tổng thời gian 2 tuần:</p>
+            <div class="sub-milestones">
+              <div class="sub-item">
+                <span class="sub-date">25/06</span>
+                <span>Start development</span>
+              </div>
+              <div class="sub-item">
+                <span class="sub-date">08/07</span>
+                <span>Release</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Reward network — future (8/7) -->
+        <div class="timeline-item future">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">🎯 MILESTONE · 08/07</div>
+            <h4>Reward Network</h4>
+            <p>Vào xác nhận yêu cầu (requirements confirmation) cho Reward Network. Sau khi confirm scope sẽ chuyển sang phase phát triển.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 📅 Plan W24 ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🎯 Kế hoạch tuần tới — W24</h2>
+      <span class="hint">08 → 14 / 06 / 2026</span>
+    </div>
+    <div class="plan-grid">
+      <div class="plan-item">
+        <div class="plan-checkbox">☐</div>
+        <div class="plan-content">
+          <h4>Testing và release các tính năng thêm mới</h4>
+          <p>Ranking Engine · Multi-tenant Brand/Cat · Partner Webview · Filter brand kênh</p>
+        </div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-checkbox">☐</div>
+        <div class="plan-content">
+          <h4>Tiếp tục UAT với GotIt</h4>
+          <p>Hỗ trợ Total Go-live đại trà · fix productID mismatch</p>
+        </div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-checkbox">☐</div>
+        <div class="plan-content">
+          <h4>Hoàn thiện quà tặng vật lý</h4>
+          <p>Carry-over từ W23 — đọc tài liệu + draft plan phase 2</p>
+        </div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-checkbox">☐</div>
+        <div class="plan-content">
+          <h4>Hoàn thiện quản lý gara</h4>
+          <p>Carry-over từ W23 · <b>Phương án: Vibe code</b> — prototype nhanh bằng AI, iterate dần</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 🩺 Sức khoẻ dự án — Strategic Metrics ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🩺 Sức khoẻ dự án</h2>
+      <span class="hint">Bộ chỉ số chiến lược cập nhật hàng tuần</span>
+    </div>
+
+    <!-- 3 visual metric gauges -->
+    <div class="metric-grid">
+
+      <!-- Metric 1: Customer Feedback → Ship Ratio -->
+      <div class="metric-card success">
+        <div class="gauge success" style="--pct: 100;">
+          <div>
+            <div class="gauge-value">100<span class="unit">%</span></div>
+            <div class="gauge-sub">Ship trong tuần</div>
+          </div>
+        </div>
+        <h4>🔁 Feedback → Ship Ratio</h4>
+        <p><b>4/4 yêu cầu Total feedback đã ship</b>: Tìm kiếm thông minh · Auto bật/tắt category khi không có quà · Đổi hình ảnh category · Order (kéo thả thứ tự) category.</p>
+        <div class="verdict">✓ 4/4 ship trong tuần · Xuất sắc</div>
+      </div>
+
+      <!-- TEMP COMMENTED OUT — Roadmap Drift Index
+      <div class="metric-card danger">
+        <div class="gauge danger" style="--pct: 94;">
+          <div>
+            <div class="gauge-value">94<span class="unit">%</span></div>
+            <div class="gauge-sub">Drift</div>
+          </div>
+        </div>
+        <h4>🗺️ Roadmap Drift Index</h4>
+        <p>16/17 task thực tế không có trong plan đầu tuần. Pivot tốt nhưng dấu hiệu planning chưa khớp với UAT cycle. Cần xem lại cách lập plan.</p>
+        <div class="verdict">⚠️ Cao — review planning cycle</div>
+      </div>
+      -->
+
+
+      <!-- Metric 3: Vendor Health Score -->
+      <div class="metric-card warning">
+        <div class="gauge warning" style="--pct: 40;">
+          <div>
+            <div class="gauge-value">4<span class="unit">/ 10</span></div>
+            <div class="gauge-sub">GotIt Health</div>
+          </div>
+        </div>
+        <h4>🤝 Vendor Health Score (GotIt)</h4>
+        <p>3 vấn đề UAT trong tuần (đẩy trách nhiệm category · 2 API mapping bất đồng · productID mismatch). <b>Team chủ động phát hiện + xử lý 2/3 ngay trong tuần</b>, còn productID mismatch chuyển W24.</p>
+        <div class="verdict">⚠️ Suy giảm — cần escalate</div>
+      </div>
+
+    </div>
+
+    <!-- Risk Discovery & Resolution callout -->
+    <div style="background: var(--card); border:1px solid var(--border); border-radius: 12px; padding: 18px 22px; margin-bottom: 20px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+      <div style="flex-shrink: 0; width: 64px; height: 64px; border-radius: 50%; background: conic-gradient(var(--info) calc(67 * 1%), var(--bg-soft) 0); display: flex; align-items: center; justify-content: center; position: relative;">
+        <div style="position: absolute; inset: 6px; background: var(--card); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 16px; font-weight: 800; color: var(--info);">67%</span>
+        </div>
+      </div>
+      <div style="flex: 1; min-width: 240px;">
+        <div style="font-size: 12px; color: var(--info); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px;">🛡️ Risk Discovery &amp; Resolution Rate</div>
+        <div style="font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px;">2 / 3 vấn đề team chủ động phát hiện đã được xử lý ngay trong tuần</div>
+        <div style="font-size: 13px; color: var(--ink-soft); line-height: 1.5;">
+          <b style="color: var(--success);">✓ Đã xử lý:</b> Category bật/tắt (dual-mode pattern) · Data mapping bất đồng bộ (raw data ownership)
+          <br>
+          <b style="color: var(--warning);">⏳ Chuyển W24:</b> ProductID Excel ≠ API mismatch
+        </div>
+      </div>
+    </div>
+
+    <!-- TEMP COMMENTED OUT — Qualitative metrics block
+    <div class="reco-card">
+      <h3>🧭 Quan sát định tính</h3>
+      <div class="reco-grid">
+        <div class="reco-item">
+          <span class="reco-num">1</span>
+          <h4>Decision Log — Quyết định kỹ thuật</h4>
+          <p>Tuần này có 3 quyết định lớn: (1) dual-mode pattern cho category bật/tắt — giải pháp cho GotIt push trách nhiệm sang CNV · (2) raw data ownership — CNV lấy raw từ GotIt và tự xử lý mapping · (3) Vibe code cho Quản lý gara — prototype nhanh bằng AI.</p>
+        </div>
+        <div class="reco-item">
+          <span class="reco-num">2</span>
+          <h4>Carry-over Backlog Aging</h4>
+          <p>Item nào carry-over bao nhiêu tuần. Quà vật lý đã defer 3 tuần (W8 → W10), giờ có timeline cụ thể 19/6 deploy + 24/6 UAT nên không còn "phantom backlog". Quản lý gara cũng đã có phương án vibe code.</p>
+        </div>
+        <div class="reco-item">
+          <span class="reco-num">3</span>
+          <h4>Team Bandwidth Distribution</h4>
+          <p>Trang 7 task (4 vendor + 3 spec/keyword) — Leader đang đảm 2 vai: vendor liaison + IC contributor. Cần đánh giá có scale được không khi Total go-live đại trà / thêm khách hàng mới / quà vật lý phase 2 cùng lúc.</p>
+        </div>
+      </div>
+    </div>
+    -->
+  </div>
+
+  <footer>
+    Generated 07/06/2026 · Reward V2 Weekly Report · Sprint 10 / W23 · UI inspired by W21 dashboard, light mode
+    <br>
+    Source: <code>git log --since=2026-06-01 --until=2026-06-08 --no-merges</code> trên <code>rewards-v2</code>, <code>cdp-frontend</code>, <code>mini-app</code>
+  </footer>
+
+</div>
+
+<script>
+  // ====== Collapsible sections ======
+  const chevronSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
+  document.querySelectorAll('.section .section-title').forEach(title => {
+    // Inject chevron toggle
+    const toggle = document.createElement('span');
+    toggle.className = 'section-toggle';
+    toggle.innerHTML = chevronSvg;
+    title.appendChild(toggle);
+
+    // Click to toggle
+    title.addEventListener('click', (e) => {
+      // Avoid toggle when clicking inner controls (none currently, but future-proof)
+      if (e.target.closest('button, a, input, select')) return;
+      title.parentElement.classList.toggle('collapsed');
+    });
+  });
+
+  // ====== Expand all / Collapse all ======
+  function setAllCollapsed(collapsed) {
+    document.querySelectorAll('.section').forEach(sec => {
+      sec.classList.toggle('collapsed', collapsed);
+    });
+  }
+  const btnExpand = document.getElementById('btn-expand-all');
+  const btnCollapse = document.getElementById('btn-collapse-all');
+  if (btnExpand) btnExpand.addEventListener('click', () => setAllCollapsed(false));
+  if (btnCollapse) btnCollapse.addEventListener('click', () => setAllCollapsed(true));
+
+  // ====== Tab switching for "Tính năng đã đạt" ======
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.dataset.tab;
+      // Toggle active state
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      // Toggle visibility
+      document.querySelectorAll('.feat-list').forEach(list => list.classList.add('hidden'));
+      const target = document.getElementById('tab-' + tabId);
+      if (target) target.classList.remove('hidden');
+    });
+  });
+
+  Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto";
+  Chart.defaults.color = '#374151';
+
+  // ====== Chart 1: Goal Achievement (planned vs added) ======
+  new Chart(document.getElementById('goalChart'), {
+    type: 'doughnut',
+    data: {
+      labels: [
+        'Đầu tuần · ĐẠT (1)',
+        'Đầu tuần · KHÔNG đạt (2)',
+        'Phát sinh · ĐẠT (16)'
+      ],
+      datasets: [{
+        data: [1, 2, 16],
+        backgroundColor: ['#10B981', '#EF4444', '#4F46E5'],
+        borderColor: '#fff',
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '60%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12 }, padding: 12, boxWidth: 14 }
+        }
+      }
+    }
+  });
+
+  // ====== Chart 2: Effort allocation ======
+  new Chart(document.getElementById('effortChart'), {
+    type: 'doughnut',
+    data: {
+      labels: [
+        'Phát triển tính năng mới (37 pts · 63%)',
+        'Fix bug · Improve · Refactor (7 pts · 12%)',
+        'Trao đổi đối tác & UAT (14 pts · 25%)'
+      ],
+      datasets: [{
+        data: [37, 7, 14],
+        backgroundColor: ['#8B5CF6', '#3B82F6', '#F59E0B'],
+        borderColor: '#fff',
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '55%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12 }, padding: 12, boxWidth: 14 }
+        }
+      }
+    }
+  });
+
+  // ====== Combo chart: Số task (bar) + Độ khó TB (line) ======
+  // Trang: 7 task / 25 pts → avg 3.57 difficulty
+  // Huy:   5 task / 19 pts → avg 3.80 difficulty
+  // Hải:   4 task / 14 pts → avg 3.50 difficulty
+  new Chart(document.getElementById('taskComboChart'), {
+    data: {
+      labels: ['Trang', 'Huy', 'Hải'],
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Số task hoàn thành',
+          data: [7, 5, 4],
+          backgroundColor: ['rgba(79,70,229,.85)', 'rgba(16,185,129,.85)', 'rgba(245,158,11,.85)'],
+          borderRadius: 10,
+          yAxisID: 'y',
+          order: 2,
+          barThickness: 60
+        },
+        {
+          type: 'line',
+          label: 'Độ khó trung bình / task',
+          data: [3.57, 3.80, 3.50],
+          borderColor: '#EC4899',
+          backgroundColor: 'rgba(236,72,153,.15)',
+          borderWidth: 3,
+          pointBackgroundColor: '#EC4899',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 7,
+          pointHoverRadius: 9,
+          tension: 0.35,
+          fill: true,
+          yAxisID: 'y1',
+          order: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12 }, padding: 14, boxWidth: 14, usePointStyle: true }
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              if (ctx.dataset.label.includes('Độ khó')) {
+                return `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)} / 5`;
+              }
+              return `${ctx.dataset.label}: ${ctx.parsed.y}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { font: { size: 14, weight: 700 }, color: '#111827' },
+          grid: { display: false }
+        },
+        y: {
+          position: 'left',
+          beginAtZero: true,
+          max: 10,
+          title: { display: true, text: 'Số task', font: { size: 12, weight: 600 }, color: '#4F46E5' },
+          ticks: { stepSize: 2, font: { size: 12 }, color: '#4F46E5' },
+          grid: { color: 'rgba(148,163,184,.12)' }
+        },
+        y1: {
+          position: 'right',
+          beginAtZero: true,
+          max: 5,
+          title: { display: true, text: 'Độ khó TB (1-5)', font: { size: 12, weight: 600 }, color: '#EC4899' },
+          ticks: { stepSize: 1, font: { size: 12 }, color: '#EC4899' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+
+  // ====== Chart 5: Category breakdown per person (stacked) ======
+  new Chart(document.getElementById('categoryStackChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Trang', 'Huy', 'Hải'],
+      datasets: [
+        {
+          label: 'Phát triển tính năng mới',
+          data: [3, 5, 2],
+          backgroundColor: '#8B5CF6'
+        },
+        {
+          label: 'Fix bug · Improve · Refactor',
+          data: [0, 0, 2],
+          backgroundColor: '#3B82F6'
+        },
+        {
+          label: 'Trao đổi đối tác & UAT',
+          data: [4, 0, 0],
+          backgroundColor: '#F59E0B'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 10, boxWidth: 14 } },
+        tooltip: {
+          callbacks: {
+            footer: (items) => {
+              const total = items.reduce((sum, item) => sum + item.parsed.y, 0);
+              return 'Tổng: ' + total + ' task';
+            }
+          }
+        }
+      },
+      scales: {
+        x: { stacked: true, ticks: { font: { size: 13, weight: 600 } } },
+        y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1, font: { size: 12 } } }
+      }
+    }
+  });
+</script>
+</body>
+</html>
