@@ -269,40 +269,40 @@
 <div class="wrap">
   <header>
     <h1>Team Performance Dashboard — Reward v2</h1>
-    <p>Hiệu suất team 3 người · Giai đoạn 30/03 – 12/06/2026 (11 sprint · W5=3d · W6-W11=5d each · <b style="color:#6ee7b7;">W9 ✅ GO-LIVE</b> · <b style="color:#f9a8d4;">W10 ⚡ Pivot UAT</b> · <b style="color:#60a5fa;">W11 ✅ Bám plan + Phase 2 90%</b>) · Cập nhật ISO W24 · <b style="color:#60a5fa;">post-W11 refresh — 4/4 mục tiêu kế hoạch · Quà vật lý + MCO Gara 90%</b></p>
+    <p>Hiệu suất team 3 người · Giai đoạn 30/03 – 19/06/2026 (12 sprint · W5=3d · W6-W12=5d each · <b style="color:#6ee7b7;">W9 ✅ GO-LIVE</b> · <b style="color:#f9a8d4;">W10 ⚡ Pivot UAT</b> · <b style="color:#60a5fa;">W11 ✅ Bám plan + Phase 2 90%</b> · <b style="color:#34d399;">W12 ✅ Hoàn thành phần CNV — chờ GotIt cho UAT 22/06</b>) · Cập nhật ISO W25 · <b style="color:#34d399;">post-W12 refresh — Quà vật lý + MCO Gara DONE phần CNV, blocker dồn về GotIt</b></p>
   </header>
 
   <!-- KPI -->
   <div class="kpi-grid">
     <div class="kpi blue">
       <div class="kpi-label">Tổng task hoàn thành</div>
-      <div class="kpi-value">140</div>
-      <div class="kpi-sub">+17 sau W11 (Release evoucher production + UAT GotIt + Quà vật lý 90% (Worker MỚI + Refactor 2 worker + PDPL + luồng vận hành) + MCO Gara 90% (vibe code + refactor mini-app BE lấy location) + 4 tài liệu + Module mini-app BE internal)</div>
+      <div class="kpi-value">154</div>
+      <div class="kpi-sub">+14 sau W12 (Quà vật lý HOÀN THÀNH code+deploy+test E2E · MCO Gara release production · gửi GotIt đánh giá tích hợp + Public Key + PII · status chốt theo spec GotIt)</div>
     </div>
     <div class="kpi green">
       <div class="kpi-label">Velocity trung bình</div>
-      <div class="kpi-value">12.7</div>
-      <div class="kpi-sub">task / tuần · W11 ship 17 task / 5d (55 commits/3 dev) · 3 tuần liền giữ velocity ≥17 task</div>
+      <div class="kpi-value">12.8</div>
+      <div class="kpi-sub">task / tuần · W12 ship 14 task / 5d (60 commits/3 dev) · Hải gánh 43 commits drive code Phase 2</div>
     </div>
     <div class="kpi orange">
       <div class="kpi-label">Module hoàn thiện</div>
-      <div class="kpi-value">36</div>
-      <div class="kpi-sub">+<b style="color:#60a5fa;">Quà vật lý 90% 🆕</b> (Worker đồng bộ quà vật lý MỚI · PDPL nghị định 13 · luồng vận hành) · +<b style="color:#60a5fa;">MCO Gara location 90% 🆕</b> (vibe code · mini-app BE lấy location) · +<b>Dịch vụ quản lý secret mini-app (cnv-internal-api)</b> · +<b>Release đổi evoucher production</b></div>
+      <div class="kpi-value">38</div>
+      <div class="kpi-sub">+<b style="color:#34d399;">Quà vật lý 100% code 🆕</b> (BE+web+mini-app · test E2E · sẵn sàng prod) · +<b style="color:#34d399;">MCO Gara RELEASE PRODUCTION 🆕</b> (chờ Zalo duyệt miniapp nghiệm thu)</div>
     </div>
     <div class="kpi red">
-      <div class="kpi-label">Blockers đang mở</div>
-      <div class="kpi-value">2</div>
-      <div class="kpi-sub">🟡 <b>Quà vật lý staging mismatch bộ status</b> (W25 GotIt reply map lại) · 🟡 <b>UAT GotIt phát sinh</b> (GotIt đã fix 80%, không ảnh hưởng timeline) · <b>ProductID Excel ≠ API</b> đã fix W11</div>
+      <div class="kpi-label">Blockers đang mở (đều ở GotIt)</div>
+      <div class="kpi-value">3</div>
+      <div class="kpi-sub">🔴 <b>GotIt setup CampaignId + quà vật lý prod</b> (chặn UAT 22/06) · 🔴 <b>Public Key chưa confirm</b> · 🟡 <b>đối soát + partial success</b> đợi GotIt</div>
     </div>
     <div class="kpi" style="background: linear-gradient(135deg, rgba(139,92,246,.2), rgba(236,72,153,.15)); border:1px solid rgba(139,92,246,.3);">
       <div class="kpi-label" style="color:#c4b5fd;">Effort Score (có trọng số)</div>
-      <div class="kpi-value" style="background: linear-gradient(90deg, #c084fc, #f472b6); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">486</div>
-      <div class="kpi-sub">complexity points · avg 3.47/task · <b style="color:#60a5fa;">+65 sau W11</b> (MCO Gara location Very Hard 5 + Quà vật lý 90% 5 + Release evoucher prod 5 + UAT GotIt 4)</div>
+      <div class="kpi-value" style="background: linear-gradient(90deg, #c084fc, #f472b6); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">550</div>
+      <div class="kpi-sub">complexity points · avg 3.51/task · <b style="color:#34d399;">+64 sau W12</b> (Quà vật lý code Very Hard · Worker inquiry polling · status history · MCO Gara release · vendor UAT prep)</div>
     </div>
-    <div class="kpi" style="background: linear-gradient(135deg, rgba(59,130,246,.18), rgba(16,185,129,.18)); border:1px solid rgba(59,130,246,.4);">
-      <div class="kpi-label" style="color:#60a5fa;">🎯 W24 (W11) Goal Achievement</div>
-      <div class="kpi-value" style="color:#60a5fa;">4/4 🎯</div>
-      <div class="kpi-sub">100% mục tiêu kế hoạch đạt (2 full + 2 đạt 90% carry W25) · Plan adherence 100% (vs W10 = 6% pivot) · 0% drift</div>
+    <div class="kpi" style="background: linear-gradient(135deg, rgba(52,211,153,.18), rgba(16,185,129,.18)); border:1px solid rgba(52,211,153,.4);">
+      <div class="kpi-label" style="color:#34d399;">🎯 W25 (W12) — phần CNV</div>
+      <div class="kpi-value" style="color:#34d399;">100% ✅</div>
+      <div class="kpi-sub">Toàn bộ phần thuộc CNV xong · mốc UAT Total 22/06 phụ thuộc 100% GotIt (2 dependency)</div>
     </div>
     <div class="kpi" style="background: linear-gradient(135deg, rgba(239,68,68,.15), rgba(245,158,11,.15)); border:1px solid rgba(239,68,68,.3);">
       <div class="kpi-label" style="color:#fca5a5;">Out-of-scope (delegate khác)</div>
@@ -323,8 +323,8 @@
       <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Webhook/Payment: 100% (+ Worker Send-Voucher Kafka pipeline DONE · RewardEventZnsDeliveryStrategy · Voucher Notification Channel API)</div>
       <div class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span>FE Account Admin: 100% (+<b style="color:#67e8f9;">Brand filter dropdown · GotIt Expiry Config UI · Excel export + funnel chart refactor (3 bonus full-stack)</b>)</div>
       <div class="legend-item"><span class="legend-dot" style="background:#ec4899"></span>Miniapp UI: 100% (+<b style="color:#6ee7b7;">Deploy shop 1168 + 3188 · Navigation rewards-v2 route · VoucherDetail polish · reward network whitelist</b>)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#c4b5fd"></span>Quà vật lý (Phase 2): 90% 🆕 (W11 push mạnh — Refactor 2 worker hiện có + <b>Worker đồng bộ quà vật lý MỚI</b> (polling physical orders) · PDPL nghị định 13 + Quản lý địa chỉ giao hàng · Luồng vận hành end-to-end · W25 hoàn thiện staging UAT)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#60a5fa"></span>MCO Gara location - Quét mã tích điểm: 90% 🆕 (W11 — vibe code + refactor mini-app BE lấy location · W25 deploy shop test · Release 08/07)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#c4b5fd"></span>Quà vật lý (Phase 2): <b style="color:#34d399;">100% code ✅</b> (W12 — hoàn thiện luồng redeem digital+physical · Worker inquiry polling 2h · PhysicalDeliveryStatus + status history theo spec GotIt · PDPL nghị định 13 · test E2E xong · deploy staging) — <b>chờ GotIt setup prod</b>)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#60a5fa"></span>MCO Gara location - Quét mã tích điểm: <b style="color:#34d399;">100% — RELEASE PRODUCTION ✅</b> (W12 — vibe code xong, release prod shop MCO · chờ Zalo duyệt miniapp nghiệm thu thực địa)</div>
       <div class="legend-item"><span class="legend-dot" style="background:#f472b6"></span>Platform layer (net-core): 30% (foundation branch chưa merge — vẫn defer)</div>
       <div class="legend-item"><span class="legend-dot" style="background:#fbbf24"></span>Infra/Staging: 100% 🚀 (+<b>CICD staging = prod aligned · Worker product-store deploy · CICD keys simplify · cron job production-ready · PRODUCTION DEPLOYED</b>)</div>
     </div>
@@ -386,8 +386,9 @@
 
   <!-- Audit findings banner -->
   <div class="card" style="margin-bottom:20px; background: linear-gradient(135deg, rgba(16,185,129,.08), rgba(59,130,246,.08)); border:1px solid rgba(16,185,129,.3);">
-    <h3 style="color:#60a5fa;">🎯 Audit findings 24/04 — refresh sau W11 (12/06): Bám plan + Phase 2 advance 90%</h3>
+    <h3 style="color:#34d399;">🎯 Audit findings 24/04 — refresh sau W12 (19/06): Hoàn thành phần CNV · blocker dồn về GotIt cho UAT 22/06</h3>
     <div style="font-size:13px; color:#cbd5e1; line-height:1.6; margin-bottom:12px;">
+      <strong style="color:#34d399;">✅ CLOSED W12 (15-19/06) — Hoàn thành toàn bộ phần thuộc CNV, sẵn sàng UAT Total 22/06:</strong> <b style="color:#34d399;">🎁 Quà vật lý HOÀN THÀNH code + deploy</b> (Hải drive 43 commits — thống nhất luồng redeem digital+physical · redeem flow + draft mini-app · Worker inquiry GotIt physical order long-running polling 2h + recovery · PhysicalDeliveryStatus thống nhất theo spec GotIt (bỏ deliveryStatus sub-order) + status history + clientOrderCode idempotency · redemption limit + out-of-stock + serial number + ngày giao dự kiến lịch nghỉ lễ VN · PDPL consent + DeliveryConfig + AdminRedeemHistory + Reward Feed Unit Projection · <b>test E2E xong, deploy staging — sẵn sàng prod khi GotIt setup</b>), <b style="color:#34d399;">🚗 MCO Gara location RELEASE PRODUCTION</b> (Huy khép VibePage — native bridge + location permission → release prod shop MCO, chờ Zalo duyệt miniapp nghiệm thu), <b style="color:#34d399;">🤝 Vendor (Trang):</b> hoàn tất + gửi GotIt bản đánh giá tích hợp ✅ · gửi Public Key (đợi confirm) ✅ · làm rõ PII ✅ · push GotIt clarify bộ status (đã chốt vào code) ✅ · mail push đối soát (đợi phản hồi), <b style="color:#34d399;">🏗 CICD (Trang):</b> deploy 3 worker physical (inquiry-gotit-physical, sync-gotit-address, sync-gotit-physical-product) + fix Helm image tag staging/prod, <b style="color:#67e8f9;">Misc:</b> Voucher notification channel đa kênh + unit test SendVoucherService (Huy) · null safety filter + unit test + cleanup property deprecated (Huy) · gỡ temporary shop test gates physical campaigns (Hải). <b style="color:#fca5a5;">⏰ Blocker dồn về GotIt cho UAT 22/06:</b> setup CampaignId + setup quà vật lý production + confirm Public Key — phần CNV không còn việc dev nào chặn. <b style="color:#34d399;">Trạng thái: 100% phần CNV xong</b> — rủi ro mốc UAT = rủi ro vendor.<br><br>
       <strong style="color:#60a5fa;">🎯 CLOSED W11 (08-12/06) — Bám sát 4/4 mục tiêu kế hoạch · Phase 2 đẩy lên 90%:</strong> <b style="color:#60a5fa;">Release tính năng đổi evoucher mới production</b> (Trang — build prod properties, refactor flyway version, sửa webhook, thêm category → Total đổi quà thật trên prod), <b style="color:#60a5fa;">UAT API danh mục/thương hiệu với GotIt PASS</b> (Trang — sàng lọc trước release, không bug nghiêm trọng), <b style="color:#60a5fa;">Quà vật lý 90% code complete 🆕</b> (Hải — <b>Worker đồng bộ quà vật lý MỚI</b> (polling GotIt physical orders + sync physical products) + <b>Refactor 2 worker hiện có</b> (consumer + orphan-sweep batch processing) · PDPL nghị định 13 + Quản lý địa chỉ giao hàng · Đã bao gồm confirm scope catId vật lý vs evoucher + support physical campaigns FE; Trang — luồng vận hành end-to-end + đối soát mẫu GotIt + hỏi câu hỏi vendor), <b style="color:#60a5fa;">MCO Gara location - Quét mã tích điểm 90% dev 🆕</b> (Team — vibe code approach + Trang dựng module mini-app backend internal foundation + Huy implement <b>Dịch vụ quản lý secret mini-app</b> qua endpoint cnv-internal-api + ký HMAC-SHA256 + Phân giải vị trí Zalo), <b style="color:#67e8f9;">4 tài liệu ship</b> (Trang — bài truyền thông · HDSD user · tài liệu release tính năng · HDSD automation + setup miniapp), <b style="color:#67e8f9;">CICD worker đồng bộ quà</b> (Trang — setup CI/CD + Helm + manual deploy jobs), <b style="color:#fcd34d;">Misc:</b> Sửa lỗi ZNS + xử lý template (Huy) · Đồng bộ kiểu cột DB với khai báo entity (Huy) · Cải thiện UX mini-app 10 commits (Hải: Điều hướng Membership + reward display + PullToRefresh + Dropdown phương thức · Bộ lọc thương hiệu · Themed checkbox · Reward network whitelist) · Vietnamese translations + PLUGIN_VOUCHER_SENT permissions (Huy) · Hỗ trợ vibe code review (Trang). <b style="color:#fcd34d;">⚠️ Vendor phát sinh W11:</b> UAT GotIt issues (GotIt đã fix 80%, không ảnh hưởng timeline) · staging quà vật lý mismatch bộ status (W25 GotIt reply map lại). <b style="color:#60a5fa;">Plan adherence: 100% (0% drift)</b> — phục hồi mạnh sau W10 pivot UAT.<br><br>
       <strong style="color:#f9a8d4;">⚡ CLOSED W10 (01-07/06) — Pivot lần 3 UAT Total feedback:</strong> <b style="color:#f9a8d4;">4/4 Total feedback ship trong tuần</b> (Tìm kiếm thông minh keyword search · Personalized Search Ranking Engine · Auto bật/tắt category dual-mode · Drag-drop thứ tự category · Đổi tên+hình ảnh category override account-level), <b style="color:#fcd34d;">Partner Webview + topup-codes</b> (Hải — rename link-codes → topup-codes + GotIt usage method voucher filtering), <b style="color:#fcd34d;">Filter brand theo kênh</b> (Hải — brand filter mini-app + BE), <b>Multi-tenant Brand/Category BE</b> (Huy — brand-category mappings cleanup + listEnabledBrands by category + client-specific endpoints), Admin FE polish + Mini-app UX polish 9 commits. <b>Phát hiện 3 UAT issues, xử lý 2/3 trong tuần</b> (dual-mode category · raw data ownership); ProductID Excel ≠ API mismatch defer W11 (đã fix).<br><br>
       <strong style="color:#6ee7b7;">🚀 CLOSED W9 (25-29/05) — GO-LIVE Production Total evoucher (FIRST RELEASE):</strong> <b style="color:#6ee7b7;">Deploy reward production Thứ 6 (29/05)</b> — rewards-v2 + cdp-backend gateway + Worker Send-Voucher lên prod, không bug nghiêm trọng sau release. <b style="color:#6ee7b7;">ZNS strategy complete 🆕</b> (Huy ship `RewardEventZnsDeliveryStrategy` + remove `AccountDeliveryConfig` deprecated + Voucher Notification Channel API + Kafka topic config fix prod/staging overlap — đóng 25% còn lại Worker Send-Voucher từ W8 → 100%), <b style="color:#6ee7b7;">CICD staging=prod aligned</b> (Trang simplify CI/CD keys single signature key + manual deploy worker-sync-gotit-product-store + cron job production-ready), <b style="color:#6ee7b7;">Testing staging với Total API key PASS</b> — 3 dev pair fix bug critical "Query did not return unique result" khi 2 shop chung API KEY (27ccdf7 — phát hiện trước go-live, tránh incident prod), <b style="color:#6ee7b7;">Deploy mini-app shop 1168 + 3188</b> (Hải 9 commits — Navigation rewards-v2 route mapping + VoucherDetailV2 categories/badges polish + VoucherCard vendor icon + reward network whitelist), <b style="color:#67e8f9;">3 BONUS full-stack features ship ngoài plan</b> (Huy: Brand filter voucher history full-stack BE+Gateway+FE · GotIt Voucher Expiry Config full-stack · Account Overview Excel Report + Funnel chart refactor full-stack), <b style="color:#c4b5fd;">Physical Gift Phase 2 KICKOFF SỚM 🆕</b> (Hải vượt scope W21 plan, đã start implement physical gift redemption flow + address management trên branch `haiht/rewards-v2-physical` — không chỉ research như plan ban đầu). <b style="color:#6ee7b7;">Vendor done:</b> GotIt nghiệm thu tích hợp Total Golive ✅ · Hỗ trợ Total đến go-live ongoing ✅ · CampaignId GotIt đã có response ✅ (ready implement W23). <b style="color:#fcd34d;">Misc:</b> DB perf cleanup root-cause delete `rewriteBatchedStatements=true` (cacfaf9 — không bulk insert thật được do IDENTITY), privacy hardening rm phone/email khi redeem GotIt voucher (2cff2b4), GotIt sync sequential processing reduce vendor API load (8847da4), per-voucher pointsRequired calculation (d3c5704), UserVoucherController attach GotIt usage methods (eeb01bf), vendor management vendorId + inventory count (1bf3d87), distinct user count redemption stats (5c86d8f).<br><br>
@@ -436,7 +437,7 @@
 
   <!-- Team allocation per week -->
   <div class="card" style="margin-bottom:20px;">
-    <h3>Phân bổ team theo tuần (W5 → W11) — GotIt only · Dev only · <b style="color:#60a5fa;">W11 5/5d done (12/06) — Bám plan + Phase 2 advance 90% 🎯</b></h3>
+    <h3>Phân bổ team theo tuần (W5 → W12) — GotIt only · Dev only · <b style="color:#34d399;">W12 5/5d done (19/06) — Hoàn thành phần CNV, chờ GotIt cho UAT 22/06 ✅</b></h3>
     <div style="margin-bottom:12px; padding:10px 14px; background:rgba(34,197,94,.08); border-left:3px solid #34d399; border-radius:6px; font-size:12px; color:#cbd5e1; line-height:1.5;">
       <strong style="color:#34d399;">✅ W5 đã đóng (28/4-2/5, 3 ngày làm việc do lễ 30/4-1/5):</strong>
       Dev sprint: (1) Miniapp đổi điểm 100% [Hải], (2) Local test env CG [Trang], (3) [CnvWork] migrate cnvconnect [Huy].
@@ -722,13 +723,51 @@
             </div>
           </td>
         </tr>
+
+        <!-- ====== W12 (15-19/06 · ISO W25) — Hoàn thành phần CNV, chờ GotIt cho UAT 22/06 ====== -->
+        <tr style="vertical-align:top; background:rgba(52,211,153,.10);">
+          <td style="padding:10px; font-weight:600; color:#34d399;">W12 ✅<br><span style="font-size:11px; color:#94a3b8; font-weight:normal;">15-19/6 (ISO W25)</span><br><span style="font-size:10px; color:#34d399;">HOÀN THÀNH phần CNV · 5/5d<br>chờ GotIt cho UAT 22/06</span><br><span style="font-size:10px; color:#94a3b8;">60 commits / 3 dev<br>6 / 11 / 43</span></td>
+          <td style="padding:10px; border-left:1px solid rgba(56,189,248,.2);">
+            <div style="background:rgba(52,211,153,.12); padding:4px 6px; border-radius:4px; margin:4px 0; border-left:2px solid #34d399;">🎯 <strong style="color:#34d399;">Tuần nước rút trước UAT Total 22/06</strong>: hoàn thành toàn bộ phần thuộc CNV — phần còn lại phụ thuộc GotIt.</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ 🏗 <strong>CICD deploy 3 worker physical</strong> — worker-inquiry-gotit-physical-order + sync-gotit-address + sync-gotit-physical-product. Fix Helm image tag staging/prod + key path physical staging.</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ 🤝 <strong>Hoàn tất + gửi GotIt bản đánh giá tích hợp</strong> — điều kiện tiên quyết cho go-live Total.</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ 🔐 <strong>Gửi Public Key + làm rõ PII với GotIt</strong> — PII done phía CNV. Public Key: chờ GotIt confirm + cấu hình.</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ 🤝 <strong>Push GotIt clarify bộ status + mail đối soát</strong> — status đã chốt vào code (PhysicalDeliveryStatus). Đối soát đợi phản hồi (không block UAT).</div>
+            <div style="margin-top:8px; padding:6px 8px; background:rgba(239,68,68,.10); border-radius:4px; font-size:11px; color:#fca5a5;">
+              🔴 <b>Blocker UAT 22/06 (chờ GotIt):</b> setup CampaignId + setup quà vật lý production + confirm Public Key. Phần CNV không còn việc dev nào chặn.
+            </div>
+            <div style="margin-top:6px; padding:6px 8px; background:rgba(168,85,247,.08); border-radius:4px; font-size:11px; color:#c084fc;">
+              📌 <b>W13 plan:</b> Escalate GotIt + chạy UAT Total · go-live quà vật lý prod khi GotIt setup · chốt đối soát + partial success · setup monitoring+on-call
+            </div>
+          </td>
+          <td style="padding:10px; border-left:1px solid rgba(167,139,250,.2);">
+            <div style="background:rgba(96,165,250,.12); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong style="color:#60a5fa;">🚗 MCO Gara VibePage → RELEASE PRODUCTION</strong> — hoàn thiện native bridge + location permission (3ecab9aa, 3fc9a4c7). Khép MCO Gara tích điểm → release prod shop MCO (chờ Zalo duyệt miniapp nghiệm thu).</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>Voucher notification channel — đa kênh + API</strong> — refactor channel sang list đa cấu hình (5fc26b67a, 1a42cd1) + cải thiện mô tả API + UI.</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ 🧪 <strong>Unit test SendVoucherService (đa kênh)</strong> — verify logic dispatch đa kênh (213949c). Giảm test debt carry.</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>Null safety column data type + unit test + cleanup</strong> — null safety parse filter (3d107bd74) + bỏ property deprecated integration.cnv-internal.url (8997b1321).</div>
+            <div style="margin-top:8px; padding:6px 8px; background:rgba(168,85,247,.08); border-radius:4px; font-size:11px; color:#c084fc;">
+              📌 <b>W13 carry:</b> Support implement campaignId tracking khi GotIt cấp · tiếp tục đẩy test coverage E2E · MCO Gara nghiệm thu sau Zalo duyệt
+            </div>
+          </td>
+          <td style="padding:10px; border-left:1px solid rgba(236,72,153,.2);">
+            <div style="background:rgba(196,181,253,.12); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong style="color:#c4b5fd;">🎁 Quà vật lý HOÀN THÀNH (drive 43 commits)</strong> — thống nhất luồng redeem digital+physical (b7b6d65) + redeem flow + draft mini-app (75a91fab) + delivery config (94eb278f).</div>
+            <div style="background:rgba(196,181,253,.10); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong style="color:#c4b5fd;">🎁 Worker inquiry GotIt physical order</strong> — long-running polling 2h + recovery (a92e2b7, 3a11aba) + PhysicalOrderPollOrchestrator chuẩn hóa status.</div>
+            <div style="background:rgba(196,181,253,.10); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong style="color:#c4b5fd;">🎁 PhysicalDeliveryStatus thống nhất + status history + idempotency</strong> — theo spec GotIt (bỏ deliveryStatus sub-order) + clientOrderCode + RedemptionOrderStatusHistory (ed5c62f).</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>Limit + tồn kho + serial + ngày giao dự kiến</strong> — redemption limit validation (7c8f59f) + out-of-stock (9838a76) + serial (4a65bff) + estimated delivery + lịch nghỉ lễ VN (f090f92).</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>PDPL consent + AdminRedeemHistory + Reward Feed</strong> — user consent (27d74c6) + admin redeem history + Reward Feed Unit Projection (4934d11) + usage methods.</div>
+            <div style="background:rgba(110,231,183,.08); padding:4px 6px; border-radius:4px; margin:4px 0;">✅ <strong>Test E2E quà vật lý DONE</strong> + cải thiện UX mini-app/web (order history + time formatting + gỡ temporary shop test gates).</div>
+            <div style="margin-top:8px; padding:6px 8px; background:rgba(168,85,247,.08); border-radius:4px; font-size:11px; color:#c084fc;">
+              📌 <b>W13 carry:</b> Go-live quà vật lý prod khi GotIt setup · smoke test luồng thật · hỗ trợ UAT Total
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
     <div style="margin-top:12px; padding:10px 12px; background:rgba(15,23,42,.5); border-radius:6px; font-size:12px; color:#cbd5e1; line-height:1.5;">
-      <strong style="color:#f472b6;">Tổng task per dev (W5-W11, ~43d/người · W5=3d, W6-W11=5d each done · post-W11):</strong>
-      <strong style="color:#38bdf8;">Trang ~52 tasks / 43d + ops</strong> (W11: Release evoucher prod + UAT API category/brand GotIt + Dựng luồng vận hành quà vật lý + Đối soát + module mini-app BE foundation cho MCO Gara + 4 docs + CICD worker + vibe code support · <b>23 commits W11</b>) ·
-      <strong style="color:#a78bfa;">Huy ~35 tasks / 42d</strong> (W11: <b style="color:#60a5fa;">Dịch vụ quản lý secret mini-app + Phân giải vị trí Zalo 🆕</b> (cho MCO Gara) + Sửa lỗi ZNS + xử lý template + Đồng bộ kiểu cột DB enum + Mở rộng test + i18n permissions · <b>10 commits W11</b>) ·
-      <strong style="color:#ec4899;">Hải ~46 tasks / 42d</strong> (W11: <b style="color:#c4b5fd;">Worker đồng bộ quà vật lý MỚI 🆕</b> (polling physical orders) + <b>Refactor 2 worker hiện có</b> (consumer + orphan-sweep batch) + PDPL nghị định 13 + Quản lý địa chỉ giao hàng + Cải thiện UX mini-app 10 commits + Sửa lỗi & kiểm thử · <b>22 commits W11 / 4 repos</b>).
+      <strong style="color:#f472b6;">Tổng task per dev (W5-W12, ~48d/người · W5=3d, W6-W12=5d each done · post-W12):</strong>
+      <strong style="color:#38bdf8;">Trang ~57 tasks / 48d + ops</strong> (W12: CICD deploy 3 worker physical + gửi GotIt đánh giá tích hợp + Public Key + PII + push status clarify + mail đối soát + UAT prep Total 22/06 · <b>6 commits + CICD/infra W12</b>) ·
+      <strong style="color:#a78bfa;">Huy ~39 tasks / 47d</strong> (W12: <b style="color:#60a5fa;">MCO Gara VibePage → release production 🆕</b> + Voucher notification channel đa kênh + unit test SendVoucherService + null safety + cleanup property · <b>11 commits W12</b>) ·
+      <strong style="color:#ec4899;">Hải ~52 tasks / 47d</strong> (W12: <b style="color:#c4b5fd;">Quà vật lý HOÀN THÀNH code 🆕</b> — unify redeem digital+physical + worker inquiry polling + PhysicalDeliveryStatus + status history + limit/stock/serial/delivery date + PDPL consent + test E2E · <b>43 commits W12 / 4 repos — drive toàn bộ Phase 2</b>).
       <br><br>
       <strong style="color:#34d399;">✅ W5 closed (3 ngày · 5 task ship):</strong> Module E CRM F1 ship 29/4 = bonus + 3 task plan dev sprint. Demo Total 4/5 đã chạy.
       <br>
@@ -751,14 +790,18 @@
       <strong style="color:#60a5fa;">🎯 W11 closed (5/5d · 17 task ship · 55 commits) — Bám sát plan + Phase 2 advance 90%:</strong> <b>4/4 mục tiêu kế hoạch đạt</b> (Production data Total demo · Release đổi evoucher mới production · Quà vật lý 90% · MCO Gara 90%). <b>Plan adherence 100%</b> (vs W10 = 6% pivot — phục hồi mạnh). <b>Phase 2 quà vật lý đẩy lên 90%</b>: <b>Worker đồng bộ quà vật lý MỚI</b> (polling physical orders) + Refactor 2 worker hiện có (consumer + orphan-sweep) + PDPL nghị định 13 + Quản lý địa chỉ giao hàng + Luồng vận hành end-to-end (Trang design). <b>MCO Gara location 90% dev</b>: vibe code approach + module mini-app backend internal foundation (Trang) + Dịch vụ quản lý secret mini-app (cnv-internal-api) + Phân giải vị trí Zalo (Huy). Trang shift mạnh non-code work: 4 tài liệu + 2 vendor track + hỗ trợ vibe code. <b>⚠️ Vendor phát sinh:</b> UAT GotIt issues (GotIt fix 80%) · staging quà vật lý mismatch bộ status (W25 map lại) — không ảnh hưởng timeline.
       <br>
       <strong style="color:#fbbf24;">⚠️ Carry sang W12 (W25, 15-19/06):</strong> Quà vật lý hoàn thiện staging + UAT · Thêm điều khoản nghị định 13 đầy đủ · Tiếp tục clarify GotIt + testing staging · Gửi GotIt bản đánh giá tích hợp (format TotalxGotIt) · MCO Gara deploy shop test + testing thực địa · Hotfix readiness + E2E test debt 1 day dedicated · Map lại bộ status quà vật lý sau GotIt phản hồi.
+      <br>
+      <strong style="color:#34d399;">✅ W12 closed (5/5d · 14 task ship · 60 commits) — Hoàn thành phần CNV, chờ GotIt cho UAT 22/06:</strong> <b>Toàn bộ phần thuộc CNV xong (100%)</b>. <b>🎁 Quà vật lý HOÀN THÀNH code + deploy + test E2E</b> (Hải drive 43 commits — unify redeem digital+physical, worker inquiry polling 2h, PhysicalDeliveryStatus + status history theo spec GotIt, limit/stock/serial/delivery date, PDPL consent) — sẵn sàng prod khi GotIt setup. <b>🚗 MCO Gara RELEASE PRODUCTION</b> (Huy khép VibePage → release prod shop MCO, chờ Zalo duyệt nghiệm thu). <b>🤝 Vendor (Trang):</b> gửi GotIt đánh giá tích hợp ✅ + Public Key ✅ (đợi confirm) + PII ✅ + status chốt ✅ + mail đối soát (đợi). <b>🔴 Blocker dồn về GotIt cho UAT 22/06:</b> setup CampaignId + quà vật lý production + confirm Public Key. <b>Rủi ro mốc UAT = rủi ro vendor</b>, không còn việc dev nào chặn.
+      <br>
+      <strong style="color:#fbbf24;">⚠️ Carry sang W13 (W26, 22-26/06):</strong> Escalate GotIt + chạy UAT Total 22/06 · go-live quà vật lý production khi GotIt setup xong · chốt đối soát + partial success/refund điểm với GotIt · MCO Gara nghiệm thu thực địa sau Zalo duyệt · setup monitoring + on-call cho quà vật lý prod · implement campaignId tracking khi GotIt cấp.
     </div>
   </div>
 
   <!-- Gantt -->
   <div class="card" style="margin-bottom:20px;">
-    <h3>Timeline 11 tuần — Done (W1–W11 ⬆ · W8 Pivot · <b style="color:#6ee7b7;">W9 🚀 GO-LIVE</b> · <b style="color:#f9a8d4;">W10 ⚡ Pivot UAT</b> · <b style="color:#60a5fa;">W11 🎯 Bám plan + Phase 2 90%</b>)</h3>
+    <h3>Timeline 12 tuần — Done (W1–W12 ⬆ · W8 Pivot · <b style="color:#6ee7b7;">W9 🚀 GO-LIVE</b> · <b style="color:#f9a8d4;">W10 ⚡ Pivot UAT</b> · <b style="color:#60a5fa;">W11 🎯 Bám plan</b> · <b style="color:#34d399;">W12 ✅ Hoàn thành phần CNV</b>)</h3>
     <div style="margin-bottom: 12px;">
-      <div class="gantt-week-header" style="grid-template-columns: 220px repeat(11, 1fr);">
+      <div class="gantt-week-header" style="grid-template-columns: 220px repeat(12, 1fr);">
         <div style="text-align:left;">Task / Module</div>
         <div style="background:rgba(16,185,129,.08);">W1 (30/3)</div>
         <div style="background:rgba(16,185,129,.08);">W2 (6/4)</div>
@@ -771,6 +814,7 @@
         <div style="background:rgba(16,185,129,.18); font-size:11px;" title="ISO W22, 5/5d done · GO-LIVE Production">W9 ✅ 5d 🚀</div>
         <div style="background:rgba(236,72,153,.18); font-size:11px;" title="ISO W23, 5/5d done · Pivot UAT Total feedback">W10 ✅ 5d ⚡</div>
         <div style="background:rgba(96,165,250,.18); font-size:11px;" title="ISO W24, 5/5d done · Bám plan + Phase 2 90%">W11 ✅ 5d 🎯</div>
+        <div style="background:rgba(52,211,153,.20); font-size:11px;" title="ISO W25, 5/5d done · Hoàn thành phần CNV, chờ GotIt UAT 22/6">W12 ✅ 5d</div>
       </div>
     </div>
     <div class="gantt" id="ganttBody"></div>
@@ -946,41 +990,41 @@
   new Chart(document.getElementById('weeklyChart'), {
     type: 'bar',
     data: {
-      labels: ['T1 (30/3)', 'T2 (6/4)', 'T3 (13/4)', 'T4 (21/4)', 'T5 (28/4) 3d', 'T6 (5/5)', 'T7 (11/5) ✅', 'T8 (18/5) ✅⚡', 'T9 (25/5) ✅🚀', 'T10 (1/6) ✅⚡', 'T11 (8/6) ✅🎯'],
+      labels: ['T1 (30/3)', 'T2 (6/4)', 'T3 (13/4)', 'T4 (21/4)', 'T5 (28/4) 3d', 'T6 (5/5)', 'T7 (11/5) ✅', 'T8 (18/5) ✅⚡', 'T9 (25/5) ✅🚀', 'T10 (1/6) ✅⚡', 'T11 (8/6) ✅🎯', 'T12 (15/6) ✅'],
       datasets: [
         {
           label: 'Worker / Sync',
-          data: [3, 1, 1, 2, 0, 1, 2, 2, 2, 1, 3],
+          data: [3, 1, 1, 2, 0, 1, 2, 2, 2, 1, 3, 2],
           backgroundColor: '#3b82f6',
           borderRadius: 6
         },
         {
           label: 'API Development (BE)',
-          data: [3, 5, 2, 2, 2, 4, 3, 3, 5, 4, 4],
+          data: [3, 5, 2, 2, 2, 4, 3, 3, 5, 4, 4, 3],
           backgroundColor: '#10b981',
           borderRadius: 6
         },
         {
           label: 'Integration',
-          data: [0, 2, 2, 1, 0, 2, 3, 3, 4, 3, 3],
+          data: [0, 2, 2, 1, 0, 2, 3, 3, 4, 3, 3, 2],
           backgroundColor: '#f59e0b',
           borderRadius: 6
         },
         {
           label: 'Business Logic',
-          data: [0, 0, 3, 1, 1, 4, 3, 2, 2, 4, 2],
+          data: [0, 0, 3, 1, 1, 4, 3, 2, 2, 4, 2, 3],
           backgroundColor: '#8b5cf6',
           borderRadius: 6
         },
         {
           label: 'Frontend (Account UI)',
-          data: [0, 0, 0, 7, 0, 1, 3, 2, 3, 3, 1],
+          data: [0, 0, 0, 7, 0, 1, 3, 2, 3, 3, 1, 1],
           backgroundColor: '#a78bfa',
           borderRadius: 6
         },
         {
           label: 'Miniapp (User-facing)',
-          data: [0, 0, 0, 3, 1, 0, 1, 2, 2, 2, 4],
+          data: [0, 0, 0, 3, 1, 0, 1, 2, 2, 2, 4, 3],
           backgroundColor: '#ec4899',
           borderRadius: 6
         }
@@ -1101,12 +1145,12 @@
   // Performance: tasks vs complexity (combo chart)
   new Chart(document.getElementById('performanceChart'), {
     data: {
-      labels: ['T1 (30/3)', 'T2 (6/4)', 'T3 (13/4)', 'T4 (21/4)', 'T5 (28/4) 3d', 'T6 (5/5)', 'T7 (11/5) ✅', 'T8 (18/5) ✅⚡', 'T9 (25/5) ✅🚀', 'T10 (1/6) ✅⚡', 'T11 (8/6) ✅🎯'],
+      labels: ['T1 (30/3)', 'T2 (6/4)', 'T3 (13/4)', 'T4 (21/4)', 'T5 (28/4) 3d', 'T6 (5/5)', 'T7 (11/5) ✅', 'T8 (18/5) ✅⚡', 'T9 (25/5) ✅🚀', 'T10 (1/6) ✅⚡', 'T11 (8/6) ✅🎯', 'T12 (15/6) ✅'],
       datasets: [
         {
           type: 'bar',
           label: 'Số task',
-          data: [6, 8, 8, 16, 5, 15, 15, 14, 18, 17, 17],
+          data: [6, 8, 8, 16, 5, 15, 15, 14, 18, 17, 17, 14],
           backgroundColor: '#3b82f6',
           borderRadius: 6,
           yAxisID: 'y',
@@ -1115,7 +1159,7 @@
         {
           type: 'bar',
           label: 'Complexity Points',
-          data: [16, 23, 31, 46, 17, 55, 60, 56, 70, 58, 65],
+          data: [16, 23, 31, 46, 17, 55, 60, 56, 70, 58, 65, 64],
           backgroundColor: '#a78bfa',
           borderRadius: 6,
           yAxisID: 'y',
@@ -1124,7 +1168,7 @@
         {
           type: 'line',
           label: 'Độ khó TB / task',
-          data: [2.67, 2.88, 3.88, 2.88, 3.40, 3.67, 4.00, 4.00, 3.89, 3.41, 3.82],
+          data: [2.67, 2.88, 3.88, 2.88, 3.40, 3.67, 4.00, 4.00, 3.89, 3.41, 3.82, 4.57],
           borderColor: '#f472b6',
           backgroundColor: 'rgba(244,114,182,.15)',
           borderWidth: 3,
@@ -1180,13 +1224,13 @@
   new Chart(document.getElementById('difficultyChart'), {
     type: 'bar',
     data: {
-      labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7 ✅', 'T8 ✅⚡', 'T9 ✅🚀', 'T10 ✅⚡', 'T11 ✅🎯'],
+      labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7 ✅', 'T8 ✅⚡', 'T9 ✅🚀', 'T10 ✅⚡', 'T11 ✅🎯', 'T12 ✅'],
       datasets: [
-        { label: '1 · Trivial', data: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], backgroundColor: '#22d3ee', borderRadius: 4 },
-        { label: '2 · Easy',    data: [1, 3, 0, 4, 0, 1, 1, 1, 3, 2, 1], backgroundColor: '#10b981', borderRadius: 4 },
-        { label: '3 · Medium',  data: [3, 3, 3, 10, 3, 4, 4, 4, 7, 6, 6], backgroundColor: '#f59e0b', borderRadius: 4 },
-        { label: '4 · Hard',    data: [1, 1, 3, 2, 2, 4, 6, 6, 6, 7, 7], backgroundColor: '#f97316', borderRadius: 4 },
-        { label: '5 · Very Hard', data: [0, 1, 2, 0, 0, 3, 4, 3, 2, 2, 3], backgroundColor: '#ef4444', borderRadius: 4 }
+        { label: '1 · Trivial', data: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], backgroundColor: '#22d3ee', borderRadius: 4 },
+        { label: '2 · Easy',    data: [1, 3, 0, 4, 0, 1, 1, 1, 3, 2, 1, 0], backgroundColor: '#10b981', borderRadius: 4 },
+        { label: '3 · Medium',  data: [3, 3, 3, 10, 3, 4, 4, 4, 7, 6, 6, 2], backgroundColor: '#f59e0b', borderRadius: 4 },
+        { label: '4 · Hard',    data: [1, 1, 3, 2, 2, 4, 6, 6, 6, 7, 7, 5], backgroundColor: '#f97316', borderRadius: 4 },
+        { label: '5 · Very Hard', data: [0, 1, 2, 0, 0, 3, 4, 3, 2, 2, 3, 7], backgroundColor: '#ef4444', borderRadius: 4 }
       ]
     },
     options: {
@@ -1516,7 +1560,24 @@
     { name: '♻️ Refactor Worker đồng bộ quà (consumer + orphan-sweep batch)', cat: 'Worker', start: 10, end: 11, cls: 'bar-worker', owner: 'L' },
     { name: '✅ 🎁 PDPL nghị định 13 + Quản lý địa chỉ giao hàng', cat: 'Miniapp', start: 10, end: 11, cls: 'bar-miniapp', owner: 'L' },
     { name: '✅ Cải thiện UX mini-app 10 commits (Membership + PullToRefresh + Bộ lọc)', cat: 'Miniapp', start: 10, end: 11, cls: 'bar-miniapp', owner: 'L' },
-    { name: '✅ Sửa lỗi & kiểm thử mini-app (overflow + ngrok header)', cat: 'Miniapp', start: 10, end: 11, cls: 'bar-miniapp', owner: 'L' }
+    { name: '✅ Sửa lỗi & kiểm thử mini-app (overflow + ngrok header)', cat: 'Miniapp', start: 10, end: 11, cls: 'bar-miniapp', owner: 'L' },
+    // ====== W12 ACTUAL (15-19/6 · ISO W25 · Hoàn thành phần CNV, chờ GotIt UAT 22/6) ======
+    // Trang — CICD + Vendor + UAT prep
+    { name: '✅ 🏗 CICD deploy 3 worker physical + fix Helm staging/prod', cat: 'Infra', start: 11, end: 12, cls: 'bar-infra', owner: 'T' },
+    { name: '✅ 🤝 Gửi GotIt đánh giá tích hợp + Public Key + làm rõ PII', cat: 'Integration', start: 11, end: 12, cls: 'bar-integration', owner: 'T' },
+    { name: '✅ 🤝 Push GotIt clarify status + mail đối soát', cat: 'Integration', start: 11, end: 12, cls: 'bar-integration', owner: 'T' },
+    { name: '✅ ⏰ Chuẩn bị Production/UAT Total 22/06 + theo dõi dependency', cat: 'Logic', start: 11, end: 12, cls: 'bar-logic', owner: 'T' },
+    // Huy — MCO Gara release + voucher channel + test
+    { name: '✅ 🚗 MCO Gara VibePage → RELEASE PRODUCTION', cat: 'Miniapp', start: 11, end: 12, cls: 'bar-miniapp', owner: 'H' },
+    { name: '✅ Voucher notification channel đa kênh + API', cat: 'API', start: 11, end: 12, cls: 'bar-api', owner: 'H' },
+    { name: '✅ 🧪 Unit test SendVoucherService + null safety + cleanup', cat: 'Logic', start: 11, end: 12, cls: 'bar-logic', owner: 'H' },
+    // Hải — Quà vật lý HOÀN THÀNH (drive 43 commits)
+    { name: '✅ 🎁 Quà vật lý — unify redeem digital+physical + draft', cat: 'API', start: 11, end: 12, cls: 'bar-api', owner: 'L' },
+    { name: '✅ 🎁 Worker inquiry GotIt physical order (polling 2h + recovery)', cat: 'Worker', start: 11, end: 12, cls: 'bar-worker', owner: 'L' },
+    { name: '✅ 🎁 PhysicalDeliveryStatus + status history + idempotency (spec GotIt)', cat: 'Logic', start: 11, end: 12, cls: 'bar-logic', owner: 'L' },
+    { name: '✅ 🎁 Limit + tồn kho + serial + ngày giao dự kiến (lễ VN)', cat: 'Logic', start: 11, end: 12, cls: 'bar-logic', owner: 'L' },
+    { name: '✅ 🎁 PDPL consent + DeliveryConfig + AdminRedeemHistory + Reward Feed', cat: 'API', start: 11, end: 12, cls: 'bar-api', owner: 'L' },
+    { name: '✅ Test E2E quà vật lý DONE + cải thiện UX mini-app/web', cat: 'Miniapp', start: 11, end: 12, cls: 'bar-miniapp', owner: 'L' }
   ];
 
   const gantt = document.getElementById('ganttBody');
@@ -1532,10 +1593,10 @@
 
     const wrap = document.createElement('div');
     wrap.className = 'gantt-bar-wrap';
-    wrap.style.gridTemplateColumns = 'repeat(11, 1fr)';
+    wrap.style.gridTemplateColumns = 'repeat(12, 1fr)';
     wrap.style.position = 'relative';
 
-    for (let i = 0; i < 11; i++) {
+    for (let i = 0; i < 12; i++) {
       const cell = document.createElement('div');
       cell.className = 'gantt-cell';
       wrap.appendChild(cell);
@@ -1544,8 +1605,8 @@
     const span = t.end - t.start;
     const bar = document.createElement('div');
     bar.className = `gantt-bar ${t.cls}${t.planned ? ' planned' : ''}`;
-    bar.style.left = `calc(${(t.start / 11) * 100}% + 4px)`;
-    bar.style.width = `calc(${(span / 11) * 100}% - 8px)`;
+    bar.style.left = `calc(${(t.start / 12) * 100}% + 4px)`;
+    bar.style.width = `calc(${(span / 12) * 100}% - 8px)`;
     bar.textContent = span > 0 ? `${span}w` : '';
     wrap.appendChild(bar);
 
