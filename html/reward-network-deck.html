@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reward Network — Đề xuất</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2333; --ink-soft:#4A5468; --paper:#FBFAF5; --surface:#FFFFFF;
+    --line:#E4E0D6; --line-strong:#D2CCBE; --seal:#DA4A2A; --seal-deep:#B23A1F;
+    --teal:#2F7E6E; --teal-soft:rgba(47,126,110,.14); --muted:#8F897B;
+    --grotesk:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --mono:'Space Mono','SFMono-Regular',ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--grotesk);background:var(--paper);color:var(--ink);
+    overflow:hidden;
+    background-image:radial-gradient(var(--line) .6px,transparent .6px);
+    background-size:24px 24px;
+  }
+
+  .deck{height:100vh;width:100vw;position:relative;}
+  .slide{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:clamp(28px,6vw,90px);
+    opacity:0;visibility:hidden;transform:translateY(14px);
+    transition:opacity .4s ease,transform .4s ease,visibility .4s;
+    overflow-y:auto;
+  }
+  .slide.active{opacity:1;visibility:visible;transform:none;}
+  .inner{max-width:980px;width:100%;margin:0 auto;}
+
+  .eyebrow{
+    font-family:var(--mono);font-size:clamp(11px,1.2vw,13px);
+    letter-spacing:.22em;text-transform:uppercase;color:var(--seal);font-weight:700;
+    display:flex;align-items:center;gap:12px;margin-bottom:clamp(14px,2.2vw,24px);
+  }
+  .eyebrow::before{content:"";width:34px;height:2px;background:var(--seal);display:inline-block;}
+  h1{font-size:clamp(28px,5vw,58px);font-weight:700;line-height:1.05;letter-spacing:-.025em;}
+  h1 em{font-style:normal;color:var(--seal);}
+  .sub{font-size:clamp(15px,1.9vw,21px);color:var(--ink-soft);max-width:58ch;margin-top:clamp(14px,2vw,22px);line-height:1.5;}
+  .body{font-size:clamp(14px,1.6vw,18px);color:var(--ink-soft);max-width:62ch;margin-top:18px;line-height:1.6;}
+  .body b,.sub b{color:var(--ink);font-weight:600;}
+
+  /* cover */
+  .cover h1{font-size:clamp(32px,6.2vw,72px);max-width:20ch;}
+  .cover .brandmark{
+    font-family:var(--mono);font-weight:700;letter-spacing:.1em;font-size:13px;
+    color:var(--ink);margin-bottom:auto;display:flex;align-items:center;gap:10px;
+  }
+  .cover .dot{width:9px;height:9px;border-radius:50%;background:var(--seal);}
+  .cover{justify-content:flex-start;padding-top:clamp(40px,8vh,90px);}
+  .cover .innerflex{display:flex;flex-direction:column;height:100%;}
+  .cover .spread{margin-top:auto;}
+
+  /* stat tiles */
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:clamp(22px,3vw,34px);}
+  @media(max-width:820px){.tiles{grid-template-columns:repeat(2,1fr);}}
+  .tile{background:var(--surface);border:1.5px solid var(--ink);border-radius:13px;padding:clamp(16px,2vw,22px);}
+  .tile .big{font-family:var(--mono);font-weight:700;font-size:clamp(22px,3vw,34px);letter-spacing:-.02em;}
+  .tile .lab{font-size:13px;color:var(--ink-soft);margin-top:6px;line-height:1.35;}
+  .tile .big.seal{color:var(--seal);}
+
+  /* jtbd quote */
+  .quote{
+    border-left:3px solid var(--seal);padding:6px 0 6px 22px;margin-top:26px;
+    font-size:clamp(17px,2.3vw,26px);line-height:1.45;font-weight:500;max-width:30ch;
+  }
+  .quote em{font-style:normal;color:var(--seal);}
+
+  /* before/after */
+  .ba{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center;margin-top:30px;}
+  @media(max-width:760px){.ba{grid-template-columns:1fr;}.ba .ar{transform:rotate(90deg);justify-self:center;}}
+  .card{background:var(--surface);border:1.5px solid var(--line-strong);border-radius:13px;padding:20px 22px;}
+  .card.hi{border-color:var(--ink);}
+  .card .ct{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+  .card .cb{font-size:clamp(15px,1.8vw,19px);line-height:1.4;}
+  .card.hi .cb b{color:var(--seal);}
+  .ar{font-size:26px;color:var(--line-strong);}
+
+  /* rule callout */
+  .rule{
+    background:var(--ink);color:#fff;border-radius:15px;padding:clamp(24px,3.4vw,40px);
+    margin-top:26px;font-size:clamp(19px,2.6vw,30px);line-height:1.35;font-weight:500;
+  }
+  .rule b{color:var(--seal);}
+  .rule .sigma{
+    font-family:var(--mono);font-size:13px;letter-spacing:.1em;color:rgba(255,255,255,.6);
+    margin-top:18px;display:block;font-weight:400;
+  }
+
+  /* two-col */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px;}
+  @media(max-width:760px){.two{grid-template-columns:1fr;}}
+  .col{background:var(--surface);border:1.5px solid var(--ink);border-radius:13px;padding:22px;}
+  .col h4{font-size:clamp(15px,1.8vw,19px);margin-bottom:10px;}
+  .col p{font-size:14px;color:var(--ink-soft);line-height:1.55;}
+  .col .arrow-chain{font-family:var(--mono);font-size:13px;color:var(--teal);font-weight:700;margin-top:12px;line-height:1.5;}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:22px;text-align:center;}
+
+  /* formula */
+  .formula{
+    background:var(--surface);border:1.5px dashed var(--seal);border-radius:13px;
+    padding:clamp(20px,2.8vw,30px);margin-top:24px;text-align:center;
+    font-family:var(--mono);font-size:clamp(15px,2.2vw,24px);font-weight:700;color:var(--ink);
+  }
+  .formula .o{color:var(--seal);}
+  .reveal{margin-top:22px;font-size:clamp(16px,2vw,22px);line-height:1.5;}
+  .reveal b{color:var(--seal);}
+
+  /* chart slide layout */
+  .chartwrap{display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-items:center;margin-top:18px;}
+  @media(max-width:820px){.chartwrap{grid-template-columns:1fr;}}
+  svg{display:block;width:100%;height:auto;}
+  .chartcard{background:var(--surface);border:1.5px solid var(--ink);border-radius:13px;padding:18px 18px 10px;}
+
+  /* risk rows */
+  .risks{margin-top:24px;display:flex;flex-direction:column;gap:11px;}
+  .risk{display:grid;grid-template-columns:1fr auto 1.1fr;gap:14px;align-items:center;
+    background:var(--surface);border:1.5px solid var(--line-strong);border-radius:11px;padding:14px 18px;}
+  @media(max-width:720px){.risk{grid-template-columns:1fr;gap:6px;}.risk .rar{display:none;}}
+  .risk .rp{font-size:14.5px;font-weight:600;}
+  .risk .rar{color:var(--seal);font-size:18px;}
+  .risk .rs{font-size:14px;color:var(--ink-soft);line-height:1.4;}
+  .risk .rs b{color:var(--teal);}
+
+  /* moat vs */
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px;}
+  @media(max-width:760px){.vs{grid-template-columns:1fr;}}
+  .vbox{border-radius:13px;padding:22px;}
+  .vbox.them{background:var(--surface);border:1.5px solid var(--line-strong);}
+  .vbox.us{background:var(--ink);color:#fff;}
+  .vbox .vt{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;color:var(--muted);}
+  .vbox.us .vt{color:var(--seal);}
+  .vbox .vc{font-size:clamp(15px,1.8vw,18px);line-height:1.5;}
+  .vbox.us .vc b{color:var(--seal);}
+
+  /* ask */
+  .ask-list{margin-top:26px;display:flex;flex-direction:column;gap:16px;}
+  .ask{display:flex;gap:18px;align-items:flex-start;}
+  .ask .n{font-family:var(--mono);font-weight:700;font-size:clamp(22px,3vw,34px);color:var(--seal);line-height:1;flex:0 0 auto;}
+  .ask .at{font-size:clamp(16px,2vw,21px);line-height:1.4;}
+  .ask .at small{display:block;color:var(--ink-soft);font-size:.72em;margin-top:4px;}
+  .scope{margin-top:28px;font-family:var(--mono);font-size:clamp(13px,1.6vw,16px);
+    background:var(--teal-soft);border:1px solid var(--teal);color:var(--teal);
+    display:inline-block;padding:10px 16px;border-radius:9px;font-weight:700;}
+
+  /* stamp signature */
+  .stamp{
+    position:absolute;top:clamp(24px,4vw,54px);right:clamp(24px,4vw,54px);
+    border:2px solid var(--seal);color:var(--seal);border-radius:8px;
+    font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.06em;
+    padding:7px 11px;transform:rotate(7deg);opacity:.8;text-align:center;line-height:1.3;
+  }
+
+  /* nav chrome */
+  .chrome{position:fixed;left:0;right:0;bottom:0;height:54px;display:flex;align-items:center;
+    justify-content:space-between;padding:0 clamp(16px,3vw,40px);z-index:10;
+    background:linear-gradient(transparent,rgba(251,250,245,.9) 40%);}
+  .dots{display:flex;gap:7px;}
+  .dots button{width:8px;height:8px;border-radius:50%;border:none;background:var(--line-strong);cursor:pointer;padding:0;transition:background .2s,transform .2s;}
+  .dots button.on{background:var(--seal);transform:scale(1.25);}
+  .navbtns{display:flex;gap:8px;align-items:center;}
+  .navbtns button{
+    font-family:var(--mono);font-size:13px;font-weight:700;border:1.5px solid var(--ink);
+    background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer;
+  }
+  .navbtns button:disabled{opacity:.3;cursor:default;}
+  .navbtns .count{border:none;background:none;color:var(--muted);min-width:48px;text-align:center;}
+  .navbtns button:focus-visible,.dots button:focus-visible{outline:2px solid var(--seal);outline-offset:2px;}
+
+  @media(prefers-reduced-motion:reduce){.slide{transition:opacity .15s;transform:none;}}
+  @media print{
+    body{overflow:visible;height:auto;}
+    .deck{height:auto;}
+    .slide{position:relative;opacity:1!important;visibility:visible!important;transform:none!important;
+      page-break-after:always;min-height:90vh;border-bottom:1px solid var(--line);}
+    .chrome{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- 1 COVER -->
+  <section class="slide cover active">
+    <div class="inner innerflex">
+      <div class="brandmark"><span class="dot"></span> REWARD NETWORK · ĐỀ XUẤT NỘI BỘ</div>
+      <div class="spread">
+        <h1>Mệnh giá là marketing. <em>Credit</em> là cái pool thật sự thanh toán.</h1>
+        <p class="sub">Biến 3000 doanh nghiệp đang dùng CDP thành một mạng lưới đổi quà chung — và CNV đứng giữa làm phòng thanh toán bù trừ, <b>không ôm kho quà</b>.</p>
+        <p class="body" style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:30px;">→ dùng phím mũi tên để chuyển slide</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 WHY US -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">01 · Lợi thế</div>
+      <h1>Vì sao là CNV, vì sao bây giờ</h1>
+      <p class="body">Phần lớn mạng lưới kiểu này chết vì không gom đủ merchant để pool sôi động. Liquidity đó CNV đã có sẵn.</p>
+      <div class="tiles">
+        <div class="tile"><div class="big seal">3000</div><div class="lab">doanh nghiệp đang dùng CDP</div></div>
+        <div class="tile"><div class="big">Quà sẵn</div><div class="lab">mỗi shop đã có bộ quà riêng, đang xài nội bộ</div></div>
+        <div class="tile"><div class="big">CDP</div><div class="lab">dữ liệu định danh khách thật</div></div>
+        <div class="tile"><div class="big">Urbox<br>GotIt</div><div class="lab">quan hệ sẵn, làm mỏ neo giá</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 PROBLEM -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">02 · Vấn đề (Job A)</div>
+      <h1>Loyalty của mỗi shop đang nghèo</h1>
+      <div class="quote">Khi khách của tôi muốn đổi quà, tôi muốn cho họ chọn <em>cả quà của mạng lưới</em>, để giữ chân tốt hơn — mà không tốn thêm tiền mua quà.</div>
+      <div class="ba">
+        <div class="card"><div class="ct">Hôm nay</div><div class="cb">Khách chỉ đổi được quà của <b>chính shop đó</b> → kém hấp dẫn, khó giữ chân.</div></div>
+        <div class="ar">→</div>
+        <div class="card hi"><div class="ct">Với mạng lưới</div><div class="cb">Khách đổi được quà của <b>cả mạng</b> → loyalty giàu hơn ngay, shop không tốn thêm tiền.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 MODEL -->
+  <section class="slide">
+    <div class="stamp">KHÔNG<br>ÔM KHO</div>
+    <div class="inner">
+      <div class="eyebrow">03 · Mô hình</div>
+      <h1>Phòng thanh toán bù trừ, <em>không</em> phải kho quà</h1>
+      <p class="body">Shop nạp ưu đãi vào pool, khách của shop khác đổi ra. Hệ thống chỉ <b>đánh trọng số và cân bằng credit</b> — không tồn hàng, không rủi ro hàng hoá.</p>
+      <div class="chartcard" style="margin-top:24px;max-width:760px;">
+        <svg viewBox="0 0 760 200" role="img" aria-label="Vòng luân chuyển credit">
+          <!-- nodes -->
+          <rect x="20" y="74" width="150" height="52" rx="10" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+          <text x="95" y="98" text-anchor="middle" font-family="var(--grotesk)" font-weight="600" font-size="14" fill="var(--ink)">Shop nạp quà</text>
+          <text x="95" y="116" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--teal)">+ credit</text>
+
+          <rect x="305" y="64" width="150" height="72" rx="10" fill="var(--ink)"/>
+          <text x="380" y="94" text-anchor="middle" font-family="var(--grotesk)" font-weight="600" font-size="14" fill="#fff">POOL</text>
+          <text x="380" y="114" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--seal)">Σ credit = 0</text>
+
+          <rect x="590" y="74" width="150" height="52" rx="10" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+          <text x="665" y="98" text-anchor="middle" font-family="var(--grotesk)" font-weight="600" font-size="14" fill="var(--ink)">Khách đổi quà</text>
+          <text x="665" y="116" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--seal)">− credit</text>
+
+          <!-- arrows -->
+          <line x1="170" y1="100" x2="298" y2="100" stroke="var(--teal)" stroke-width="2"/>
+          <polygon points="298,100 288,95 288,105" fill="var(--teal)"/>
+          <line x1="462" y1="100" x2="583" y2="100" stroke="var(--seal)" stroke-width="2"/>
+          <polygon points="583,100 573,95 573,105" fill="var(--seal)"/>
+          <!-- return loop -->
+          <path d="M665 126 q0 50 -285 50 q-285 0 -285 -50" fill="none" stroke="var(--line-strong)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <text x="380" y="190" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--muted)">credit quay về shop đã nạp</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 TENSION -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">04 · Căng thẳng gốc</div>
+      <h1>Ai cũng muốn <em>rút</em>. Nạp chỉ là cái giá phải trả.</h1>
+      <p class="sub">Vì mọi shop tham gia với cùng một động lực — làm loyalty của <b>mình</b> giàu hơn — nên pool tự nhiên lệch về phía cầu. Đây là gốc của mọi rủi ro, và là thứ cơ chế credit phải trị.</p>
+    </div>
+  </section>
+
+  <!-- 6 MECHANISM -->
+  <section class="slide">
+    <div class="stamp">Σ = 0</div>
+    <div class="inner">
+      <div class="eyebrow">05 · Giải pháp lõi</div>
+      <h1>Cơ chế credit</h1>
+      <div class="rule">
+        Muốn rút quà bên khác → phải có <b>credit</b>.<br>
+        Muốn có credit → quà của mình phải được người ta <b>thật sự đổi</b>.
+        <span class="sigma">Khách đổi tiêu credit · shop được đổi nhận credit · sổ cái toàn hệ thống luôn = 0 · CNV không phát hành giá trị.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 SELF SOLVE -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">06 · Tự trị</div>
+      <h1>Cơ chế tự sửa hai vấn đề kinh điển</h1>
+      <div class="two">
+        <div class="col">
+          <h4>Nạp quà dổm, rút quà xịn</h4>
+          <p>Quà dổm thì không ai đổi.</p>
+          <div class="arrow-chain">không ai đổi → kiếm ít credit → số dư cạn → hệ thống tự chặn lệnh rút</div>
+        </div>
+        <div class="col">
+          <h4>Định giá không công bằng</h4>
+          <p>Voucher cà phê vs spa — không cần ban định giá phán xử.</p>
+          <div class="arrow-chain">đặt giá-credit quá cao → không ai đổi → kiếm 0 → thị trường tự định giá</div>
+        </div>
+      </div>
+      <div class="kicker">Không cần ban định giá. Không cần làm cảnh sát. Kẻ gian tự thua.</div>
+    </div>
+  </section>
+
+  <!-- 8 PRICING % -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">07 · Phần khó nhất</div>
+      <h1>Ưu đãi % không có giá trị cố định</h1>
+      <div class="chartwrap">
+        <div>
+          <p class="body" style="margin-top:0;">"15%, một số sản phẩm, tối đa 100k" <b>trôi theo giỏ hàng</b>. Định giá đúng = trung bình số tiền khách thật sự tiết kiệm mỗi lần đổi.</p>
+          <div class="formula">credit ≈ E<span class="o">[</span> min( % × phần giỏ đủ ĐK , trần ) <span class="o">]</span></div>
+          <p class="reveal">Giỏ trung bình ~450k → "15% tối đa 100k" chỉ đáng <b>~50k credit ≈ một nửa mệnh giá</b>.</p>
+        </div>
+        <div class="chartcard">
+          <svg id="miniChart" viewBox="0 0 360 250" role="img" aria-label="Số tiền giảm theo kích thước giỏ, bị trần cắt"></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 STANDARDIZE -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">08 · Đứng giữa an toàn</div>
+      <h1>Chuẩn hoá về <em>một</em> đơn vị credit ngay ở cửa vào</h1>
+      <p class="body">Khách vẫn thấy "15% tối đa 100k" — đó là marketing của shop. Nhưng pool chỉ thanh toán bằng một đơn vị credit duy nhất, nên sổ cái sạch và ta không phải xử lý sự bất định của % ở tầng clearing.</p>
+      <div class="two" style="margin-top:22px;">
+        <div class="col"><h4>Lấy "giỏ trung bình" ở đâu</h4><p>Từ <b style="color:var(--teal)">CDP</b> — AOV lịch sử của chính shop trên tập sản phẩm đó.</p></div>
+        <div class="col"><h4>Khi chưa có dữ liệu (cold start)</h4><p>Neo tạm bằng benchmark <b style="color:var(--teal)">Urbox/GotIt</b>, rồi tự hiệu chỉnh khi lượt đổi thật chảy về.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 RISKS -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">09 · Rủi ro của trung gian</div>
+      <h1>Rủi ro thật không nằm ở credit</h1>
+      <p class="body" style="margin-top:14px;">Credit thì shop không gian lận được (tổng = 0). Rủi ro nằm ở chỗ khác — đều đã có cách chặn.</p>
+      <div class="risks">
+        <div class="risk"><div class="rp">Shop không honor quà đã đổi</div><div class="rar">→</div><div class="rs"><b>Ký quỹ credit</b>, chỉ trả cho shop khi khách xác nhận đã nhận quà.</div></div>
+        <div class="risk"><div class="rp">Rút trước rồi bỏ chạy</div><div class="rar">→</div><div class="rs"><b>Trần rút ròng</b> = credit đã kiếm, không cho âm.</div></div>
+        <div class="risk"><div class="rp">Tư cách pháp lý / thuế của credit</div><div class="rar">→</div><div class="rs"><b>Tư vấn luật sớm</b> — trung gian dễ bị quy là bên phát hành.</div></div>
+        <div class="risk"><div class="rp">Xử lý shop nạp món ế</div><div class="rar">→</div><div class="rs"><b>Thang bậc</b>: cảnh báo → tắt overdraft → tạm ngưng. "Off network" ≠ mất CDP.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 MOAT -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">10 · Moat</div>
+      <h1>Cái "khác xíu" chính là lợi thế</h1>
+      <div class="vs">
+        <div class="vbox them">
+          <div class="vt">Urbox / GotIt</div>
+          <div class="vc">Chạy bằng <b>tiền thật</b> — mua sỉ, bán lẻ. Không có lớp định danh khách.</div>
+        </div>
+        <div class="vbox us">
+          <div class="vt">CNV</div>
+          <div class="vc">Đổi ngang, <b>clear bằng nhu cầu thật</b> + <b>CDP làm lớp tin cậy</b>: định danh khách thật, chặn tự đổi/đổi giả, bắt vòng farm credit.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 ASK -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">11 · Đề xuất</div>
+      <h1>Chưa viết code. Test 2 giả định sống-còn.</h1>
+      <div class="ask-list">
+        <div class="ask"><div class="n">1</div><div class="at">Merchant có chấp nhận để <b style="color:var(--ink)">thị trường định giá</b> quà của họ không?<small>kể cả khi credit thấp hơn mệnh giá họ tự hào</small></div></div>
+        <div class="ask"><div class="n">2</div><div class="at">Trong tập khách của ta có đủ <b style="color:var(--ink)">nhu cầu chéo</b> không?<small>khách quán cà phê có thật sự thèm voucher spa?</small></div></div>
+      </div>
+      <div class="scope">~10–20 merchant · 4–6 tuần · đúng cả hai → mở rộng</div>
+    </div>
+  </section>
+
+</div>
+
+<div class="chrome">
+  <div class="dots" id="dots"></div>
+  <div class="navbtns">
+    <button id="prev" aria-label="Slide trước">←</button>
+    <span class="count" id="count">1 / 12</span>
+    <button id="next" aria-label="Slide sau">→</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const slides=[...document.querySelectorAll('.slide')];
+  const dotsWrap=document.getElementById('dots');
+  const count=document.getElementById('count');
+  const prev=document.getElementById('prev'), next=document.getElementById('next');
+  let cur=0;
+
+  slides.forEach((s,i)=>{
+    const b=document.createElement('button');
+    b.setAttribute('aria-label','Slide '+(i+1));
+    b.addEventListener('click',()=>go(i));
+    dotsWrap.appendChild(b);
+  });
+  const dots=[...dotsWrap.children];
+
+  function go(i){
+    i=Math.max(0,Math.min(slides.length-1,i));
+    slides[cur].classList.remove('active');
+    dots[cur].classList.remove('on');
+    cur=i;
+    slides[cur].classList.add('active');
+    dots[cur].classList.add('on');
+    count.textContent=(cur+1)+' / '+slides.length;
+    prev.disabled=cur===0; next.disabled=cur===slides.length-1;
+    slides[cur].scrollTop=0;
+  }
+  prev.addEventListener('click',()=>go(cur-1));
+  next.addEventListener('click',()=>go(cur+1));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1);}
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();go(cur-1);}
+    else if(e.key==='Home'){go(0);} else if(e.key==='End'){go(slides.length-1);}
+  });
+  go(0);
+
+  // ---- mini chart (slide 8): 15%, cap 100k, AOV 450k, elig 100% ----
+  (function(){
+    const svg=document.getElementById('miniChart'); if(!svg) return;
+    const p=0.15, cap=100000, median=450000, elig=1, sigma=0.5, N=40;
+    const VW=360,VH=250,PL=40,PR=10,PT=14,PB=30, pw=VW-PL-PR, ph=VH-PT-PB;
+    const xmin=30000, xmax=median*4.0;
+    let buckets=[],wsum=0,ev=0,maxW=0;
+    for(let i=0;i<N;i++){
+      const x=xmin+(xmax-xmin)*(i+0.5)/N;
+      const w=(1/x)*Math.exp(-((Math.log(x)-Math.log(median))**2)/(2*sigma*sigma));
+      const raw=p*x*elig, disc=Math.min(raw,cap);
+      buckets.push({x,w,raw,disc}); wsum+=w; ev+=w*disc; if(w>maxW)maxW=w;
+    }
+    ev/=wsum;
+    const yMax=cap*1.7;
+    const X=x=>PL+((x-xmin)/(xmax-xmin))*pw;
+    const Y=v=>PT+ph-Math.min(v,yMax)/yMax*ph;
+    const bw=pw/N*0.74;
+    const k=v=>Math.round(v/1000)+'k';
+    let s='';
+    // grid
+    for(let t=0;t<=3;t++){const v=yMax*t/3,y=Y(v);
+      s+=`<line x1="${PL}" y1="${y.toFixed(1)}" x2="${VW-PR}" y2="${y.toFixed(1)}" stroke="var(--line)"/>`;
+      s+=`<text x="${PL-6}" y="${(y+3).toFixed(1)}" text-anchor="end" font-family="var(--mono)" font-size="9" fill="var(--muted)">${k(v)}</text>`;}
+    // density
+    let area=`M ${X(buckets[0].x).toFixed(1)} ${(PT+ph).toFixed(1)}`;
+    buckets.forEach(b=>{area+=` L ${X(b.x).toFixed(1)} ${(PT+ph-(b.w/maxW)*ph*0.9).toFixed(1)}`;});
+    area+=` L ${X(buckets[N-1].x).toFixed(1)} ${(PT+ph).toFixed(1)} Z`;
+    s+=`<path d="${area}" fill="rgba(27,35,51,.05)" stroke="rgba(27,35,51,.13)"/>`;
+    // bars
+    buckets.forEach(b=>{
+      const x0=(X(b.x)-bw/2).toFixed(1), yb=PT+ph, yd=Y(b.disc);
+      s+=`<rect x="${x0}" y="${yd.toFixed(1)}" width="${bw.toFixed(1)}" height="${(yb-yd).toFixed(1)}" fill="var(--teal)" opacity="0.85"/>`;
+      if(b.raw>cap){const yr=Y(b.raw);
+        s+=`<rect x="${x0}" y="${yr.toFixed(1)}" width="${bw.toFixed(1)}" height="${(yd-yr).toFixed(1)}" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="0.5" stroke-dasharray="2 2"/>`;}
+    });
+    // cap line
+    const yc=Y(cap);
+    s+=`<line x1="${PL}" y1="${yc.toFixed(1)}" x2="${VW-PR}" y2="${yc.toFixed(1)}" stroke="var(--ink-soft)" stroke-width="1.3" stroke-dasharray="5 4"/>`;
+    s+=`<text x="${VW-PR}" y="${(yc-5).toFixed(1)}" text-anchor="end" font-family="var(--mono)" font-size="9.5" font-weight="700" fill="var(--ink-soft)">TRẦN ${k(cap)}</text>`;
+    // EV line
+    const ye=Y(ev);
+    s+=`<line x1="${PL}" y1="${ye.toFixed(1)}" x2="${VW-PR}" y2="${ye.toFixed(1)}" stroke="var(--seal)" stroke-width="2.5"/>`;
+    s+=`<rect x="${PL}" y="${(ye-17).toFixed(1)}" width="116" height="15" rx="3" fill="var(--seal)"/>`;
+    s+=`<text x="${PL+6}" y="${(ye-5.5).toFixed(1)}" font-family="var(--mono)" font-size="9.5" font-weight="700" fill="#fff">CREDIT ≈ ${k(ev)}</text>`;
+    // axis
+    s+=`<line x1="${PL}" y1="${(PT+ph).toFixed(1)}" x2="${VW-PR}" y2="${(PT+ph).toFixed(1)}" stroke="var(--ink)" stroke-width="1.3"/>`;
+    s+=`<text x="${(PL+pw/2).toFixed(1)}" y="${VH-6}" text-anchor="middle" font-family="var(--mono)" font-size="9" letter-spacing="0.08em" fill="var(--muted)">KÍCH THƯỚC GIỎ HÀNG</text>`;
+    svg.innerHTML=s;
+  })();
+})();
+</script>
+</body>
+</html>

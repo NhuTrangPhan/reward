@@ -361,12 +361,12 @@
     </div>
 
     <div class="card">
-      <h3>Phân bố độ khó task (11 tuần)</h3>
+      <h3>Phân bố độ khó task (12 tuần)</h3>
       <div class="chart-container">
         <canvas id="difficultyChart"></canvas>
       </div>
       <div style="margin-top:12px; padding:12px; background:rgba(15,23,42,.5); border-radius:8px; font-size:12px; color:#cbd5e1; line-height:1.6;">
-        <strong style="color:#60a5fa;">🎯 Nhận xét W11 (8-12/6) — Bám plan + Phase 2 advance 90%:</strong> <strong style="color:#60a5fa;">17 task ship · 63 complexity points · avg 3.7/5 · 55 commits</strong>. <b>4/4 mục tiêu kế hoạch đạt</b> (Production data Total demo · Release đổi evoucher mới prod · Quà vật lý 90% · MCO Gara 90%). <strong>3 Very Hard tasks</strong> (Release evoucher production · <b>Worker đồng bộ quà vật lý MỚI</b> cho Phase 2 · <b>Dịch vụ quản lý secret mini-app + Phân giải vị trí Zalo</b> cho MCO Gara), <strong>6 Hard tasks</strong> (UAT API GotIt PASS · Luồng vận hành quà vật lý · Đối soát + hỏi câu hỏi GotIt · Module mini-app BE foundation cho MCO Gara · CICD worker · PDPL nghị định 13 + Quản lý địa chỉ giao hàng · Cải thiện UX mini-app 10 commits), <strong>6 Medium</strong> (<b>Refactor Worker đồng bộ quà</b> · Sửa lỗi ZNS · Đồng bộ DB enum · Sửa lỗi mini-app · 4 tài liệu · Hỗ trợ vibe code), <strong>1 Easy</strong> (Mở rộng test + i18n permissions). <b>Plan adherence 100%</b> (vs W10 = 6% pivot — phục hồi mạnh). <b>Trang shift mạnh non-code work</b> (4 tài liệu + 2 vendor + hỗ trợ vibe code) — leadership maturity signal.<br><strong style="color:#f9a8d4;">⚡ Nhận xét W10 (1-7/6) — Pivot UAT Total feedback:</strong> 17 task · 58 points · avg 3.41 · 40 commits — Total đưa 4 feedback yêu cầu mới → ship đủ 4/4 trong tuần (Tìm kiếm thông minh · Auto bật/tắt category · Đổi hình ảnh · Drag-drop). Plan đầu tuần đạt 1/3.<br><strong style="color:#6ee7b7;">🚀 Nhận xét W9 (25-29/5) — GO-LIVE Production:</strong> 18 task · 70 points · avg 3.89 · 86 commits. First production release. ZNS complete + CICD prod-align + Mini-app deploy 2 shop + 3 bonus full-stack + Phase 2 kickoff. Critical bug "2 shops chung API KEY" bắt ở staging.<br><strong style="color:#f9a8d4;">Nhận xét W8 (18-22/5) — Pivot lần 2:</strong> 14 task · 56 points · avg 4.00 — CNV không ký GotIt, pivot ngay trong tuần. F1 Multi-tenant HMAC + Worker Send-Voucher Kafka + Recon v2 close + CICD project 215.<br><strong style="color:#f472b6;">Nhận xét W7 (11-15/5):</strong> 15 task · 60 points · avg 4.00 — wave architecture/integration lớn nhất quarter (F1 AES-256 + F2 Recon API + F4 CRM split + F8 Staging+K8s).
+        <strong style="color:#34d399;">✅ Nhận xét W12 (15-19/6) — Hoàn thành phần CNV, chờ GotIt cho UAT 22/06:</strong> <strong style="color:#34d399;">14 task ship · 64 complexity points · avg 4.57/5 (tuần nặng nhất quarter) · 60 commits</strong>. <b>Toàn bộ phần thuộc CNV xong 100%</b>. <strong>7 Very Hard tasks</strong> (Quà vật lý: unify redeem digital+physical · Worker inquiry GotIt physical polling 2h + recovery · PhysicalDeliveryStatus + status history theo spec GotIt · limit/tồn kho/serial/ngày giao · PDPL consent + DeliveryConfig · MCO Gara release production · gửi GotIt đánh giá tích hợp), <strong>5 Hard</strong> (CICD deploy 3 worker physical · Public Key + PII · push status clarify + đối soát · Voucher notification channel đa kênh · UX mini-app/web), <strong>2 Medium</strong> (unit test SendVoucherService · null safety + cleanup). <b>Hải drive 43 commits</b> toàn bộ code Phase 2 — năng suất đỉnh. <b style="color:#fca5a5;">⏰ Blocker dồn về GotIt:</b> CampaignId + setup quà vật lý prod + confirm Public Key cho UAT 22/06 — rủi ro mốc = rủi ro vendor, không còn việc dev nào chặn.<br><strong style="color:#60a5fa;">🎯 Nhận xét W11 (8-12/6) — Bám plan + Phase 2 advance 90%:</strong> <strong style="color:#60a5fa;">17 task ship · 63 complexity points · avg 3.7/5 · 55 commits</strong>. <b>4/4 mục tiêu kế hoạch đạt</b> (Production data Total demo · Release đổi evoucher mới prod · Quà vật lý 90% · MCO Gara 90%). <strong>3 Very Hard tasks</strong> (Release evoucher production · <b>Worker đồng bộ quà vật lý MỚI</b> cho Phase 2 · <b>Dịch vụ quản lý secret mini-app + Phân giải vị trí Zalo</b> cho MCO Gara), <strong>6 Hard tasks</strong> (UAT API GotIt PASS · Luồng vận hành quà vật lý · Đối soát + hỏi câu hỏi GotIt · Module mini-app BE foundation cho MCO Gara · CICD worker · PDPL nghị định 13 + Quản lý địa chỉ giao hàng · Cải thiện UX mini-app 10 commits), <strong>6 Medium</strong> (<b>Refactor Worker đồng bộ quà</b> · Sửa lỗi ZNS · Đồng bộ DB enum · Sửa lỗi mini-app · 4 tài liệu · Hỗ trợ vibe code), <strong>1 Easy</strong> (Mở rộng test + i18n permissions). <b>Plan adherence 100%</b> (vs W10 = 6% pivot — phục hồi mạnh). <b>Trang shift mạnh non-code work</b> (4 tài liệu + 2 vendor + hỗ trợ vibe code) — leadership maturity signal.<br><strong style="color:#f9a8d4;">⚡ Nhận xét W10 (1-7/6) — Pivot UAT Total feedback:</strong> 17 task · 58 points · avg 3.41 · 40 commits — Total đưa 4 feedback yêu cầu mới → ship đủ 4/4 trong tuần (Tìm kiếm thông minh · Auto bật/tắt category · Đổi hình ảnh · Drag-drop). Plan đầu tuần đạt 1/3.<br><strong style="color:#6ee7b7;">🚀 Nhận xét W9 (25-29/5) — GO-LIVE Production:</strong> 18 task · 70 points · avg 3.89 · 86 commits. First production release. ZNS complete + CICD prod-align + Mini-app deploy 2 shop + 3 bonus full-stack + Phase 2 kickoff. Critical bug "2 shops chung API KEY" bắt ở staging.<br><strong style="color:#f9a8d4;">Nhận xét W8 (18-22/5) — Pivot lần 2:</strong> 14 task · 56 points · avg 4.00 — CNV không ký GotIt, pivot ngay trong tuần. F1 Multi-tenant HMAC + Worker Send-Voucher Kafka + Recon v2 close + CICD project 215.<br><strong style="color:#f472b6;">Nhận xét W7 (11-15/5):</strong> 15 task · 60 points · avg 4.00 — wave architecture/integration lớn nhất quarter (F1 AES-256 + F2 Recon API + F4 CRM split + F8 Staging+K8s).
       </div>
     </div>
   </div>
@@ -837,32 +837,32 @@
   <!-- Blockers -->
   <div class="grid-2">
     <div class="card">
-      <h3>Blockers &amp; Rủi ro hiện tại (refresh 12/06 · sau W11 — Bám plan + Phase 2 90%)</h3>
+      <h3>Blockers &amp; Rủi ro hiện tại (refresh 19/06 · sau W12 — Hoàn thành phần CNV, chờ GotIt cho UAT 22/06)</h3>
       <div class="blocker-list">
-        <div class="blocker medium" style="background: linear-gradient(180deg, #FFFBEB 0%, var(--card) 60%);">
-          <div class="blocker-title">🟡 Quà vật lý staging — tài liệu mismatch API (bộ status) — W11 PHÁT SINH</div>
-          <div class="blocker-desc">Tài liệu staging quà vật lý mismatch với API (cụ thể là <b>bộ status</b>). <b>W12 sau khi GotIt phản hồi sẽ map lại.</b> Không ảnh hưởng timeline release nhưng cần resolve trước UAT staging.</div>
-          <span class="blocker-tag tag-medium">External · Medium · W11 new</span>
-        </div>
-        <div class="blocker medium" style="background: linear-gradient(180deg, #FFFBEB 0%, var(--card) 60%);">
-          <div class="blocker-title">🟡 UAT GotIt phát sinh issues (GotIt fix 80%) — W11 PHÁT SINH</div>
-          <div class="blocker-desc">Phát sinh 1 số vấn đề UAT evoucher GotIt. <b>Đã feedback và GotIt đã fix được 80%</b>. <b>Không ảnh hưởng timeline release evoucher.</b> Còn 20% follow up W12.</div>
-          <span class="blocker-tag tag-medium">External · Medium · W11 new</span>
+        <div class="blocker high">
+          <div class="blocker-title">🔴 GotIt chưa setup CampaignId + quà vật lý production — BLOCKER UAT 22/06</div>
+          <div class="blocker-desc">Toàn bộ phần CNV đã sẵn sàng, nhưng <b>mốc UAT Total 22/06 phụ thuộc GotIt setup 2 thứ này</b>. Đến 19/06 chưa có xác nhận. <b>Action W13:</b> Trang follow-up gấp đầu tuần + escalate nếu cuối tuần chưa có. Rủi ro mốc UAT = rủi ro vendor.</div>
+          <span class="blocker-tag tag-high">External · High · W12 · chặn UAT</span>
         </div>
         <div class="blocker high">
-          <div class="blocker-title">Trang single-point trên 4 sản phẩm — W11 ESCALATED</div>
-          <div class="blocker-desc">Trang gánh release + 2 vendor + MCO Gara foundation + 4 docs + vibe code support. <b>Risk:</b> bottleneck khi W12 cần UAT quà vật lý + MCO Gara shop test cùng tuần. <b>Action W12:</b> delegate docs technical cho Huy/Hải, Trang chỉ review.</div>
-          <span class="blocker-tag tag-high">Internal · High · W11 escalated</span>
+          <div class="blocker-title">🔴 Public Key — GotIt chưa confirm nhận + cấu hình</div>
+          <div class="blocker-desc">CNV đã gửi Public Key nhưng <b>GotIt chưa phản hồi</b>. Nếu chưa cấu hình kịp → có thể chặn xác thực luồng production tại UAT. <b>Action W13:</b> xác nhận trạng thái với GotIt trước 22/06.</div>
+          <span class="blocker-tag tag-high">External · High · W12 new</span>
+        </div>
+        <div class="blocker medium" style="background: linear-gradient(180deg, #FFFBEB 0%, var(--card) 60%);">
+          <div class="blocker-title">🟡 Đối soát + partial success quà vật lý — đợi GotIt phản hồi</div>
+          <div class="blocker-desc">Đã mail push GotIt về đối soát, chưa có phản hồi. Partial success cần GotIt định nghĩa rõ để chốt cơ chế refund điểm. <b>Không block UAT</b> nhưng phải rõ trước go-live thật (tránh sai tiền). Fallback: draft mẫu đối soát nội bộ.</div>
+          <span class="blocker-tag tag-medium">External · Medium · W12 · pre go-live</span>
+        </div>
+        <div class="blocker medium" style="background: linear-gradient(180deg, #EFF6FF 0%, var(--card) 60%);">
+          <div class="blocker-title">🟡 MCO Gara — chờ Zalo duyệt miniapp để nghiệm thu</div>
+          <div class="blocker-desc">Code 100% + release production rồi, nhưng <b>chưa nghiệm thu thực địa vì đợi Zalo duyệt miniapp</b>. Phụ thuộc bên thứ ba (Zalo), team không kiểm soát timeline. <b>Action:</b> theo dõi trạng thái duyệt.</div>
+          <span class="blocker-tag tag-medium">External · Medium · W12 · Zalo dependency</span>
         </div>
         <div class="blocker medium">
-          <div class="blocker-title">Post-release monitoring + on-call rotation chưa setup (carry W9 → W11 · 3 weeks)</div>
-          <div class="blocker-desc">Production đã GO-LIVE 29/05 nhưng <b>chưa có dashboard monitor</b> và <b>chưa có on-call rotation</b>. W10 dồn vendor UAT, W11 dồn 4 sản phẩm song song. <b>Action W12:</b> Trang + Hải pair setup runbook + rotation đầu tuần (priority cao).</div>
-          <span class="blocker-tag tag-medium">Internal · Medium · 3 weeks carry</span>
-        </div>
-        <div class="blocker medium">
-          <div class="blocker-title">Điều khoản nghị định 13 chưa đầy đủ (W11 new)</div>
-          <div class="blocker-desc">Mới có UI consent modal trên mini-app (Hải ship W11), nhưng <b>điều khoản chi tiết chưa draft</b>. Phải có trước UAT quà vật lý W12 để compliance. <b>Action W12:</b> Trang draft chi tiết + compliance review T2-T3.</div>
-          <span class="blocker-tag tag-medium">Internal · Medium · W11 new · Compliance</span>
+          <div class="blocker-title">Post-release monitoring + on-call rotation chưa setup (carry W9 → W12 · 4 weeks)</div>
+          <div class="blocker-desc">Evoucher production GO-LIVE 29/05 nhưng <b>chưa có dashboard monitor + on-call rotation</b>. Càng cấp thiết khi quà vật lý sắp lên prod. <b>Action W13:</b> Trang + Hải pair setup runbook + rotation trước khi quà vật lý go-live.</div>
+          <span class="blocker-tag tag-medium">Internal · Medium · 4 weeks carry</span>
         </div>
         <div class="blocker medium">
           <div class="blocker-title">Test debt — gap carry 3 tuần liền (W21+W22+ongoing)</div>
@@ -878,6 +878,21 @@
           <div class="blocker-title">net-core branch merge review (carry W6 → W10 · 4 weeks open)</div>
           <div class="blocker-desc">Branch <code>haiht/reward-redeem</code> trong net-core-platform-cnv (6 commits foundation) <b>chưa merge sau 4 tuần</b>. Cần Trang+Hải pair-review interface. W8+W9 không touch, defer tiếp W10.</div>
           <span class="blocker-tag tag-medium">Internal · Medium · 4 weeks open</span>
+        </div>
+        <div class="blocker medium" style="opacity:.55; background: linear-gradient(135deg, rgba(52,211,153,.14), rgba(16,185,129,.08));">
+          <div class="blocker-title" style="color:#34d399;">✅ MILESTONE W12: Hoàn thành 100% phần CNV cho cả 2 sản phẩm lớn</div>
+          <div class="blocker-desc">Quà vật lý (BE+web+mini-app) code + deploy + test E2E xong · MCO Gara release production · gửi GotIt đánh giá tích hợp + Public Key + PII · status chốt theo spec GotIt. <b>14 task / 64 pts / avg 4.57 — tuần nặng nhất quarter, Hải drive 43 commits.</b> Toàn bộ critical path còn lại nằm ở GotIt + Zalo.</div>
+          <span class="blocker-tag tag-medium" style="background:rgba(52,211,153,.20);color:#34d399; font-weight:700;">MILESTONE W12 ✅</span>
+        </div>
+        <div class="blocker medium" style="opacity:.55;">
+          <div class="blocker-title">✅ RESOLVED W12: Bộ status quà vật lý — đã chốt theo spec GotIt</div>
+          <div class="blocker-desc">Status mismatch (W11) đã clarify với GotIt + thống nhất vào code: PhysicalDeliveryStatus (bỏ deliveryStatus ở sub-order) + status history + clientOrderCode idempotency. Recovery worker chạy đúng bộ status mới. <b>Không còn rủi ro recovery sai.</b></div>
+          <span class="blocker-tag tag-medium" style="background:rgba(34,197,94,.15);color:#34d399;">RESOLVED W12 🆕</span>
+        </div>
+        <div class="blocker medium" style="opacity:.55;">
+          <div class="blocker-title">✅ RESOLVED W12: Nghị định 13 (PDPL consent) + test E2E quà vật lý</div>
+          <div class="blocker-desc">PDPL consent management (controller + service + entity) ship W12 — compliance nghị định 13 done. Quà vật lý đã test E2E (limit, tồn kho, serial, delivery, status). Test debt giảm: Huy ship unit test SendVoucherService đa kênh.</div>
+          <span class="blocker-tag tag-medium" style="background:rgba(34,197,94,.15);color:#34d399;">RESOLVED W12 🆕</span>
         </div>
         <div class="blocker medium" style="opacity:.55; background: linear-gradient(135deg, rgba(96,165,250,.12), rgba(59,130,246,.08));">
           <div class="blocker-title" style="color:#60a5fa;">🎯 MILESTONE W11: 4/4 mục tiêu kế hoạch đạt + Phase 2 advance 90% + MCO Gara 90%</div>
@@ -968,7 +983,7 @@
     </div>
 
     <div class="card">
-      <h3>So sánh Sprint 9 · 10 · 11 ✅ (W22 → W24) — GO-LIVE → Pivot UAT → Bám plan + Phase 2 90%</h3>
+      <h3>So sánh Sprint 10 · 11 · 12 ✅ (W23 → W25) — Pivot UAT → Bám plan → Hoàn thành phần CNV (chờ GotIt)</h3>
       <div class="chart-container">
         <canvas id="highlightChart"></canvas>
       </div>
@@ -976,7 +991,7 @@
   </div>
 
   <footer>
-    Dashboard cập nhật từ báo cáo tiến độ · Cập nhật: 12/06/2026 (ISO W24 / Sprint 11 ✅ 5/5d done · <b style="color:#60a5fa;">🎯 Bám plan + Phase 2 advance 90%</b>) · Post-W11 refresh: W11 ship 17 task / 55 commits — 4/4 mục tiêu kế hoạch đạt (Production data Total demo · Release đổi evoucher mới · Quà vật lý 90% · MCO Gara 90%) · 3 dev / 5 ngày / 4 repositories · <b style="color:#60a5fa;">Plan adherence 100%</b> (vs W10 = 6%) · Phase 2 quà vật lý 15% → 90% với <b>1 worker MỚI</b> (polling physical orders) + <b>Refactor 2 worker hiện có</b> + PDPL nghị định 13 + luồng vận hành · MCO Gara location 90% (vibe code + refactor mini-app BE lấy location) · ⚠️ 2 vendor issues phát sinh W11 không ảnh hưởng timeline (UAT GotIt fix 80% · staging quà vật lý mismatch bộ status W12 map lại) · Production stable từ W9 GO-LIVE (29/5)
+    Dashboard cập nhật từ báo cáo tiến độ · Cập nhật: 19/06/2026 (ISO W25 / Sprint 12 ✅ 5/5d done · <b style="color:#34d399;">✅ Hoàn thành phần CNV — chờ GotIt cho UAT 22/06</b>) · Post-W12 refresh: W12 ship 14 task / 60 commits — <b style="color:#34d399;">100% phần thuộc CNV hoàn thành</b> (Quà vật lý code+deploy+test E2E · MCO Gara release production · gửi GotIt đánh giá tích hợp + Public Key + PII · status chốt theo spec GotIt) · 3 dev / 5 ngày / 4 repositories · Hải drive 43 commits toàn bộ Phase 2 · <b style="color:#fca5a5;">🔴 Mốc UAT Total 22/06 phụ thuộc 100% GotIt</b> (setup CampaignId + quà vật lý production + confirm Public Key) — không còn việc dev nào chặn · MCO Gara chờ Zalo duyệt miniapp nghiệm thu · Production stable từ W9 GO-LIVE (29/5)
   </footer>
 </div>
 
@@ -1094,18 +1109,9 @@
       labels: ['Architecture', 'Integration', 'Phase 2 (Quà vật lý)', 'MCO Gara location', 'Plan Adherence', 'Vendor Coordination', 'Production', 'Mini-app UX'],
       datasets: [
         {
-          label: 'Sprint 9 (25–29/5) 🚀 GO-LIVE',
-          data: [100, 100, 15, 0, 100, 100, 100, 90],
-          backgroundColor: 'rgba(139,92,246,.10)',
-          borderColor: '#a78bfa',
-          pointBackgroundColor: '#c084fc',
-          pointBorderColor: '#fff',
-          borderWidth: 2
-        },
-        {
           label: 'Sprint 10 (1–7/6) ⚡ Pivot UAT',
           data: [100, 100, 15, 5, 6, 100, 100, 95],
-          backgroundColor: 'rgba(236,72,153,.12)',
+          backgroundColor: 'rgba(236,72,153,.10)',
           borderColor: '#ec4899',
           pointBackgroundColor: '#f472b6',
           pointBorderColor: '#fff',
@@ -1114,9 +1120,18 @@
         {
           label: 'Sprint 11 (8–12/6) 🎯 Bám plan + Phase 2 90%',
           data: [100, 100, 90, 90, 100, 95, 100, 100],
-          backgroundColor: 'rgba(96,165,250,.18)',
+          backgroundColor: 'rgba(96,165,250,.12)',
           borderColor: '#60a5fa',
           pointBackgroundColor: '#3b82f6',
+          pointBorderColor: '#fff',
+          borderWidth: 2
+        },
+        {
+          label: 'Sprint 12 (15–19/6) ✅ Hoàn thành phần CNV',
+          data: [100, 100, 100, 100, 100, 88, 100, 100],
+          backgroundColor: 'rgba(52,211,153,.18)',
+          borderColor: '#34d399',
+          pointBackgroundColor: '#10b981',
           pointBorderColor: '#fff',
           borderWidth: 3,
           pointRadius: 5
@@ -1388,7 +1403,22 @@
     { week: 'T11', name: 'Đồng bộ kiểu cột DB với khai báo entity (enum)', d: 3 },
     { week: 'T11', name: 'Mở rộng test RewardItemKeywordSearch + i18n permissions', d: 2 },
     { week: 'T11', name: 'Sửa lỗi & kiểm thử mini-app (overflow + ngrok header)', d: 3 },
-    { week: 'T11', name: '🚗 Hỗ trợ vibe code (review pattern consistency)', d: 3 }
+    { week: 'T11', name: '🚗 Hỗ trợ vibe code (review pattern consistency)', d: 3 },
+    // ========= W12 ACTUAL (15-19/6 — ISO W25 · Hoàn thành phần CNV, chờ GotIt UAT 22/6) =========
+    { week: 'T12', name: '🎁 Quà vật lý — unify redeem digital + physical + draft', d: 5 },
+    { week: 'T12', name: '🎁 Worker inquiry GotIt physical order (polling 2h + recovery)', d: 5 },
+    { week: 'T12', name: '🎁 PhysicalDeliveryStatus + status history + idempotency (spec GotIt)', d: 5 },
+    { week: 'T12', name: '🎁 PDPL consent + DeliveryConfig + AdminRedeemHistory + Reward Feed', d: 5 },
+    { week: 'T12', name: '🎁 Limit + tồn kho + serial + ngày giao dự kiến (lễ VN)', d: 5 },
+    { week: 'T12', name: '🚗 MCO Gara VibePage → RELEASE PRODUCTION', d: 5 },
+    { week: 'T12', name: '🤝 Gửi GotIt đánh giá tích hợp + chuẩn bị Production/UAT Total', d: 5 },
+    { week: 'T12', name: '🏗 CICD deploy 3 worker physical + fix Helm staging/prod', d: 4 },
+    { week: 'T12', name: '🔐 Gửi Public Key + làm rõ PII với GotIt', d: 4 },
+    { week: 'T12', name: '🤝 Push GotIt clarify bộ status + mail đối soát', d: 4 },
+    { week: 'T12', name: 'Voucher notification channel đa kênh + API', d: 4 },
+    { week: 'T12', name: 'Test E2E quà vật lý + cải thiện UX mini-app/web', d: 4 },
+    { week: 'T12', name: '🧪 Unit test SendVoucherService (đa kênh)', d: 3 },
+    { week: 'T12', name: 'Null safety column data type + cleanup property', d: 3 }
   ];
   const diffColors = { 1:'#22d3ee', 2:'#10b981', 3:'#f59e0b', 4:'#f97316', 5:'#ef4444' };
   const diffLabels = { 1:'Trivial', 2:'Easy', 3:'Medium', 4:'Hard', 5:'Very Hard' };

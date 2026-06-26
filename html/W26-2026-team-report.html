@@ -1,0 +1,2081 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>W26/2026 — Reward V2 Team Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F8FAFC;
+    --bg-soft: #F1F5F9;
+    --card: #FFFFFF;
+    --border: #E5E7EB;
+    --border-soft: #F1F5F9;
+
+    --ink: #111827;
+    --ink-soft: #374151;
+    --muted: #6B7280;
+    --muted-light: #9CA3AF;
+
+    --primary: #4F46E5;
+    --primary-soft: #EEF2FF;
+    --success: #10B981;
+    --success-soft: #D1FAE5;
+    --danger: #EF4444;
+    --danger-soft: #FEE2E2;
+    --warning: #F59E0B;
+    --warning-soft: #FEF3C7;
+    --info: #3B82F6;
+    --info-soft: #DBEAFE;
+    --purple: #8B5CF6;
+    --purple-soft: #EDE9FE;
+    --pink: #EC4899;
+    --pink-soft: #FCE7F3;
+
+    --m-trang: #4F46E5;
+    --m-huy:   #10B981;
+    --m-hai:   #F59E0B;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 28px;
+    line-height: 1.65;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1280px; margin: 0 auto; }
+
+  /* ===== Header ===== */
+  header {
+    background: linear-gradient(135deg, #EEF2FF 0%, #FCE7F3 100%);
+    border: 1px solid #DDD6FE;
+    border-radius: 16px;
+    padding: 32px 28px;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  header .eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 2.5px;
+    color: var(--primary);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  header h1 {
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.8px;
+    margin-bottom: 8px;
+  }
+  header p {
+    color: var(--muted);
+    font-size: 15px;
+  }
+  header .meta {
+    margin-top: 16px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  header .meta span {
+    background: rgba(255,255,255,.7);
+    border: 1px solid rgba(79,70,229,.15);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  /* ===== Strategy banner ===== */
+  .strategy-banner {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FED7AA 100%);
+    border: 1px solid #FBBF24;
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .strategy-banner .label {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #92400E;
+    text-transform: uppercase;
+    background: rgba(255,255,255,.6);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .strategy-banner h2 {
+    font-size: 19px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .strategy-banner p {
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .strategy-banner b { color: #B45309; font-weight: 700; }
+  .strategy-banner .arrow { color: #B45309; font-weight: 800; }
+
+  /* ===== KPI ===== */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .kpi {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+  }
+  .kpi.success::before { background: var(--success); }
+  .kpi.danger::before  { background: var(--danger); }
+  .kpi.warning::before { background: var(--warning); }
+  .kpi.info::before    { background: var(--info); }
+  .kpi.primary::before { background: var(--primary); }
+  .kpi.pink::before    { background: var(--pink); }
+
+  .kpi-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .kpi-value {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 4px;
+  }
+  .kpi-sub {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ===== Section title ===== */
+  .section { margin-bottom: 36px; }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    user-select: none;
+    padding: 4px 8px 4px 0;
+    border-radius: 8px;
+    transition: background 0.15s;
+  }
+  .section-title:hover {
+    background: var(--bg-soft);
+  }
+  .section-title h2 {
+    font-size: 24px;
+    color: var(--ink);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+  }
+  .section-title h2::before {
+    content: "";
+    display: inline-block;
+    width: 5px;
+    height: 22px;
+    background: linear-gradient(180deg, var(--primary), var(--pink));
+    border-radius: 3px;
+    margin-right: 12px;
+  }
+  .section-title .hint {
+    font-size: 14px;
+    color: var(--muted);
+    flex: 1;
+  }
+  .section-toggle {
+    width: 32px;
+    height: 32px;
+    background: var(--bg-soft);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: transform 0.25s ease, background 0.15s, color 0.15s;
+  }
+  .section-title:hover .section-toggle {
+    background: var(--primary-soft);
+    color: var(--primary);
+  }
+  .section.collapsed .section-toggle {
+    transform: rotate(-90deg);
+  }
+  .section > *:not(.section-title) {
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.2s ease, margin 0.3s ease;
+    max-height: 6000px;
+    opacity: 1;
+  }
+  .section.collapsed > *:not(.section-title) {
+    max-height: 0;
+    opacity: 0;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+  }
+
+  /* Collapse-all toolbar */
+  .collapse-toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .collapse-toolbar .toolbar-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .collapse-toolbar .toolbar-btn:hover {
+    background: var(--primary-soft);
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+  .collapse-toolbar .toolbar-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* ===== Cards generic ===== */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+  }
+  .card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 14px;
+    letter-spacing: -0.2px;
+  }
+
+  /* ===== CTO/PO Dashboard ===== */
+  .cto-dash {
+    background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+    border: 1px solid #BFDBFE;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+  .cto-dash > h3 {
+    font-size: 14px;
+    color: var(--info);
+    margin-bottom: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+  }
+  .cto-dash > h3::before {
+    content: "👁  ";
+  }
+  .chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .chart-card h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .chart-card .chart-sub {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .chart-wrap {
+    position: relative;
+    height: 240px;
+  }
+  .chart-wrap.tall { height: 280px; }
+
+  /* Big number callout */
+  .big-callout {
+    text-align: center;
+    padding: 14px 0 8px;
+  }
+  .big-callout .num {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+  .big-callout .num.success { color: var(--success); }
+  .big-callout .num.warning { color: var(--warning); }
+  .big-callout .num.danger { color: var(--danger); }
+  .big-callout .num.primary { color: var(--primary); }
+  .big-callout .label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* ===== Member task table ===== */
+  .member-row {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+  }
+  .member-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .av-trang { background: var(--m-trang); }
+  .av-huy   { background: var(--m-huy); }
+  .av-hai   { background: var(--m-hai); }
+  .member-head h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .member-head .role {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .member-head .meta-pills {
+    margin-left: auto;
+    display: flex; gap: 8px;
+  }
+  .pill {
+    padding: 5px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .pill.task    { background: var(--info-soft); color: var(--info); }
+  .pill.effort  { background: var(--purple-soft); color: var(--purple); }
+
+  .member-stats-row {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  @media (max-width: 768px) {
+    .member-stats-row { grid-template-columns: 1fr; }
+  }
+  .member-tasks {
+    list-style: none;
+  }
+  .member-tasks li {
+    padding: 8px 0;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.55;
+  }
+  .member-tasks li::before {
+    content: "✓";
+    color: var(--success);
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+    width: 18px;
+    height: 18px;
+    background: var(--success-soft);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .member-tasks li b { color: var(--ink); font-weight: 700; }
+  .member-tasks li .desc {
+    display: block;
+    margin-top: 3px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .difficulty-bar {
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-soft);
+  }
+
+  /* ===== Tabbed feature list ===== */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    background: var(--card);
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    flex: 1;
+    min-width: 180px;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+  }
+  .tab-btn:hover {
+    background: var(--bg-soft);
+    color: var(--ink);
+  }
+  .tab-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--purple));
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(79,70,229,.25);
+  }
+  .tab-btn .count {
+    display: inline-block;
+    min-width: 22px;
+    padding: 2px 8px;
+    background: rgba(255,255,255,.25);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .tab-btn:not(.active) .count {
+    background: var(--bg-soft);
+    color: var(--muted);
+  }
+
+  /* ===== Feat list (cards stacked vertically) ===== */
+  .feat-list { display: flex; flex-direction: column; gap: 10px; }
+  .feat-list.hidden { display: none; }
+  .feat-row {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: all 0.15s;
+  }
+  .feat-row:hover {
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(79,70,229,.08);
+  }
+  .feat-check {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--success);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-weight: 800;
+    font-size: 15px;
+    margin-top: 1px;
+  }
+  .feat-content { flex: 1; min-width: 0; }
+  .feat-content h4 {
+    font-size: 16.5px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 5px;
+    letter-spacing: -0.2px;
+  }
+  .feat-content p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .feat-content .feat-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .feat-content .feat-meta span {
+    background: var(--bg-soft);
+    color: var(--ink-soft);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+  }
+  .feat-content .feat-meta span b { color: var(--ink); }
+  .feat-content .feat-meta .badge-owner-trang { background: #EEF2FF; color: var(--m-trang); }
+  .feat-content .feat-meta .badge-owner-huy   { background: #ECFDF5; color: #047857; }
+  .feat-content .feat-meta .badge-owner-hai   { background: #FEF3C7; color: #B45309; }
+  .feat-content .feat-meta .badge-heavy       { background: linear-gradient(135deg, #FCE7F3, #FFE4E6); color: #BE185D; font-weight: 700; }
+
+  /* ===== Vertical Timeline ===== */
+  .timeline {
+    position: relative;
+    padding: 12px 0 12px 12px;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 28px;
+    top: 14px;
+    bottom: 14px;
+    width: 3px;
+    background: linear-gradient(180deg,
+      var(--success) 0%,
+      var(--success) 22%,
+      var(--warning) 22%,
+      var(--warning) 50%,
+      var(--info) 50%,
+      var(--info) 78%,
+      var(--purple) 78%,
+      var(--purple) 100%);
+    border-radius: 3px;
+  }
+  .timeline-item {
+    position: relative;
+    padding-left: 76px;
+    padding-bottom: 22px;
+  }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-dot {
+    position: absolute;
+    left: 16px;
+    top: 6px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: white;
+    border: 4px solid var(--success);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 4px white, 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .timeline-dot::after {
+    content: "";
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+  }
+  .timeline-item.done .timeline-dot { border-color: var(--success); }
+  .timeline-item.done .timeline-dot::after { background: var(--success); }
+  .timeline-item.current .timeline-dot { border-color: var(--warning); animation: pulse 2s infinite; }
+  .timeline-item.current .timeline-dot::after { background: var(--warning); }
+  .timeline-item.upcoming .timeline-dot { border-color: var(--info); }
+  .timeline-item.upcoming .timeline-dot::after { background: var(--info); }
+  .timeline-item.future .timeline-dot { border-color: var(--purple); }
+  .timeline-item.future .timeline-dot::after { background: var(--purple); }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 4px white, 0 0 0 0 rgba(245,158,11,0.4); }
+    50% { box-shadow: 0 0 0 4px white, 0 0 0 8px rgba(245,158,11,0); }
+  }
+
+  .timeline-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    border-left: 4px solid var(--success);
+  }
+  .timeline-item.current .timeline-card { border-left-color: var(--warning); background: linear-gradient(135deg, #FFFBEB 0%, var(--card) 80%); }
+  .timeline-item.upcoming .timeline-card { border-left-color: var(--info); }
+  .timeline-item.future .timeline-card { border-left-color: var(--purple); }
+
+  .timeline-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  .timeline-item.done .timeline-date { background: var(--success-soft); color: #047857; }
+  .timeline-item.current .timeline-date { background: var(--warning-soft); color: #B45309; }
+  .timeline-item.upcoming .timeline-date { background: var(--info-soft); color: #1D4ED8; }
+  .timeline-item.future .timeline-date { background: var(--purple-soft); color: #5B21B6; }
+
+  .timeline-card h4 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    letter-spacing: -0.2px;
+  }
+  .timeline-card p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .timeline-card p + p { margin-top: 6px; }
+  .timeline-card .sub-milestones {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .timeline-card .sub-milestones .sub-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .timeline-card .sub-milestones .sub-item .sub-date {
+    background: var(--bg-soft);
+    color: var(--ink);
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    font-size: 12px;
+  }
+  .timeline-card .note {
+    background: var(--warning-soft);
+    color: #92400E;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .timeline-card .note b { color: #B45309; }
+
+  /* ===== Result grids ===== */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    border-left: 5px solid;
+  }
+  .result-card.success { border-left-color: var(--success); }
+  .result-card.danger  { border-left-color: var(--danger); }
+  .result-card.warning { border-left-color: var(--warning); }
+  .result-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .result-card.success h3 { color: var(--success); }
+  .result-card.danger h3  { color: var(--danger); }
+  .result-card.warning h3 { color: #B45309; }
+  .result-card ul { list-style: none; }
+  .result-card li {
+    padding: 8px 0;
+    font-size: 15px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .result-card.success li::before { content: "✓"; color: var(--success); font-weight: 800; }
+  .result-card.danger li::before { content: "✕"; color: var(--danger); font-weight: 800; }
+  .result-card.warning li::before { content: "◐"; color: var(--warning); font-weight: 800; }
+
+  /* ===== Risk heatmap ===== */
+  .risk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .risk-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    border-top: 4px solid;
+  }
+  .risk-item.high   { border-top-color: var(--danger); background: linear-gradient(180deg, #FEF2F2 0%, var(--card) 60%); }
+  .risk-item.medium { border-top-color: var(--warning); background: linear-gradient(180deg, #FFFBEB 0%, var(--card) 60%); }
+  .risk-item.low    { border-top-color: var(--success); background: linear-gradient(180deg, #F0FDF4 0%, var(--card) 60%); }
+  .risk-item .risk-level {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .risk-item.high .risk-level   { background: var(--danger-soft); color: var(--danger); }
+  .risk-item.medium .risk-level { background: var(--warning-soft); color: #B45309; }
+  .risk-item.low .risk-level    { background: var(--success-soft); color: #047857; }
+  .risk-item h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .risk-item p {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .risk-item p b { color: var(--ink); }
+
+  /* ===== Plan W25 ===== */
+  .plan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .plan-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    border-top: 4px solid var(--primary);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .plan-checkbox {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    background: var(--primary-soft);
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-weight: 800;
+    font-size: 12px;
+    margin-top: 2px;
+  }
+  .plan-item .plan-content h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .plan-item .plan-content p {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ===== Health metric gauges (CSS conic) ===== */
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .metric-card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 22px 20px;
+    text-align: center;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .metric-card.danger  { border-top: 4px solid var(--danger); }
+  .metric-card.warning { border-top: 4px solid var(--warning); }
+  .metric-card.success { border-top: 4px solid var(--success); }
+
+  .gauge {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 8px auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .gauge::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    background: var(--card);
+    border-radius: 50%;
+    z-index: 0;
+  }
+  .gauge-value {
+    position: relative;
+    z-index: 1;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+  .gauge-value .unit {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-left: 2px;
+  }
+  .gauge-sub {
+    position: relative;
+    z-index: 1;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+  }
+  .gauge.danger  { background: conic-gradient(var(--danger) calc(var(--pct, 0) * 1%), var(--bg-soft) 0); }
+  .gauge.warning { background: conic-gradient(var(--warning) calc(var(--pct, 0) * 1%), var(--bg-soft) 0); }
+  .gauge.success { background: conic-gradient(var(--success) calc(var(--pct, 0) * 1%), var(--bg-soft) 0); }
+  .gauge.info    { background: conic-gradient(var(--info) calc(var(--pct, 0) * 1%), var(--bg-soft) 0); }
+
+  .metric-card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    letter-spacing: -0.2px;
+  }
+  .metric-card p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .metric-card .verdict {
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: var(--bg-soft);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .metric-card.danger  .verdict { background: var(--danger-soft);  color: var(--danger); }
+  .metric-card.warning .verdict { background: var(--warning-soft); color: #B45309; }
+  .metric-card.success .verdict { background: var(--success-soft); color: #047857; }
+
+  /* ===== CTO Recommendation ===== */
+  .reco-card {
+    background: linear-gradient(135deg, #F0F9FF 0%, #EFF6FF 100%);
+    border: 1px solid #BFDBFE;
+    border-radius: 14px;
+    padding: 24px 26px;
+  }
+  .reco-card h3 {
+    font-size: 19px;
+    color: var(--info);
+    margin-bottom: 14px;
+    font-weight: 700;
+  }
+  .reco-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+  }
+  .reco-item {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 16px 18px;
+    border-left: 3px solid var(--info);
+  }
+  .reco-item .reco-num {
+    display: inline-block;
+    width: 28px; height: 28px;
+    background: var(--info);
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 28px;
+    font-weight: 800;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .reco-item h4 {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .reco-item p {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    text-align: center;
+    padding: 24px 0;
+    color: var(--muted);
+    font-size: 12.5px;
+    border-top: 1px solid var(--border);
+    margin-top: 36px;
+  }
+  footer code {
+    background: var(--bg-soft);
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: var(--ink-soft);
+    font-family: "SF Mono", Monaco, monospace;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="eyebrow">Weekly Report · Sprint 13 · W26</div>
+    <h1>Reward V2 — Team Weekly Report</h1>
+    <p>Tuần 26 / 2026 · 22 → 26 / 06 · 3 contributors · 4 repositories</p>
+    <div class="meta">
+      <span>📦 rewards-v2</span>
+      <span>🏗 cdp-backend</span>
+      <span>🎨 cdp-frontend</span>
+      <span>📱 mini-app</span>
+      <span>🟢 Production stable</span>
+      <span>🔀 Chủ động đổi hướng</span>
+    </div>
+  </header>
+
+  <!-- Strategy banner -->
+  <div class="strategy-banner">
+    <span class="label">📌 Bối cảnh &amp; định hướng tuần</span>
+    <h2>Đạt 4/4 mục tiêu đặt ra — 2 việc phụ thuộc bên ngoài bị tắc → team chủ động đổi hướng</h2>
+    <p>Team <b>hoàn thành 4/4 mục tiêu tuần</b>: release quà vật lý · bàn giao MCO Gara cho CG · review API Urbox + gửi đề xuất · khởi động thiết kế Reward Network. <b style="color:#B45309;">Hai việc phụ thuộc bên ngoài bị tắc</b> — UAT Total (Total chưa ký gửi quà cho GotIt) và đối soát quà vật lý (GotIt chưa trả lời đúng trọng tâm) → <b>team không ngồi chờ, chủ động khởi động 2 dự án mới: Reward Network (pool quà) + tích hợp đối tác Urbox cho rewards-v2</b>.</p>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi success">
+      <div class="kpi-label">Mục tiêu đặt ra đã đạt</div>
+      <div class="kpi-value">4/4</div>
+      <div class="kpi-sub">3 Done + 1 bàn giao CG (MCO Gara) — hoàn thành phần việc của team</div>
+    </div>
+    <div class="kpi danger">
+      <div class="kpi-label">Việc tắc do bên ngoài</div>
+      <div class="kpi-value">2</div>
+      <div class="kpi-sub">UAT Total (Total chưa gửi quà) · Đối soát quà vật lý (GotIt chưa trả lời đúng)</div>
+    </div>
+    <div class="kpi" style="background: linear-gradient(135deg, rgba(139,92,246,.16), rgba(6,182,212,.14)); border:1px solid rgba(139,92,246,.3);">
+      <div class="kpi-label" style="color:#7C3AED;">🔀 Dự án mới chủ động khởi động</div>
+      <div class="kpi-value" style="color:#7C3AED;">2</div>
+      <div class="kpi-sub">Reward Network (pool quà) + Tích hợp Urbox — 2 dự án độc lập</div>
+    </div>
+    <div class="kpi info">
+      <div class="kpi-label">🎁 Quà vật lý</div>
+      <div class="kpi-value">✅</div>
+      <div class="kpi-sub">Release production + bàn giao CG · CG tự setup cho Total, không cần deploy thêm</div>
+    </div>
+    <div class="kpi primary">
+      <div class="kpi-label">🚗 MCO Gara</div>
+      <div class="kpi-value">✅</div>
+      <div class="kpi-sub">Zalo duyệt miniapp + truyền thông + bàn giao CG · team release khỏi dự án</div>
+    </div>
+    <div class="kpi pink">
+      <div class="kpi-label">Tổng commits W26</div>
+      <div class="kpi-value">28</div>
+      <div class="kpi-sub">Hải 25 · Huy 3 (Urbox) · Trang non-code (thiết kế RN + vendor + handover)</div>
+    </div>
+  </div>
+
+  <!-- ============== 🎯 Tổng quan điều hành ============== -->
+  <div class="cto-dash">
+    <h3>Tổng quan điều hành</h3>
+
+    <div class="chart-grid">
+
+      <!-- Chart 1: Kết quả mục tiêu -->
+      <div class="chart-card">
+        <h4>🎯 Kết quả 4 mục tiêu tuần</h4>
+        <div class="chart-sub">4/4 mục tiêu đặt ra hoàn thành: 3 Done + 1 bàn giao CG (MCO Gara — điều chỉnh từ "hỗ trợ kiểm nghiệm").</div>
+        <div class="chart-wrap"><canvas id="goalChart"></canvas></div>
+      </div>
+
+      <!-- Chart 2: Achievement + blocker -->
+      <div class="chart-card">
+        <h4>📊 Mục tiêu vs việc tắc bên ngoài</h4>
+        <div class="chart-sub">Toàn bộ mục tiêu team đặt ra đã đạt. 2 việc phụ thuộc bên ngoài (Total/GotIt) bị tắc → team chủ động đổi hướng.</div>
+        <div class="big-callout">
+          <div class="num success">4/4</div>
+          <div class="label">Mục tiêu team đạt</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; font-size:13px;">
+          <div style="text-align:center; padding:10px; background:var(--success-soft); border-radius:8px;">
+            <div style="font-size:22px; font-weight:800; color:#047857;">4/4</div>
+            <div style="color:var(--muted); margin-top:2px;">Mục tiêu đặt ra</div>
+          </div>
+          <div style="text-align:center; padding:10px; background:var(--danger-soft); border-radius:8px;">
+            <div style="font-size:22px; font-weight:800; color:var(--danger);">2</div>
+            <div style="color:var(--muted); margin-top:2px;">Tắc do Total/GotIt</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart 3: Effort allocation -->
+      <div class="chart-card">
+        <h4>⚖️ Cơ cấu phân bổ công sức</h4>
+        <div class="chart-sub">Khi việc cũ đã đóng/bàn giao, team dồn lực sang 2 dự án mới (Reward Network thiết kế + tích hợp Urbox).</div>
+        <div class="chart-wrap"><canvas id="effortChart"></canvas></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toolbar Expand/Collapse all -->
+  <div class="collapse-toolbar">
+    <button class="toolbar-btn" id="btn-expand-all" title="Mở tất cả section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      Mở tất cả
+    </button>
+    <button class="toolbar-btn" id="btn-collapse-all" title="Đóng tất cả section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+      Đóng tất cả
+    </button>
+    <span style="font-size:12px; color:var(--muted); align-self:center; margin-left:6px;">💡 Click vào tiêu đề mỗi section để mở/đóng</span>
+  </div>
+
+  <!-- ============== 👥 Hiệu suất theo thành viên ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>👥 Hiệu suất theo thành viên</h2>
+      <span class="hint">Dựa trên số task &amp; độ khó (1-5)</span>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h4>📋 Số task &amp; độ khó trung bình</h4>
+        <div class="chart-sub">
+          <b>Cột:</b> Số task hoàn thành.
+          <b>Đường:</b> Độ khó trung bình mỗi task (1-5).
+        </div>
+        <div class="chart-wrap tall"><canvas id="taskComboChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h4>🧩 Cơ cấu task theo nhóm công việc</h4>
+        <div class="chart-sub">Phân bổ task mỗi người theo 4 nhóm.</div>
+        <div class="chart-wrap tall"><canvas id="categoryStackChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Trang -->
+    <div class="member-row">
+      <div class="member-head">
+        <div class="avatar av-trang">NT</div>
+        <div>
+          <h3>Như Trang</h3>
+          <div class="role">Tech Lead · Thiết kế Reward Network · Đề xuất Urbox · Bàn giao CG · Điều phối Total (non-code)</div>
+        </div>
+        <div class="meta-pills">
+          <span class="pill task">5 task</span>
+          <span class="pill effort">18 pts</span>
+        </div>
+      </div>
+      <ul class="member-tasks">
+        <li><b>🌐 [Reward Network] Thiết kế sản phẩm + hệ thống</b><span class="desc">Định hình ý tưởng: Reward Network = hệ thống pool quà, cho các shop nạp/rút quà theo tỉ lệ. Đang ở giai đoạn thiết kế — chưa code.</span></li>
+        <li><b>🔌 [Dự án Urbox] Viết bản đề xuất tính năng gửi Urbox</b><span class="desc">Review + tổng hợp yêu cầu tích hợp đối tác Urbox vào rewards-v2 (vendor mới, song song GotIt) → gửi bản đề xuất cho Urbox. <b>Dự án độc lập với Reward Network.</b></span></li>
+        <li><b>🚗 Bàn giao + hướng dẫn CG (MCO Gara + quà vật lý)</b><span class="desc">CG chưa action cho MCO → Trang bàn giao + hướng dẫn lại để CG chủ động hỗ trợ khách. Hướng dẫn CG tự setup quà vật lý production cho Total.</span></li>
+        <li><b>⏰ Điều phối UAT Total — phát hiện blocker thương mại</b><span class="desc">Drive chuẩn bị UAT. Phát hiện Total chưa ký gửi danh sách quà vật lý cho GotIt → UAT chưa chạy được (vấn đề phía khách hàng, không phải kỹ thuật).</span></li>
+        <li><b>🤝 Theo dõi đối soát GotIt — quyết định giảm focus</b><span class="desc">GotIt vẫn không trả lời đúng trọng tâm đối soát quà vật lý → Trang quyết định team không focus quá nhiều vào đối soát vật lý, đổi chiến lược sang review sản phẩm khi có Urbox.</span></li>
+      </ul>
+    </div>
+
+    <!-- Hai -->
+    <div class="member-row">
+      <div class="member-head">
+        <div class="avatar av-hai">H1</div>
+        <div>
+          <h3>Hồ Trung Hải</h3>
+          <div class="role">Full-stack · Hoàn thiện + release quà vật lý · drive 25 commits</div>
+        </div>
+        <div class="meta-pills">
+          <span class="pill task">6 task</span>
+          <span class="pill effort">24 pts</span>
+        </div>
+      </div>
+      <ul class="member-tasks">
+        <li><b>🎁 Release + polish quà vật lý (delivery type, refund, status)</b><span class="desc">Delivery type filter cho redemption order (BE+gateway+FE) · refund points kèm loyalty history · voucher CANCELLED state · fix LazyInitializationException khi mark points refunded.</span></li>
+        <li><b>🎁 Visibility + pause cho GotIt physical campaign</b><span class="desc">Visibility management + pause preview cho GotIt physical campaign · physical property cho AccountBrandConfig · ChannelIcon + physical delivery option.</span></li>
+        <li><b>🔐 GotIt credential verification + soft delete user</b><span class="desc">Verify credential GotIt + xử lý soft delete user — tăng độ chắc chắn luồng tích hợp trước go-live thật.</span></li>
+        <li><b>🎁 PDPL consent server validation + address book flow</b><span class="desc">Cải thiện PDPL consent + server-side validation cho physical gift · address book sheet (grouping + layout) + mở từ màn xác nhận · max quantity message.</span></li>
+        <li><b>🎨 Cải thiện FE web/mini-app</b><span class="desc">Refactor transaction labels + status badge · brand column bảng đối soát · page size redeem wallet · lịch sử đổi quà + time formatting + refund type display.</span></li>
+        <li><b>✅ Kiểm thử quà vật lý sau release</b><span class="desc">Test lại các luồng quà vật lý (limit, tồn kho, serial, delivery, status) đảm bảo ổn định trên production trước khi CG vận hành.</span></li>
+      </ul>
+    </div>
+
+    <!-- Huy -->
+    <div class="member-row">
+      <div class="member-head">
+        <div class="avatar av-huy">H</div>
+        <div>
+          <h3>Trần Lê Huy</h3>
+          <div class="role">Full-stack · Dự án Tích hợp Urbox cho rewards-v2 (branch huytl/urbox-rewards-v2)</div>
+        </div>
+        <div class="meta-pills">
+          <span class="pill task">3 task</span>
+          <span class="pill effort">9 pts</span>
+        </div>
+      </div>
+      <ul class="member-tasks">
+        <li><b>🔌 UrboxCategorySyncService — đồng bộ category Urbox</b><span class="desc">Implement service đồng bộ danh mục (category) từ Urbox (4131c6e) — thuộc dự án tích hợp đối tác Urbox vào rewards-v2 (vendor mới, song song GotIt).</span></li>
+        <li><b>🔌 UrboxAccountVendorConfigDisabler — bật/tắt vendor config Urbox</b><span class="desc">Cơ chế bật/tắt cấu hình vendor Urbox theo account (d31b990) — cùng dự án tích hợp Urbox, theo bản đề xuất Trang gửi Urbox.</span></li>
+        <li><b>Fix internal loyalty service URL (staging)</b><span class="desc">Cập nhật URL CNV Loyalty internal trong application-staging.properties — đảm bảo luồng hold/accept/deny điểm trỏ đúng môi trường staging.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============== 🚀 Tính năng & hạng mục hoàn thành ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🚀 Tính năng &amp; hạng mục hoàn thành</h2>
+      <span class="hint">Phân loại 4 nhóm: Tính năng &amp; Bàn giao · Đối tác/UAT · Sửa lỗi/Cải tiến · Hạ tầng</span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="feature">🆕 Tính năng &amp; Bàn giao <span class="count">5</span></button>
+      <button class="tab-btn" data-tab="vendor">🤝 Đối tác &amp; UAT <span class="count">3</span></button>
+      <button class="tab-btn" data-tab="improve">✨ Sửa lỗi &amp; Cải tiến <span class="count">4</span></button>
+      <button class="tab-btn" data-tab="docs">📝 Hạ tầng &amp; Bàn giao <span class="count">2</span></button>
+    </div>
+
+    <!-- Tab content: Tính năng & Bàn giao (5) -->
+    <div class="feat-list" id="tab-feature">
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🎁 Quà vật lý — RELEASE PRODUCTION + bàn giao CG</h4>
+          <p>Sản phẩm đã <b>release trên production</b>. <b>CG tự setup cho Total, không cần team deploy thêm.</b> Tuần này Hải polish nốt: delivery type filter, visibility/pause campaign, refund points, voucher CANCELLED. Phần kỹ thuật đóng.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b> (code)</span>
+            <span class="badge-owner-trang">👤 <b>Trang</b> (bàn giao CG)</span>
+            <span>🎁 Phase 2</span>
+            <span class="badge-heavy">⭐ ✅ Production</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🚗 MCO Gara location - Quét mã tích điểm — BÀN GIAO CG</h4>
+          <p>Miniapp <b>đã được Zalo duyệt</b> → truyền thông + <b>bàn giao CG</b>. CG chưa action cho MCO nên team hướng dẫn lại để CG chủ động hỗ trợ khách. <b>Team release khỏi tính năng này</b>, nghiệm thu thực địa giao CG.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b> (truyền thông + handover)</span>
+            <span>🚗 MCO Gara</span>
+            <span class="badge-heavy">✅ Đóng · bàn giao CG</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🌐 Reward Network — khởi động thiết kế (dự án mới)</h4>
+          <p><b>Reward Network = hệ thống pool quà</b> cho các shop <b>nạp/rút quà theo tỉ lệ</b>. W26: Trang nghiên cứu thiết kế sản phẩm + kiến trúc hệ thống. <b>Đang ở giai đoạn thiết kế — chưa code.</b> Hướng đi dài hạn sau khi quà vật lý + MCO Gara đã đóng.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b> (thiết kế SP + hệ thống)</span>
+            <span>🌐 Dự án mới</span>
+            <span class="badge-heavy">⭐ Khởi động</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🔌 Tích hợp đối tác Urbox cho rewards-v2 (dự án riêng)</h4>
+          <p><b>Dự án độc lập, song song Reward Network:</b> thêm Urbox làm vendor cho rewards-v2 (như GotIt). Trang viết bản đề xuất gửi Urbox · Huy code trên branch <code>huytl/urbox-rewards-v2</code>: <b>UrboxCategorySyncService</b> (đồng bộ category) + <b>UrboxAccountVendorConfigDisabler</b> (bật/tắt vendor config).</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b> (đề xuất)</span>
+            <span class="badge-owner-huy">👤 <b>Huy</b> (code · 2 commit)</span>
+            <span>📦 rewards-v2</span>
+            <span class="badge-heavy">⭐ Khởi động</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🔐 GotIt credential verification + soft delete user</h4>
+          <p>Verify credential GotIt + xử lý soft delete user (Hải) — tăng độ chắc chắn + an toàn cho luồng tích hợp GotIt trước khi go-live thật với Total.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 rewards-v2</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab content: Đối tác & UAT (3) -->
+    <div class="feat-list hidden" id="tab-vendor">
+      <div class="feat-row">
+        <div class="feat-check" style="background:var(--danger);">!</div>
+        <div class="feat-content">
+          <h4>⛔ UAT Total — chưa chạy được vì Total chưa ký gửi quà vật lý</h4>
+          <p>Mốc UAT <b>chưa thực hiện được</b>: Total chưa ký gửi danh sách quà vật lý cho GotIt → GotIt chưa có product để setup → chưa test UAT. <b>Đây là blocker thương mại phía khách hàng (Total)</b>, không phải kỹ thuật. Phần CNV + CampaignId GotIt đã sẵn sàng.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b> (điều phối)</span>
+            <span>⛔ Chờ Total ký gửi quà</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🤝 GotIt CampaignId — đã có ✅ (chỉ thiếu product từ Total)</h4>
+          <p>GotIt đã setup CampaignId. <b>Chỉ còn thiếu product list</b> — khi Total ký gửi danh sách quà, CG sẽ vào setup trên production. Đánh giá tích hợp + Public Key + PII đã hoàn tất (tuần trước).</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b></span>
+            <span>✅ CampaignId có · ⏳ chờ product</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🤝 Đối soát quà vật lý — GotIt chưa trả lời đúng trọng tâm</h4>
+          <p>Đã mail push GotIt về đối soát nhưng <b>GotIt vẫn không trả lời đúng trọng tâm</b>. <b>Quyết định:</b> team không focus quá nhiều vào đối soát vật lý, đổi chiến lược sang review sản phẩm khi có thêm đối tác Urbox.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b></span>
+            <span>🔀 Giảm focus · đổi chiến lược</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab content: Sửa lỗi & Cải tiến (4) -->
+    <div class="feat-list hidden" id="tab-improve">
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Refund points + voucher CANCELLED + fix LazyInitException</h4>
+          <p>refundPoints kèm description vào loyalty history · xử lý voucher usage status CANCELLED + refund type display · fix LazyInitializationException khi detach voucher lúc mark points refunded.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 rewards-v2 · mini-app</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>PDPL consent server validation + address book flow</h4>
+          <p>Cải thiện PDPL consent + server-side validation cho physical gift redemption · address book sheet (grouping + layout) + mở address book trực tiếp từ màn xác nhận · max quantity reached message.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 mini-app</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Refactor transaction labels + status badge + reconciliation</h4>
+          <p>Refactor transaction type + status labels trong redeem history/wallet · delivery status badge · brand column bảng đối soát · page size selection redeem wallet · ẩn voucher CANCELLED + simplify CTA.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 cdp-frontend · mini-app</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Fix internal loyalty service URL (staging)</h4>
+          <p>Cập nhật URL CNV Loyalty internal trong application-staging.properties — đảm bảo luồng hold/accept/deny điểm trỏ đúng môi trường staging.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>📦 rewards-v2</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab content: Hạ tầng & Bàn giao (2) -->
+    <div class="feat-list hidden" id="tab-docs">
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🚗 Bàn giao MCO Gara + quà vật lý cho CG</h4>
+          <p>Truyền thông + bàn giao MCO Gara (Zalo đã duyệt) cho CG · hướng dẫn CG tự setup quà vật lý production cho Total (không cần team deploy thêm). <b>Chuyển vận hành 2 sản phẩm sang CG.</b></p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b></span>
+            <span>🚗 Handover CG</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>⏰ Điều phối UAT Total + theo dõi GotIt</h4>
+          <p>Drive chuẩn bị UAT, phát hiện blocker Total chưa ký gửi quà → báo cáo để Sales/BD push. Theo dõi đối soát + partial success với GotIt (chưa phản hồi đúng trọng tâm).</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b></span>
+            <span>⏰ Điều phối vendor/khách hàng</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 🎯 Đối chiếu mục tiêu kế hoạch ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🎯 Đối chiếu mục tiêu kế hoạch</h2>
+      <span class="hint">4 mục tiêu đặt ra đầu tuần W26 — đạt 4/4</span>
+    </div>
+    <div class="grid-2">
+      <div class="result-card success">
+        <h3>✅ Mục tiêu đặt ra — đạt 4/4</h3>
+        <ul>
+          <li>Improve + Fix bug quà vật lý → Release ✅</li>
+          <li>Hỗ trợ MCO kiểm nghiệm → bàn giao + hướng dẫn CG 🔄</li>
+          <li>Review kỹ thuật API Urbox + gửi bản đề xuất ✅</li>
+          <li>Khởi động thiết kế dự án Reward Network ✅</li>
+        </ul>
+      </div>
+      <div class="result-card danger">
+        <h3>⛔ Việc phụ thuộc bên ngoài — bị tắc (2)</h3>
+        <ul>
+          <li>UAT Total — Total chưa ký gửi quà vật lý cho GotIt</li>
+          <li>Đối soát quà vật lý — GotIt chưa trả lời đúng trọng tâm</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:14px; background:linear-gradient(135deg,#FFFBEB,#FEF2F2); border:1px solid #FCD34D; border-radius:12px; padding:16px 20px;">
+      <div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#92400E; text-transform:uppercase; margin-bottom:8px;">🧭 Lý do chưa đạt &amp; phương án chủ động của team</div>
+      <p style="font-size:14.5px; color:var(--ink-soft); line-height:1.65; margin-bottom:6px;"><b>① UAT Total:</b> Total chưa ký gửi quà vật lý cho GotIt (vấn đề thương mại, ngoài tầm team) <span style="color:var(--muted)">→</span> <b style="color:#047857;">team không ngồi chờ, chủ động khởi động dự án Reward Network.</b></p>
+      <p style="font-size:14.5px; color:var(--ink-soft); line-height:1.65;"><b>② Đối soát quà vật lý:</b> pending GotIt trả lời, và GotIt vẫn không trả lời đúng trọng tâm <span style="color:var(--muted)">→</span> <b style="color:#047857;">team không focus quá nhiều vào đối soát vật lý, chủ động đổi chiến lược sang review sản phẩm khi có thêm đối tác Urbox.</b></p>
+    </div>
+  </div>
+
+  <!-- ============== 🛡️ Đánh giá rủi ro ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🛡️ Đánh giá rủi ro</h2>
+      <span class="hint">Các rủi ro &amp; điểm cần ưu tiên theo dõi</span>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-item high">
+        <span class="risk-level">🔥 HIGH · BLOCKER THƯƠNG MẠI</span>
+        <h4>Total chưa ký gửi quà vật lý cho GotIt</h4>
+        <p>Phần kỹ thuật CNV + CampaignId GotIt đã sẵn sàng, nhưng <b>UAT + go-live bị treo vì Total chưa ký gửi danh sách quà</b>. Đây là vấn đề <b>thương mại/hợp đồng phía khách hàng</b>, team không kiểm soát. <b>Action:</b> báo cáo lãnh đạo + Sales/BD push Total; team sẵn sàng go-live ngay khi có product.</p>
+      </div>
+      <div class="risk-item medium">
+        <span class="risk-level">🟡 MEDIUM</span>
+        <h4>Đối soát quà vật lý — GotIt không trả lời đúng trọng tâm</h4>
+        <p>Đã mail push GotIt nhiều lần, GotIt vẫn trả lời lệch trọng tâm. <b>Phương án team:</b> giảm focus đối soát vật lý, đổi chiến lược sang review sản phẩm khi có Urbox. Cần chốt trước khi phát sinh đơn thật để tránh sai tiền.</p>
+      </div>
+      <div class="risk-item medium">
+        <span class="risk-level">🟡 MEDIUM · HANDOVER</span>
+        <h4>MCO Gara — nghiệm thu thực địa chuyển CG</h4>
+        <p>Team đã bàn giao MCO Gara cho CG (Zalo duyệt + truyền thông xong). <b>Nghiệm thu thực địa giờ do CG chủ trì</b> — rủi ro ở khâu chuyển giao: CG cần nắm đủ để vận hành. <b>Action:</b> team standby support khi CG cần.</p>
+      </div>
+      <div class="risk-item medium">
+        <span class="risk-level">🟡 MEDIUM</span>
+        <h4>Cân tải nhân sự — Hải gánh ~90% code</h4>
+        <p>Hải 25/28 commits. Khi 2 dự án mới (Reward Network + Urbox) vào giai đoạn code, cần <b>phân vai rõ để san sẻ</b>, tránh dồn tiếp vào Hải. <b>Action:</b> chốt scope từng dự án → phân công Huy/Hải.</p>
+      </div>
+      <div class="risk-item low">
+        <span class="risk-level">✅ RESOLVED</span>
+        <h4>Quà vật lý — release production + bàn giao CG</h4>
+        <p>Sản phẩm đã release production, CG tự setup được không cần deploy thêm. Status chốt theo spec GotIt, test E2E xong, GotIt credential verification ship. <b>Phần kỹ thuật đóng hoàn toàn.</b></p>
+      </div>
+      <div class="risk-item low">
+        <span class="risk-level">✅ RESOLVED</span>
+        <h4>MCO Gara — Zalo duyệt + bàn giao CG</h4>
+        <p>Miniapp đã được Zalo duyệt, truyền thông + bàn giao CG xong. Team release khỏi tính năng. Khép hoàn toàn từ phía dev.</p>
+      </div>
+      <div class="risk-item low">
+        <span class="risk-level">✅ LOW</span>
+        <h4>Production stability</h4>
+        <p>Evoucher production LIVE từ W22 — ổn định. Không có incident production trong W26.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 🤝 Đánh giá đối tác GotIt ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🤝 Đánh giá đối tác GotIt</h2>
+      <span class="hint">Góc nhìn Solution Architect — đánh giá chất lượng tích hợp vendor trước UAT</span>
+    </div>
+
+    <div style="background: linear-gradient(135deg, #FEF2F2 0%, #FFFBEB 100%); border:1px solid #FCA5A5; border-radius:14px; padding:18px 22px; margin-bottom:20px;">
+      <div style="font-size:12px; color:var(--danger); font-weight:700; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px;">⚠️ Tổng kết đánh giá</div>
+      <p style="font-size:15px; color:var(--ink-soft); line-height:1.65;">GotIt phản hồi <b>theo phản ứng</b> chứ không chủ động, tài liệu kỹ thuật <b>hoàn thiện dần theo câu hỏi của CNV</b> thay vì có sẵn integration package hoàn chỉnh. Đặc biệt vendor thường <b style="color:var(--danger);">trả lời câu gần giống câu hỏi, chứ không trả lời đúng câu hỏi</b>. Các vùng rủi ro cao (status, reconciliation, partial success, UAT simulation) cần làm rõ <b>trước</b> UAT — đây là điều kiện tiên quyết để bảo vệ luồng tiền và recovery.</p>
+    </div>
+
+    <!-- 4 điểm số -->
+    <div class="metric-grid">
+      <div class="metric-card warning">
+        <div class="gauge warning" style="--pct: 45;">
+          <div>
+            <div class="gauge-value">4.5<span class="unit">/10</span></div>
+            <div class="gauge-sub">Chất lượng</div>
+          </div>
+        </div>
+        <h4>💬 Chất lượng phản hồi</h4>
+        <p>Trả lời <b>gần giống</b> câu hỏi chứ không <b>đúng</b> câu hỏi. Né các tình huống cụ thể (partial success, enum đầy đủ).</p>
+        <div class="verdict">⚠️ Điểm yếu nhất</div>
+      </div>
+
+      <div class="metric-card danger">
+        <div class="gauge danger" style="--pct: 30;">
+          <div>
+            <div class="gauge-value">3<span class="unit">/10</span></div>
+            <div class="gauge-sub">Chủ động</div>
+          </div>
+        </div>
+        <h4>🔄 Độ chủ động</h4>
+        <p>Gần như không chủ động. Mọi vấn đề đều theo pattern: CNV phát hiện → hỏi → follow-up → vendor mới phản hồi.</p>
+        <div class="verdict">🔴 Rất bị động</div>
+      </div>
+
+      <div class="metric-card danger">
+        <div class="gauge danger" style="--pct: 40;">
+          <div>
+            <div class="gauge-value">4<span class="unit">/10</span></div>
+            <div class="gauge-sub">Tài liệu</div>
+          </div>
+        </div>
+        <h4>📄 Trưởng thành tài liệu kỹ thuật</h4>
+        <p>API không khớp tài liệu. Thiếu enum chuẩn, reconciliation, checklist go-live, template đối soát, evaluation form.</p>
+        <div class="verdict">🔴 Đáng lo nhất</div>
+      </div>
+
+      <div class="metric-card danger">
+        <div class="gauge danger" style="--pct: 80;">
+          <div>
+            <div class="gauge-value">8<span class="unit">/10</span></div>
+            <div class="gauge-sub">Rủi ro</div>
+          </div>
+        </div>
+        <h4>🚨 Rủi ro vận hành</h4>
+        <p>Status · Reconciliation · Partial Success · UAT simulation — đều phải rõ <b>trước</b> UAT. Sai → sai tiền / sai recovery.</p>
+        <div class="verdict">🔴 Mức cao</div>
+      </div>
+    </div>
+
+    <!-- Ví dụ chất lượng phản hồi -->
+    <div class="card" style="margin-bottom:16px;">
+      <h3>💬 Mẫu phản hồi điển hình — "trả lời gần giống, không trả lời đúng"</h3>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:14px; margin-top:8px;">
+
+        <div style="border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+          <div style="background:var(--info-soft); color:#1D4ED8; padding:8px 12px; font-size:13px; font-weight:700;">❓ CNV hỏi</div>
+          <div style="padding:10px 12px; font-size:13.5px; color:var(--ink-soft); border-bottom:1px dashed var(--border);">"Nếu partial success thì đối soát thế nào?"</div>
+          <div style="background:var(--bg-soft); color:var(--ink-soft); padding:8px 12px; font-size:13px; font-weight:700;">💬 GotIt trả lời</div>
+          <div style="padding:10px 12px; font-size:13.5px; color:var(--ink-soft);">"Đổi quà thành công sẽ đối soát."</div>
+          <div style="background:var(--danger-soft); color:var(--danger); padding:8px 12px; font-size:12.5px; font-weight:600;">→ Không trả lời partial success</div>
+        </div>
+
+        <div style="border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+          <div style="background:var(--info-soft); color:#1D4ED8; padding:8px 12px; font-size:13px; font-weight:700;">❓ CNV hỏi</div>
+          <div style="padding:10px 12px; font-size:13.5px; color:var(--ink-soft); border-bottom:1px dashed var(--border);">"Go-live checklist?"</div>
+          <div style="background:var(--bg-soft); color:var(--ink-soft); padding:8px 12px; font-size:13px; font-weight:700;">💬 GotIt trả lời</div>
+          <div style="padding:10px 12px; font-size:13.5px; color:var(--ink-soft);">"Sau khi test xong sẽ cung cấp."</div>
+          <div style="background:var(--danger-soft); color:var(--danger); padding:8px 12px; font-size:12.5px; font-weight:600;">→ Không cung cấp ngay</div>
+        </div>
+
+        <div style="border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+          <div style="background:var(--info-soft); color:#1D4ED8; padding:8px 12px; font-size:13px; font-weight:700;">❓ CNV hỏi</div>
+          <div style="padding:10px 12px; font-size:13.5px; color:var(--ink-soft); border-bottom:1px dashed var(--border);">"Bộ enum đầy đủ?"</div>
+          <div style="background:var(--bg-soft); color:var(--ink-soft); padding:8px 12px; font-size:13px; font-weight:700;">💬 GotIt trả lời</div>
+          <div style="padding:10px 12px; font-size:13.5px; color:var(--ink-soft);">"Đã update tài liệu."</div>
+          <div style="background:var(--danger-soft); color:var(--danger); padding:8px 12px; font-size:12.5px; font-weight:600;">→ Nhưng tài liệu không khớp API</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Pattern độ chủ động -->
+    <div class="card" style="margin-bottom:16px;">
+      <h3>🔄 Pattern độ chủ động — CNV luôn là bên khởi xướng</h3>
+      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:13px; margin:8px 0 14px;">
+        <span style="background:var(--info-soft); color:#1D4ED8; padding:6px 12px; border-radius:20px; font-weight:700;">CNV phát hiện vấn đề</span>
+        <span style="color:var(--muted);">→</span>
+        <span style="background:var(--info-soft); color:#1D4ED8; padding:6px 12px; border-radius:20px; font-weight:700;">CNV hỏi</span>
+        <span style="color:var(--muted);">→</span>
+        <span style="background:var(--info-soft); color:#1D4ED8; padding:6px 12px; border-radius:20px; font-weight:700;">CNV follow-up</span>
+        <span style="color:var(--muted);">→</span>
+        <span style="background:var(--info-soft); color:#1D4ED8; padding:6px 12px; border-radius:20px; font-weight:700;">CNV tổng hợp lại</span>
+        <span style="color:var(--muted);">→</span>
+        <span style="background:var(--warning-soft); color:#B45309; padding:6px 12px; border-radius:20px; font-weight:700;">Khả Diệu tag Hoàng Phát</span>
+        <span style="color:var(--muted);">→</span>
+        <span style="background:var(--success-soft); color:#047857; padding:6px 12px; border-radius:20px; font-weight:700;">GotIt phản hồi</span>
+      </div>
+      <p style="font-size:13px; color:var(--muted); line-height:1.55;"><b style="color:var(--ink-soft);">6 vấn đề đều theo pattern này:</b> Status mismatch · Product mismatch · Brand mapping · Evaluation form · Go-live process · Reconciliation. Vendor gần như không tự đưa ra vấn đề hay giải pháp trước khi CNV truy.</p>
+    </div>
+
+    <!-- Red flags rủi ro vận hành -->
+    <div class="card">
+      <h3>🚨 Vùng rủi ro — cập nhật trạng thái W26</h3>
+      <div class="risk-grid" style="margin-top:8px;">
+        <div class="risk-item low">
+          <span class="risk-level">✅ ĐÃ CHỐT · STATUS</span>
+          <h4>Bộ status — đã clarify + vào code</h4>
+          <p>PhysicalDeliveryStatus theo spec GotIt, recovery worker chạy đúng. <b>Không còn là rủi ro.</b></p>
+        </div>
+        <div class="risk-item low">
+          <span class="risk-level">✅ ĐÃ CÓ · CAMPAIGNID</span>
+          <h4>GotIt CampaignId — đã setup</h4>
+          <p>GotIt đã có CampaignId. Quà vật lý đã release production, CG tự setup được. <b>Chỉ còn thiếu product list từ Total.</b></p>
+        </div>
+        <div class="risk-item high">
+          <span class="risk-level">🔴 BLOCKER · TOTAL</span>
+          <h4>Total chưa ký gửi danh sách quà vật lý</h4>
+          <p>Blocker thật sự giờ <b>không phải GotIt mà là Total</b> — chưa ký gửi product cho GotIt → chưa có quà để UAT. Vấn đề thương mại/hợp đồng, cần Sales/BD + lãnh đạo push.</p>
+        </div>
+        <div class="risk-item medium">
+          <span class="risk-level">🟡 GIẢM FOCUS · ĐỐI SOÁT</span>
+          <h4>Đối soát + partial success — GotIt lệch trọng tâm</h4>
+          <p>GotIt vẫn không trả lời đúng trọng tâm. <b>Phương án team:</b> giảm focus đối soát vật lý, đổi chiến lược sang review sản phẩm khi có Urbox. Vẫn cần chốt trước khi có đơn thật.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 🗺️ Lộ trình sản phẩm ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🗺️ Lộ trình sản phẩm</h2>
+      <span class="hint">Các mốc triển khai chính từ W26 đến đầu Q3</span>
+    </div>
+
+    <div class="card" style="padding: 28px 24px;">
+      <div class="timeline">
+
+        <!-- 1. Quà vật lý release + handover — done -->
+        <div class="timeline-item done">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">✅ DONE · W26 — RELEASE PRODUCTION + BÀN GIAO CG</div>
+            <h4>Quà vật lý — Production + bàn giao CG</h4>
+            <p>Đã release production, polish nốt (delivery filter, refund, GotIt credential verification). <b>CG tự setup cho Total không cần deploy thêm.</b> Phần kỹ thuật đóng hoàn toàn.</p>
+          </div>
+        </div>
+
+        <!-- 2. MCO Gara handover — done -->
+        <div class="timeline-item done">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">✅ DONE · W26 — BÀN GIAO CG (ĐÓNG)</div>
+            <h4>MCO Gara location - Quét mã tích điểm</h4>
+            <p>Miniapp Zalo duyệt ✅ → truyền thông + <b>bàn giao CG</b>. Team release khỏi tính năng, nghiệm thu thực địa giao CG. Khép hoàn toàn.</p>
+          </div>
+        </div>
+
+        <!-- 3. UAT Total — blocked by Total -->
+        <div class="timeline-item current">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">⛔ BỊ TREO · UAT Total — chờ Total ký gửi quà</div>
+            <h4>UAT Total quà vật lý</h4>
+            <p>Phần kỹ thuật + GotIt CampaignId đã sẵn sàng. <b>UAT chưa chạy được vì Total chưa ký gửi danh sách quà vật lý cho GotIt</b> — blocker thương mại phía khách hàng.</p>
+            <div class="note">⚠️ Rủi ro mốc nằm ở phía Total (thương mại) — báo cáo lãnh đạo + Sales/BD push. Team đã sẵn sàng go-live ngay khi có product.</div>
+          </div>
+        </div>
+
+        <!-- 4. Reward Network — upcoming (dự án mới) -->
+        <div class="timeline-item upcoming">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">🌐 ĐANG KHỞI ĐỘNG · Dự án 1 — Reward Network</div>
+            <h4>Reward Network — hệ thống pool quà</h4>
+            <p>Hệ thống <b>pool quà</b>, shop <b>nạp/rút quà theo tỉ lệ</b>. W26: Trang thiết kế sản phẩm + kiến trúc hệ thống (đang thiết kế, chưa code). Hướng đi dài hạn sau khi quà vật lý + MCO Gara đã đóng.</p>
+          </div>
+        </div>
+
+        <!-- 5. Tích hợp Urbox — upcoming (dự án song song) -->
+        <div class="timeline-item upcoming">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">🔌 ĐANG KHỞI ĐỘNG · Dự án 2 — Tích hợp Urbox</div>
+            <h4>Tích hợp đối tác Urbox cho rewards-v2</h4>
+            <p><b>Dự án độc lập, song song Reward Network:</b> thêm Urbox làm vendor (như GotIt). W26: Trang viết bản đề xuất · Huy code UrboxCategorySyncService + UrboxAccountVendorConfigDisabler trên branch riêng.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 📅 Plan W27 ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🎯 Kế hoạch tuần tới — W27</h2>
+      <span class="hint">29/06 → 03/07 · trọng tâm: 2 dự án mới + đẩy Total + standby support CG · <i>(đề xuất — anh/chị chỉnh theo ưu tiên thực tế)</i></span>
+    </div>
+    <div class="plan-grid">
+      <div class="plan-item">
+        <div class="plan-checkbox">☐</div>
+        <div class="plan-content">
+          <h4>🌐 Reward Network — chốt thiết kế → bắt đầu dev</h4>
+          <p>Trang chốt bản thiết kế sản phẩm + hệ thống (pool quà, nạp/rút theo tỉ lệ) → phân vai dev</p>
+        </div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-checkbox">☐</div>
+        <div class="plan-content">
+          <h4>🔌 Tích hợp Urbox — phát triển tiếp</h4>
+          <p>Huy dev tiếp theo bản đề xuất (sync sản phẩm + luồng đổi quà), chờ phản hồi Urbox</p>
+        </div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-checkbox">☐</div>
+        <div class="plan-content">
+          <h4>⏰ Đẩy Total ký gửi quà (qua Sales/BD)</h4>
+          <p>Báo cáo lãnh đạo + phối hợp Sales/BD để Total gửi product cho GotIt → mở UAT</p>
+        </div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-checkbox">☐</div>
+        <div class="plan-content">
+          <h4>🚗 Standby support CG</h4>
+          <p>Hỗ trợ CG setup quà vật lý + nghiệm thu MCO Gara khi cần</p>
+        </div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-checkbox">☐</div>
+        <div class="plan-content">
+          <h4>📊 Setup monitoring + on-call quà vật lý prod</h4>
+          <p>Carry — cần có trước khi Total phát sinh đơn thật</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 🩺 Sức khoẻ dự án — Strategic Metrics ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🩺 Sức khoẻ dự án</h2>
+      <span class="hint">Bộ chỉ số chiến lược cập nhật hàng tuần</span>
+    </div>
+
+    <div class="metric-grid">
+
+      <!-- Metric 1: Kỹ thuật đóng + bàn giao -->
+      <div class="metric-card success">
+        <div class="gauge success" style="--pct: 100;">
+          <div>
+            <div class="gauge-value">4/4</div>
+            <div class="gauge-sub">Mục tiêu đạt</div>
+          </div>
+        </div>
+        <h4>🎯 Mục tiêu tuần — đạt 4/4</h4>
+        <p>Hoàn thành 4/4 mục tiêu đặt ra (3 done + 1 bàn giao CG). Cả 2 sản phẩm lớn (Quà vật lý + MCO Gara) đã <b>đóng + bàn giao CG</b> — team rảnh tay chuyển sang 2 dự án mới.</p>
+        <div class="verdict">✓ Đóng + handover CG</div>
+      </div>
+
+      <!-- Metric 2: Critical path nằm ở Total -->
+      <div class="metric-card danger">
+        <div class="gauge danger" style="--pct: 100;">
+          <div>
+            <div class="gauge-value">Total</div>
+            <div class="gauge-sub">Critical path</div>
+          </div>
+        </div>
+        <h4>⛔ Blocker chuyển sang thương mại</h4>
+        <p>UAT + go-live <b>chờ Total ký gửi danh sách quà vật lý cho GotIt</b>. Không còn là vấn đề kỹ thuật hay GotIt setup — mà là <b>hợp đồng/thương mại phía khách hàng</b>. Cần lãnh đạo + Sales/BD push.</p>
+        <div class="verdict">🔴 Ngoài tầm kiểm soát team</div>
+      </div>
+
+      <!-- Metric 3: Vendor Health Score (GotIt) -->
+      <div class="metric-card warning">
+        <div class="gauge warning" style="--pct: 40;">
+          <div>
+            <div class="gauge-value">4<span class="unit">/ 10</span></div>
+            <div class="gauge-sub">GotIt Health</div>
+          </div>
+        </div>
+        <h4>🤝 Vendor Health Score (GotIt)</h4>
+        <p>Phản hồi 4.5/10 · chủ động 3/10 · tài liệu 4/10. CampaignId đã setup nhưng đối soát + partial success vẫn chưa trả lời đúng trọng tâm. <b>Cần chốt trước khi phát sinh đơn thật.</b> Xem section <b>Đánh giá đối tác GotIt</b>.</p>
+        <div class="verdict">🟡 Giảm focus · theo dõi</div>
+      </div>
+
+    </div>
+
+    <!-- Risk Discovery & Resolution callout -->
+    <div style="background: var(--card); border:1px solid var(--border); border-radius: 12px; padding: 18px 22px; margin-bottom: 20px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+      <div style="flex-shrink: 0; width: 64px; height: 64px; border-radius: 50%; background: conic-gradient(var(--success) calc(100 * 1%), var(--bg-soft) 0); display: flex; align-items: center; justify-content: center; position: relative;">
+        <div style="position: absolute; inset: 6px; background: var(--card); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 15px; font-weight: 800; color: var(--success);">2/2</span>
+        </div>
+      </div>
+      <div style="flex: 1; min-width: 240px;">
+        <div style="font-size: 12px; color: var(--success); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px;">🛡️ Cả 2 sản phẩm — đóng + bàn giao xong</div>
+        <div style="font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px;">Phần kỹ thuật đã chuyển giao hoàn toàn cho CG</div>
+        <div style="font-size: 13px; color: var(--ink-soft); line-height: 1.5;">
+          <b style="color: var(--success);">✓ Đóng + bàn giao:</b> Quà vật lý (release prod + CG setup) · MCO Gara (Zalo duyệt + handover CG) · GotIt credential verification · 2 dự án mới (RN + Urbox) khởi động
+          <br>
+          <b style="color: var(--danger);">⛔ Blocker thương mại:</b> Total chưa ký gửi quà · <b style="color: var(--warning);">⏳ chờ GotIt:</b> đối soát · partial success
+        </div>
+      </div>
+    </div>
+
+    <!-- Qualitative metrics block -->
+    <div class="reco-card">
+      <h3>🧭 Quan sát định tính</h3>
+      <div class="reco-grid">
+        <div class="reco-item">
+          <span class="reco-num">1</span>
+          <h4>Điểm sáng — đóng việc gọn + chủ động đổi hướng</h4>
+          <p>Team <b>đóng + bàn giao hoàn toàn 2 sản phẩm lớn</b> (Quà vật lý release prod, MCO Gara handover CG). Khi 2 việc phụ thuộc bên ngoài bị tắc, team <b>không ngồi chờ mà chủ động khởi động 2 dự án mới</b>: Reward Network (thiết kế) + tích hợp Urbox (đề xuất + code).</p>
+        </div>
+        <div class="reco-item">
+          <span class="reco-num">2</span>
+          <h4>Blocker chuyển từ kỹ thuật → thương mại</h4>
+          <p>Khác các tuần trước (blocker ở GotIt setup), giờ blocker là <b>Total chưa ký gửi quà vật lý</b> — vấn đề hợp đồng/thương mại. Team + GotIt đã sẵn sàng. <b>Khuyến nghị lãnh đạo: đây là việc của Sales/BD, không nên tính vào tiến độ kỹ thuật team.</b></p>
+        </div>
+        <div class="reco-item">
+          <span class="reco-num">3</span>
+          <h4>Cân tải nhân sự — cần phân vai 2 dự án mới</h4>
+          <p><b>Hải gánh 25/28 commits</b> (gần như toàn bộ), Huy 3 (Urbox), Trang non-code. Khi Reward Network + Urbox vào giai đoạn code, nên <b>chốt scope từng dự án rồi phân vai rõ Huy/Hải</b> để cân tải — tránh tiếp tục dồn vào Hải.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Generated 26/06/2026 · Reward V2 Weekly Report · Sprint 13 / W26 · UI inspired by W23 layout, light mode
+    <br>
+    Source: <code>git log --since=2026-06-22 --until=2026-06-26</code> trên <code>rewards-v2</code>, <code>cdp-backend</code>, <code>cdp-frontend</code>, <code>mini-app</code> · 28 commits (Hải 25 · Huy 3 · Trang non-code: thiết kế RN + vendor + handover)
+  </footer>
+
+</div>
+
+<script>
+  // ====== Collapsible sections ======
+  const chevronSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
+  document.querySelectorAll('.section .section-title').forEach(title => {
+    const toggle = document.createElement('span');
+    toggle.className = 'section-toggle';
+    toggle.innerHTML = chevronSvg;
+    title.appendChild(toggle);
+
+    title.addEventListener('click', (e) => {
+      if (e.target.closest('button, a, input, select')) return;
+      title.parentElement.classList.toggle('collapsed');
+    });
+  });
+
+  // ====== Expand all / Collapse all ======
+  function setAllCollapsed(collapsed) {
+    document.querySelectorAll('.section').forEach(sec => {
+      sec.classList.toggle('collapsed', collapsed);
+    });
+  }
+  const btnExpand = document.getElementById('btn-expand-all');
+  const btnCollapse = document.getElementById('btn-collapse-all');
+  if (btnExpand) btnExpand.addEventListener('click', () => setAllCollapsed(false));
+  if (btnCollapse) btnCollapse.addEventListener('click', () => setAllCollapsed(true));
+
+  // ====== Tab switching ======
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.feat-list').forEach(list => list.classList.add('hidden'));
+      const target = document.getElementById('tab-' + tabId);
+      if (target) target.classList.remove('hidden');
+    });
+  });
+
+  Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto";
+  Chart.defaults.color = '#374151';
+
+  // ====== Chart 1: Kết quả 4 mục tiêu ======
+  new Chart(document.getElementById('goalChart'), {
+    type: 'doughnut',
+    data: {
+      labels: [
+        'Done (3)',
+        'Bàn giao CG (1)'
+      ],
+      datasets: [{
+        data: [3, 1],
+        backgroundColor: ['#10B981', '#3B82F6'],
+        borderColor: '#fff',
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '60%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12 }, padding: 12, boxWidth: 14 }
+        }
+      }
+    }
+  });
+
+  // ====== Chart 2: Effort allocation ======
+  new Chart(document.getElementById('effortChart'), {
+    type: 'doughnut',
+    data: {
+      labels: [
+        'Quà vật lý — release+polish (38%)',
+        'Tích hợp Urbox — đề xuất+code (18%)',
+        'Bàn giao CG + vendor/Total (18%)',
+        'Sửa lỗi / cải tiến (14%)',
+        'Reward Network — thiết kế (12%)'
+      ],
+      datasets: [{
+        data: [38, 18, 18, 14, 12],
+        backgroundColor: ['#8B5CF6', '#06B6D4', '#F59E0B', '#3B82F6', '#10B981'],
+        borderColor: '#fff',
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '55%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12 }, padding: 12, boxWidth: 14 }
+        }
+      }
+    }
+  });
+
+  // ====== Combo chart: Số task (bar) + Độ khó TB (line) ======
+  // Trang: 5 task / 18 pts → avg 3.60 (non-code: thiết kế RN + đề xuất Urbox + bàn giao + điều phối)
+  // Huy:   3 task / 9 pts → avg 3.00 (2 Urbox + fix URL)
+  // Hải:   6 task / 24 pts → avg 4.00 (drive 25 commits)
+  new Chart(document.getElementById('taskComboChart'), {
+    data: {
+      labels: ['Trang', 'Huy', 'Hải'],
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Số task hoàn thành',
+          data: [5, 3, 6],
+          backgroundColor: ['rgba(79,70,229,.85)', 'rgba(16,185,129,.85)', 'rgba(245,158,11,.85)'],
+          borderRadius: 10,
+          yAxisID: 'y',
+          order: 2,
+          barThickness: 60
+        },
+        {
+          type: 'line',
+          label: 'Độ khó trung bình / task',
+          data: [3.60, 3.00, 4.00],
+          borderColor: '#EC4899',
+          backgroundColor: 'rgba(236,72,153,.15)',
+          borderWidth: 3,
+          pointBackgroundColor: '#EC4899',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 7,
+          pointHoverRadius: 9,
+          tension: 0.35,
+          fill: true,
+          yAxisID: 'y1',
+          order: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12 }, padding: 14, boxWidth: 14, usePointStyle: true }
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              if (ctx.dataset.label.includes('Độ khó')) {
+                return `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)} / 5`;
+              }
+              return `${ctx.dataset.label}: ${ctx.parsed.y}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { font: { size: 14, weight: 700 }, color: '#111827' },
+          grid: { display: false }
+        },
+        y: {
+          position: 'left',
+          beginAtZero: true,
+          max: 10,
+          title: { display: true, text: 'Số task', font: { size: 12, weight: 600 }, color: '#4F46E5' },
+          ticks: { stepSize: 2, font: { size: 12 }, color: '#4F46E5' },
+          grid: { color: 'rgba(148,163,184,.12)' }
+        },
+        y1: {
+          position: 'right',
+          beginAtZero: true,
+          max: 5,
+          title: { display: true, text: 'Độ khó TB (1-5)', font: { size: 12, weight: 600 }, color: '#EC4899' },
+          ticks: { stepSize: 1, font: { size: 12 }, color: '#EC4899' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+
+  // ====== Chart 5: Category breakdown per person (stacked) ======
+  new Chart(document.getElementById('categoryStackChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Trang', 'Huy', 'Hải'],
+      datasets: [
+        {
+          label: 'Phát triển — RN / Urbox / tính năng',
+          data: [2, 2, 2],
+          backgroundColor: '#8B5CF6'
+        },
+        {
+          label: 'Sửa lỗi · Cải tiến · Refactor',
+          data: [0, 1, 4],
+          backgroundColor: '#3B82F6'
+        },
+        {
+          label: 'Đối tác & UAT',
+          data: [2, 0, 0],
+          backgroundColor: '#F59E0B'
+        },
+        {
+          label: 'Bàn giao · Vận hành',
+          data: [1, 0, 0],
+          backgroundColor: '#06B6D4'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 10, boxWidth: 14 } },
+        tooltip: {
+          callbacks: {
+            footer: (items) => {
+              const total = items.reduce((sum, item) => sum + item.parsed.y, 0);
+              return 'Tổng: ' + total + ' task';
+            }
+          }
+        }
+      },
+      scales: {
+        x: { stacked: true, ticks: { font: { size: 13, weight: 600 } } },
+        y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1, font: { size: 12 } } }
+      }
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luồng lấy vị trí — Zalo Mini App vibe (trang 72)</title>
+<style>
+  :root{
+    --teal-fill:#E1F5EE; --teal-bd:#1D9E75; --teal-tx:#04342C;
+    --pur-fill:#EEEDFE; --pur-bd:#7F77DD; --pur-tx:#26215C;
+    --gray-fill:#F1EFE8; --gray-bd:#888780; --gray-tx:#2C2C2A;
+    --amb-fill:#FAEEDA; --amb-bd:#EF9F27; --amb-tx:#412402;
+    --ink:#2C2C2A; --ink2:#5F5E5A; --line:#e5e3da; --bg:#f5f3ec; --card:#ffffff;
+    --req:#6b6862; --resp:#a8a59b; --life:#cfccc2;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;padding:28px 16px}
+  .wrap{max-width:960px;margin:0 auto;background:var(--card);border:1px solid var(--line);
+    border-radius:16px;padding:32px 34px}
+  h1{font-size:25px;font-weight:600;margin:0 0 4px}
+  h2{font-size:19px;font-weight:600;margin:34px 0 12px;padding-top:18px;border-top:1px solid var(--line)}
+  h3{font-size:15px;font-weight:600;margin:20px 0 8px}
+  p{margin:8px 0}
+  .sub{color:var(--ink2);font-size:14px;margin:0 0 18px}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;
+    background:#f1efe8;padding:1px 5px;border-radius:4px;color:#3c3a35}
+  pre{background:#f7f5ef;border:1px solid var(--line);border-radius:8px;padding:12px 14px;
+    overflow-x:auto;font-size:12.5px;line-height:1.55;margin:10px 0}
+  pre code{background:none;padding:0}
+  ol,ul{margin:8px 0;padding-left:22px}
+  li{margin:5px 0}
+  table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:#f7f5ef;font-weight:600}
+  .tldr{background:#f7f5ef;border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:18px 0}
+  .tldr ol{margin:0;padding-left:20px}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--ink2);margin:6px 0 16px}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .sw{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .note{border-left:3px solid var(--amb-bd);background:var(--amb-fill);color:var(--amb-tx);
+    padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0;font-size:13.5px}
+  .note.ok{border-left-color:var(--teal-bd);background:var(--teal-fill);color:var(--teal-tx)}
+  .dgram{margin:14px 0;overflow-x:auto}
+  svg text{font-family:inherit}
+  .t{font-size:14px;fill:var(--ink)}
+  .ts{font-size:12.5px;fill:var(--ink2)}
+  .th{font-size:14px;font-weight:500;fill:var(--ink)}
+  .foot{color:var(--ink2);font-size:13px;margin-top:30px;padding-top:16px;border-top:1px solid var(--line)}
+  details{margin:12px 0;font-size:13.5px}
+  summary{cursor:pointer;font-weight:500;color:var(--ink2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Luồng lấy vị trí (Location)</h1>
+  <p class="sub">Zalo Mini App "vibe" — ví dụ trang 72 (Feature QR Garage) · cơ chế dùng chung mọi vibe app · xác minh theo code 2026-06-19</p>
+
+  <div class="tldr">
+    <ol>
+      <li><b>Zalo không trả <code>lat/lng</code> thẳng</b> — <code>getLocation()</code> chỉ trả một <code>token</code>; phải decode ở backend kèm <code>secret_key</code> riêng từng Mini App.</li>
+      <li><b>Vibe không tự gọi native được</b> — 2 bản <code>zmp-sdk</code> trong 1 webview tranh biến global <code>window.onNativeMessage</code> → lỗi <code>-1401</code>. Vibe nhờ <b>host</b> gọi giùm qua <code>CustomEvent</code>.</li>
+      <li>Luồng <b>2 giai đoạn</b>: (1) trong webview lấy <code>token</code>; (2) backend đổi <code>token → lat/lng</code>.</li>
+      <li><b>Secret lấy ở <code>mini-app-backend</code></b>; <b>decode chạy ở Frontend API</b>. <code>cnv-id</code> KHÔNG tham gia luồng này.</li>
+    </ol>
+  </div>
+
+  <div class="legend">
+    <span><i class="sw" style="background:var(--teal-fill);border:1px solid var(--teal-bd)"></i> trong máy (webview Zalo)</span>
+    <span><i class="sw" style="background:var(--pur-fill);border:1px solid var(--pur-bd)"></i> backend CNV</span>
+    <span><i class="sw" style="background:var(--gray-fill);border:1px solid var(--gray-bd)"></i> phía Zalo (bên ngoài)</span>
+    <span><i class="sw" style="background:var(--amb-fill);border:1px solid var(--amb-bd)"></i> điểm mấu chốt</span>
+    <span>— nét liền = gửi đi · - - nét đứt = trả về</span>
+  </div>
+
+  <h2>Sơ đồ luồng tổng (gộp 2 giai đoạn)</h2>
+  <p>Một mạch liền: <code>token</code> + <code>accessToken</code> lấy ở giai đoạn 1 được <b>mang nguyên sang giai đoạn 2</b> (bước ⑥) để backend decode. Đường kẻ dọc là ranh giới <i>trong máy</i> ↔ <i>trên server</i>.</p>
+  <div class="dgram">
+  <svg width="100%" viewBox="0 0 980 496" role="img" aria-label="Sơ đồ luồng tổng gộp cả 2 giai đoạn lấy vị trí">
+    <defs><marker id="a0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+    <line x1="497" y1="36" x2="497" y2="462" stroke="#cdcabf" stroke-dasharray="2 5"/>
+    <text x="250" y="32" text-anchor="middle" class="ts" fill="#8a877e">— trong máy (webview) —</text>
+    <text x="730" y="32" text-anchor="middle" class="ts" fill="#8a877e">— trên server —</text>
+
+    <g><rect x="40" y="40" width="140" height="40" rx="8" fill="#E1F5EE" stroke="#1D9E75"/><text x="110" y="64" text-anchor="middle" class="th" fill="#04342C">vibe app</text></g>
+    <g><rect x="195" y="40" width="140" height="40" rx="8" fill="#E1F5EE" stroke="#1D9E75"/><text x="265" y="64" text-anchor="middle" class="th" fill="#04342C">host Mini App</text></g>
+    <g><rect x="350" y="40" width="140" height="40" rx="8" fill="#F1EFE8" stroke="#888780"/><text x="420" y="64" text-anchor="middle" class="th" fill="#2C2C2A">Zalo native</text></g>
+    <g><rect x="505" y="40" width="140" height="40" rx="8" fill="#EEEDFE" stroke="#7F77DD"/><text x="575" y="64" text-anchor="middle" class="th" fill="#26215C">Frontend API</text></g>
+    <g><rect x="660" y="40" width="140" height="40" rx="8" fill="#EEEDFE" stroke="#7F77DD"/><text x="730" y="58" text-anchor="middle" class="ts" fill="#26215C">mini-app</text><text x="730" y="73" text-anchor="middle" class="ts" fill="#26215C">backend</text></g>
+    <g><rect x="820" y="40" width="140" height="40" rx="8" fill="#F1EFE8" stroke="#888780"/><text x="890" y="64" text-anchor="middle" class="th" fill="#2C2C2A">Zalo Graph</text></g>
+
+    <line x1="110" y1="80" x2="110" y2="462" stroke="#cfccc2" stroke-dasharray="3 4"/>
+    <line x1="265" y1="80" x2="265" y2="462" stroke="#cfccc2" stroke-dasharray="3 4"/>
+    <line x1="420" y1="80" x2="420" y2="462" stroke="#cfccc2" stroke-dasharray="3 4"/>
+    <line x1="575" y1="80" x2="575" y2="462" stroke="#cfccc2" stroke-dasharray="3 4"/>
+    <line x1="730" y1="80" x2="730" y2="462" stroke="#cfccc2" stroke-dasharray="3 4"/>
+    <line x1="890" y1="80" x2="890" y2="462" stroke="#cfccc2" stroke-dasharray="3 4"/>
+
+    <text x="187" y="100" text-anchor="middle" class="ts">1 · vibe-get-location (event)</text>
+    <line x1="110" y1="108" x2="263" y2="108" stroke="#6b6862" stroke-width="1.5" marker-end="url(#a0)"/>
+
+    <rect x="160" y="124" width="210" height="26" rx="6" fill="#FAEEDA" stroke="#EF9F27"/>
+    <text x="265" y="141" text-anchor="middle" class="ts" fill="#412402">2 · giành window.onNativeMessage</text>
+
+    <text x="342" y="170" text-anchor="middle" class="ts">3 · getLocation() + getAccessToken()</text>
+    <line x1="265" y1="178" x2="418" y2="178" stroke="#6b6862" stroke-width="1.5" marker-end="url(#a0)"/>
+
+    <text x="342" y="202" text-anchor="middle" class="ts">4 · token + accessToken (sau khi cấp quyền)</text>
+    <line x1="420" y1="210" x2="267" y2="210" stroke="#a8a59b" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a0)"/>
+
+    <text x="187" y="234" text-anchor="middle" class="ts">5 · resolve({ token, accessToken })</text>
+    <line x1="265" y1="242" x2="112" y2="242" stroke="#a8a59b" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a0)"/>
+
+    <text x="342" y="272" text-anchor="middle" class="th" fill="#854F0B">6 · POST /location/resolve — gửi code(=token) + accessToken + headers</text>
+    <line x1="110" y1="280" x2="573" y2="280" stroke="#BA7517" stroke-width="2.2" marker-end="url(#a0)"/>
+
+    <text x="652" y="308" text-anchor="middle" class="ts">7 · get-mini-app-secret { accountId, miniAppId }</text>
+    <line x1="575" y1="316" x2="728" y2="316" stroke="#6b6862" stroke-width="1.5" marker-end="url(#a0)"/>
+
+    <text x="652" y="340" text-anchor="middle" class="ts">8 · { appId, appSecret } · lệch account → rỗng</text>
+    <line x1="730" y1="348" x2="577" y2="348" stroke="#a8a59b" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a0)"/>
+
+    <text x="732" y="374" text-anchor="middle" class="ts">9 · GET /me/info (access_token + code + secret_key)</text>
+    <line x1="575" y1="382" x2="888" y2="382" stroke="#6b6862" stroke-width="1.5" marker-end="url(#a0)"/>
+
+    <text x="732" y="406" text-anchor="middle" class="ts">10 · data.latitude / longitude</text>
+    <line x1="890" y1="414" x2="577" y2="414" stroke="#a8a59b" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a0)"/>
+
+    <text x="342" y="438" text-anchor="middle" class="ts">11 · { latitude, longitude }</text>
+    <line x1="575" y1="446" x2="112" y2="446" stroke="#a8a59b" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a0)"/>
+
+    <text x="40" y="484" class="ts">teal = CNV client · tím = CNV server · xám = Zalo (bên ngoài) · nét đứt = trả về · ⑥ token+accessToken mang sang server</text>
+  </svg>
+  </div>
+
+  <h2>Phóng to từng chặng</h2>
+  <h3>Giai đoạn 1 — Lấy "token vị trí" (trong webview)</h3>
+  <div class="dgram">
+  <svg width="100%" viewBox="0 0 820 360" role="img" aria-label="Sơ đồ giai đoạn 1: vibe nhờ host gọi Zalo native lấy token">
+    <defs><marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+    <g><rect x="45" y="40" width="190" height="34" rx="8" fill="var(--teal-fill)" stroke="var(--teal-bd)"/><text x="140" y="62" text-anchor="middle" class="th" fill="var(--teal-tx)">vibe app</text></g>
+    <g><rect x="315" y="40" width="190" height="34" rx="8" fill="var(--teal-fill)" stroke="var(--teal-bd)"/><text x="410" y="62" text-anchor="middle" class="th" fill="var(--teal-tx)">host Mini App</text></g>
+    <g><rect x="585" y="40" width="190" height="34" rx="8" fill="var(--gray-fill)" stroke="var(--gray-bd)"/><text x="680" y="62" text-anchor="middle" class="th" fill="var(--gray-tx)">Zalo SDK (native)</text></g>
+    <line x1="140" y1="74" x2="140" y2="340" stroke="var(--life)" stroke-dasharray="3 4"/>
+    <line x1="410" y1="74" x2="410" y2="340" stroke="var(--life)" stroke-dasharray="3 4"/>
+    <line x1="680" y1="74" x2="680" y2="340" stroke="var(--life)" stroke-dasharray="3 4"/>
+
+    <text x="275" y="104" text-anchor="middle" class="ts">1 · vibe-get-location { resolve }</text>
+    <line x1="140" y1="112" x2="408" y2="112" stroke="var(--req)" stroke-width="1.5" marker-end="url(#a1)"/>
+
+    <rect x="300" y="128" width="220" height="26" rx="6" fill="var(--amb-fill)" stroke="var(--amb-bd)"/>
+    <text x="410" y="145" text-anchor="middle" class="ts" fill="var(--amb-tx)">2 · giành window.onNativeMessage</text>
+
+    <text x="545" y="184" text-anchor="middle" class="ts">3 · getLocation() + getAccessToken()</text>
+    <line x1="410" y1="192" x2="678" y2="192" stroke="var(--req)" stroke-width="1.5" marker-end="url(#a1)"/>
+
+    <text x="545" y="222" text-anchor="middle" class="ts">4 · { token, accessToken } · sau khi cấp quyền</text>
+    <line x1="680" y1="230" x2="412" y2="230" stroke="var(--resp)" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+
+    <rect x="318" y="246" width="184" height="26" rx="6" fill="var(--amb-fill)" stroke="var(--amb-bd)"/>
+    <text x="410" y="263" text-anchor="middle" class="ts" fill="var(--amb-tx)">5 · trả onNativeMessage lại cho vibe</text>
+
+    <text x="275" y="302" text-anchor="middle" class="ts">6 · resolve({ token, accessToken }) | { reason }</text>
+    <line x1="410" y1="310" x2="142" y2="310" stroke="var(--resp)" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  </svg>
+  </div>
+
+  <h3>Vì sao phải "giành" <code>window.onNativeMessage</code>?</h3>
+  <p><code>zmp-sdk</code> nhận kết quả native bằng cách Zalo gọi hàm global <code>window.onNativeMessage(serialId, data)</code>. Mỗi bản SDK giữ một bảng <code>callbacks[serialId]</code> riêng nhưng đăng ký vào <b>cùng một ô global duy nhất</b>. Vibe nạp sau ghi đè ô này → nếu host gọi native mà ô đang trỏ bảng của vibe thì callback rơi mất → treo. Nên host phải <b>giành lại ô về bản mình ngay trước khi gọi, rồi trả lại sau</b>.</p>
+
+  <div class="dgram">
+  <svg width="100%" viewBox="0 0 820 384" role="img" aria-label="Cơ chế routing của window.onNativeMessage">
+    <defs><marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+
+    <rect x="40" y="40" width="440" height="52" rx="8" fill="#fbfaf6" stroke="var(--line)"/>
+    <text x="58" y="63" class="th">1 · JS gọi getLocation()</text>
+    <text x="58" y="81" class="ts">SDK lưu callbacks[serialId] = cb</text>
+    <line x1="260" y1="92" x2="260" y2="106" stroke="var(--req)" stroke-width="1.5" marker-end="url(#a2)"/>
+
+    <rect x="40" y="108" width="440" height="52" rx="8" fill="#fbfaf6" stroke="var(--line)"/>
+    <text x="58" y="131" class="th">2 · gửi request xuống native (kèm serialId)</text>
+    <text x="58" y="149" class="ts">Zalo native hỏi quyền + lấy token vị trí</text>
+    <line x1="260" y1="160" x2="260" y2="174" stroke="var(--req)" stroke-width="1.5" marker-end="url(#a2)"/>
+
+    <rect x="40" y="176" width="440" height="52" rx="8" fill="var(--teal-fill)" stroke="var(--teal-bd)"/>
+    <text x="58" y="199" class="th" fill="var(--teal-tx)">3 · native gọi window.onNativeMessage()</text>
+    <text x="58" y="217" class="ts" fill="var(--teal-tx)">ô global DUY NHẤT — kèm serialId + data</text>
+    <line x1="260" y1="228" x2="260" y2="242" stroke="var(--req)" stroke-width="1.5" marker-end="url(#a2)"/>
+
+    <rect x="40" y="244" width="440" height="52" rx="8" fill="#fbfaf6" stroke="var(--line)"/>
+    <text x="58" y="267" class="th">4 · tra callbacks[serialId] → gọi cb</text>
+    <text x="58" y="285" class="ts">Promise resolve → JS nhận kết quả</text>
+
+    <line x1="482" y1="222" x2="506" y2="222" stroke="var(--amb-bd)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#a2)"/>
+    <rect x="508" y="176" width="272" height="160" rx="8" fill="var(--amb-fill)" stroke="var(--amb-bd)"/>
+    <text x="524" y="200" class="th" fill="var(--amb-tx)">vì sao phải "giành" ô này</text>
+    <text x="524" y="222" class="ts" fill="var(--amb-tx)">2 bảng callbacks (host &amp; vibe),</text>
+    <text x="524" y="240" class="ts" fill="var(--amb-tx)">nhưng chung 1 ô onNativeMessage.</text>
+    <text x="524" y="258" class="ts" fill="var(--amb-tx)">Vibe nạp sau chiếm ô → host gọi</text>
+    <text x="524" y="276" class="ts" fill="var(--amb-tx)">thì serialId tra nhầm bảng →</text>
+    <text x="524" y="294" class="ts" fill="var(--amb-tx)">callback rơi mất → treo (-1401).</text>
+    <text x="524" y="318" class="ts" fill="var(--amb-tx)">⇒ host giành ô trước khi gọi,</text>
+    <text x="524" y="330" class="ts" fill="var(--amb-tx)">trả lại sau khi xong.</text>
+  </svg>
+  </div>
+
+  <h3>Giai đoạn 2 — Đổi token ra toạ độ thật (backend)</h3>
+  <div class="dgram">
+  <svg width="100%" viewBox="0 0 900 348" role="img" aria-label="Sơ đồ giai đoạn 2: Frontend API xin secret ở mini-app-backend rồi decode qua Zalo Graph">
+    <defs><marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+    <g><rect x="25" y="40" width="170" height="34" rx="8" fill="var(--teal-fill)" stroke="var(--teal-bd)"/><text x="110" y="62" text-anchor="middle" class="th" fill="var(--teal-tx)">vibe app</text></g>
+    <g><rect x="270" y="40" width="170" height="34" rx="8" fill="var(--pur-fill)" stroke="var(--pur-bd)"/><text x="355" y="62" text-anchor="middle" class="th" fill="var(--pur-tx)">Frontend API</text></g>
+    <g><rect x="510" y="40" width="180" height="34" rx="8" fill="var(--pur-fill)" stroke="var(--pur-bd)"/><text x="600" y="62" text-anchor="middle" class="th" fill="var(--pur-tx)">mini-app-backend</text></g>
+    <g><rect x="715" y="40" width="170" height="34" rx="8" fill="var(--gray-fill)" stroke="var(--gray-bd)"/><text x="800" y="62" text-anchor="middle" class="th" fill="var(--gray-tx)">Zalo Graph</text></g>
+    <line x1="110" y1="74" x2="110" y2="312" stroke="var(--life)" stroke-dasharray="3 4"/>
+    <line x1="355" y1="74" x2="355" y2="312" stroke="var(--life)" stroke-dasharray="3 4"/>
+    <line x1="600" y1="74" x2="600" y2="312" stroke="var(--life)" stroke-dasharray="3 4"/>
+    <line x1="800" y1="74" x2="800" y2="312" stroke="var(--life)" stroke-dasharray="3 4"/>
+
+    <text x="232" y="104" text-anchor="middle" class="ts">1 · POST /location/resolve (+ X-Mini-App-Id, X-Customer-Token)</text>
+    <line x1="110" y1="112" x2="353" y2="112" stroke="var(--req)" stroke-width="1.5" marker-end="url(#a3)"/>
+
+    <text x="478" y="140" text-anchor="middle" class="ts">2 · get-mini-app-secret { accountId, miniAppId }</text>
+    <line x1="355" y1="148" x2="598" y2="148" stroke="var(--req)" stroke-width="1.5" marker-end="url(#a3)"/>
+
+    <text x="478" y="176" text-anchor="middle" class="ts">3 · { appId, appSecret } · lệch account → rỗng</text>
+    <line x1="600" y1="184" x2="357" y2="184" stroke="var(--resp)" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a3)"/>
+
+    <text x="578" y="212" text-anchor="middle" class="ts">4 · GET /me/info (access_token + code + secret_key)</text>
+    <line x1="355" y1="220" x2="798" y2="220" stroke="var(--req)" stroke-width="1.5" marker-end="url(#a3)"/>
+
+    <text x="578" y="248" text-anchor="middle" class="ts">5 · data.latitude / longitude</text>
+    <line x1="800" y1="256" x2="357" y2="256" stroke="var(--resp)" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a3)"/>
+
+    <text x="232" y="284" text-anchor="middle" class="ts">6 · { latitude, longitude }</text>
+    <line x1="355" y1="292" x2="112" y2="292" stroke="var(--resp)" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a3)"/>
+  </svg>
+  </div>
+
+  <div class="note">Secret chỉ đi nội bộ giữa các service — KHÔNG ra client. Decode (gọi Zalo Graph) chạy NGAY tại Frontend API. <b>cnv-id KHÔNG tham gia luồng location.</b></div>
+
+  <h2>Các thành phần</h2>
+  <table>
+    <tr><th>Tên</th><th>Vai trò</th><th>File chính</th></tr>
+    <tr><td>vibe app</td><td>Mini App Angular <code>&lt;vibe-app&gt;</code>; cần toạ độ để đối chiếu vị trí garage.</td><td><code>cnv-vibe/72/src/app/shared/location.service.ts</code></td></tr>
+    <tr><td>host Mini App (FE)</td><td>App Zalo bọc ngoài, bridge gọi native giùm vibe.</td><td><code>mini-app/src/pages/vibe-page/index.tsx</code></td></tr>
+    <tr><td>Zalo SDK (native)</td><td><code>getLocation()</code>, <code>getAccessToken()</code>.</td><td>thư viện Zalo</td></tr>
+    <tr><td>Frontend API</td><td>Gateway Java; điều phối decode.</td><td><code>cdp-backend/frontend-api</code> + module <code>cnv-integration</code>, <code>zalo-integration</code></td></tr>
+    <tr><td>mini-app-backend</td><td><b>Nguồn <code>secret_key</code></b> của từng Mini App (port 8092, nội bộ).</td><td><code>mini-app-backend/cnv-internal-api</code></td></tr>
+    <tr><td>Zalo Graph</td><td><code>graph.zalo.me/v2.0/me/info</code> decode token → toạ độ.</td><td>Zalo</td></tr>
+  </table>
+
+  <h2>Chi tiết HTTP</h2>
+  <h3>vibe → Frontend API</h3>
+  <pre><code>POST {environment.frontendApiUrl}/location/resolve
+Headers:
+  X-Mini-App-Id:    &lt;config.miniAppId&gt;        // BẮT BUỘC
+  X-Customer-Token: &lt;auth.customerToken()&gt;    // BẮT BUỘC (phải đã đăng nhập)
+Body:
+  { "code": "&lt;token vị trí&gt;", "accessToken": "&lt;access token&gt;", "accountDomainName": "&lt;...&gt;" }</code></pre>
+  <p class="sub">Backend lấy <code>accountId</code> từ user đã xác thực (qua <code>X-Customer-Token</code>), KHÔNG từ <code>accountDomainName</code> trong body.</p>
+
+  <h3>Frontend API → mini-app-backend (lấy secret)</h3>
+  <pre><code>POST {integration.cnv-internal.url}/info/get-mini-app-secret
+Body: { "accountId": &lt;id&gt;, "miniAppId": "&lt;id&gt;" }
+→ { "data": { "appId": "...", "appSecret": "..." } }   // lệch account → rỗng</code></pre>
+  <p class="sub">Port 8092, network nội bộ, KHÔNG ký HMAC (bảo mật dựa vào port chặn internet + kiểm sở hữu account).</p>
+
+  <h3>Frontend API → Zalo Graph (decode)</h3>
+  <pre><code>GET {integration.zalo.graph.url|https://graph.zalo.me/v2.0}/me/info
+Headers: access_token, code, secret_key
+→ data.latitude / data.longitude</code></pre>
+
+  <h3>Mã lỗi của /location/resolve</h3>
+  <table>
+    <tr><th>Code</th><th>Khi nào</th></tr>
+    <tr><td><code>UNAUTHORIZED</code></td><td>chưa đăng nhập / token không suy ra được account</td></tr>
+    <tr><td><code>MINIAPP_ID_REQUIRED</code></td><td>thiếu header <code>X-Mini-App-Id</code></td></tr>
+    <tr><td><code>MINIAPP_SECRET_NOT_FOUND</code></td><td>Mini App không thuộc account / không có secret</td></tr>
+    <tr><td><code>LOCATION_RESOLVE_FAILED</code></td><td>Zalo Graph lỗi hoặc thiếu lat/lng</td></tr>
+  </table>
+
+  <h3>Hợp đồng CustomEvent (vibe ↔ host)</h3>
+  <table>
+    <tr><th>Event</th><th>Host làm gì</th><th>Trả về (detail.resolve)</th></tr>
+    <tr><td><code>vibe-get-location</code></td><td>giành bridge → getLocation()+getAccessToken()</td><td><code>{ token, accessToken }</code> | <code>{ reason }</code></td></tr>
+    <tr><td><code>vibe-open-location-setting</code></td><td>openPermissionSetting({})</td><td>(không)</td></tr>
+  </table>
+  <p class="sub">Timeout vibe 20s · watchdog host 15s · getAccessToken timeout 4s · reason ∈ {gps_off, unknown}.</p>
+
+  <h3>GeoOutcome (kết quả phía vibe)</h3>
+  <table>
+    <tr><th>reason</th><th>Nghĩa</th></tr>
+    <tr><td><code>ok</code></td><td>có <code>pos</code> toạ độ thật</td></tr>
+    <tr><td><code>timeout</code></td><td>host không trả lời trong 20s (host cũ chưa hỗ trợ)</td></tr>
+    <tr><td><code>gps_off</code></td><td>user từ chối quyền / tắt GPS</td></tr>
+    <tr><td><code>backend</code></td><td>có token nhưng backend decode không ra toạ độ</td></tr>
+    <tr><td><code>unknown</code></td><td>treo / exception / thiếu token</td></tr>
+  </table>
+  <div class="note ok">Quy ước trang 72 (MỀM): chỉ chặn check-in khi CÓ toạ độ thật VÀ xa garage &gt; 100m. Thiếu toạ độ → vẫn cho qua + ghi nhận (tránh app kẹt khi host cũ / backend chưa sẵn).</div>
+
+  <h2>Những điểm dễ hiểu sai</h2>
+  <ol>
+    <li><code>getLocation()</code> trả <b>token</b>, KHÔNG phải lat/lng.</li>
+    <li>Vibe đừng tự gọi <code>getLocation</code>/<code>getAccessToken</code> → <code>-1401</code>. Luôn qua host bằng <code>vibe-get-location</code>.</li>
+    <li><code>secret_key</code> lấy ở <b>mini-app-backend</b>, không phải cnv-id.</li>
+    <li>Decode chạy ngay tại <b>Frontend API</b>, không relay đi đâu.</li>
+    <li><code>/location/resolve</code> bắt buộc đã đăng nhập.</li>
+    <li>Header gọi Zalo Graph là <code>access_token</code>, <code>code</code>, <code>secret_key</code> (đặt ở HTTP header).</li>
+  </ol>
+
+  <details>
+    <summary>📜 Lịch sử — phương án đã bỏ (relay qua cnv-id)</summary>
+    <p>Bản đầu định relay qua <code>cnv-id</code> (thêm <code>ResolveLocation</code> + <code>GetLocationByAccessToken</code> ở cnv-id, <code>IdInternalService.resolveLocation()</code> ở Frontend API gọi sang <code>cnv-id /internal/zalo/location/resolve</code>). Đã thay bằng cách hiện tại (Frontend API tự xin secret ở mini-app-backend + tự decode). Grep repo cnv-id hiện tại không còn các symbol này. Comment <code>MiniAppSecretService</code>: endpoint secret trước ở <code>internal-api</code> (8090, HMAC), nay chuyển <code>cnv-internal-api</code> (8092).</p>
+  </details>
+
+  <div class="foot">
+    Tài liệu kèm: <code>luong-location-trang-72.md</code> (bản chữ cho AI/dev) · <code>PLAN-trang-72.md</code> mục 21 (hồ sơ trang). Cập nhật 2026-06-19.
+  </div>
+
+</div>
+</body>
+</html>
