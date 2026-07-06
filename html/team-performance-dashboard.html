@@ -269,8 +269,141 @@
 <div class="wrap">
   <header>
     <h1>Team Performance Dashboard — Reward v2</h1>
-    <p>Hiệu suất team 3 người · Giai đoạn 30/03 – 19/06/2026 (12 sprint · W5=3d · W6-W12=5d each · <b style="color:#6ee7b7;">W9 ✅ GO-LIVE</b> · <b style="color:#f9a8d4;">W10 ⚡ Pivot UAT</b> · <b style="color:#60a5fa;">W11 ✅ Bám plan + Phase 2 90%</b> · <b style="color:#34d399;">W12 ✅ Hoàn thành phần CNV — chờ GotIt cho UAT 22/06</b>) · Cập nhật ISO W25 · <b style="color:#34d399;">post-W12 refresh — Quà vật lý + MCO Gara DONE phần CNV, blocker dồn về GotIt</b></p>
+    <p>Hiệu suất team 3 người · Giai đoạn 30/03 – 19/06/2026 (12 sprint · W5=3d · W6-W12=5d each · <b style="color:#6ee7b7;">W9 ✅ GO-LIVE</b> · <b style="color:#f9a8d4;">W10 ⚡ Pivot UAT</b> · <b style="color:#60a5fa;">W11 ✅ Bám plan + Phase 2 90%</b> · <b style="color:#34d399;">W12 ✅ Hoàn thành phần CNV — chờ GotIt cho UAT 22/06</b>) · Cập nhật ISO W25 · <b style="color:#34d399;">post-W12 refresh — Quà vật lý + MCO Gara DONE phần CNV, blocker dồn về GotIt</b><br><span style="display:inline-block; margin-top:8px; padding:4px 12px; background:rgba(139,92,246,.18); border:1px solid rgba(139,92,246,.35); border-radius:99px; color:#c4b5fd; font-size:12.5px;">🔀 Cập nhật W26–W27: chuyển hướng sang <b>Reward Network + UrBox</b> — xem <b>Giai đoạn 2</b> ngay bên dưới · đánh giá theo <b>độ khó + thiết kế</b>, không theo commit</span></p>
   </header>
+
+  <!-- ============================================================= -->
+  <!-- ==================  GIAI ĐOẠN 2 · W26–W27  ================== -->
+  <!-- ============================================================= -->
+  <div style="margin-bottom:28px; padding:22px 24px; background:linear-gradient(135deg, rgba(139,92,246,.18), rgba(52,211,153,.12)); border:1px solid rgba(139,92,246,.3); border-radius:16px;">
+    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-bottom:6px;">
+      <span style="font-size:20px; font-weight:800; background:linear-gradient(90deg,#c084fc,#34d399); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">🔀 GIAI ĐOẠN 2 — Chuyển hướng chiến lược</span>
+      <span style="font-size:12px; color:#c4b5fd; background:rgba(139,92,246,.2); padding:3px 10px; border-radius:99px;">W26–W27 · 22/06 → 03/07/2026</span>
+    </div>
+    <p style="color:#cbd5e1; font-size:13.5px; line-height:1.6; margin:0;">Kết thúc kỷ nguyên GotIt / quà vật lý (Giai đoạn 1 đã đóng: go-live + hoàn thành phần CNV) → mở <b style="color:#c4b5fd;">2 dự án mới song song</b>: thiết kế <b style="color:#c4b5fd;">Reward Network</b> (Trang) + tích hợp <b style="color:#6ee7b7;">UrBox</b> làm vendor (Huy). Phần lớn công việc là <b>thiết kế / kiến trúc</b> — nên đánh giá theo <b style="color:#f9a8d4;">độ khó + chiều sâu + số hạng mục</b>, <b>KHÔNG</b> theo commit (điển hình: Trang gần 0 commit nhưng làm việc khó nhất quý).</p>
+  </div>
+
+  <!-- KPI Giai đoạn 2 -->
+  <div class="kpi-grid">
+    <div class="kpi green">
+      <div class="kpi-label">Dự án mới khởi động</div>
+      <div class="kpi-value" style="font-size:26px;">RN + UrBox</div>
+      <div class="kpi-sub">2 dự án song song · Reward Network (thiết kế) + UrBox (tích hợp vendor) — tách bạch, chạy đồng thời</div>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-label">Reward Network — thiết kế</div>
+      <div class="kpi-value" style="color:#60a5fa;">CHỐT ✅</div>
+      <div class="kpi-sub">Mô hình design v2 · WBS 79 task · 33 task PO/BA Phase 1 (~90 PD) · kiến trúc · mockup 10 màn · init project · <b style="color:#93c5fd;">code 0% → W28 vào dev</b></div>
+    </div>
+    <div class="kpi orange">
+      <div class="kpi-label">UrBox — phần kỹ thuật</div>
+      <div class="kpi-value" style="color:#fbbf24;">~90%</div>
+      <div class="kpi-sub">Evoucher 100% · đổi quà vật lý 6/7 phase (85%) · đồng bộ catalog 92% · phần còn lại chờ UrBox mở API + IP</div>
+    </div>
+    <div class="kpi" style="background: linear-gradient(135deg, rgba(236,72,153,.18), rgba(244,114,182,.12)); border:1px solid rgba(236,72,153,.3);">
+      <div class="kpi-label" style="color:#f9a8d4;">W27 — khối lượng</div>
+      <div class="kpi-value" style="color:#f472b6;">21 hạng mục</div>
+      <div class="kpi-sub">Trang 7 · Huy 8 · Hải 6 · độ khó TB ~4.0/5 (cao nhất quý) — <b style="color:#f9a8d4;">không đo bằng commit</b></div>
+    </div>
+  </div>
+
+  <!-- Hiệu suất W26–W27 theo thành viên (độ khó) -->
+  <div class="card" style="margin-bottom:20px;">
+    <h3>👥 Hiệu suất W26–W27 theo thành viên — chấm theo độ khó, không theo commit</h3>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:14px;">
+
+      <!-- Trang -->
+      <div style="padding:14px 16px; background:rgba(15,23,42,.5); border-left:4px solid #38bdf8; border-radius:0 8px 8px 0;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <b style="color:#7dd3fc; font-size:14.5px;">Trang · Tech Lead</b>
+          <span style="font-size:11px; color:#38bdf8; background:rgba(56,189,248,.15); padding:3px 9px; border-radius:99px; font-weight:700;">⭐ ĐỘ KHÓ CAO NHẤT · 4.00</span>
+        </div>
+        <div style="font-size:12.5px; color:#cbd5e1; line-height:1.65;"><b style="color:#e2e8f0;">W27 (7 hạng mục):</b> chốt mô hình Reward Network · tài liệu design v2 · WBS 79 task · kiến trúc hệ thống · mockup 10 màn · init project reward-network · clarify UrBox gap analysis.<br><b style="color:#e2e8f0;">W26:</b> khởi tạo thiết kế RN + tách UrBox thành dự án độc lập.</div>
+        <div style="margin-top:8px; font-size:11.5px; color:#94a3b8; font-style:italic;">≈ 0 commit nhưng thiết kế trọn hệ thống mới — việc khó nhất quý. Minh hoạ vì sao không chấm theo commit.</div>
+      </div>
+
+      <!-- Huy -->
+      <div style="padding:14px 16px; background:rgba(15,23,42,.5); border-left:4px solid #a78bfa; border-radius:0 8px 8px 0;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <b style="color:#c4b5fd; font-size:14.5px;">Huy</b>
+          <span style="font-size:11px; color:#a78bfa; background:rgba(167,139,250,.15); padding:3px 9px; border-radius:99px; font-weight:700;">🔥 ĐỘ KHÓ RẤT CAO · 4.25</span>
+        </div>
+        <div style="font-size:12.5px; color:#cbd5e1; line-height:1.65;"><b style="color:#e2e8f0;">W27 (8 hạng mục):</b> đổi quà vật lý UrBox 6/7 phase (đặt đơn · đối chiếu địa chỉ · theo dõi giao hàng · recovery) · 3 fix hạ tầng tận gốc · "Cửa hàng áp dụng" dùng chung GotIt+UrBox.<br><b style="color:#e2e8f0;">W26:</b> MCO Gara — Zalo duyệt miniapp + bàn giao CG.</div>
+        <div style="margin-top:8px; font-size:11.5px; color:#94a3b8; font-style:italic;">2 khối độ khó cao (UrBox physical + vá lỗi hạ tầng) — 150+ test pass, 0 regression.</div>
+      </div>
+
+      <!-- Hải -->
+      <div style="padding:14px 16px; background:rgba(15,23,42,.5); border-left:4px solid #ec4899; border-radius:0 8px 8px 0;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <b style="color:#f9a8d4; font-size:14.5px;">Hải</b>
+          <span style="font-size:11px; color:#ec4899; background:rgba(236,72,153,.15); padding:3px 9px; border-radius:99px; font-weight:700;">ĐỘ KHÓ TB-CAO · 3.67</span>
+        </div>
+        <div style="font-size:12.5px; color:#cbd5e1; line-height:1.65;"><b style="color:#e2e8f0;">W27 (6 hạng mục):</b> Rewards Hub đa vendor · bảo mật / masking PII · export XLSX · ranking · branding UrBox.<br><b style="color:#e2e8f0;">W26:</b> release quà vật lý production + bàn giao CG (drive phần lớn code đóng Phase 2).</div>
+        <div style="margin-top:8px; font-size:11.5px; color:#94a3b8; font-style:italic;">Giữ nhịp sản phẩm chạy khi 2 dự án mới còn ở giai đoạn thiết kế/tích hợp.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Tiến độ 2 dự án -->
+  <div class="grid-2" style="grid-template-columns:1fr 1fr;">
+
+    <!-- Reward Network -->
+    <div class="card">
+      <h3>🌐 Reward Network — thiết kế chốt, sắp vào dev</h3>
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px;">
+        <div style="text-align:center; min-width:90px;">
+          <div style="font-size:34px; font-weight:800; color:#60a5fa; line-height:1;">100%</div>
+          <div style="font-size:11px; color:#94a3b8;">thiết kế</div>
+        </div>
+        <div style="flex:1; font-size:12.5px; color:#cbd5e1; line-height:1.6;">Pool quà chung ~3000 DN · mô hình Credit + Voucher Levels · earn-on-redemption · CNV điều phối, không ôm kho / không tiền mặt. Tài liệu design v2 + WBS + kiến trúc + mockup đã xong.</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12px;">
+        <div style="text-align:center; padding:8px; background:rgba(96,165,250,.12); border-radius:8px;"><div style="font-size:18px; font-weight:800; color:#60a5fa;">79</div><div style="color:#94a3b8;">task WBS (P0→P3)</div></div>
+        <div style="text-align:center; padding:8px; background:rgba(96,165,250,.12); border-radius:8px;"><div style="font-size:18px; font-weight:800; color:#60a5fa;">~90 PD</div><div style="color:#94a3b8;">Phase 1 (33 task)</div></div>
+      </div>
+      <div style="margin-top:12px; padding:10px 12px; background:rgba(52,211,153,.1); border-radius:8px; font-size:12px; color:#6ee7b7;"><b>W28 vào dev:</b> pick 2 epic đầu luồng (Contribution core + Issue/Redeem offline) → dựng thin-slice offline-first.</div>
+    </div>
+
+    <!-- UrBox -->
+    <div class="card">
+      <h3>🔌 UrBox — ~90% kỹ thuật (4 khối)</h3>
+
+      <div style="margin-bottom:11px;">
+        <div style="display:flex; justify-content:space-between; font-size:12.5px; color:#e2e8f0; margin-bottom:4px;"><span>A · Đổi quà vật lý (7 phase)</span><b style="color:#fbbf24;">85%</b></div>
+        <div style="height:8px; background:rgba(148,163,184,.15); border-radius:99px; overflow:hidden;"><div style="height:100%; width:85%; background:#f59e0b; border-radius:99px;"></div></div>
+        <div style="font-size:11px; color:#94a3b8; margin-top:3px;">P1→P6 xong · còn P7 (real-time admin) chờ UrBox cấp API + IP</div>
+      </div>
+
+      <div style="margin-bottom:11px;">
+        <div style="display:flex; justify-content:space-between; font-size:12.5px; color:#e2e8f0; margin-bottom:4px;"><span>B · Đổi quà evoucher + recovery</span><b style="color:#34d399;">100%</b></div>
+        <div style="height:8px; background:rgba(148,163,184,.15); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:#10b981; border-radius:99px;"></div></div>
+        <div style="font-size:11px; color:#94a3b8; margin-top:3px;">4/4 lỗi trọng yếu vá tận gốc (chữ ký · campaign_code · timeout · phân loại lỗi)</div>
+      </div>
+
+      <div style="margin-bottom:11px;">
+        <div style="display:flex; justify-content:space-between; font-size:12.5px; color:#e2e8f0; margin-bottom:4px;"><span>C · Catalog + refactor consumer</span><b style="color:#34d399;">92%</b></div>
+        <div style="height:8px; background:rgba(148,163,184,.15); border-radius:99px; overflow:hidden;"><div style="height:100%; width:92%; background:#10b981; border-radius:99px;"></div></div>
+        <div style="font-size:11px; color:#94a3b8; margin-top:3px;">Consumer per-account kiểu GotIt · 19/21 hạng mục · còn code_display_type + content-hash</div>
+      </div>
+
+      <div>
+        <div style="display:flex; justify-content:space-between; font-size:12.5px; color:#e2e8f0; margin-bottom:4px;"><span>D · Đàm phán API với UrBox</span><span style="font-size:11px; color:#60a5fa; background:rgba(96,165,250,.15); padding:2px 8px; border-radius:99px;">CHỜ ĐỐI TÁC</span></div>
+        <div style="height:8px; background:repeating-linear-gradient(45deg, rgba(96,165,250,.25), rgba(96,165,250,.25) 6px, rgba(15,23,42,.5) 6px, rgba(15,23,42,.5) 12px); border-radius:99px;"></div>
+        <div style="font-size:11px; color:#94a3b8; margin-top:3px;">Đã gửi 2 tài liệu đề xuất · chờ 6 hạng mục (IP · rate limit · OAuth · webhook · đối soát · incremental sync)</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Divider: Giai đoạn 1 -->
+  <div style="display:flex; align-items:center; gap:14px; margin:32px 0 20px;">
+    <div style="flex:1; height:1px; background:rgba(148,163,184,.2);"></div>
+    <span style="font-size:13px; color:#64748b; text-transform:uppercase; letter-spacing:1px; white-space:nowrap;">▼ Giai đoạn 1 · 30/03 – 19/06 · 12 sprint (đã đóng)</span>
+    <div style="flex:1; height:1px; background:rgba(148,163,184,.2);"></div>
+  </div>
+
+  <!-- KPI -->
 
   <!-- KPI -->
   <div class="kpi-grid">

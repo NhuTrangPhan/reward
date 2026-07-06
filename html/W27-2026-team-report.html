@@ -1033,8 +1033,59 @@
   <!-- Strategy banner -->
   <div class="strategy-banner">
     <span class="label">📌 Bối cảnh &amp; định hướng tuần</span>
-    <h2>Hai trọng tâm song song — Thiết kế Reward Network (Trang) &amp; Dựng luồng đổi quà vật lý UrBox (Huy)</h2>
-    <p>Sau khi quà vật lý + MCO Gara đã đóng/bàn giao, team dồn lực sang hướng mới. <b>Trang chốt toàn bộ mô hình + thiết kế Reward Network</b> (pool quà chung + Credit + Voucher Levels + earn-on-redemption · CNV không ôm kho, không tiền mặt) — design v2, WBS 79 task, mockup 10 màn, <b>init project 02/07</b>. <b>Huy dựng trọn luồng đổi quà vật lý UrBox 6/7 phase</b> (địa chỉ giao, đặt đơn, theo dõi trạng thái, tự phục hồi) + 2 worker mới + <b>vá 3 lỗi hạ tầng tận gốc</b>, 150+ test pass — từ "chưa hỗ trợ" → "sẵn sàng test sandbox". <b>Hải</b> ship Rewards Hub + bảo mật dữ liệu (masking) + export report.</p>
+    <h2>Reward tách thành 3 dự án con — tuần tập trung 2 mũi: Kết nối UrBox &amp; reward-network</h2>
+    <p>Dự án Reward giờ chia <b>3 nhánh độc lập</b>: <b>Kết nối GotIt</b> (đã live ~95%, bàn giao CG) · <b>Kết nối UrBox</b> (~90% kỹ thuật) · <b>reward-network</b> (mới — thiết kế xong 100%, code Phase 1 khởi động W28). Tuần này dồn lực <b>2 mũi</b>: <b>Huy</b> dựng luồng đổi quà vật lý UrBox 6/7 phase + vá 3 lỗi hạ tầng tận gốc (150+ test pass); <b>Trang</b> chốt toàn bộ thiết kế reward-network (mô hình + WBS 79 task + mockup 10 màn + init 02/07); <b>Hải</b> giữ nhịp sản phẩm (Rewards Hub + bảo mật/masking + export).</p>
+  </div>
+
+  <!-- ============== 📊 Portfolio 3 dự án con ============== -->
+  <div style="margin-bottom:22px;">
+    <div style="font-size:13px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-bottom:12px;">📊 Reward tách 3 dự án con — % hoàn thành trên tổng task (đã đối chiếu code)</div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:14px;">
+
+      <!-- GotIt -->
+      <div style="padding:18px; background:var(--card); border:1px solid var(--border); border-top:4px solid var(--success); border-radius:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:4px;">
+          <b style="font-size:15px;">🤝 Kết nối GotIt</b>
+          <span style="font-size:10.5px; font-weight:700; color:#047857; background:var(--success-soft); padding:3px 9px; border-radius:99px;">LIVE · DUY TRÌ</span>
+        </div>
+        <div style="display:flex; align-items:baseline; gap:8px; margin:6px 0;">
+          <span style="font-size:34px; font-weight:800; color:var(--success); line-height:1;">~95%</span>
+          <span style="font-size:12px; color:var(--muted);">6 nhóm tính năng</span>
+        </div>
+        <div style="height:8px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin-bottom:8px;"><div style="height:100%; width:95%; background:var(--success); border-radius:99px;"></div></div>
+        <div style="font-size:12px; color:var(--ink-soft);">Vendor tích hợp sớm nhất, đã live prod (evoucher W22 · vật lý W25-26 bàn giao CG). 5/6 nhóm 100%, đa kênh gửi 85%. Blocker Total là <b>thương mại</b>, không phải dev.</div>
+      </div>
+
+      <!-- UrBox -->
+      <div style="padding:18px; background:var(--card); border:1px solid var(--border); border-top:4px solid var(--warning); border-radius:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:4px;">
+          <b style="font-size:15px;">🔌 Kết nối UrBox</b>
+          <span style="font-size:10.5px; font-weight:700; color:#B45309; background:var(--warning-soft); padding:3px 9px; border-radius:99px;">⭐ TRỌNG TÂM · HUY</span>
+        </div>
+        <div style="display:flex; align-items:baseline; gap:8px; margin:6px 0;">
+          <span style="font-size:34px; font-weight:800; color:var(--warning); line-height:1;">~90%</span>
+          <span style="font-size:12px; color:var(--muted);">kỹ thuật · 29/32 task</span>
+        </div>
+        <div style="height:8px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin-bottom:8px;"><div style="height:100%; width:90%; background:var(--warning); border-radius:99px;"></div></div>
+        <div style="font-size:12px; color:var(--ink-soft);">Evoucher 4/4 · Vật lý 6/7 phase · Catalog 19/21. Còn <b>D · đàm phán API 0/6</b> (IP · OAuth · webhook…) — <b>chờ UrBox</b>, ngoài kiểm soát team.</div>
+      </div>
+
+      <!-- reward-network -->
+      <div style="padding:18px; background:var(--card); border:1px solid var(--border); border-top:4px solid var(--purple); border-radius:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:4px;">
+          <b style="font-size:15px;">🌐 reward-network</b>
+          <span style="font-size:10.5px; font-weight:700; color:#6D28D9; background:var(--purple-soft); padding:3px 9px; border-radius:99px;">⭐ TRỌNG TÂM · TRANG</span>
+        </div>
+        <div style="margin:10px 0 8px;">
+          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px;"><span>Thiết kế &amp; lập kế hoạch</span><b style="color:var(--purple);">100%</b></div>
+          <div style="height:7px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin-bottom:8px;"><div style="height:100%; width:100%; background:var(--purple); border-radius:99px;"></div></div>
+          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px;"><span>Code Phase 1 (33 task dev)</span><b style="color:var(--muted);">0%</b></div>
+          <div style="height:7px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:0%; background:var(--purple); border-radius:99px;"></div></div>
+        </div>
+        <div style="font-size:12px; color:var(--ink-soft);">Dự án mới. Xong 100% thiết kế (mô hình + WBS 79 task + mockup 10 màn + Phase 0 scaffold). <b>Code nghiệp vụ 0/33</b> — dev khởi động <b>W28</b>.</div>
+      </div>
+
+    </div>
   </div>
 
   <!-- KPI -->
@@ -1223,11 +1274,18 @@
     </div>
   </div>
 
-  <!-- ============== 📦 Tổng quan tiến độ dự án UrBox ============== -->
+  <!-- ============== CHI TIẾT THEO DỰ ÁN ============== -->
+  <div style="display:flex; align-items:center; gap:14px; margin:30px 0 4px;">
+    <div style="flex:1; height:2px; background:linear-gradient(90deg, var(--primary), transparent);"></div>
+    <span style="font-size:14px; font-weight:800; color:var(--primary); text-transform:uppercase; letter-spacing:1px; white-space:nowrap;">📂 Chi tiết theo dự án — đã có gì &amp; % hoàn thành</span>
+    <div style="flex:1; height:2px; background:linear-gradient(90deg, transparent, var(--primary));"></div>
+  </div>
+
+  <!-- ============== 🔌 Dự án · Kết nối UrBox ============== -->
   <div class="section">
     <div class="section-title">
-      <h2>📦 Tổng quan tiến độ dự án UrBox</h2>
-      <span class="hint">Đối chiếu trực tiếp với code · phần kỹ thuật team kiểm soát ~90% · phần còn lại là test staging + chờ UrBox mở API</span>
+      <h2>🔌 Dự án · Kết nối UrBox — đã có gì &amp; % hoàn thành</h2>
+      <span class="hint">Trọng tâm tuần (Huy) · đối chiếu trực tiếp với code · kỹ thuật team kiểm soát ~90% (29/32 task) · phần còn lại chờ UrBox mở API</span>
     </div>
 
     <!-- Hero: con số tổng -->
@@ -1274,9 +1332,9 @@
       <div style="padding:16px 18px; background:var(--card); border:1px solid var(--border); border-radius:12px;">
         <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
           <b style="font-size:14.5px;">C · Đồng bộ catalog + refactor consumer</b>
-          <span style="font-size:18px; font-weight:800; color:var(--success);">92%</span>
+          <span style="font-size:18px; font-weight:800; color:var(--success);">90%</span>
         </div>
-        <div style="height:9px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin:9px 0;"><div style="height:100%; width:92%; background:var(--success); border-radius:99px;"></div></div>
+        <div style="height:9px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin:9px 0;"><div style="height:100%; width:90%; background:var(--success); border-radius:99px;"></div></div>
         <div style="font-size:12.5px; color:var(--ink-soft);"><b>19/21 hạng mục</b>: module consumer per-account (Kafka + job tracking + deactivateStale) giống GotIt · ghi đủ ảnh/cửa hàng/tồn/stock=1. <b>Còn</b>: đẩy <code>code_display_type</code> ra voucher + content-hash (optional).</div>
       </div>
 
@@ -1323,6 +1381,73 @@
         </ul>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ============== 🌐 Dự án · reward-network ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🌐 Dự án · reward-network — đã có gì &amp; % hoàn thành</h2>
+      <span class="hint">Trọng tâm tuần (Trang) · dự án mới · thiết kế 100% (đã xong) vs code Phase 1 0/33 task — dev khởi động W28</span>
+    </div>
+
+    <!-- Hero: tách thiết kế vs code -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin-bottom:18px;">
+      <div style="padding:16px 18px; background:linear-gradient(135deg,var(--purple-soft) 0%,var(--card) 80%); border:1px solid #DDD6FE; border-radius:12px;">
+        <div style="font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;">Thiết kế &amp; lập kế hoạch</div>
+        <div style="font-size:38px; font-weight:800; color:#6D28D9; line-height:1.15;">100% ✅</div>
+        <div style="font-size:12.5px; color:var(--ink-soft);">design v2 · WBS 79 task · PO/BA Phase 1 (33 task) · kiến trúc · mockup 10 màn · init project (02/07)</div>
+      </div>
+      <div style="padding:16px 18px; background:var(--card); border:1px solid var(--border); border-radius:12px;">
+        <div style="font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;">Code Phase 1 (33 task dev)</div>
+        <div style="font-size:38px; font-weight:800; color:var(--ink); line-height:1.15;">0<span style="font-size:20px; color:var(--muted);">/33 · 0%</span></div>
+        <div style="font-size:12.5px; color:var(--ink-soft);">Phase 0 scaffold xong (16 file khung, chưa entity nghiệp vụ) · chưa có Offer / Voucher / Redeem · <b>dev khởi động W28</b>.</div>
+      </div>
+    </div>
+
+    <!-- 8 epic breakdown -->
+    <div style="font-size:13px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-bottom:10px;">📋 Phase 1 — 33 task · 8 epic (~90 PD) · tất cả chưa vào code</div>
+    <div style="overflow-x:auto;">
+    <table style="width:100%; border-collapse:collapse; font-size:12.5px;">
+      <thead><tr style="text-align:left; color:var(--muted); border-bottom:2px solid var(--border);">
+        <th style="padding:7px 10px;">Epic</th><th style="padding:7px 10px;">Thuộc</th><th style="padding:7px 10px; text-align:center;">Task</th><th style="padding:7px 10px; text-align:center;">Xong</th><th style="padding:7px 10px; width:120px;">Tiến độ</th>
+      </tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">1 · Contribution (tạo/đẩy quà)</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">6</td><td style="padding:7px 10px; text-align:center; color:var(--muted);">0</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px;"></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">2 · Marketplace API</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">3</td><td style="padding:7px 10px; text-align:center; color:var(--muted);">0</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px;"></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">3 · Issue/Redeem + offline</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">4</td><td style="padding:7px 10px; text-align:center; color:var(--muted);">0</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px;"></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">4 · CNV Admin (duyệt/gán cấp)</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">4</td><td style="padding:7px 10px; text-align:center; color:var(--muted);">0</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px;"></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">5 · Report chống quà rác</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">2</td><td style="padding:7px 10px; text-align:center; color:var(--muted);">0</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px;"></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">6 · Integration rewards-v2 (RN thành vendor)</td><td style="padding:7px 10px; color:var(--muted);">BE-RW</td><td style="padding:7px 10px; text-align:center;">7</td><td style="padding:7px 10px; text-align:center; color:var(--muted);">0</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px;"></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">7 · FE + Gateway</td><td style="padding:7px 10px; color:var(--muted);">CDP + FE</td><td style="padding:7px 10px; text-align:center;">4</td><td style="padding:7px 10px; text-align:center; color:var(--muted);">0</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px;"></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">8 · Test &amp; pilot</td><td style="padding:7px 10px; color:var(--muted);">QA</td><td style="padding:7px 10px; text-align:center;">3</td><td style="padding:7px 10px; text-align:center; color:var(--muted);">0</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px;"></div></td></tr>
+      </tbody>
+      <tfoot><tr style="border-top:2px solid var(--border); font-weight:800; color:var(--ink);">
+        <td style="padding:8px 10px;">Tổng Phase 1</td><td></td><td style="padding:8px 10px; text-align:center;">33</td><td style="padding:8px 10px; text-align:center; color:var(--muted);">0</td><td style="padding:8px 10px; color:var(--muted);">0%</td>
+      </tr></tfoot>
+    </table>
+    </div>
+
+    <div style="margin-top:14px; padding:12px 14px; background:var(--success-soft); border-radius:10px; font-size:12.5px; color:#047857;"><b>W28 vào dev:</b> pick 2 epic đầu luồng — ① Contribution core (P1-01/02/06) + ② Issue/Redeem offline (P1-10/11/13) → dựng thin-slice offline-first (tạo quà → sinh mã → khách đổi → NV đánh dấu). ⚠️ P1-01/06 phụ thuộc entity Offer core (Phase 0) — nếu chưa có, làm trước như bước 0.</div>
+  </div>
+
+  <!-- ============== 🤝 Dự án · Kết nối GotIt ============== -->
+  <div class="section collapsed">
+    <div class="section-title">
+      <h2>🤝 Dự án · Kết nối GotIt — live production (đã bàn giao)</h2>
+      <span class="hint">Vendor tích hợp sớm nhất · ~95% · duy trì/vận hành · tuần này KHÔNG phải trọng tâm</span>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:20px; padding:16px 18px; background:linear-gradient(135deg,var(--success-soft) 0%,var(--card) 80%); border:1px solid #A7F3D0; border-radius:12px; margin-bottom:16px;">
+      <div style="text-align:center; min-width:110px;"><div style="font-size:40px; font-weight:800; color:#047857; line-height:1;">~95%</div><div style="font-size:11px; color:var(--muted);">6 nhóm tính năng</div></div>
+      <div style="flex:1; min-width:240px; font-size:12.5px; color:var(--ink-soft);">Đã live production (evoucher từ W22 · quà vật lý W25-26 <b>bàn giao CG vận hành</b>). Không TODO/bug tồn trong code. Còn <b>blocker Total (UAT)</b> nhưng là <b>rào cản thương mại</b> (Total chưa ký gửi quà), không phải việc dev.</div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:10px;">
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Đồng bộ catalog</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Đổi quà evoucher + recovery</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Quà vật lý + status history</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Recovery &amp; idempotency</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Đối soát / reconciliation</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Gửi voucher đa kênh</span><b style="color:var(--warning);">85%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:85%; background:var(--warning);"></div></div><div style="font-size:10.5px; color:var(--muted); margin-top:4px;">SMS còn tối giản · ZNS phụ thuộc module ngoài</div></div>
     </div>
   </div>
 
