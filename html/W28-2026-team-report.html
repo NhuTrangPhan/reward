@@ -1053,7 +1053,7 @@
           <span style="font-size:12px; color:var(--muted);">6 nhóm tính năng</span>
         </div>
         <div style="height:8px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin-bottom:8px;"><div style="height:100%; width:95%; background:var(--success); border-radius:99px;"></div></div>
-        <div style="font-size:12px; color:var(--ink-soft);">Vendor tích hợp sớm nhất, đã live prod (evoucher W22 · vật lý W25-26 bàn giao CG). 5/6 nhóm 100%, đa kênh gửi 85%. Blocker Total là <b>thương mại</b>, không phải dev.</div>
+        <div style="font-size:12px; color:var(--ink-soft);">Vendor tích hợp sớm nhất, đã live prod (evoucher W22 · vật lý W25-26 bàn giao CG). 5/6 nhóm 100%, đa kênh gửi 85%. <b>UAT Total: Total đã gửi quà sang GotIt, CG đang xử lý UAT.</b></div>
       </div>
 
       <!-- UrBox -->
@@ -1440,7 +1440,7 @@
     </div>
     <div style="display:flex; flex-wrap:wrap; align-items:center; gap:20px; padding:16px 18px; background:linear-gradient(135deg,var(--success-soft) 0%,var(--card) 80%); border:1px solid #A7F3D0; border-radius:12px; margin-bottom:16px;">
       <div style="text-align:center; min-width:110px;"><div style="font-size:40px; font-weight:800; color:#047857; line-height:1;">~95%</div><div style="font-size:11px; color:var(--muted);">6 nhóm tính năng</div></div>
-      <div style="flex:1; min-width:240px; font-size:12.5px; color:var(--ink-soft);">Đã live production (evoucher từ W22 · quà vật lý W25-26 <b>bàn giao CG vận hành</b>). Không TODO/bug tồn trong code. Còn <b>blocker Total (UAT)</b> nhưng là <b>rào cản thương mại</b> (Total chưa ký gửi quà), không phải việc dev.</div>
+      <div style="flex:1; min-width:240px; font-size:12.5px; color:var(--ink-soft);">Đã live production (evoucher từ W22 · quà vật lý W25-26 <b>bàn giao CG vận hành</b>). Không TODO/bug tồn trong code. <b>UAT Total: Total đã gửi quà sang GotIt, team CG đang xử lý để UAT</b> — blocker thương mại trước đó (Total chưa ký gửi quà) đã được gỡ.</div>
     </div>
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:10px;">
       <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Đồng bộ catalog</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
@@ -1550,13 +1550,13 @@
       </div>
 
       <div class="feat-row">
-        <div class="feat-check" style="background:var(--danger);">!</div>
+        <div class="feat-check" style="background:var(--info);">▶</div>
         <div class="feat-content">
-          <h4>⛔ UAT Total — vẫn treo (Total chưa ký gửi quà)</h4>
-          <p>Phần kỹ thuật + GotIt CampaignId đã sẵn sàng từ trước. Total vẫn chưa ký gửi danh sách quà vật lý → UAT chưa chạy được. <b>Blocker thương mại</b> — team giữ trọng tâm reward-network + UrBox, chờ Sales/BD đẩy Total.</p>
+          <h4>▶ UAT Total — đang chạy (Total đã gửi quà)</h4>
+          <p><b>Total đã gửi quà sang GotIt; team CG đang xử lý để UAT.</b> Blocker thương mại kéo dài trước đó (Total chưa ký gửi quà) đã được gỡ. Phần kỹ thuật + GotIt CampaignId sẵn sàng từ trước → chờ CG chạy UAT + nghiệm thu, team standby go-live.</p>
           <div class="feat-meta">
             <span class="badge-owner-trang">👤 <b>Trang</b> (theo dõi)</span>
-            <span>⛔ Chờ Total (thương mại)</span>
+            <span>▶ Đang UAT (CG xử lý)</span>
           </div>
         </div>
       </div>
@@ -1672,7 +1672,7 @@
       <div class="result-card warning">
         <h3>⏳ Tồn đọng — chờ/carry (2)</h3>
         <ul>
-          <li>UAT Total — vẫn chờ Total ký gửi quà (thương mại)</li>
+          <li>UAT Total — Total đã gửi quà sang GotIt, CG đang xử lý UAT (theo dõi nghiệm thu)</li>
           <li>reward-network còn lại: report chống quà rác · E2E/pilot · admin config đầy đủ — carry W29</li>
         </ul>
       </div>
@@ -1706,10 +1706,10 @@
         <h4>Huy single-point toàn bộ reward-network (BE→FE→.NET)</h4>
         <p>Huy nắm gần như toàn bộ code reward-network + integration + checkout .NET → bus-factor cao ở dự án mới. Trang tập trung kiến trúc/UrBox, Hải tập trung catalog/UrBox. <b>Rủi ro:</b> nếu Huy vắng, RN nghẽn. <b>Action:</b> Huy giữ handoff/project-context + review đối kháng mỗi task; kéo Hải vào 1-2 epic RN để chia tải.</p>
       </div>
-      <div class="risk-item medium">
-        <span class="risk-level">🟡 MEDIUM · KHÁCH HÀNG</span>
-        <h4>UAT Total vẫn treo (Total chưa gửi quà)</h4>
-        <p>Blocker thương mại kéo dài. Team đã chuyển trọng tâm, không để chặn tiến độ. <b>Action:</b> Sales/BD đẩy Total; team standby go-live khi có product.</p>
+      <div class="risk-item low">
+        <span class="risk-level">✅ CẢI THIỆN · KHÁCH HÀNG</span>
+        <h4>UAT Total — blocker thương mại đã gỡ</h4>
+        <p>Total đã gửi quà sang GotIt; team CG đang xử lý để UAT. Rào cản kéo dài (Total chưa ký gửi quà) đã được gỡ. <b>Action:</b> theo dõi CG chạy UAT + chuẩn bị go-live khi nghiệm thu.</p>
       </div>
       <div class="risk-item low">
         <span class="risk-level">✅ RESOLVED</span>
@@ -1919,13 +1919,13 @@
           </div>
         </div>
 
-        <!-- 4. UAT Total — treo phía khách hàng -->
-        <div class="timeline-item future">
+        <!-- 4. UAT Total — đang chạy UAT -->
+        <div class="timeline-item current">
           <div class="timeline-dot"></div>
           <div class="timeline-card">
-            <div class="timeline-date">⛔ TREO · Chờ Total ký gửi quà</div>
+            <div class="timeline-date">▶ ĐANG UAT · Total đã gửi quà sang GotIt</div>
             <h4>UAT Total quà vật lý</h4>
-            <p>Kỹ thuật + GotIt CampaignId sẵn sàng. Chờ Total ký gửi danh sách quà (thương mại) → Sales/BD đẩy. Team standby go-live khi có product.</p>
+            <p>Total đã gửi quà sang GotIt; team CG đang xử lý để UAT. Blocker thương mại (Total chưa ký gửi quà) đã được gỡ. Kỹ thuật + GotIt CampaignId sẵn sàng từ trước → chờ CG nghiệm thu + go-live.</p>
           </div>
         </div>
 
