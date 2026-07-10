@@ -1033,7 +1033,7 @@
   <!-- Strategy banner -->
   <div class="strategy-banner">
     <span class="label">📌 Bối cảnh &amp; định hướng tuần</span>
-    <h2>reward-network vào dev tăng tốc (code ~60% · chưa QA → tính ~30%) &amp; UrBox lên staging — trên nền phân tích kiến trúc toàn domain</h2>
+    <h2>reward-network vào dev tăng tốc (code ~60% · chưa QA → tính ~12%) &amp; UrBox lên staging — trên nền phân tích kiến trúc toàn domain</h2>
     <p>Tuần chuyển từ <b>thiết kế → thực thi</b>. <b>Huy</b> build reward-network Phase 1 diện rộng — full-stack 5 repo: BE core (đóng góp · chợ ưu đãi · đổi quà · dùng offline · <b>áp mã online apply/confirm/release</b> · duyệt admin · sổ credit · đối soát — 219 test) + tích hợp RN thành <b>vendor của rewards-v2</b> + gateway cdp-backend + FE module + checkout .NET; đổi tên hiển thị <b>reward-network → reward-hub</b>. <b>Trang</b> làm phần khó nhất tuần — <b>phân tích kiến trúc toàn domain reward</b> (truy vết voucher mini-app · định vị hệ cũ .NET/Mongo · nhiều sequence diagram cũ↔đích · lộ trình migration strangler-fig P0→P7 · gap analysis) + chốt hướng UrBox (ratelimit · RSA · tài liệu vật lý) + gửi public key + <b>deploy UrBox staging</b>. <b>Hải</b> UrBox combo redemption + tỷ giá đổi điểm + gộp catalog đa vendor + cấu hình staging/prod.</p>
   </div>
 
@@ -1067,7 +1067,7 @@
           <span style="font-size:12px; color:var(--muted);">kỹ thuật · đã lên staging</span>
         </div>
         <div style="height:8px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin-bottom:8px;"><div style="height:100%; width:92%; background:var(--warning); border-radius:99px;"></div></div>
-        <div style="font-size:12px; color:var(--ink-soft);">W28: <b>deploy staging</b> + chốt <b>3/6 mục</b> với UrBox (ratelimit · RSA · UrBox gửi tài liệu vật lý) + gửi public key + combo redemption (Hải). Còn rà soát sau deploy + đàm phán API còn lại.</div>
+        <div style="font-size:12px; color:var(--ink-soft);">W28: <b>deploy staging</b> + chốt 3 mục với UrBox (ratelimit · RSA · tài liệu vật lý). <b>UrBox đã setup RSA + gửi 2 app_id/app_secret để CNV test.</b> + combo redemption (Hải). Còn rà soát + API còn lại.</div>
       </div>
 
       <!-- reward-network -->
@@ -1079,10 +1079,10 @@
         <div style="margin:10px 0 8px;">
           <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px;"><span>Thiết kế &amp; lập kế hoạch</span><b style="color:var(--purple);">100%</b></div>
           <div style="height:7px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin-bottom:8px;"><div style="height:100%; width:100%; background:var(--purple); border-radius:99px;"></div></div>
-          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px;"><span>Code Phase 1 (đã code ~20/33, chưa QA)</span><b style="color:#B45309;">~30%</b></div>
-          <div style="height:7px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:30%; background:var(--warning); border-radius:99px;"></div></div>
+          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px;"><span>Code Phase 1 (đã code ~20/33, chưa QA)</span><b style="color:#B45309;">~12%</b></div>
+          <div style="height:7px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:12%; background:var(--warning); border-radius:99px;"></div></div>
         </div>
-        <div style="font-size:12px; color:var(--ink-soft);">Huy code <b>~20/33 (~60%)</b> trong 1 tuần — nhưng <b>chưa test/review độc lập → tính 50% → ~30%</b> hoàn thành thực. Luồng offline + áp mã online chạy thật · 219 test (của Huy).</div>
+        <div style="font-size:12px; color:var(--ink-soft);">Huy code <b>~20/33 (~60%)</b> trong 1 tuần — nhưng <b>chưa test/review độc lập → tính 20% → ~12%</b> hoàn thành thực. Luồng offline + áp mã online chạy thật · 219 test (của Huy).</div>
       </div>
 
     </div>
@@ -1097,8 +1097,8 @@
     </div>
     <div class="kpi" style="background: linear-gradient(135deg, rgba(139,92,246,.2), rgba(6,182,212,.14)); border:1px solid rgba(139,92,246,.35);">
       <div class="kpi-label" style="color:#7C3AED;">🌐 reward-network — Phase 1</div>
-      <div class="kpi-value" style="color:#7C3AED;">~30%</div>
-      <div class="kpi-sub">Đã code ~20/33 (~60%) full-stack nhưng <b>chưa test/review độc lập → tính 50% → ~30%</b> · từ 0% tuần trước</div>
+      <div class="kpi-value" style="color:#7C3AED;">~12%</div>
+      <div class="kpi-sub">Đã code ~20/33 (~60%) full-stack nhưng <b>chưa test/review độc lập → tính 20% → ~12%</b> · từ 0% tuần trước</div>
     </div>
     <div class="kpi info">
       <div class="kpi-label">🔌 UrBox — lên staging</div>
@@ -1131,17 +1131,17 @@
       <!-- Chart 1: Kết quả mục tiêu -->
       <div class="chart-card">
         <h4>🎯 Kết quả 4 trọng tâm tuần</h4>
-        <div class="chart-sub">4/4 đạt: reward-network vào dev (code ~60%, QA ~30%) · UrBox lên staging · chốt hướng UrBox (3 mục) · phân tích kiến trúc migration.</div>
+        <div class="chart-sub">4/4 đạt: reward-network vào dev (code ~60%, QA ~12%) · UrBox lên staging · chốt hướng UrBox (3 mục) · phân tích kiến trúc migration.</div>
         <div class="chart-wrap"><canvas id="goalChart"></canvas></div>
       </div>
 
       <!-- Chart 2: Reward Network WBS -->
       <div class="chart-card">
         <h4>🌐 reward-network — tiến độ Phase 1</h4>
-        <div class="chart-sub">Huy code full-stack đưa Phase 1 lên <b>~60% (20/33)</b> trong 1 tuần — nhưng chưa test/review độc lập nên <b>tính 50% → ~30%</b> hoàn thành thực.</div>
+        <div class="chart-sub">Huy code full-stack đưa Phase 1 lên <b>~60% (20/33)</b> trong 1 tuần — nhưng chưa test/review độc lập nên <b>tính 20% → ~12%</b> hoàn thành thực.</div>
         <div class="big-callout">
-          <div class="num" style="color:#B45309;">~30%</div>
-          <div class="label">hoàn thành thực · code ~60% × 50% (chưa QA)</div>
+          <div class="num" style="color:#B45309;">~12%</div>
+          <div class="label">hoàn thành thực · code ~60% × 20% (chưa QA)</div>
         </div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; font-size:13px;">
           <div style="text-align:center; padding:10px; background:var(--purple-soft); border-radius:8px;">
@@ -1271,7 +1271,7 @@
         <li><b>🔧 Checkout .NET (net-core-platform-cnv)</b><span class="desc">P1-41/43: hook classify mã RN + apply/confirm khi PAID + đường VAT — checkout ecommerce áp mã RN.</span></li>
         <li><b>♻️ Đổi tên hiển thị reward-network → reward-hub</b><span class="desc">Đồng bộ tên BE/gateway/FE (cosmetic) — tên hiển thị người dùng = "reward-hub".</span></li>
       </ul>
-      <div style="margin-top:10px; padding:8px 12px; background:var(--warning-soft); border-radius:8px; font-size:12.5px; color:#B45309;"><b>Kết quả:</b> reward-network Phase 1 <b>đã code ~20/33 (~60%)</b> trong 1 tuần · 219 test (của Huy) · luồng đóng góp → đổi quà → áp mã online chạy thật đầu-cuối (RN + rewards-v2 + gateway + FE + .NET). <b>⚠️ Chưa test/review độc lập → tính 50% → ~30% hoàn thành thực.</b></div>
+      <div style="margin-top:10px; padding:8px 12px; background:var(--warning-soft); border-radius:8px; font-size:12.5px; color:#B45309;"><b>Kết quả:</b> reward-network Phase 1 <b>đã code ~20/33 (~60%)</b> trong 1 tuần · 219 test (của Huy) · luồng đóng góp → đổi quà → áp mã online chạy thật đầu-cuối (RN + rewards-v2 + gateway + FE + .NET). <b>⚠️ Chưa test/review độc lập → tính 20% → ~12% hoàn thành thực.</b></div>
     </div>
   </div>
 
@@ -1286,7 +1286,7 @@
   <div class="section">
     <div class="section-title">
       <h2>🔌 Dự án · Kết nối UrBox — đã có gì &amp; % hoàn thành</h2>
-      <span class="hint">Đã <b>deploy staging</b> tuần này · kỹ thuật team kiểm soát ~92% · chốt 3 mục với UrBox · phần còn lại: rà soát sau deploy + API chờ đối tác</span>
+      <span class="hint">Đã <b>deploy staging</b> · kỹ thuật team ~92% · UrBox đã setup RSA + gửi 2 app_id/app_secret để CNV test · còn rà soát + API chờ đối tác</span>
     </div>
 
     <!-- Hero: con số tổng -->
@@ -1297,7 +1297,7 @@
       </div>
       <div style="flex:1; min-width:260px;">
         <div style="font-size:15px; font-weight:700; color:var(--ink); margin-bottom:6px;">🚀 W28: đã <span style="color:#047857;">deploy lên staging</span> + chốt 3 mục với UrBox + combo redemption</div>
-        <div style="font-size:13.5px; color:var(--ink-soft);">Đổi quà (evoucher + vật lý) &amp; catalog đa vendor đã chạy trên staging. Chốt <b>3 điểm</b> với UrBox (ratelimit · RSA · tài liệu vật lý) + gửi public key. Phần chưa xong: rà soát sau deploy + API còn lại chờ đối tác. Đánh giá theo độ khó, không theo commit.</div>
+        <div style="font-size:13.5px; color:var(--ink-soft);">Đổi quà (evoucher + vật lý) &amp; catalog đa vendor đã chạy trên staging. Chốt <b>3 điểm</b> với UrBox (ratelimit · RSA · tài liệu vật lý) + gửi public key. <b style="color:#047857;">UrBox đã setup RSA + gửi 2 bộ app_id/app_secret để CNV test staging.</b> Phần chưa xong: rà soát sau deploy + API còn lại chờ đối tác.</div>
       </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
         <div style="text-align:center; padding:10px 14px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="font-size:20px; font-weight:800; color:var(--warning);">6/7</div><div style="font-size:11px; color:var(--muted);">phase vật lý</div></div>
@@ -1343,10 +1343,10 @@
       <div style="padding:16px 18px; background:var(--card); border:1px solid var(--border); border-radius:12px;">
         <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
           <b style="font-size:14.5px;">D · Đàm phán API với UrBox</b>
-          <span style="font-size:12px; font-weight:700; color:var(--info); background:var(--info-soft); padding:3px 10px; border-radius:99px;">ĐÃ CHỐT 3 MỤC</span>
+          <span style="font-size:12px; font-weight:700; color:var(--info); background:var(--info-soft); padding:3px 10px; border-radius:99px;">🔑 RSA + 2 CREDS TEST</span>
         </div>
-        <div style="height:9px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin:9px 0;"><div style="height:100%; width:50%; background:var(--info); border-radius:99px;"></div></div>
-        <div style="font-size:12.5px; color:var(--ink-soft);"><b>W28 tiến triển</b>: chốt <b>3 mục</b> (ratelimit · RSA · UrBox đã gửi tài liệu vật lý) + gửi public key. Còn: OAuth ủy quyền · webhook trạng thái · API đối soát bulk · incremental sync — chờ UrBox.</div>
+        <div style="height:9px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin:9px 0;"><div style="height:100%; width:60%; background:var(--info); border-radius:99px;"></div></div>
+        <div style="font-size:12.5px; color:var(--ink-soft);"><b>W28 tiến triển</b>: chốt 3 mục (ratelimit · RSA · tài liệu vật lý) + gửi public key. <b style="color:#047857;">✅ UrBox đã setup RSA + gửi lại 2 bộ app_id/app_secret cho CNV test staging.</b> Còn: OAuth · webhook trạng thái · API đối soát bulk · incremental sync — chờ UrBox.</div>
       </div>
 
     </div>
@@ -1367,7 +1367,7 @@
       <div style="padding:14px 16px; background:var(--info-soft); border-left:4px solid var(--info); border-radius:0 10px 10px 0;">
         <h4 style="margin:0 0 8px; font-size:14px; color:#1D4ED8;">🧪 Rà soát sau deploy staging <span style="font-weight:500; color:var(--muted);">(đang làm)</span></h4>
         <ul style="margin:0; padding-left:18px; font-size:12.5px; color:var(--ink-soft); line-height:1.7;">
-          <li><b>✅ Đã deploy staging W28</b> — đang rà soát lại các tính năng sau deploy.</li>
+          <li><b>✅ Đã deploy staging W28</b> + nhận 2 bộ app_id/app_secret UrBox → đang rà soát + test với credential thật.</li>
           <li>Test redeem + recovery + catalog sync per-account trên staging (chữ ký · ảnh/cửa hàng/tồn · deactivateStale).</li>
           <li>Chuẩn bị prod: backfill <code>campaign_code</code> · Kafka topic/consumer.</li>
         </ul>
@@ -1389,7 +1389,7 @@
   <div class="section">
     <div class="section-title">
       <h2>🌐 Dự án · reward-network — đã có gì &amp; % hoàn thành</h2>
-      <span class="hint">Trọng tâm tuần (Huy build) · đã code ~20/33 (~60%) nhưng <b>chưa test/review độc lập → tính 50% → ~30%</b> hoàn thành thực · đổi tên hiển thị → reward-hub</span>
+      <span class="hint">Trọng tâm tuần (Huy build) · đã code ~20/33 (~60%) nhưng <b>chưa test/review độc lập → tính 20% → ~12%</b> hoàn thành thực · đổi tên hiển thị → reward-hub</span>
     </div>
 
     <!-- Hero: tách thiết kế vs code -->
@@ -1401,13 +1401,13 @@
       </div>
       <div style="padding:16px 18px; background:linear-gradient(135deg,var(--success-soft) 0%,var(--card) 80%); border:1px solid #A7F3D0; border-radius:12px;">
         <div style="font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;">Code Phase 1 (dev)</div>
-        <div style="font-size:38px; font-weight:800; color:#B45309; line-height:1.15;">~30<span style="font-size:20px; color:var(--muted);">% thực · code ~60%</span></div>
-        <div style="font-size:12.5px; color:var(--ink-soft);"><b>Đã code ~20/33 (~60%)</b> (Huy): 12 entity · 8 controller · 18 service · 219 test. <b style="color:#B45309;">Chưa test/review độc lập → tính 50% → ~30% hoàn thành thực.</b> Luồng offline + áp mã online chạy thật (kéo sớm cả online-apply ngoài 33).</div>
+        <div style="font-size:38px; font-weight:800; color:#B45309; line-height:1.15;">~12<span style="font-size:20px; color:var(--muted);">% thực · code ~60%</span></div>
+        <div style="font-size:12.5px; color:var(--ink-soft);"><b>Đã code ~20/33 (~60%)</b> (Huy): 12 entity · 8 controller · 18 service · 219 test. <b style="color:#B45309;">Chưa test/review độc lập → tính 20% → ~12% hoàn thành thực.</b> Luồng offline + áp mã online chạy thật (kéo sớm cả online-apply ngoài 33).</div>
       </div>
     </div>
 
     <!-- 8 epic breakdown -->
-    <div style="font-size:13px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-bottom:10px;">📋 Phase 1 — 33 task · 8 epic (~90 PD) · <span style="color:#B45309;">đã code ~20/33 · hoàn thành thực ~30% (chưa QA)</span></div>
+    <div style="font-size:13px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-bottom:10px;">📋 Phase 1 — 33 task · 8 epic (~90 PD) · <span style="color:#B45309;">đã code ~20/33 · hoàn thành thực ~12% (chưa QA)</span></div>
     <div style="overflow-x:auto;">
     <table style="width:100%; border-collapse:collapse; font-size:12.5px;">
       <thead><tr style="text-align:left; color:var(--muted); border-bottom:2px solid var(--border);">
@@ -1424,12 +1424,12 @@
         <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">8 · Test &amp; pilot</td><td style="padding:7px 10px; color:var(--muted);">QA</td><td style="padding:7px 10px; text-align:center;">3</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">1</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:33%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
       </tbody>
       <tfoot><tr style="border-top:2px solid var(--border); font-weight:800; color:var(--ink);">
-        <td style="padding:8px 10px;">Tổng Phase 1</td><td></td><td style="padding:8px 10px; text-align:center;">33</td><td style="padding:8px 10px; text-align:center; color:#047857;">~20 code</td><td style="padding:8px 10px; color:#B45309;">~30% thực (×50%)</td>
+        <td style="padding:8px 10px;">Tổng Phase 1</td><td></td><td style="padding:8px 10px; text-align:center;">33</td><td style="padding:8px 10px; text-align:center; color:#047857;">~20 code</td><td style="padding:8px 10px; color:#B45309;">~12% thực (×20%)</td>
       </tr></tfoot>
     </table>
     </div>
 
-    <div style="margin-top:14px; padding:12px 14px; background:var(--warning-soft); border-radius:10px; font-size:12.5px; color:#B45309;"><b>⚠️ Lưu ý đánh giá:</b> ~20/33 task đã code nhưng <b>chưa qua test + review độc lập → chỉ tính 50% → ~30% hoàn thành thực</b>. <b>Vượt scope:</b> ngoài 33 task còn kéo sớm áp mã online (P1-34/39/40/46) + hook checkout .NET (P1-41/43). <b>Còn lại:</b> report chống quà rác · admin config · offer image · redeem status · E2E + pilot. <b>W29:</b> test + review lại phần đã code + hoàn thiện + pilot thử.</div>
+    <div style="margin-top:14px; padding:12px 14px; background:var(--warning-soft); border-radius:10px; font-size:12.5px; color:#B45309;"><b>⚠️ Lưu ý đánh giá:</b> ~20/33 task đã code nhưng <b>chưa qua test + review độc lập → chỉ tính 20% → ~12% hoàn thành thực</b> — <i>1 tuần để code nhưng ~3 tuần để review + sửa đúng hướng + test; review có thể phát sinh việc</i>. <b>Vượt scope:</b> ngoài 33 task còn kéo sớm áp mã online (P1-34/39/40/46) + hook checkout .NET (P1-41/43). <b>Còn lại:</b> report chống quà rác · admin config · offer image · redeem status · E2E + pilot. <b>W29:</b> test + review lại phần đã code + hoàn thiện + pilot thử.</div>
   </div>
 
   <!-- ============== 🤝 Dự án · Kết nối GotIt ============== -->
@@ -1473,11 +1473,11 @@
         <div class="feat-check" style="background:var(--purple);">★</div>
         <div class="feat-content">
           <h4>🌐 reward-network — BE Phase 1 build diện rộng (trọng tâm · Huy)</h4>
-          <p><b>Đã code ~20/33 (~60%) trong 1 tuần</b> — chưa test/review độc lập → tính 50% → <b>~30% hoàn thành thực</b>. BE core: đóng góp offer + state machine + code-gen · chợ ưu đãi + phân quyền L1/L2 · đổi quà idempotent + dùng offline · <b>áp mã online apply/confirm/release</b> · sổ credit shadow · đối soát <code>@Scheduled</code> · duyệt offer admin CRM. <b>12 entity · 8 controller · 18 service · 219 test.</b></p>
+          <p><b>Đã code ~20/33 (~60%) trong 1 tuần</b> — chưa test/review độc lập → tính 20% → <b>~12% hoàn thành thực</b>. BE core: đóng góp offer + state machine + code-gen · chợ ưu đãi + phân quyền L1/L2 · đổi quà idempotent + dùng offline · <b>áp mã online apply/confirm/release</b> · sổ credit shadow · đối soát <code>@Scheduled</code> · duyệt offer admin CRM. <b>12 entity · 8 controller · 18 service · 219 test.</b></p>
           <div class="feat-meta">
             <span class="badge-owner-huy">👤 <b>Huy</b></span>
             <span>🆕 reward-network</span>
-            <span class="badge-heavy" style="background:var(--purple-soft); color:#5B21B6;">★ Trọng tâm · code ~60% (QA ~30%)</span>
+            <span class="badge-heavy" style="background:var(--purple-soft); color:#5B21B6;">★ Trọng tâm · code ~60% (QA ~12%)</span>
           </div>
         </div>
       </div>
@@ -1663,7 +1663,7 @@
       <div class="result-card success">
         <h3>✅ Trọng tâm tuần — đạt 4/4</h3>
         <ul>
-          <li>reward-network — code Phase 1 ~60% (BE + online + integration); chưa QA → tính ~30% ✅</li>
+          <li>reward-network — code Phase 1 ~60% (BE + online + integration); chưa QA → tính ~12% ✅</li>
           <li>UrBox — deploy staging + chốt 3 mục đối tác + public key ✅</li>
           <li>Phân tích kiến trúc toàn domain + lộ trình migration ✅</li>
           <li>Multi-vendor catalog + tỷ giá đổi điểm + combo redemption ✅</li>
@@ -1679,7 +1679,7 @@
     </div>
     <div style="margin-top:14px; background:linear-gradient(135deg,#F5F3FF,#EFF6FF); border:1px solid #C7D2FE; border-radius:12px; padding:16px 20px;">
       <div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#5B21B6; text-transform:uppercase; margin-bottom:8px;">🧭 Định hướng chiến lược của team</div>
-      <p style="font-size:14.5px; color:var(--ink-soft); line-height:1.65; margin-bottom:6px;"><b>① Từ thiết kế → thực thi:</b> sau khi chốt thiết kế reward-network (W27), team vào dev ngay — Huy code <b style="color:#5B21B6;">~60% Phase 1 full-stack trong 1 tuần</b> (hoàn thành thực ~30% do chưa test/review), luồng đổi quà + áp mã online chạy thật.</p>
+      <p style="font-size:14.5px; color:var(--ink-soft); line-height:1.65; margin-bottom:6px;"><b>① Từ thiết kế → thực thi:</b> sau khi chốt thiết kế reward-network (W27), team vào dev ngay — Huy code <b style="color:#5B21B6;">~60% Phase 1 full-stack trong 1 tuần</b> (hoàn thành thực ~12% do chưa test/review), luồng đổi quà + áp mã online chạy thật.</p>
       <p style="font-size:14.5px; color:var(--ink-soft); line-height:1.65;"><b>② Củng cố nền đa vendor:</b> UrBox lên staging + chốt hướng đối tác; catalog gộp đa vendor + tỷ giá điểm — chuẩn bị hạ tầng cho <b style="color:#5B21B6;">3 nguồn quà (GotIt · UrBox · reward-network)</b> chạy song song.</p>
     </div>
   </div>
@@ -1694,7 +1694,7 @@
       <div class="risk-item high">
         <span class="risk-level">🔥 HIGH · NGUỒN LỰC</span>
         <h4>reward-network vào dev tốc độ cao — 1 mình Huy gánh full-stack</h4>
-        <p>Phase 1 ~90 PD; tuần này Huy 1 mình code ~60% xuyên 5 repo — nhưng <b>chưa test/review độc lập → thực chất tính ~30%</b>. <b>Rủi ro:</b> bus-factor 1 người + code nhanh chưa QA dễ nợ chất lượng/E2E; phần còn lại + duy trì UrBox/rewards-v2 vẫn cần người. <b>Action:</b> ưu tiên test + review lại phần đã code; kéo Hải/Trang vào epic còn lại; chốt phạm vi pilot P0.</p>
+        <p>Phase 1 ~90 PD; tuần này Huy 1 mình code ~60% xuyên 5 repo — nhưng <b>chưa test/review độc lập → thực chất tính ~12%</b>. <b>Rủi ro:</b> bus-factor 1 người + code nhanh chưa QA dễ nợ chất lượng/E2E; phần còn lại + duy trì UrBox/rewards-v2 vẫn cần người. <b>Action:</b> ưu tiên test + review lại phần đã code; kéo Hải/Trang vào epic còn lại; chốt phạm vi pilot P0.</p>
       </div>
       <div class="risk-item medium">
         <span class="risk-level">🟡 MEDIUM · UrBox</span>
@@ -1718,8 +1718,8 @@
       </div>
       <div class="risk-item low">
         <span class="risk-level">✅ MILESTONE</span>
-        <h4>reward-network — code Phase 1 ~60% (thực ~30%)</h4>
-        <p>1 tuần code ~20/33 Phase 1: đóng góp → đổi quà → áp mã online chạy thật đầu-cuối (5 repo) · 219 test. Tăng tốc mạnh — <b>cần test + review lại (đang tính 50% → ~30%)</b>.</p>
+        <h4>reward-network — code Phase 1 ~60% (thực ~12%)</h4>
+        <p>1 tuần code ~20/33 Phase 1: đóng góp → đổi quà → áp mã online chạy thật đầu-cuối (5 repo) · 219 test. Tăng tốc mạnh — <b>cần test + review lại (đang tính 20% → ~12%)</b>.</p>
       </div>
       <div class="risk-item low">
         <span class="risk-level">✅ LOW</span>
@@ -1885,9 +1885,9 @@
         <div class="timeline-item current">
           <div class="timeline-dot"></div>
           <div class="timeline-card">
-            <div class="timeline-date">🌐 TRỌNG TÂM · W28 — CODE ~60% (THỰC ~30%)</div>
+            <div class="timeline-date">🌐 TRỌNG TÂM · W28 — CODE ~60% (THỰC ~12%)</div>
             <h4>reward-network (reward-hub) — pool quà</h4>
-            <p>Từ thiết kế (W27) → dev: Huy code Phase 1 <b>~60% full-stack</b> (5 repo) · 219 test · luồng đóng góp → đổi quà → áp mã online chạy thật. <b>Chưa test/review độc lập → tính 50% → ~30% hoàn thành thực.</b></p>
+            <p>Từ thiết kế (W27) → dev: Huy code Phase 1 <b>~60% full-stack</b> (5 repo) · 219 test · luồng đóng góp → đổi quà → áp mã online chạy thật. <b>Chưa test/review độc lập → tính 20% → ~12% hoàn thành thực.</b></p>
             <div class="sub-milestones">
               <div class="sub-item"><span class="sub-date">W29+</span><span>Hoàn thiện: report chống quà rác · admin config · E2E + pilot thử</span></div>
               <div class="sub-item"><span class="sub-date">~90 PD</span><span>Phase 1 tổng · pilot 20-50 shop F&amp;B/Retail</span></div>
@@ -1901,7 +1901,7 @@
           <div class="timeline-card">
             <div class="timeline-date">🔌 STAGING · W28 — ĐÃ DEPLOY</div>
             <h4>Kết nối UrBox cho rewards-v2</h4>
-            <p><b>Đã lên staging</b> W28: đổi quà (evoucher + vật lý) + catalog đa vendor + combo redemption. Chốt <b>3 mục</b> với UrBox (ratelimit · RSA · tài liệu vật lý) + gửi public key. Còn rà soát sau deploy + API nâng cao.</p>
+            <p><b>Đã lên staging</b> W28: đổi quà + catalog đa vendor + combo redemption. UrBox <b>đã setup RSA + gửi 2 app_id/app_secret</b> cho CNV test staging. Còn rà soát + API nâng cao.</p>
             <div class="sub-milestones">
               <div class="sub-item"><span class="sub-date">W29</span><span>Rà soát staging · chuẩn bị prod (backfill campaign_code · Kafka)</span></div>
               <div class="sub-item"><span class="sub-date">Chờ UrBox</span><span>P7 real-time + OAuth / webhook / đối soát / incremental</span></div>
@@ -2117,7 +2117,7 @@
     type: 'doughnut',
     data: {
       labels: [
-        'reward-network — Phase 1 ~30% (chưa QA)',
+        'reward-network — Phase 1 ~12% (chưa QA)',
         'UrBox — staging + chốt 3 mục',
         'Phân tích kiến trúc + migration',
         'Multi-vendor catalog + tỷ giá điểm'
