@@ -1,0 +1,2307 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>W29/2026 — Reward V2 Team Report (2 ngày)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F8FAFC;
+    --bg-soft: #F1F5F9;
+    --card: #FFFFFF;
+    --border: #E5E7EB;
+    --border-soft: #F1F5F9;
+
+    --ink: #111827;
+    --ink-soft: #374151;
+    --muted: #6B7280;
+    --muted-light: #9CA3AF;
+
+    --primary: #4F46E5;
+    --primary-soft: #EEF2FF;
+    --success: #10B981;
+    --success-soft: #D1FAE5;
+    --danger: #EF4444;
+    --danger-soft: #FEE2E2;
+    --warning: #F59E0B;
+    --warning-soft: #FEF3C7;
+    --info: #3B82F6;
+    --info-soft: #DBEAFE;
+    --purple: #8B5CF6;
+    --purple-soft: #EDE9FE;
+    --pink: #EC4899;
+    --pink-soft: #FCE7F3;
+
+    --m-trang: #4F46E5;
+    --m-huy:   #10B981;
+    --m-hai:   #F59E0B;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 28px;
+    line-height: 1.65;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1280px; margin: 0 auto; }
+
+  /* ===== Header ===== */
+  header {
+    background: linear-gradient(135deg, #EEF2FF 0%, #FCE7F3 100%);
+    border: 1px solid #DDD6FE;
+    border-radius: 16px;
+    padding: 32px 28px;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  header .eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 2.5px;
+    color: var(--primary);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  header h1 {
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.8px;
+    margin-bottom: 8px;
+  }
+  header p {
+    color: var(--muted);
+    font-size: 15px;
+  }
+  header .meta {
+    margin-top: 16px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  header .meta span {
+    background: rgba(255,255,255,.7);
+    border: 1px solid rgba(79,70,229,.15);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  /* ===== Strategy banner ===== */
+  .strategy-banner {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FED7AA 100%);
+    border: 1px solid #FBBF24;
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .strategy-banner .label {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #92400E;
+    text-transform: uppercase;
+    background: rgba(255,255,255,.6);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .strategy-banner h2 {
+    font-size: 19px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .strategy-banner p {
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .strategy-banner b { color: #B45309; font-weight: 700; }
+  .strategy-banner .arrow { color: #B45309; font-weight: 800; }
+
+  /* ===== KPI ===== */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .kpi {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+  }
+  .kpi.success::before { background: var(--success); }
+  .kpi.danger::before  { background: var(--danger); }
+  .kpi.warning::before { background: var(--warning); }
+  .kpi.info::before    { background: var(--info); }
+  .kpi.primary::before { background: var(--primary); }
+  .kpi.pink::before    { background: var(--pink); }
+
+  .kpi-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .kpi-value {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 4px;
+  }
+  .kpi-sub {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ===== Section title ===== */
+  .section { margin-bottom: 36px; }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    user-select: none;
+    padding: 4px 8px 4px 0;
+    border-radius: 8px;
+    transition: background 0.15s;
+  }
+  .section-title:hover {
+    background: var(--bg-soft);
+  }
+  .section-title h2 {
+    font-size: 24px;
+    color: var(--ink);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+  }
+  .section-title h2::before {
+    content: "";
+    display: inline-block;
+    width: 5px;
+    height: 22px;
+    background: linear-gradient(180deg, var(--primary), var(--pink));
+    border-radius: 3px;
+    margin-right: 12px;
+  }
+  .section-title .hint {
+    font-size: 14px;
+    color: var(--muted);
+    flex: 1;
+  }
+  .section-toggle {
+    width: 32px;
+    height: 32px;
+    background: var(--bg-soft);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: transform 0.25s ease, background 0.15s, color 0.15s;
+  }
+  .section-title:hover .section-toggle {
+    background: var(--primary-soft);
+    color: var(--primary);
+  }
+  .section.collapsed .section-toggle {
+    transform: rotate(-90deg);
+  }
+  .section > *:not(.section-title) {
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.2s ease, margin 0.3s ease;
+    max-height: 6000px;
+    opacity: 1;
+  }
+  .section.collapsed > *:not(.section-title) {
+    max-height: 0;
+    opacity: 0;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+  }
+
+  /* Collapse-all toolbar */
+  .collapse-toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .collapse-toolbar .toolbar-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .collapse-toolbar .toolbar-btn:hover {
+    background: var(--primary-soft);
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+  .collapse-toolbar .toolbar-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* ===== Cards generic ===== */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+  }
+  .card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 14px;
+    letter-spacing: -0.2px;
+  }
+
+  /* ===== CTO/PO Dashboard ===== */
+  .cto-dash {
+    background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+    border: 1px solid #BFDBFE;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+  .cto-dash > h3 {
+    font-size: 14px;
+    color: var(--info);
+    margin-bottom: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+  }
+  .cto-dash > h3::before {
+    content: "👁  ";
+  }
+  .chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .chart-card h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .chart-card .chart-sub {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .chart-wrap {
+    position: relative;
+    height: 240px;
+  }
+  .chart-wrap.tall { height: 280px; }
+
+  /* Big number callout */
+  .big-callout {
+    text-align: center;
+    padding: 14px 0 8px;
+  }
+  .big-callout .num {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+  .big-callout .num.success { color: var(--success); }
+  .big-callout .num.warning { color: var(--warning); }
+  .big-callout .num.danger { color: var(--danger); }
+  .big-callout .num.primary { color: var(--primary); }
+  .big-callout .label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* ===== Member task table ===== */
+  .member-row {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+  }
+  .member-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .av-trang { background: var(--m-trang); }
+  .av-huy   { background: var(--m-huy); }
+  .av-hai   { background: var(--m-hai); }
+  .member-head h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .member-head .role {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .member-head .meta-pills {
+    margin-left: auto;
+    display: flex; gap: 8px;
+  }
+  .pill {
+    padding: 5px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .pill.task    { background: var(--info-soft); color: var(--info); }
+  .pill.effort  { background: var(--purple-soft); color: var(--purple); }
+
+  .member-stats-row {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  @media (max-width: 768px) {
+    .member-stats-row { grid-template-columns: 1fr; }
+  }
+  .member-tasks {
+    list-style: none;
+  }
+  .member-tasks li {
+    padding: 8px 0;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.55;
+  }
+  .member-tasks li::before {
+    content: "✓";
+    color: var(--success);
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+    width: 18px;
+    height: 18px;
+    background: var(--success-soft);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .member-tasks li b { color: var(--ink); font-weight: 700; }
+  .member-tasks li .desc {
+    display: block;
+    margin-top: 3px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .difficulty-bar {
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-soft);
+  }
+
+  /* ===== Tabbed feature list ===== */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    background: var(--card);
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    flex: 1;
+    min-width: 180px;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+  }
+  .tab-btn:hover {
+    background: var(--bg-soft);
+    color: var(--ink);
+  }
+  .tab-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--purple));
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(79,70,229,.25);
+  }
+  .tab-btn .count {
+    display: inline-block;
+    min-width: 22px;
+    padding: 2px 8px;
+    background: rgba(255,255,255,.25);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .tab-btn:not(.active) .count {
+    background: var(--bg-soft);
+    color: var(--muted);
+  }
+
+  /* ===== Feat list (cards stacked vertically) ===== */
+  .feat-list { display: flex; flex-direction: column; gap: 10px; }
+  .feat-list.hidden { display: none; }
+  .feat-row {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: all 0.15s;
+  }
+  .feat-row:hover {
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(79,70,229,.08);
+  }
+  .feat-check {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--success);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-weight: 800;
+    font-size: 15px;
+    margin-top: 1px;
+  }
+  .feat-content { flex: 1; min-width: 0; }
+  .feat-content h4 {
+    font-size: 16.5px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 5px;
+    letter-spacing: -0.2px;
+  }
+  .feat-content p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .feat-content .feat-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .feat-content .feat-meta span {
+    background: var(--bg-soft);
+    color: var(--ink-soft);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+  }
+  .feat-content .feat-meta span b { color: var(--ink); }
+  .feat-content .feat-meta .badge-owner-trang { background: #EEF2FF; color: var(--m-trang); }
+  .feat-content .feat-meta .badge-owner-huy   { background: #ECFDF5; color: #047857; }
+  .feat-content .feat-meta .badge-owner-hai   { background: #FEF3C7; color: #B45309; }
+  .feat-content .feat-meta .badge-heavy       { background: linear-gradient(135deg, #FCE7F3, #FFE4E6); color: #BE185D; font-weight: 700; }
+
+  /* ===== Vertical Timeline ===== */
+  .timeline {
+    position: relative;
+    padding: 12px 0 12px 12px;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 28px;
+    top: 14px;
+    bottom: 14px;
+    width: 3px;
+    background: linear-gradient(180deg,
+      var(--success) 0%,
+      var(--success) 22%,
+      var(--warning) 22%,
+      var(--warning) 50%,
+      var(--info) 50%,
+      var(--info) 78%,
+      var(--purple) 78%,
+      var(--purple) 100%);
+    border-radius: 3px;
+  }
+  .timeline-item {
+    position: relative;
+    padding-left: 76px;
+    padding-bottom: 22px;
+  }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-dot {
+    position: absolute;
+    left: 16px;
+    top: 6px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: white;
+    border: 4px solid var(--success);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 4px white, 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .timeline-dot::after {
+    content: "";
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+  }
+  .timeline-item.done .timeline-dot { border-color: var(--success); }
+  .timeline-item.done .timeline-dot::after { background: var(--success); }
+  .timeline-item.current .timeline-dot { border-color: var(--warning); animation: pulse 2s infinite; }
+  .timeline-item.current .timeline-dot::after { background: var(--warning); }
+  .timeline-item.upcoming .timeline-dot { border-color: var(--info); }
+  .timeline-item.upcoming .timeline-dot::after { background: var(--info); }
+  .timeline-item.future .timeline-dot { border-color: var(--purple); }
+  .timeline-item.future .timeline-dot::after { background: var(--purple); }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 4px white, 0 0 0 0 rgba(245,158,11,0.4); }
+    50% { box-shadow: 0 0 0 4px white, 0 0 0 8px rgba(245,158,11,0); }
+  }
+
+  .timeline-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    border-left: 4px solid var(--success);
+  }
+  .timeline-item.current .timeline-card { border-left-color: var(--warning); background: linear-gradient(135deg, #FFFBEB 0%, var(--card) 80%); }
+  .timeline-item.upcoming .timeline-card { border-left-color: var(--info); }
+  .timeline-item.future .timeline-card { border-left-color: var(--purple); }
+
+  .timeline-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  .timeline-item.done .timeline-date { background: var(--success-soft); color: #047857; }
+  .timeline-item.current .timeline-date { background: var(--warning-soft); color: #B45309; }
+  .timeline-item.upcoming .timeline-date { background: var(--info-soft); color: #1D4ED8; }
+  .timeline-item.future .timeline-date { background: var(--purple-soft); color: #5B21B6; }
+
+  .timeline-card h4 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    letter-spacing: -0.2px;
+  }
+  .timeline-card p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .timeline-card p + p { margin-top: 6px; }
+  .timeline-card .sub-milestones {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .timeline-card .sub-milestones .sub-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .timeline-card .sub-milestones .sub-item .sub-date {
+    background: var(--bg-soft);
+    color: var(--ink);
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    font-size: 12px;
+  }
+  .timeline-card .note {
+    background: var(--warning-soft);
+    color: #92400E;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .timeline-card .note b { color: #B45309; }
+
+  /* ===== Result grids ===== */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    border-left: 5px solid;
+  }
+  .result-card.success { border-left-color: var(--success); }
+  .result-card.danger  { border-left-color: var(--danger); }
+  .result-card.warning { border-left-color: var(--warning); }
+  .result-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .result-card.success h3 { color: var(--success); }
+  .result-card.danger h3  { color: var(--danger); }
+  .result-card.warning h3 { color: #B45309; }
+  .result-card ul { list-style: none; }
+  .result-card li {
+    padding: 8px 0;
+    font-size: 15px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .result-card.success li::before { content: "✓"; color: var(--success); font-weight: 800; }
+  .result-card.danger li::before { content: "✕"; color: var(--danger); font-weight: 800; }
+  .result-card.warning li::before { content: "◐"; color: var(--warning); font-weight: 800; }
+
+  /* ===== Risk heatmap ===== */
+  .risk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .risk-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    border-top: 4px solid;
+  }
+  .risk-item.high   { border-top-color: var(--danger); background: linear-gradient(180deg, #FEF2F2 0%, var(--card) 60%); }
+  .risk-item.medium { border-top-color: var(--warning); background: linear-gradient(180deg, #FFFBEB 0%, var(--card) 60%); }
+  .risk-item.low    { border-top-color: var(--success); background: linear-gradient(180deg, #F0FDF4 0%, var(--card) 60%); }
+  .risk-item .risk-level {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .risk-item.high .risk-level   { background: var(--danger-soft); color: var(--danger); }
+  .risk-item.medium .risk-level { background: var(--warning-soft); color: #B45309; }
+  .risk-item.low .risk-level    { background: var(--success-soft); color: #047857; }
+  .risk-item h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .risk-item p {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .risk-item p b { color: var(--ink); }
+
+  /* ===== Plan W25 ===== */
+  .plan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .plan-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    border-top: 4px solid var(--primary);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .plan-checkbox {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    background: var(--primary-soft);
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-weight: 800;
+    font-size: 12px;
+    margin-top: 2px;
+  }
+  .plan-item .plan-content h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .plan-item .plan-content p {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ===== Health metric gauges (CSS conic) ===== */
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .metric-card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 22px 20px;
+    text-align: center;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .metric-card.danger  { border-top: 4px solid var(--danger); }
+  .metric-card.warning { border-top: 4px solid var(--warning); }
+  .metric-card.success { border-top: 4px solid var(--success); }
+
+  .gauge {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 8px auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .gauge::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    background: var(--card);
+    border-radius: 50%;
+    z-index: 0;
+  }
+  .gauge-value {
+    position: relative;
+    z-index: 1;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+  .gauge-value .unit {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-left: 2px;
+  }
+  .gauge-sub {
+    position: relative;
+    z-index: 1;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+  }
+  .gauge.danger  { background: conic-gradient(var(--danger) calc(var(--pct, 0) * 1%), var(--bg-soft) 0); }
+  .gauge.warning { background: conic-gradient(var(--warning) calc(var(--pct, 0) * 1%), var(--bg-soft) 0); }
+  .gauge.success { background: conic-gradient(var(--success) calc(var(--pct, 0) * 1%), var(--bg-soft) 0); }
+  .gauge.info    { background: conic-gradient(var(--info) calc(var(--pct, 0) * 1%), var(--bg-soft) 0); }
+
+  .metric-card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    letter-spacing: -0.2px;
+  }
+  .metric-card p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .metric-card .verdict {
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: var(--bg-soft);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .metric-card.danger  .verdict { background: var(--danger-soft);  color: var(--danger); }
+  .metric-card.warning .verdict { background: var(--warning-soft); color: #B45309; }
+  .metric-card.success .verdict { background: var(--success-soft); color: #047857; }
+
+  /* ===== CTO Recommendation ===== */
+  .reco-card {
+    background: linear-gradient(135deg, #F0F9FF 0%, #EFF6FF 100%);
+    border: 1px solid #BFDBFE;
+    border-radius: 14px;
+    padding: 24px 26px;
+  }
+  .reco-card h3 {
+    font-size: 19px;
+    color: var(--info);
+    margin-bottom: 14px;
+    font-weight: 700;
+  }
+  .reco-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+  }
+  .reco-item {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 16px 18px;
+    border-left: 3px solid var(--info);
+  }
+  .reco-item .reco-num {
+    display: inline-block;
+    width: 28px; height: 28px;
+    background: var(--info);
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 28px;
+    font-weight: 800;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .reco-item h4 {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .reco-item p {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    text-align: center;
+    padding: 24px 0;
+    color: var(--muted);
+    font-size: 12.5px;
+    border-top: 1px solid var(--border);
+    margin-top: 36px;
+  }
+  footer code {
+    background: var(--bg-soft);
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: var(--ink-soft);
+    font-family: "SF Mono", Monaco, monospace;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="eyebrow">Weekly Report · Sprint 16 · W29 · Tuần rút gọn 2 ngày</div>
+    <h1>Reward V2 — Team Weekly Report</h1>
+    <p>Tuần 29 / 2026 · 13/07 → 14/07 (T2 + T3) · 3 contributors + QC</p>
+    <div class="meta">
+      <span>📦 rewards-v2</span>
+      <span>🆕 reward-network</span>
+      <span>🏗 cdp-backend</span>
+      <span>🎨 cdp-frontend</span>
+      <span>🔧 net-core</span>
+      <span>🗓 Team làm 2 ngày · Trọng tâm: reward-network hoàn thiện code + UrBox test staging</span>
+    </div>
+  </header>
+
+  <!-- Strategy banner -->
+  <div class="strategy-banner">
+    <span class="label">📌 Bối cảnh &amp; định hướng tuần</span>
+    <h2>reward-network hoàn thiện code (settlement Kafka + siết bảo mật) &amp; UrBox testing staging — tuần rút gọn 2 ngày</h2>
+    <p>Tuần này team làm <b>2 ngày (T2 13/07 · T3 14/07)</b>. <b>Huy</b> hoàn thiện cơ bản code reward-network: chuyển toàn bộ luồng voucher sang <b>Kafka settlement</b> (net-core → RN → rewards-v2 · chống mất đơn khi mạng lỗi), móc đủ <b>7 điểm confirm/release</b> trong 26 chỗ xử lý đơn, tách <b>3 worker riêng</b>, chống trùng đơn (idempotency P1-10), rồi <b>siết bảo mật</b> (bắt buộc ký RSA CRM Admin — default-deny) + <b>2 vòng hardening (7 hạng mục)</b>. <b>Trang</b> review &amp; <b>mask thông tin nhạy cảm trong log</b> reward-v2 + yêu cầu UrBox cấp thông tin staging + trực tiếp test staging. <b>Hải</b> hardening UrBox sync (đa app-credential · tồn kho digital/vật lý · dọn quà khi đổi credential · fallback URBOX_OTHER · ngày giao dự kiến) + catalog-sync bền hơn; cùng Trang &amp; <b>QC test chung</b> trên staging.</p>
+  </div>
+
+  <!-- ============== 📊 Portfolio 3 dự án con ============== -->
+  <div style="margin-bottom:22px;">
+    <div style="font-size:13px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-bottom:12px;">📊 Reward tách 3 dự án con — % hoàn thành trên tổng task (đã đối chiếu code)</div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:14px;">
+
+      <!-- GotIt -->
+      <div style="padding:18px; background:var(--card); border:1px solid var(--border); border-top:4px solid var(--success); border-radius:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:4px;">
+          <b style="font-size:15px;">🤝 Kết nối GotIt</b>
+          <span style="font-size:10.5px; font-weight:700; color:#047857; background:var(--success-soft); padding:3px 9px; border-radius:99px;">LIVE · DUY TRÌ</span>
+        </div>
+        <div style="display:flex; align-items:baseline; gap:8px; margin:6px 0;">
+          <span style="font-size:34px; font-weight:800; color:var(--success); line-height:1;">~95%</span>
+          <span style="font-size:12px; color:var(--muted);">6 nhóm tính năng</span>
+        </div>
+        <div style="height:8px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin-bottom:8px;"><div style="height:100%; width:95%; background:var(--success); border-radius:99px;"></div></div>
+        <div style="font-size:12px; color:var(--ink-soft);">Vendor tích hợp sớm nhất, đã live prod (evoucher W22 · vật lý W25-26 bàn giao CG). 5/6 nhóm 100%, đa kênh gửi 85%. <b>UAT Total: Total đã gửi quà sang GotIt, CG đang xử lý UAT.</b></div>
+      </div>
+
+      <!-- UrBox -->
+      <div style="padding:18px; background:var(--card); border:1px solid var(--border); border-top:4px solid var(--warning); border-radius:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:4px;">
+          <b style="font-size:15px;">🔌 Kết nối UrBox</b>
+          <span style="font-size:10.5px; font-weight:700; color:#B45309; background:var(--warning-soft); padding:3px 9px; border-radius:99px;">🧪 ĐANG TEST STAGING</span>
+        </div>
+        <div style="display:flex; align-items:baseline; gap:8px; margin:6px 0;">
+          <span style="font-size:34px; font-weight:800; color:var(--warning); line-height:1;">~92%</span>
+          <span style="font-size:12px; color:var(--muted);">kỹ thuật · đang test staging</span>
+        </div>
+        <div style="height:8px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin-bottom:8px;"><div style="height:100%; width:92%; background:var(--warning); border-radius:99px;"></div></div>
+        <div style="font-size:12px; color:var(--ink-soft);">Đang <b>testing trên staging</b> (Trang + Hải + <b>QC test chung</b>). Hải hardening sync: đa app-credential · tồn kho digital/vật lý · fallback URBOX_OTHER · ngày giao dự kiến. Còn hoàn thiện test + next step tích hợp.</div>
+      </div>
+
+      <!-- reward-network -->
+      <div style="padding:18px; background:var(--card); border:1px solid var(--border); border-top:4px solid var(--purple); border-radius:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:4px;">
+          <b style="font-size:15px;">🌐 reward-network <span style="font-size:11px; color:var(--muted); font-weight:500;">(reward-hub)</span></b>
+          <span style="font-size:10.5px; font-weight:700; color:#6D28D9; background:var(--purple-soft); padding:3px 9px; border-radius:99px;">⭐ TĂNG TỐC · HUY</span>
+        </div>
+        <div style="margin:10px 0 8px;">
+          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px;"><span>Thiết kế &amp; lập kế hoạch</span><b style="color:var(--purple);">100%</b></div>
+          <div style="height:7px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin-bottom:8px;"><div style="height:100%; width:100%; background:var(--purple); border-radius:99px;"></div></div>
+          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px;"><span>Code Phase 1 (đã code ~24/33, chưa QA)</span><b style="color:#B45309;">~14%</b></div>
+          <div style="height:7px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:14%; background:var(--warning); border-radius:99px;"></div></div>
+        </div>
+        <div style="font-size:12px; color:var(--ink-soft);">Huy hoàn thiện cơ bản code (~24/33 · ~72%): +settlement Kafka +siết bảo mật +2 vòng hardening. <b>Code xong + test Huy xanh nhưng chưa review độc lập/deploy → tính 20% → ~14%</b>.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi success">
+      <div class="kpi-label">Trọng tâm 2 ngày (T2+T3)</div>
+      <div class="kpi-value">3 mảng</div>
+      <div class="kpi-sub">reward-network hoàn thiện code · UrBox test staging · review + mask log nhạy cảm</div>
+    </div>
+    <div class="kpi" style="background: linear-gradient(135deg, rgba(139,92,246,.2), rgba(6,182,212,.14)); border:1px solid rgba(139,92,246,.35);">
+      <div class="kpi-label" style="color:#7C3AED;">🌐 reward-network — Phase 1</div>
+      <div class="kpi-value" style="color:#7C3AED;">~14%</div>
+      <div class="kpi-sub">Hoàn thiện cơ bản code (~24/33 ~72%) + settlement Kafka + bảo mật; <b>chưa review/deploy → tính 20% → ~14%</b></div>
+    </div>
+    <div class="kpi info">
+      <div class="kpi-label">🔌 UrBox — đang test staging</div>
+      <div class="kpi-value">Staging 🧪</div>
+      <div class="kpi-sub">Trang + Hải + <b>QC test chung</b> trên staging; Hải hardening sync (đa credential · tồn kho · fallback · ngày giao)</div>
+    </div>
+    <div class="kpi warning">
+      <div class="kpi-label">🔐 Bảo mật log (Trang)</div>
+      <div class="kpi-value">✅</div>
+      <div class="kpi-sub">Review lại log reward-v2 + mask thông tin nhạy cảm (voucher code / PII) — chống rò rỉ qua log</div>
+    </div>
+    <div class="kpi primary">
+      <div class="kpi-label">🔗 Settlement voucher qua Kafka</div>
+      <div class="kpi-value">✅</div>
+      <div class="kpi-sub">Huy: net-core → RN → rewards-v2 (confirm/release/refund) · 7 điểm confirm · 3 worker riêng · chống mất đơn</div>
+    </div>
+    <div class="kpi pink">
+      <div class="kpi-label">Khối lượng (2 ngày · theo việc + độ khó)</div>
+      <div class="kpi-value">~21 hạng mục</div>
+      <div class="kpi-sub">Huy 11 · Hải 6 · Trang 4 · độ khó cao nhất: <b>Huy (settlement Kafka + siết bảo mật)</b> · không đo bằng commit</div>
+    </div>
+  </div>
+
+  <!-- ============== 🎯 Tổng quan điều hành ============== -->
+  <div class="cto-dash">
+    <h3>Tổng quan điều hành</h3>
+
+    <div class="chart-grid">
+
+      <!-- Chart 1: Kết quả mục tiêu -->
+      <div class="chart-card">
+        <h4>🎯 3 mảng việc trong 2 ngày</h4>
+        <div class="chart-sub">reward-network hoàn thiện code (~72%, thực ~14%) · UrBox testing staging (Trang+Hải+QC) · review + mask log nhạy cảm (Trang).</div>
+        <div class="chart-wrap"><canvas id="goalChart"></canvas></div>
+      </div>
+
+      <!-- Chart 2: Reward Network WBS -->
+      <div class="chart-card">
+        <h4>🌐 reward-network — tiến độ Phase 1</h4>
+        <div class="chart-sub">Huy hoàn thiện cơ bản code lên <b>~72% (~24/33)</b> (+settlement Kafka +bảo mật +2 vòng hardening) — code xong + test Huy xanh nhưng <b>chưa review độc lập/deploy → tính 20% → ~14%</b>.</div>
+        <div class="big-callout">
+          <div class="num" style="color:#B45309;">~14%</div>
+          <div class="label">hoàn thành thực · code ~72% × 20% (chưa QA/deploy)</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; font-size:13px;">
+          <div style="text-align:center; padding:10px; background:var(--purple-soft); border-radius:8px;">
+            <div style="font-size:22px; font-weight:800; color:#7C3AED;">~24/33</div>
+            <div style="color:var(--muted); margin-top:2px;">Task đã code (chưa QA)</div>
+          </div>
+          <div style="text-align:center; padding:10px; background:var(--warning-soft); border-radius:8px;">
+            <div style="font-size:22px; font-weight:800; color:#B45309;">chờ chốt</div>
+            <div style="color:var(--muted); margin-top:2px;">code xong, chưa push/deploy</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart 3: Effort allocation -->
+      <div class="chart-card">
+        <h4>⚖️ Cơ cấu phân bổ công sức</h4>
+        <div class="chart-sub">Trọng tâm 2 ngày: hoàn thiện reward-network — settlement + bảo mật (Huy) + UrBox test staging (Hải/Trang) + mask log (Trang).</div>
+        <div class="chart-wrap"><canvas id="effortChart"></canvas></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toolbar Expand/Collapse all -->
+  <div class="collapse-toolbar">
+    <button class="toolbar-btn" id="btn-expand-all" title="Mở tất cả section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      Mở tất cả
+    </button>
+    <button class="toolbar-btn" id="btn-collapse-all" title="Đóng tất cả section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+      Đóng tất cả
+    </button>
+    <span style="font-size:12px; color:var(--muted); align-self:center; margin-left:6px;">💡 Click vào tiêu đề mỗi section để mở/đóng</span>
+  </div>
+
+  <!-- ============== 👥 Hiệu suất theo thành viên ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>👥 Hiệu suất theo thành viên</h2>
+      <span class="hint">Đánh giá theo <b>độ khó + chiều sâu phân tích + số task/tính năng</b> — KHÔNG theo commit count</span>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h4>📋 Số task &amp; độ khó trung bình</h4>
+        <div class="chart-sub">
+          <b>Cột:</b> Số việc trong 2 ngày. <b>Đường:</b> Độ khó TB mỗi việc (1-5). <b>Huy khối lượng + độ khó cao nhất tuần</b> (settlement voucher qua Kafka + siết bảo mật RSA) — đánh giá theo độ khó, không đo bằng commit.
+        </div>
+        <div class="chart-wrap tall"><canvas id="taskComboChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h4>🧩 Cơ cấu task theo nhóm công việc</h4>
+        <div class="chart-sub">Phân bổ task mỗi người theo 4 nhóm.</div>
+        <div class="chart-wrap tall"><canvas id="categoryStackChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Trang -->
+    <div class="member-row">
+      <div class="member-head">
+        <div class="avatar av-trang">NT</div>
+        <div>
+          <h3>Như Trang</h3>
+          <div class="role">Tech Lead · Bảo mật log reward-v2 + điều phối &amp; test UrBox trên staging</div>
+        </div>
+        <div class="meta-pills">
+          <span class="pill task">4 hạng mục</span>
+          <span class="pill effort">độ khó cao</span>
+        </div>
+      </div>
+      <ul class="member-tasks">
+        <li><b>🔐 Review &amp; mask thông tin nhạy cảm trong log</b><span class="desc">Rà soát lại các phần <b>log</b> của reward-v2 + <b>mask</b> dữ liệu nhạy cảm (voucher code / PII) — chống rò rỉ qua log. Commit: <code>log + mask log</code> · <code>fix mask log</code> (T2 + T3).</span></li>
+        <li><b>🤝 Yêu cầu UrBox cung cấp thông tin staging</b><span class="desc">Làm việc với UrBox để lấy thông tin môi trường staging (endpoint · quyền · dữ liệu test) — mở đường cho việc test tích hợp thật.</span></li>
+        <li><b>🧪 Trực tiếp testing UrBox trên staging</b><span class="desc">Cùng Hải chạy thử luồng UrBox trên staging với credential thật (đổi quà · đồng bộ · địa chỉ giao).</span></li>
+        <li><b>👥 Điều phối QC vào test chung</b><span class="desc">Đưa <b>QC</b> vào kiểm thử độc lập luồng UrBox trên staging cùng team — bắt đầu QA cho tích hợp UrBox.</span></li>
+      </ul>
+    </div>
+
+    <!-- Hai -->
+    <div class="member-row">
+      <div class="member-head">
+        <div class="avatar av-hai">H1</div>
+        <div>
+          <h3>Hồ Trung Hải</h3>
+          <div class="role">Full-stack · Hardening UrBox sync + catalog-sync + cùng test staging</div>
+        </div>
+        <div class="meta-pills">
+          <span class="pill task">6 hạng mục</span>
+          <span class="pill effort">độ khó cao</span>
+        </div>
+      </div>
+      <ul class="member-tasks">
+        <li><b>🔌 UrBox sync đa app-credential</b><span class="desc">Xử lý <b>nhiều bộ app_id/app_secret</b> (2 credential UrBox cấp) + quy tắc hiển thị tồn kho tách bạch digital vs vật lý.</span></li>
+        <li><b>🔌 Dọn quà vật lý khi đổi credential</b><span class="desc">Khi đổi app_id/credential → dọn <b>cả quà VẬT LÝ</b> (trước chỉ dọn digital) → tránh quà cũ còn sót.</span></li>
+        <li><b>🔌 Fallback URBOX_OTHER + ngày giao dự kiến</b><span class="desc">Quà thiếu brand/category → fallback "Khác" (<code>URBOX_OTHER</code>) · thêm <b>estimated delivery</b> cho quà vật lý (+ field <code>estimatedDelivery</code> ở cdp-backend RewardItemV2).</span></li>
+        <li><b>🗂 Catalog-sync bền hơn</b><span class="desc">Giữ catalog cũ khi vendor trả success nhưng <b>0 sản phẩm</b> (tránh xoá nhầm) · seed-on-demand danh mục · tách module lib <code>catalog-sync-*</code>.</span></li>
+        <li><b>🔗 Tự đồng bộ quà khi đổi credential (reward-network)</b><span class="desc">Tự động đồng bộ lại quà khi lưu/đổi credential vendor — giảm thao tác tay.</span></li>
+        <li><b>📈 Reward ranking theo tần suất</b><span class="desc">Boost xếp hạng quà theo tần suất + xử lý category — cải thiện gợi ý.</span></li>
+      </ul>
+    </div>
+
+    <!-- Huy -->
+    <div class="member-row">
+      <div class="member-head">
+        <div class="avatar av-huy">H</div>
+        <div>
+          <h3>Trần Lê Huy</h3>
+          <div class="role">Full-stack · reward-network hoàn thiện code — settlement voucher qua Kafka + siết bảo mật (nặng nhất tuần)</div>
+        </div>
+        <div class="meta-pills">
+          <span class="pill task">11 hạng mục</span>
+          <span class="pill effort">⭐ độ khó rất cao</span>
+        </div>
+      </div>
+      <ul class="member-tasks">
+        <li><b>🔗 Chuyển toàn bộ luồng voucher RN sang Kafka settlement</b><span class="desc"><b>T2.</b> Trước đây net-core gọi thẳng HTTP sang RN để xác nhận/hoàn voucher — dễ mất dữ liệu khi mạng lỗi. Chuyển sang <b>bắn event qua Kafka</b>: net-core phát event → RN xử lý → rewards-v2 cập nhật trạng thái đã dùng. Chắc chắn hơn, không mất đơn.</span></li>
+        <li><b>🔗 Móc đủ 7 điểm confirm/release voucher</b><span class="desc"><b>T2.</b> Rà soát toàn bộ <b>26 chỗ xử lý đơn hàng</b> trong net-core, gắn đủ 7 điểm confirm/release còn thiếu — mọi kịch bản đặt/hủy đơn xử lý voucher đúng.</span></li>
+        <li><b>♻️ Tách tác vụ nền RN thành 3 worker riêng</b><span class="desc"><b>T2.</b> Job gửi voucher + job đối soát hoàn tiền tách khỏi API chính → service worker độc lập, chạy ổn định, mở rộng riêng được.</span></li>
+        <li><b>🔒 Chống trùng đơn đổi quà (rewards-v2)</b><span class="desc"><b>T2.</b> Idempotency (P1-10): bấm đổi 2 lần / mạng retry → chỉ xử lý một lần, không trừ điểm/cấp voucher trùng.</span></li>
+        <li><b>⚡ Vá hiệu năng &amp; ổn định</b><span class="desc"><b>T2.</b> Sửa N+1 query · giới hạn xử lý đồng thời cổng nhận đơn · graceful shutdown worker.</span></li>
+        <li><b>🔐 Bắt buộc ký RSA cho thao tác nhạy cảm (default-deny)</b><span class="desc"><b>T3.</b> Mọi request cấp/thu quyền + quản lý shop qua CRM Admin phải có <b>chữ ký RSA hợp lệ</b> mới chạy — bịt hẳn lỗ hổng bypass.</span></li>
+        <li><b>🛒 Tắt brand/danh mục/pool → ẩn ưu đãi khỏi chợ ngay</b><span class="desc"><b>T3.</b> Trước đây tắt nhãn hàng/danh mục nhưng ưu đãi vẫn hiện. Sửa để ẩn đồng bộ + phát event cho rewards-v2 cập nhật — hết ưu đãi "ma".</span></li>
+        <li><b>🔒 Hoàn thiện chống trùng mã dùng-nhiều-lần</b><span class="desc"><b>T3.</b> Mã tái sử dụng không bị đếm/đốt sai khi nhiều đơn xen kẽ/retry; đơn đã hoàn tiền thì không cho giữ chỗ lại.</span></li>
+        <li><b>⏱ Nới cửa sổ đối soát hoàn tiền 3 → 30 ngày</b><span class="desc"><b>T3.</b> Đơn hoàn muộn trước đây bị bỏ sót âm thầm → nới cửa sổ quét lên 30 ngày để bắt đơn hoàn trễ.</span></li>
+        <li><b>✅ Xong hardening 2 vòng review (7 hạng mục)</b><span class="desc"><b>T3.</b> Chốt nghiệp vụ + vá triệt để: hoàn tiền toàn/phần + đảo đúng sổ điểm · đếm "khách mới" theo lần dùng đầu · phân quyền update DB rõ (5 tiến trình không tranh) · bọc data access qua tầng service.</span></li>
+        <li><b>🛠 Vá lỗi CDP không build (Double→Long) + fix hiển thị đơn</b><span class="desc"><b>T3.</b> Sửa lỗi ép kiểu làm CDP không compile + vài fix hiển thị đơn phía giao diện.</span></li>
+      </ul>
+      <div style="margin-top:10px; padding:8px 12px; background:var(--warning-soft); border-radius:8px; font-size:12.5px; color:#B45309;"><b>⚠️ Còn treo:</b> code đã xong + <b>test (của Huy) xanh</b> nhưng <b>CHƯA push/deploy — chờ chốt</b>. 2 điều kiện trước prod: (a) CRM Admin phải ký RSA; (b) deploy API chính trước rồi dọn index cũ trên staging. → chưa review độc lập/deploy nên <b>tính 20% → ~14% hoàn thành thực</b>.</div>
+    </div>
+  </div>
+
+  <!-- ============== CHI TIẾT THEO DỰ ÁN ============== -->
+  <div style="display:flex; align-items:center; gap:14px; margin:30px 0 4px;">
+    <div style="flex:1; height:2px; background:linear-gradient(90deg, var(--primary), transparent);"></div>
+    <span style="font-size:14px; font-weight:800; color:var(--primary); text-transform:uppercase; letter-spacing:1px; white-space:nowrap;">📂 Chi tiết theo dự án — đã có gì &amp; % hoàn thành</span>
+    <div style="flex:1; height:2px; background:linear-gradient(90deg, transparent, var(--primary));"></div>
+  </div>
+
+  <!-- ============== 🔌 Dự án · Kết nối UrBox ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🔌 Dự án · Kết nối UrBox — đã có gì &amp; % hoàn thành</h2>
+      <span class="hint">Đang <b>testing trên staging</b> (Trang + Hải + QC) · kỹ thuật ~92% · Hải hardening sync + đa credential · còn hoàn thiện test + next step tích hợp</span>
+    </div>
+
+    <!-- Hero: con số tổng -->
+    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:24px; padding:22px 24px; background:linear-gradient(135deg, var(--success-soft) 0%, #ECFDF5 60%, var(--card) 100%); border:1px solid #A7F3D0; border-radius:14px; margin-bottom:20px;">
+      <div style="text-align:center; min-width:150px;">
+        <div style="font-size:52px; font-weight:800; line-height:1; color:#047857;">~92<span style="font-size:26px;">%</span></div>
+        <div style="font-size:12px; color:var(--muted); margin-top:6px; text-transform:uppercase; letter-spacing:0.5px;">Phần kỹ thuật<br>team kiểm soát</div>
+      </div>
+      <div style="flex:1; min-width:260px;">
+        <div style="font-size:15px; font-weight:700; color:var(--ink); margin-bottom:6px;">🧪 W29: đang <span style="color:#047857;">testing trên staging</span> (Trang + Hải + QC test chung)</div>
+        <div style="font-size:13.5px; color:var(--ink-soft);">Đổi quà (evoucher + vật lý) &amp; catalog đa vendor chạy trên staging với <b>2 credential UrBox thật</b>. Hải hardening sync (đa app-credential · tồn kho digital/vật lý · dọn quà khi đổi credential · fallback URBOX_OTHER · ngày giao dự kiến). Phần chưa xong: hoàn thiện test staging + next step quy trình tích hợp UrBox.</div>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <div style="text-align:center; padding:10px 14px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="font-size:20px; font-weight:800; color:var(--warning);">6/7</div><div style="font-size:11px; color:var(--muted);">phase vật lý</div></div>
+        <div style="text-align:center; padding:10px 14px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="font-size:20px; font-weight:800; color:var(--success);">4/4</div><div style="font-size:11px; color:var(--muted);">fix evoucher</div></div>
+        <div style="text-align:center; padding:10px 14px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="font-size:20px; font-weight:800; color:var(--success);">19/21</div><div style="font-size:11px; color:var(--muted);">catalog+consumer</div></div>
+      </div>
+    </div>
+
+    <!-- 4 khối tiến độ -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:14px; margin-bottom:22px;">
+
+      <!-- Khối A -->
+      <div style="padding:16px 18px; background:var(--card); border:1px solid var(--border); border-radius:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
+          <b style="font-size:14.5px;">A · Đổi quà vật lý <span style="font-weight:500; color:var(--muted);">(7 phase)</span></b>
+          <span style="font-size:18px; font-weight:800; color:var(--warning);">85%</span>
+        </div>
+        <div style="height:9px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin:9px 0;"><div style="height:100%; width:85%; background:var(--warning); border-radius:99px;"></div></div>
+        <div style="font-size:12.5px; color:var(--ink-soft);"><b>P1→P6 xong</b> (nhận diện · tách vendor · đặt đơn · đối chiếu địa chỉ · theo dõi giao hàng · recovery). <b>Còn P7</b>: nút xem trạng thái real-time cho admin — chờ UrBox cấp API + IP.</div>
+      </div>
+
+      <!-- Khối B -->
+      <div style="padding:16px 18px; background:var(--card); border:1px solid var(--border); border-radius:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
+          <b style="font-size:14.5px;">B · Đổi quà evoucher + recovery</b>
+          <span style="font-size:18px; font-weight:800; color:var(--success);">100%</span>
+        </div>
+        <div style="height:9px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin:9px 0;"><div style="height:100%; width:100%; background:var(--success); border-radius:99px;"></div></div>
+        <div style="font-size:12.5px; color:var(--ink-soft);"><b>4/4 lỗi trọng yếu đã vá tận gốc</b>: chữ ký đúng 7 trường · campaign_code per-account · timeout 10s/60s · phân loại lỗi recovery (bắt 408). Luồng đổi quà đã đúng.</div>
+      </div>
+
+      <!-- Khối C -->
+      <div style="padding:16px 18px; background:var(--card); border:1px solid var(--border); border-radius:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
+          <b style="font-size:14.5px;">C · Đồng bộ catalog + refactor consumer</b>
+          <span style="font-size:18px; font-weight:800; color:var(--success);">90%</span>
+        </div>
+        <div style="height:9px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin:9px 0;"><div style="height:100%; width:90%; background:var(--success); border-radius:99px;"></div></div>
+        <div style="font-size:12.5px; color:var(--ink-soft);"><b>19/21 hạng mục</b>: module consumer per-account (Kafka + job tracking + deactivateStale) giống GotIt · ghi đủ ảnh/cửa hàng/tồn/stock=1. <b>Còn</b>: đẩy <code>code_display_type</code> ra voucher + content-hash (optional).</div>
+      </div>
+
+      <!-- Khối D -->
+      <div style="padding:16px 18px; background:var(--card); border:1px solid var(--border); border-radius:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
+          <b style="font-size:14.5px;">D · Đàm phán API với UrBox</b>
+          <span style="font-size:12px; font-weight:700; color:var(--info); background:var(--info-soft); padding:3px 10px; border-radius:99px;">🔑 RSA + 2 CREDS TEST</span>
+        </div>
+        <div style="height:9px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin:9px 0;"><div style="height:100%; width:60%; background:var(--info); border-radius:99px;"></div></div>
+        <div style="font-size:12.5px; color:var(--ink-soft);"><b>Đã chốt 3 mục</b> (ratelimit · RSA · tài liệu vật lý) + gửi public key. <b style="color:#047857;">✅ UrBox đã setup RSA + gửi lại 2 bộ app_id/app_secret cho CNV test staging (W29).</b> Còn: OAuth · webhook trạng thái · API đối soát bulk · incremental sync — chờ UrBox.</div>
+      </div>
+
+    </div>
+
+    <!-- Task còn lại: 3 nhóm -->
+    <div style="font-size:13px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.6px; margin-bottom:10px;">🗂️ Task còn lại — phân theo người chịu trách nhiệm</div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px;">
+
+      <div style="padding:14px 16px; background:var(--warning-soft); border-left:4px solid var(--warning); border-radius:0 10px 10px 0;">
+        <h4 style="margin:0 0 8px; font-size:14px; color:#B45309;">🔧 Code còn thiếu <span style="font-weight:500; color:var(--muted);">(team, nhỏ)</span></h4>
+        <ul style="margin:0; padding-left:18px; font-size:12.5px; color:var(--ink-soft); line-height:1.7;">
+          <li><b>Bắt buộc:</b> đẩy <code>code_display_type</code> ra voucher (~30′) — để FE render đúng QR/Barcode/Text.</li>
+          <li><i>Optional:</i> content-hash MD5 khi upsert catalog (chống ghi DB thừa).</li>
+          <li><i>Optional:</i> truyền <code>parent_id</code> danh mục tường minh.</li>
+        </ul>
+      </div>
+
+      <div style="padding:14px 16px; background:var(--info-soft); border-left:4px solid var(--info); border-radius:0 10px 10px 0;">
+        <h4 style="margin:0 0 8px; font-size:14px; color:#1D4ED8;">🧪 Đang test staging (W29) <span style="font-weight:500; color:var(--muted);">(Trang + Hải + QC)</span></h4>
+        <ul style="margin:0; padding-left:18px; font-size:12.5px; color:var(--ink-soft); line-height:1.7;">
+          <li><b>Trang + Hải + QC</b> test luồng UrBox trên staging với 2 credential thật.</li>
+          <li>Hải hardening sync: đa app-credential · tồn kho digital/vật lý · dọn quà khi đổi credential · fallback URBOX_OTHER · ngày giao dự kiến.</li>
+          <li>W30: hoàn thiện test staging + next step quy trình tích hợp UrBox.</li>
+        </ul>
+      </div>
+
+      <div style="padding:14px 16px; background:var(--purple-soft); border-left:4px solid var(--purple); border-radius:0 10px 10px 0;">
+        <h4 style="margin:0 0 8px; font-size:14px; color:#6D28D9;">🤝 Chờ UrBox <span style="font-weight:500; color:var(--muted);">(blocking ngoài)</span></h4>
+        <ul style="margin:0; padding-left:18px; font-size:12.5px; color:var(--ink-soft); line-height:1.7;">
+          <li><b>P7 real-time:</b> 2 API tra cứu đơn (prod) + đăng ký IP.</li>
+          <li>OAuth 2.0 ủy quyền · webhook trạng thái tiêu dùng.</li>
+          <li>API đối soát bulk · incremental sync. <i>(ratelimit · RSA đã chốt ✅)</i></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============== 🌐 Dự án · reward-network ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🌐 Dự án · reward-network — đã có gì &amp; % hoàn thành</h2>
+      <span class="hint">Trọng tâm 2 ngày (Huy) · hoàn thiện cơ bản code ~24/33 (~72%) + settlement Kafka + bảo mật; <b>chưa review độc lập/deploy → tính 20% → ~14%</b></span>
+    </div>
+
+    <!-- Hero: tách thiết kế vs code -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin-bottom:18px;">
+      <div style="padding:16px 18px; background:linear-gradient(135deg,var(--purple-soft) 0%,var(--card) 80%); border:1px solid #DDD6FE; border-radius:12px;">
+        <div style="font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;">Thiết kế &amp; lập kế hoạch</div>
+        <div style="font-size:38px; font-weight:800; color:#6D28D9; line-height:1.15;">100% ✅</div>
+        <div style="font-size:12.5px; color:var(--ink-soft);">design v2 · WBS 79 task · PO/BA Phase 1 (33 task) · kiến trúc · mockup 10 màn · init project (02/07)</div>
+      </div>
+      <div style="padding:16px 18px; background:linear-gradient(135deg,var(--success-soft) 0%,var(--card) 80%); border:1px solid #A7F3D0; border-radius:12px;">
+        <div style="font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;">Code Phase 1 (dev)</div>
+        <div style="font-size:38px; font-weight:800; color:#B45309; line-height:1.15;">~14<span style="font-size:20px; color:var(--muted);">% thực · code ~72%</span></div>
+        <div style="font-size:12.5px; color:var(--ink-soft);"><b>Đã code ~24/33 (~72%)</b> (Huy): +settlement voucher qua Kafka +siết bảo mật RSA +2 vòng hardening. <b style="color:#B45309;">Code xong + test Huy xanh nhưng chưa review độc lập/deploy → tính 20% → ~14% hoàn thành thực.</b></div>
+      </div>
+    </div>
+
+    <!-- 8 epic breakdown -->
+    <div style="font-size:13px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-bottom:10px;">📋 Phase 1 — 33 task · 8 epic (~90 PD) · <span style="color:#B45309;">đã code ~24/33 · hoàn thành thực ~14% (chưa QA)</span></div>
+    <div style="overflow-x:auto;">
+    <table style="width:100%; border-collapse:collapse; font-size:12.5px;">
+      <thead><tr style="text-align:left; color:var(--muted); border-bottom:2px solid var(--border);">
+        <th style="padding:7px 10px;">Epic</th><th style="padding:7px 10px;">Thuộc</th><th style="padding:7px 10px; text-align:center;">Task</th><th style="padding:7px 10px; text-align:center;">Xong</th><th style="padding:7px 10px; width:120px;">Tiến độ</th>
+      </tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">1 · Contribution (tạo/đẩy quà)</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">6</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">5</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:83%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">2 · Marketplace API</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">3</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">3</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">3 · Issue/Redeem + offline</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">4</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">4</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">4 · CNV Admin (duyệt/gán cấp)</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">4</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">3</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:75%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">5 · Report chống quà rác</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">2</td><td style="padding:7px 10px; text-align:center; color:var(--muted);">0</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px;"></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">6 · Integration rewards-v2 (RN thành vendor)</td><td style="padding:7px 10px; color:var(--muted);">BE-RW</td><td style="padding:7px 10px; text-align:center;">7</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">6</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:86%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">7 · FE + Gateway</td><td style="padding:7px 10px; color:var(--muted);">CDP + FE</td><td style="padding:7px 10px; text-align:center;">4</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">2</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:50%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">8 · Test &amp; pilot</td><td style="padding:7px 10px; color:var(--muted);">QA</td><td style="padding:7px 10px; text-align:center;">3</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">1</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:33%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
+      </tbody>
+      <tfoot><tr style="border-top:2px solid var(--border); font-weight:800; color:var(--ink);">
+        <td style="padding:8px 10px;">Tổng Phase 1</td><td></td><td style="padding:8px 10px; text-align:center;">33</td><td style="padding:8px 10px; text-align:center; color:#047857;">~24 code</td><td style="padding:8px 10px; color:#B45309;">~14% thực (×20%)</td>
+      </tr></tfoot>
+    </table>
+    </div>
+
+    <div style="margin-top:14px; padding:12px 14px; background:var(--warning-soft); border-radius:10px; font-size:12.5px; color:#B45309;"><b>⚠️ Lưu ý đánh giá:</b> ~24/33 task đã code nhưng <b>chưa qua test + review độc lập / chưa deploy → chỉ tính 20% → ~14% hoàn thành thực</b> — <i>1 tuần để code nhưng ~3 tuần để review + sửa đúng hướng + test; review có thể phát sinh việc</i>. <b>W29 đã thêm:</b> settlement voucher qua Kafka (confirm/release/refund) + siết bảo mật RSA + 2 vòng hardening (7 hạng mục). <b>Còn treo:</b> code xong + test Huy xanh nhưng chưa push/deploy — chờ chốt 2 điều kiện (CRM Admin ký RSA · deploy API chính rồi dọn index cũ staging). <b>W30:</b> vào test + review độc lập + deploy staging.</div>
+  </div>
+
+  <!-- ============== 🤝 Dự án · Kết nối GotIt ============== -->
+  <div class="section collapsed">
+    <div class="section-title">
+      <h2>🤝 Dự án · Kết nối GotIt — live production (đã bàn giao)</h2>
+      <span class="hint">Vendor tích hợp sớm nhất · ~95% · duy trì/vận hành · tuần này KHÔNG phải trọng tâm</span>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:20px; padding:16px 18px; background:linear-gradient(135deg,var(--success-soft) 0%,var(--card) 80%); border:1px solid #A7F3D0; border-radius:12px; margin-bottom:16px;">
+      <div style="text-align:center; min-width:110px;"><div style="font-size:40px; font-weight:800; color:#047857; line-height:1;">~95%</div><div style="font-size:11px; color:var(--muted);">6 nhóm tính năng</div></div>
+      <div style="flex:1; min-width:240px; font-size:12.5px; color:var(--ink-soft);">Đã live production (evoucher từ W22 · quà vật lý W25-26 <b>bàn giao CG vận hành</b>). Không TODO/bug tồn trong code. <b>UAT Total: Total đã gửi quà sang GotIt, team CG đang xử lý để UAT</b> — blocker thương mại trước đó (Total chưa ký gửi quà) đã được gỡ.</div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:10px;">
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Đồng bộ catalog</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Đổi quà evoucher + recovery</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Quà vật lý + status history</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Recovery &amp; idempotency</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Đối soát / reconciliation</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Gửi voucher đa kênh</span><b style="color:var(--warning);">85%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:85%; background:var(--warning);"></div></div><div style="font-size:10.5px; color:var(--muted); margin-top:4px;">SMS còn tối giản · ZNS phụ thuộc module ngoài</div></div>
+    </div>
+  </div>
+
+  <!-- ============== 🚀 Tính năng & hạng mục hoàn thành ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🚀 Tính năng &amp; hạng mục hoàn thành</h2>
+      <span class="hint">Phân loại 4 nhóm: Tính năng &amp; Dự án mới · Đối tác/UrBox · Sửa lỗi/Cải tiến · Tài liệu/Hạ tầng</span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="feature">🆕 Tính năng &amp; Dự án mới <span class="count">5</span></button>
+      <button class="tab-btn" data-tab="vendor">🤝 Đối tác &amp; UrBox <span class="count">3</span></button>
+      <button class="tab-btn" data-tab="improve">✨ Sửa lỗi &amp; Cải tiến <span class="count">4</span></button>
+      <button class="tab-btn" data-tab="docs">📝 Tài liệu &amp; Hạ tầng <span class="count">2</span></button>
+    </div>
+
+    <!-- Tab content: Tính năng & Dự án mới (5) -->
+    <div class="feat-list" id="tab-feature">
+      <div class="feat-row" style="border:1px solid #DDD6FE; background:linear-gradient(135deg,#FaF5FF,var(--card));">
+        <div class="feat-check" style="background:var(--purple);">★</div>
+        <div class="feat-content">
+          <h4>🔗 reward-network — chuyển toàn bộ luồng voucher sang Kafka settlement (trọng tâm · Huy)</h4>
+          <p>Thay HTTP trực tiếp net-core→RN (dễ mất đơn khi mạng lỗi) bằng <b>event qua Kafka</b>: net-core phát event → RN xử lý → rewards-v2 cập nhật trạng thái đã dùng (confirm/release/refund). Móc đủ <b>7 điểm confirm/release</b> trong 26 chỗ xử lý đơn · tách <b>3 worker riêng</b>. Luồng chắc chắn, không mất đơn.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>🆕 reward-network · net-core · rewards-v2</span>
+            <span class="badge-heavy" style="background:var(--purple-soft); color:#5B21B6;">★ Trọng tâm</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row" style="border:1px solid #FDE68A; background:linear-gradient(135deg,#FFFBEB,var(--card));">
+        <div class="feat-check" style="background:var(--warning);">★</div>
+        <div class="feat-content">
+          <h4>🔐 Siết bảo mật reward-network + 2 vòng hardening (Huy)</h4>
+          <p><b>Bắt buộc ký RSA</b> cho thao tác nhạy cảm CRM Admin (default-deny — bịt bypass). Tắt brand/danh mục/pool → ẩn ưu đãi khỏi chợ ngay + phát event rewards-v2 (hết ưu đãi "ma"). Xong <b>2 vòng review hardening (7 hạng mục)</b>: hoàn tiền toàn/phần + đảo sổ điểm · đếm "khách mới" · phân quyền update DB · bọc data access qua service.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>🆕 reward-network</span>
+            <span class="badge-heavy" style="background:var(--warning-soft); color:#B45309;">🔐 Bảo mật + hardening</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🔐 reward-v2 — review &amp; mask thông tin nhạy cảm trong log (Trang)</h4>
+          <p>Rà soát lại các phần log của reward-v2 + <b>mask</b> dữ liệu nhạy cảm (voucher code / PII) — chống rò rỉ qua log. Commit <code>log + mask log</code> · <code>fix mask log</code> (T2 + T3).</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b></span>
+            <span>📦 rewards-v2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🔌 UrBox — testing staging + hardening sync</h4>
+          <p><b>Trang</b> yêu cầu UrBox cấp thông tin staging + trực tiếp test staging; <b>QC test chung</b>. <b>Hải</b> hardening UrBox sync: đa app-credential · tồn kho digital/vật lý · dọn quà khi đổi credential · fallback URBOX_OTHER · ngày giao dự kiến.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b></span>
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>🔌 UrBox</span>
+            <span class="badge-heavy" style="background:var(--info-soft); color:#1D4ED8;">🧪 Đang test staging</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🔒 Chống trùng đơn + vá hiệu năng &amp; ổn định (Huy)</h4>
+          <p>Idempotency đổi quà tầng rewards-v2 (P1-10) — bấm 2 lần / mạng retry chỉ xử lý một lần. Vá N+1 query · giới hạn concurrency cổng nhận đơn · graceful shutdown worker · fix CDP không build (Double→Long) + fix hiển thị đơn.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>📦 reward-network · rewards-v2 · cdp-backend</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab content: Đối tác & UrBox (3) -->
+    <div class="feat-list hidden" id="tab-vendor">
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🔌 UrBox — testing trên staging (Trang + Hải + QC)</h4>
+          <p>Đang test luồng UrBox trên staging với <b>2 credential thật</b> (Trang + Hải + QC test chung). Hải hardening sync (đa credential · tồn kho digital/vật lý · fallback URBOX_OTHER · ngày giao dự kiến). Còn hoàn thiện test + next step quy trình tích hợp; API nâng cao (OAuth/webhook/đối soát) chờ UrBox.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b></span>
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>🔌 UrBox integration</span>
+            <span class="badge-heavy" style="background:var(--info-soft); color:#1D4ED8;">🧪 Đang test staging</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check" style="background:var(--info);">▶</div>
+        <div class="feat-content">
+          <h4>▶ UAT Total — đang chạy (Total đã gửi quà)</h4>
+          <p><b>Total đã gửi quà sang GotIt; team CG đang xử lý để UAT.</b> Blocker thương mại kéo dài trước đó (Total chưa ký gửi quà) đã được gỡ. Phần kỹ thuật + GotIt CampaignId sẵn sàng từ trước → chờ CG chạy UAT + nghiệm thu, team standby go-live.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b> (theo dõi)</span>
+            <span>▶ Đang UAT (CG xử lý)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🤝 GotIt — duy trì (live, đã bàn giao)</h4>
+          <p>GotIt đã live production + bàn giao CG (evoucher W22 · vật lý W25-26). Tuần này không phải trọng tâm, chỉ duy trì. Đối soát vật lý giữ chiến lược giảm focus, ưu tiên đa nguồn quà (UrBox + reward-network).</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b></span>
+            <span>🤝 GotIt (duy trì)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab content: Sửa lỗi & Cải tiến (4) -->
+    <div class="feat-list hidden" id="tab-improve">
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Catalog-sync bền hơn (Hải)</h4>
+          <p>Giữ catalog cũ khi vendor trả success nhưng <b>0 sản phẩm</b> (tránh xoá nhầm) · seed-on-demand danh mục · tách module lib <code>catalog-sync-*</code>.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 rewards-v2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>UrBox: fallback URBOX_OTHER + ngày giao dự kiến (Hải)</h4>
+          <p>Quà thiếu brand/category → fallback "Khác" (<code>URBOX_OTHER</code>) · thêm estimated delivery cho quà vật lý (+ field ở cdp-backend RewardItemV2) · dọn quà vật lý khi đổi credential.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 rewards-v2 · cdp-backend</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Reward ranking theo tần suất (Hải)</h4>
+          <p>Boost xếp hạng quà theo tần suất + xử lý category — cải thiện gợi ý quà cho user.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 rewards-v2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>Nới cửa sổ đối soát hoàn tiền 3 → 30 ngày (Huy)</h4>
+          <p>Đơn hoàn muộn trước đây bị bỏ sót âm thầm → nới cửa sổ quét reconciliation lên 30 ngày để bắt đơn hoàn trễ + hoàn thiện chống trùng mã dùng-nhiều-lần.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>🆕 reward-network</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab content: Tài liệu & Hạ tầng (2) -->
+    <div class="feat-list hidden" id="tab-docs">
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>♻️ Tách reward-network thành 3 worker module + config staging (Huy)</h4>
+          <p>Job gửi voucher + đối soát hoàn tiền tách khỏi API chính thành <b>3 service worker độc lập</b> (chạy ổn định, mở rộng riêng) · cập nhật application-staging.properties (DB URL) · dọn helm/gitlab-ci cũ.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>🆕 reward-network</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🧪 QC vào test chung UrBox trên staging (Trang điều phối)</h4>
+          <p>Đưa <b>QC</b> vào kiểm thử độc lập luồng UrBox trên staging cùng Trang + Hải — bắt đầu QA cho tích hợp UrBox trước khi lên prod.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-trang">👤 <b>Trang</b> + QC</span>
+            <span>🔌 UrBox</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 🎯 Đối chiếu mục tiêu kế hoạch ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🎯 Đối chiếu mục tiêu kế hoạch</h2>
+      <span class="hint">3 mảng tuần W29 (2 ngày · T2+T3) — reward-network hoàn thiện code · UrBox test staging · mask log</span>
+    </div>
+    <div class="grid-2">
+      <div class="result-card success">
+        <h3>✅ Trọng tâm 2 ngày — đạt</h3>
+        <ul>
+          <li>reward-network — hoàn thiện cơ bản code (~24/33 ~72%) + settlement Kafka + siết bảo mật; chưa QA → tính ~14% ✅</li>
+          <li>UrBox — đang testing staging (Trang + Hải + <b>QC test chung</b>) + hardening sync ✅</li>
+          <li>reward-v2 — review + mask thông tin nhạy cảm trong log ✅</li>
+        </ul>
+      </div>
+      <div class="result-card warning">
+        <h3>⏳ Còn treo / carry sang W30</h3>
+        <ul>
+          <li>reward-network — code xong + test Huy xanh nhưng <b>CHƯA push/deploy</b> (chờ chốt: CRM Admin ký RSA · deploy API chính rồi dọn index cũ staging) → W30 vào test/review/deploy</li>
+          <li>UrBox — hoàn thiện test staging + next step quy trình tích hợp</li>
+          <li>UAT Total — CG đang xử lý UAT (theo dõi nghiệm thu)</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:14px; background:linear-gradient(135deg,#F5F3FF,#EFF6FF); border:1px solid #C7D2FE; border-radius:12px; padding:16px 20px;">
+      <div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#5B21B6; text-transform:uppercase; margin-bottom:8px;">🧭 Định hướng chiến lược của team</div>
+      <p style="font-size:14.5px; color:var(--ink-soft); line-height:1.65; margin-bottom:6px;"><b>① Chốt độ tin cậy reward-network:</b> 2 ngày Huy chuyển voucher sang <b style="color:#5B21B6;">Kafka settlement</b> (không mất đơn khi mạng lỗi) + móc đủ 7 điểm confirm/release + tách 3 worker + siết bảo mật RSA — dựng nền vận hành chắc trước khi lên staging.</p>
+      <p style="font-size:14.5px; color:var(--ink-soft); line-height:1.65;"><b>② Vào QA có kiểm soát:</b> UrBox bắt đầu <b style="color:#5B21B6;">test staging cùng QC</b> (kiểm thử độc lập) + reward-v2 mask thông tin nhạy cảm trong log — siết chất lượng &amp; bảo mật trước khi mở rộng.</p>
+    </div>
+  </div>
+
+  <!-- ============== 🛡️ Đánh giá rủi ro ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🛡️ Đánh giá rủi ro</h2>
+      <span class="hint">Các rủi ro &amp; điểm cần ưu tiên theo dõi</span>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-item high">
+        <span class="risk-level">🔥 HIGH · NGUỒN LỰC</span>
+        <h4>reward-network tốc độ cao — 1 mình Huy gánh + code chưa deploy</h4>
+        <p>Huy đưa code lên ~72% (+settlement +bảo mật +hardening) — nhưng <b>chưa review độc lập/deploy → thực chất tính ~14%</b>. Code đã xong + test Huy xanh nhưng CHƯA push/deploy (chờ chốt 2 điều kiện). <b>Rủi ro:</b> bus-factor 1 người + review có thể phát sinh việc (1 tuần code ~3 tuần review/test). <b>Action:</b> W30 vào test + review độc lập + deploy staging; kéo Hải/Trang chia tải.</p>
+      </div>
+      <div class="risk-item medium">
+        <span class="risk-level">🟡 MEDIUM · UrBox</span>
+        <h4>UrBox — đang test staging, còn phụ thuộc vendor cho API nâng cao</h4>
+        <p>Đang test staging (Trang + Hải + QC) với 2 credential thật. Còn OAuth / webhook / đối soát / incremental + P7 real-time chờ UrBox cấp API/IP. <b>Action:</b> hoàn thiện test staging (cùng QC) trước khi lên prod; theo dõi UrBox trả nốt API; không để chặn luồng chính.</p>
+      </div>
+      <div class="risk-item medium">
+        <span class="risk-level">🟡 MEDIUM · CÂN TẢI</span>
+        <h4>Huy single-point toàn bộ reward-network (BE→FE→.NET)</h4>
+        <p>Huy nắm gần như toàn bộ code reward-network + integration + checkout .NET → bus-factor cao ở dự án mới. Trang tập trung kiến trúc/UrBox, Hải tập trung catalog/UrBox. <b>Rủi ro:</b> nếu Huy vắng, RN nghẽn. <b>Action:</b> Huy giữ handoff/project-context + review đối kháng mỗi task; kéo Hải vào 1-2 epic RN để chia tải.</p>
+      </div>
+      <div class="risk-item low">
+        <span class="risk-level">✅ CẢI THIỆN · KHÁCH HÀNG</span>
+        <h4>UAT Total — blocker thương mại đã gỡ</h4>
+        <p>Total đã gửi quà sang GotIt; team CG đang xử lý để UAT. Rào cản kéo dài (Total chưa ký gửi quà) đã được gỡ. <b>Action:</b> theo dõi CG chạy UAT + chuẩn bị go-live khi nghiệm thu.</p>
+      </div>
+      <div class="risk-item low">
+        <span class="risk-level">✅ RESOLVED</span>
+        <h4>Quà vật lý + MCO Gara — đã đóng + bàn giao CG</h4>
+        <p>Cả 2 sản phẩm đã release/bàn giao CG (từ W26). Team rảnh tay cho 2 dự án mới. Tuần này chỉ hỗ trợ polish nhỏ.</p>
+      </div>
+      <div class="risk-item low">
+        <span class="risk-level">✅ MILESTONE</span>
+        <h4>reward-network — code ~72% (thực ~14%) + settlement + bảo mật</h4>
+        <p>2 ngày: settlement voucher qua Kafka + siết bảo mật RSA + 2 vòng hardening → code ~24/33. Code xong + test Huy xanh nhưng chưa deploy — <b>cần review độc lập (tính 20% → ~14%)</b>.</p>
+      </div>
+      <div class="risk-item low">
+        <span class="risk-level">✅ LOW</span>
+        <h4>Production stability</h4>
+        <p>Evoucher production LIVE từ W22 — ổn định. Không có incident production trong W29. UrBox đang test staging (chưa prod).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 🤝 Đánh giá đối tác GotIt ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🤝 Đánh giá đối tác GotIt — bài học cho UrBox</h2>
+      <span class="hint">Góc nhìn Solution Architect — đúc kết từ GotIt để áp dụng khi tích hợp UrBox</span>
+    </div>
+
+    <div style="background: linear-gradient(135deg, #FEF2F2 0%, #FFFBEB 100%); border:1px solid #FCA5A5; border-radius:14px; padding:18px 22px; margin-bottom:20px;">
+      <div style="font-size:12px; color:var(--danger); font-weight:700; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px;">⚠️ Bài học từ GotIt (áp dụng cho UrBox + reward-network)</div>
+      <p style="font-size:15px; color:var(--ink-soft); line-height:1.65;">GotIt phản hồi <b>theo phản ứng</b> chứ không chủ động, tài liệu kỹ thuật <b>hoàn thiện dần theo câu hỏi của CNV</b>, thường <b style="color:var(--danger);">trả lời câu gần giống chứ không đúng câu hỏi</b>. <b style="color:#5B21B6;">→ Áp dụng cho UrBox:</b> Trang làm <b>gap analysis + đối chiếu mapping brand–category ngay từ đầu</b>, Huy code sync thực tế để phát hiện lệch tài liệu↔API sớm — <b>cố định contract trước khi phụ thuộc sâu</b>, không lặp lại vòng lặp bị động như GotIt.</p>
+    </div>
+
+    <!-- 4 điểm số -->
+    <div class="metric-grid">
+      <div class="metric-card warning">
+        <div class="gauge warning" style="--pct: 45;">
+          <div>
+            <div class="gauge-value">4.5<span class="unit">/10</span></div>
+            <div class="gauge-sub">Chất lượng</div>
+          </div>
+        </div>
+        <h4>💬 Chất lượng phản hồi</h4>
+        <p>Trả lời <b>gần giống</b> câu hỏi chứ không <b>đúng</b> câu hỏi. Né các tình huống cụ thể (partial success, enum đầy đủ).</p>
+        <div class="verdict">⚠️ Điểm yếu nhất</div>
+      </div>
+
+      <div class="metric-card danger">
+        <div class="gauge danger" style="--pct: 30;">
+          <div>
+            <div class="gauge-value">3<span class="unit">/10</span></div>
+            <div class="gauge-sub">Chủ động</div>
+          </div>
+        </div>
+        <h4>🔄 Độ chủ động</h4>
+        <p>Gần như không chủ động. Mọi vấn đề đều theo pattern: CNV phát hiện → hỏi → follow-up → vendor mới phản hồi.</p>
+        <div class="verdict">🔴 Rất bị động</div>
+      </div>
+
+      <div class="metric-card danger">
+        <div class="gauge danger" style="--pct: 40;">
+          <div>
+            <div class="gauge-value">4<span class="unit">/10</span></div>
+            <div class="gauge-sub">Tài liệu</div>
+          </div>
+        </div>
+        <h4>📄 Trưởng thành tài liệu kỹ thuật</h4>
+        <p>API không khớp tài liệu. Thiếu enum chuẩn, reconciliation, checklist go-live, template đối soát, evaluation form.</p>
+        <div class="verdict">🔴 Đáng lo nhất</div>
+      </div>
+
+      <div class="metric-card danger">
+        <div class="gauge danger" style="--pct: 80;">
+          <div>
+            <div class="gauge-value">8<span class="unit">/10</span></div>
+            <div class="gauge-sub">Rủi ro</div>
+          </div>
+        </div>
+        <h4>🚨 Rủi ro vận hành</h4>
+        <p>Status · Reconciliation · Partial Success · UAT simulation — đều phải rõ <b>trước</b> UAT. Sai → sai tiền / sai recovery.</p>
+        <div class="verdict">🔴 Mức cao</div>
+      </div>
+    </div>
+
+    <!-- Ví dụ chất lượng phản hồi -->
+    <div class="card" style="margin-bottom:16px;">
+      <h3>💬 Mẫu phản hồi điển hình — "trả lời gần giống, không trả lời đúng"</h3>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:14px; margin-top:8px;">
+
+        <div style="border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+          <div style="background:var(--info-soft); color:#1D4ED8; padding:8px 12px; font-size:13px; font-weight:700;">❓ CNV hỏi</div>
+          <div style="padding:10px 12px; font-size:13.5px; color:var(--ink-soft); border-bottom:1px dashed var(--border);">"Nếu partial success thì đối soát thế nào?"</div>
+          <div style="background:var(--bg-soft); color:var(--ink-soft); padding:8px 12px; font-size:13px; font-weight:700;">💬 GotIt trả lời</div>
+          <div style="padding:10px 12px; font-size:13.5px; color:var(--ink-soft);">"Đổi quà thành công sẽ đối soát."</div>
+          <div style="background:var(--danger-soft); color:var(--danger); padding:8px 12px; font-size:12.5px; font-weight:600;">→ Không trả lời partial success</div>
+        </div>
+
+        <div style="border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+          <div style="background:var(--info-soft); color:#1D4ED8; padding:8px 12px; font-size:13px; font-weight:700;">❓ CNV hỏi</div>
+          <div style="padding:10px 12px; font-size:13.5px; color:var(--ink-soft); border-bottom:1px dashed var(--border);">"Go-live checklist?"</div>
+          <div style="background:var(--bg-soft); color:var(--ink-soft); padding:8px 12px; font-size:13px; font-weight:700;">💬 GotIt trả lời</div>
+          <div style="padding:10px 12px; font-size:13.5px; color:var(--ink-soft);">"Sau khi test xong sẽ cung cấp."</div>
+          <div style="background:var(--danger-soft); color:var(--danger); padding:8px 12px; font-size:12.5px; font-weight:600;">→ Không cung cấp ngay</div>
+        </div>
+
+        <div style="border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+          <div style="background:var(--info-soft); color:#1D4ED8; padding:8px 12px; font-size:13px; font-weight:700;">❓ CNV hỏi</div>
+          <div style="padding:10px 12px; font-size:13.5px; color:var(--ink-soft); border-bottom:1px dashed var(--border);">"Bộ enum đầy đủ?"</div>
+          <div style="background:var(--bg-soft); color:var(--ink-soft); padding:8px 12px; font-size:13px; font-weight:700;">💬 GotIt trả lời</div>
+          <div style="padding:10px 12px; font-size:13.5px; color:var(--ink-soft);">"Đã update tài liệu."</div>
+          <div style="background:var(--danger-soft); color:var(--danger); padding:8px 12px; font-size:12.5px; font-weight:600;">→ Nhưng tài liệu không khớp API</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Pattern độ chủ động -->
+    <div class="card" style="margin-bottom:16px;">
+      <h3>🔄 Pattern độ chủ động — CNV luôn là bên khởi xướng</h3>
+      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:13px; margin:8px 0 14px;">
+        <span style="background:var(--info-soft); color:#1D4ED8; padding:6px 12px; border-radius:20px; font-weight:700;">CNV phát hiện vấn đề</span>
+        <span style="color:var(--muted);">→</span>
+        <span style="background:var(--info-soft); color:#1D4ED8; padding:6px 12px; border-radius:20px; font-weight:700;">CNV hỏi</span>
+        <span style="color:var(--muted);">→</span>
+        <span style="background:var(--info-soft); color:#1D4ED8; padding:6px 12px; border-radius:20px; font-weight:700;">CNV follow-up</span>
+        <span style="color:var(--muted);">→</span>
+        <span style="background:var(--info-soft); color:#1D4ED8; padding:6px 12px; border-radius:20px; font-weight:700;">CNV tổng hợp lại</span>
+        <span style="color:var(--muted);">→</span>
+        <span style="background:var(--warning-soft); color:#B45309; padding:6px 12px; border-radius:20px; font-weight:700;">Khả Diệu tag Hoàng Phát</span>
+        <span style="color:var(--muted);">→</span>
+        <span style="background:var(--success-soft); color:#047857; padding:6px 12px; border-radius:20px; font-weight:700;">GotIt phản hồi</span>
+      </div>
+      <p style="font-size:13px; color:var(--muted); line-height:1.55;"><b style="color:var(--ink-soft);">6 vấn đề đều theo pattern này:</b> Status mismatch · Product mismatch · Brand mapping · Evaluation form · Go-live process · Reconciliation. Vendor gần như không tự đưa ra vấn đề hay giải pháp trước khi CNV truy.</p>
+    </div>
+
+    <!-- Red flags rủi ro vận hành -->
+    <div class="card">
+      <h3>🧩 Nguyên tắc áp dụng khi tích hợp UrBox (rút từ GotIt)</h3>
+      <div class="risk-grid" style="margin-top:8px;">
+        <div class="risk-item low">
+          <span class="risk-level">✅ ÁP DỤNG · CONTRACT</span>
+          <h4>Cố định contract vendor sớm</h4>
+          <p>Đọc code rewards-v2 + gap analysis CNVxUrBox <b>ngay từ đầu</b> để cố định contract (VendorCode.CNV pattern) — không để tài liệu hoàn thiện dần theo câu hỏi như GotIt.</p>
+        </div>
+        <div class="risk-item low">
+          <span class="risk-level">✅ ÁP DỤNG · MAPPING</span>
+          <h4>Đối chiếu mapping brand–category trước</h4>
+          <p>Chốt mapping brand–category + enum ngay khâu clarify, verify bằng code sync thực tế (Huy) — phát hiện lệch tài liệu↔API sớm.</p>
+        </div>
+        <div class="risk-item medium">
+          <span class="risk-level">🟡 THEO DÕI · PHẢN HỒI</span>
+          <h4>Rủi ro vendor phản hồi chậm</h4>
+          <p>UrBox có thể lặp kiểu GotIt (bị động, trả lời lệch). <b>Đối sách:</b> chủ động gửi bản đề xuất chi tiết + câu hỏi đóng, code sync để tự kiểm chứng thay vì chờ.</p>
+        </div>
+        <div class="risk-item medium">
+          <span class="risk-level">🟡 DỜI FOCUS · ĐỐI SOÁT GOTIT</span>
+          <h4>Đối soát GotIt — giữ giảm focus</h4>
+          <p>GotIt vẫn lệch trọng tâm đối soát. Team ưu tiên đa dạng nguồn quà (UrBox) hơn là đeo bám đối soát vật lý GotIt. Chốt lại khi có đơn thật.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 🗺️ Lộ trình sản phẩm ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🗺️ Lộ trình sản phẩm</h2>
+      <span class="hint">Các mốc triển khai chính từ W29 đến hết Q3</span>
+    </div>
+
+    <div class="card" style="padding: 28px 24px;">
+      <div class="timeline">
+
+        <!-- 1. Reward Network — thiết kế xong, chuẩn bị dev -->
+        <div class="timeline-item current">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">🌐 TRỌNG TÂM · W29 — CODE ~72% (THỰC ~14%)</div>
+            <h4>reward-network (reward-hub) — pool quà</h4>
+            <p>W29 (2 ngày): Huy hoàn thiện code lên <b>~72%</b> — settlement voucher qua Kafka + siết bảo mật RSA + 2 vòng hardening. <b>Code xong + test Huy xanh nhưng chưa push/deploy → tính 20% → ~14% hoàn thành thực.</b></p>
+            <div class="sub-milestones">
+              <div class="sub-item"><span class="sub-date">W30</span><span>Vào test + review code độc lập + deploy staging (chốt 2 điều kiện: RSA · deploy API chính)</span></div>
+              <div class="sub-item"><span class="sub-date">~90 PD</span><span>Phase 1 tổng · pilot 20-50 shop F&amp;B/Retail</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Tích hợp UrBox — đang phát triển -->
+        <div class="timeline-item current">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">🔌 STAGING · W29 — ĐANG TEST</div>
+            <h4>Kết nối UrBox cho rewards-v2</h4>
+            <p><b>Đang testing trên staging</b> (Trang + Hải + <b>QC test chung</b>) với 2 credential thật. Hải hardening sync (đa credential · tồn kho · fallback · ngày giao). Còn hoàn thiện test + next step tích hợp.</p>
+            <div class="sub-milestones">
+              <div class="sub-item"><span class="sub-date">W30</span><span>Hoàn thiện testing staging + next step quy trình tích hợp UrBox</span></div>
+              <div class="sub-item"><span class="sub-date">Chờ UrBox</span><span>P7 real-time + OAuth / webhook / đối soát / incremental</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Quà vật lý + MCO Gara — đã đóng/bàn giao -->
+        <div class="timeline-item done">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">✅ DONE · W26 — ĐÓNG + BÀN GIAO CG</div>
+            <h4>Quà vật lý (production) + MCO Gara (Zalo duyệt)</h4>
+            <p>Cả 2 sản phẩm đã release/bàn giao CG. Team release khỏi 2 tính năng này, chỉ hỗ trợ vận hành khi CG cần.</p>
+          </div>
+        </div>
+
+        <!-- 4. UAT Total — đang chạy UAT -->
+        <div class="timeline-item current">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">▶ ĐANG UAT · Total đã gửi quà sang GotIt</div>
+            <h4>UAT Total quà vật lý</h4>
+            <p>Total đã gửi quà sang GotIt; team CG đang xử lý để UAT. Blocker thương mại (Total chưa ký gửi quà) đã được gỡ. Kỹ thuật + GotIt CampaignId sẵn sàng từ trước → chờ CG nghiệm thu + go-live.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 📅 Plan W29 ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🎯 Kế hoạch tuần tới — W30</h2>
+      <span class="hint">20/07 → 24/07 · reward-network vào test/review/deploy staging · UrBox hoàn thiện testing staging + next step tích hợp</span>
+    </div>
+    <div class="plan-grid">
+      <div class="plan-item">
+        <div class="plan-checkbox">☐</div>
+        <div class="plan-content">
+          <h4>🌐 reward-network — vào test + review code + deploy staging</h4>
+          <p>Code cơ bản đã xong → <b>chạy test + review code độc lập</b> (sửa phát sinh) → <b>deploy lên staging</b>. Chốt 2 điều kiện trước prod: (a) CRM Admin ký RSA; (b) deploy API chính trước rồi dọn index cũ trên staging.</p>
+        </div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-checkbox">☐</div>
+        <div class="plan-content">
+          <h4>🔌 reward-v2 (UrBox) — hoàn thiện testing staging + next step tích hợp</h4>
+          <p><b>Hoàn thiện testing UrBox trên staging</b> (cùng QC), rồi <b>tiếp tục bước tiếp theo trong quy trình tích hợp UrBox</b>.</p>
+        </div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-checkbox">☐</div>
+        <div class="plan-content">
+          <h4>🌐 reward-network — hoàn thiện epic còn lại (sau review)</h4>
+          <p>Đóng nốt Phase 1: report chống quà rác (P1-18/19) · admin config ngành/pool (P1-15/16) · offer image · redeem status · rồi E2E + pilot thử.</p>
+        </div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-checkbox">☐</div>
+        <div class="plan-content">
+          <h4>👥 Chia tải + review độc lập</h4>
+          <p>Kéo Hải/Trang vào review + 1-2 epic reward-network (giảm bus-factor dồn vào Huy) · giữ review đối kháng mỗi task khi dev tốc độ cao.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 🩺 Sức khoẻ dự án — Strategic Metrics ============== -->
+  <div class="section">
+    <div class="section-title">
+      <h2>🩺 Sức khoẻ dự án</h2>
+      <span class="hint">Bộ chỉ số chiến lược cập nhật hàng tuần</span>
+    </div>
+
+    <div class="metric-grid">
+
+      <!-- Metric 1: Mục tiêu tuần -->
+      <div class="metric-card success">
+        <div class="gauge success" style="--pct: 100;">
+          <div>
+            <div class="gauge-value">4/4</div>
+            <div class="gauge-sub">Mục tiêu đạt</div>
+          </div>
+        </div>
+        <h4>🎯 Mục tiêu tuần — đạt 4/4</h4>
+        <p>Reward Network (thiết kế + init) · Tích hợp UrBox · Clarify UrBox · Rewards Hub + bảo mật. <b>Chuyển trọng tâm hẳn sang 2 dự án mới</b> sau khi quà vật lý + MCO Gara đã đóng.</p>
+        <div class="verdict">✓ Đúng định hướng chiến lược</div>
+      </div>
+
+      <!-- Metric 2: Reward Network scope -->
+      <div class="metric-card warning">
+        <div class="gauge warning" style="--pct: 100;">
+          <div>
+            <div class="gauge-value">79</div>
+            <div class="gauge-sub">task WBS</div>
+          </div>
+        </div>
+        <h4>🌐 Reward Network — quy mô lớn cần nguồn lực</h4>
+        <p>Phase 1 <b>~90 PD, P0→P2 ~15–16 tuần với 1 lead + 2 senior</b>. Team 3 người còn duy trì rewards-v2 + UrBox. <b>Cần chốt cam kết nguồn lực trước khi vào dev.</b></p>
+        <div class="verdict">⚠️ Rủi ro nguồn lực</div>
+      </div>
+
+      <!-- Metric 3: Vendor Health Score (GotIt) -->
+      <div class="metric-card warning">
+        <div class="gauge warning" style="--pct: 40;">
+          <div>
+            <div class="gauge-value">4<span class="unit">/ 10</span></div>
+            <div class="gauge-sub">GotIt Health</div>
+          </div>
+        </div>
+        <h4>🤝 Vendor Health (GotIt) → bài học UrBox</h4>
+        <p>GotIt: phản hồi 4.5/10 · chủ động 3/10 · tài liệu 4/10. Team rút bài học <b>cố định contract UrBox sớm</b> (gap analysis + code sync) để không lặp vòng bị động. Xem section <b>Đánh giá đối tác</b>.</p>
+        <div class="verdict">🟡 Áp dụng cho UrBox</div>
+      </div>
+
+    </div>
+
+    <!-- Strategic callout -->
+    <div style="background: var(--card); border:1px solid var(--border); border-radius: 12px; padding: 18px 22px; margin-bottom: 20px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+      <div style="flex-shrink: 0; width: 64px; height: 64px; border-radius: 50%; background: conic-gradient(var(--purple) calc(100 * 1%), var(--bg-soft) 0); display: flex; align-items: center; justify-content: center; position: relative;">
+        <div style="position: absolute; inset: 6px; background: var(--card); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 22px;">🌐</span>
+        </div>
+      </div>
+      <div style="flex: 1; min-width: 240px;">
+        <div style="font-size: 12px; color: var(--purple); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px;">🚀 Tuần bản lề — chuyển sang xây nền tảng dài hạn</div>
+        <div style="font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px;">Reward Network đi từ ý tưởng → thiết kế hoàn chỉnh + init project chỉ trong 1 tuần</div>
+        <div style="font-size: 13px; color: var(--ink-soft); line-height: 1.5;">
+          <b style="color: var(--purple);">✓ Đã có:</b> mô hình pool quà + Credit + Voucher Levels · tài liệu design v2 + doc hub · WBS 79 task + estimate · kiến trúc vendor CNV · mockup 10 màn · repo reward-network
+          <br>
+          <b style="color: var(--warning);">→ Cần quyết:</b> cam kết nguồn lực (1 lead + 2 senior) để vào dev Phase 1 · phân vai 2 dự án song song (RN + UrBox)
+        </div>
+      </div>
+    </div>
+
+    <!-- Qualitative metrics block -->
+    <div class="reco-card">
+      <h3>🧭 Quan sát định tính</h3>
+      <div class="reco-grid">
+        <div class="reco-item">
+          <span class="reco-num">1</span>
+          <h4>Điểm sáng — 2 khối độ khó cao hoàn thành song song</h4>
+          <p><b>Trang</b> chốt trọn bộ Reward Network trong 1 tuần (mô hình + kiến trúc + WBS 79 task + mockup 10 màn + init). <b>Huy</b> dựng trọn luồng đổi quà vật lý UrBox 6/7 phase + 2 worker + <b>vá 3 lỗi hạ tầng tận gốc</b> (driver SQL, encryption bug, chặn bad-fix) với 150+ test pass, 0 regression. Cả 2 là công việc <b>độ khó rất cao, chiều sâu lớn</b> — minh hoạ vì sao không thể đánh giá bằng commit count.</p>
+        </div>
+        <div class="reco-item">
+          <span class="reco-num">2</span>
+          <h4>Định hướng chiến lược đúng</h4>
+          <p>Thay vì đeo bám blocker bên ngoài (Total/GotIt), team <b>chủ động xây nền tảng dài hạn (Reward Network) + đa dạng nguồn quà (UrBox)</b>. Giảm phụ thuộc 1 vendor, mở hướng doanh thu mới (pool quà chung cho nhiều shop).</p>
+        </div>
+        <div class="reco-item">
+          <span class="reco-num">3</span>
+          <h4>Rủi ro nguồn lực — cả 3 đang chạy full</h4>
+          <p>Tuần này cả 3 đều tải cao: Trang thiết kế RN (bus factor 1 người), Huy dựng UrBox physical + 3 fix hạ tầng, Hải Rewards Hub + bảo mật. <b>Reward Network cần thêm ~90 PD/15–16 tuần (1 lead + 2 senior)</b> — chồng lên UrBox chưa xong (P7) + duy trì rewards-v2. <b>Khuyến nghị: chốt nguồn lực với lãnh đạo trước khi RN vào dev; nếu không, RN hoặc UrBox sẽ phải giãn.</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Generated 14/07/2026 · Reward V2 Weekly Report · Sprint 16 / W29 · tuần rút gọn 2 ngày (T2 13/07 · T3 14/07) · UI inspired by W23 layout, light mode
+    <br>
+    Nguồn: <code>git log 13/07→14/07</code> trên reward-network · rewards-v2 · net-core · cdp-backend · cdp-frontend + việc test/non-code của Trang &amp; QC. <b>Đánh giá theo độ khó + số việc — không đo bằng commit; code xong chưa review/test tính 20%</b> (1 tuần code nhưng ~3 tuần review + sửa + test).
+  </footer>
+
+</div>
+
+<script>
+  // ====== Collapsible sections ======
+  const chevronSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
+  document.querySelectorAll('.section .section-title').forEach(title => {
+    const toggle = document.createElement('span');
+    toggle.className = 'section-toggle';
+    toggle.innerHTML = chevronSvg;
+    title.appendChild(toggle);
+
+    title.addEventListener('click', (e) => {
+      if (e.target.closest('button, a, input, select')) return;
+      title.parentElement.classList.toggle('collapsed');
+    });
+  });
+
+  // ====== Expand all / Collapse all ======
+  function setAllCollapsed(collapsed) {
+    document.querySelectorAll('.section').forEach(sec => {
+      sec.classList.toggle('collapsed', collapsed);
+    });
+  }
+  const btnExpand = document.getElementById('btn-expand-all');
+  const btnCollapse = document.getElementById('btn-collapse-all');
+  if (btnExpand) btnExpand.addEventListener('click', () => setAllCollapsed(false));
+  if (btnCollapse) btnCollapse.addEventListener('click', () => setAllCollapsed(true));
+
+  // ====== Tab switching ======
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.feat-list').forEach(list => list.classList.add('hidden'));
+      const target = document.getElementById('tab-' + tabId);
+      if (target) target.classList.remove('hidden');
+    });
+  });
+
+  Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto";
+  Chart.defaults.color = '#374151';
+
+  // ====== Chart 1: Kết quả 4 mục tiêu ======
+  new Chart(document.getElementById('goalChart'), {
+    type: 'doughnut',
+    data: {
+      labels: [
+        'reward-network — hoàn thiện code (~14%)',
+        'UrBox — testing staging (+ QC)',
+        'reward-v2 — mask log nhạy cảm'
+      ],
+      datasets: [{
+        data: [1, 1, 1],
+        backgroundColor: ['#8B5CF6', '#06B6D4', '#F59E0B'],
+        borderColor: '#fff',
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '60%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 11 }, padding: 8, boxWidth: 12 }
+        },
+        tooltip: { callbacks: { label: (c) => ` ${c.label}: ✅ đạt` } }
+      }
+    }
+  });
+
+  // ====== Chart 2: Effort allocation ======
+  new Chart(document.getElementById('effortChart'), {
+    type: 'doughnut',
+    data: {
+      labels: [
+        'reward-network settlement + bảo mật + hardening (Huy) (48%)',
+        'UrBox sync hardening + test staging (Hải) (24%)',
+        'reward-v2 mask log + điều phối test (Trang) (16%)',
+        'Cải tiến / hạ tầng khác (12%)'
+      ],
+      datasets: [{
+        data: [48, 24, 16, 12],
+        backgroundColor: ['#8B5CF6', '#06B6D4', '#F59E0B', '#3B82F6'],
+        borderColor: '#fff',
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '55%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12 }, padding: 12, boxWidth: 14 }
+        }
+      }
+    }
+  });
+
+  // ====== Combo chart: Số task (bar) + Độ khó TB (line) ======
+  // Trang: 4 task → avg 4.00 (bảo mật log + điều phối & test UrBox staging)
+  // Huy:   11 task → avg 4.50 (settlement voucher qua Kafka + siết bảo mật — nặng nhất)
+  // Hải:   6 task → avg 3.90 (hardening UrBox sync + catalog + test staging)
+  new Chart(document.getElementById('taskComboChart'), {
+    data: {
+      labels: ['Trang', 'Huy', 'Hải'],
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Số task hoàn thành',
+          data: [4, 11, 6],
+          backgroundColor: ['rgba(79,70,229,.85)', 'rgba(16,185,129,.85)', 'rgba(245,158,11,.85)'],
+          borderRadius: 10,
+          yAxisID: 'y',
+          order: 2,
+          barThickness: 60
+        },
+        {
+          type: 'line',
+          label: 'Độ khó trung bình / task',
+          data: [4.00, 4.50, 3.90],
+          borderColor: '#EC4899',
+          backgroundColor: 'rgba(236,72,153,.15)',
+          borderWidth: 3,
+          pointBackgroundColor: '#EC4899',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 7,
+          pointHoverRadius: 9,
+          tension: 0.35,
+          fill: true,
+          yAxisID: 'y1',
+          order: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12 }, padding: 14, boxWidth: 14, usePointStyle: true }
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              if (ctx.dataset.label.includes('Độ khó')) {
+                return `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)} / 5`;
+              }
+              return `${ctx.dataset.label}: ${ctx.parsed.y}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { font: { size: 14, weight: 700 }, color: '#111827' },
+          grid: { display: false }
+        },
+        y: {
+          position: 'left',
+          beginAtZero: true,
+          max: 12,
+          title: { display: true, text: 'Số task', font: { size: 12, weight: 600 }, color: '#4F46E5' },
+          ticks: { stepSize: 2, font: { size: 12 }, color: '#4F46E5' },
+          grid: { color: 'rgba(148,163,184,.12)' }
+        },
+        y1: {
+          position: 'right',
+          beginAtZero: true,
+          max: 5,
+          title: { display: true, text: 'Độ khó TB (1-5)', font: { size: 12, weight: 600 }, color: '#EC4899' },
+          ticks: { stepSize: 1, font: { size: 12 }, color: '#EC4899' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+
+  // ====== Chart 5: Category breakdown per person (stacked) ======
+  new Chart(document.getElementById('categoryStackChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Trang', 'Huy', 'Hải'],
+      datasets: [
+        {
+          label: 'reward-network (settlement + bảo mật + hardening)',
+          data: [0, 9, 0],
+          backgroundColor: '#8B5CF6'
+        },
+        {
+          label: 'UrBox (sync hardening + test staging)',
+          data: [2, 0, 4],
+          backgroundColor: '#06B6D4'
+        },
+        {
+          label: 'Bảo mật log reward-v2',
+          data: [2, 0, 0],
+          backgroundColor: '#F59E0B'
+        },
+        {
+          label: 'Catalog · ranking · hạ tầng',
+          data: [0, 2, 2],
+          backgroundColor: '#10B981'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 10, boxWidth: 14 } },
+        tooltip: {
+          callbacks: {
+            footer: (items) => {
+              const total = items.reduce((sum, item) => sum + item.parsed.y, 0);
+              return 'Tổng: ' + total + ' task';
+            }
+          }
+        }
+      },
+      scales: {
+        x: { stacked: true, ticks: { font: { size: 13, weight: 600 } } },
+        y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1, font: { size: 12 } } }
+      }
+    }
+  });
+</script>
+</body>
+</html>
