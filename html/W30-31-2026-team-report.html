@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>W30–31/2026 — Reward V2 Team Report (bản gộp)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root{
+    --bg:#F8FAFC; --card:#FFFFFF; --border:#E5E7EB; --border-soft:#F1F5F9;
+    --ink:#111827; --ink-soft:#374151; --muted:#6B7280; --muted-light:#9CA3AF;
+    --primary:#4F46E5; --primary-soft:#EEF2FF;
+    --success:#10B981; --success-soft:#D1FAE5;
+    --danger:#EF4444;  --danger-soft:#FEE2E2;
+    --warning:#F59E0B; --warning-soft:#FEF3C7;
+    --info:#3B82F6;    --info-soft:#DBEAFE;
+    --purple:#8B5CF6;  --purple-soft:#EDE9FE;
+    --m-trang:#4F46E5; --m-huy:#10B981; --m-hai:#F59E0B;
+  }
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Inter",Roboto,sans-serif;
+    background:var(--bg); color:var(--ink); padding:24px; line-height:1.6; font-size:14.5px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;}
+
+  /* Header */
+  header{background:linear-gradient(135deg,#EEF2FF 0%,#FCE7F3 100%);border:1px solid #DDD6FE;
+    border-radius:16px;padding:26px 24px;margin-bottom:22px;text-align:center;}
+  header .eyebrow{display:inline-block;font-size:11px;letter-spacing:2.4px;color:var(--primary);
+    text-transform:uppercase;font-weight:700;margin-bottom:8px;}
+  header h1{font-size:29px;font-weight:800;letter-spacing:-.6px;margin-bottom:6px;}
+  header p{color:var(--muted);font-size:14px;}
+  .chips{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+  .chip{background:rgba(255,255,255,.75);border:1px solid #E9D5FF;border-radius:999px;
+    padding:5px 12px;font-size:12px;font-weight:600;color:var(--ink-soft);}
+
+  section{margin-bottom:22px;}
+  h2{font-size:16px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  h2 .sub{font-size:12px;font-weight:500;color:var(--muted-light);}
+
+  .grid{display:grid;gap:14px;}
+  .g4{grid-template-columns:repeat(4,1fr);}
+  .g3{grid-template-columns:repeat(3,1fr);}
+  .g2{grid-template-columns:repeat(2,1fr);}
+  @media(max-width:960px){.g4,.g3,.g2{grid-template-columns:1fr;}}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;}
+  .card.accent-ok{border-left:4px solid var(--success);}
+  .card.accent-warn{border-left:4px solid var(--warning);}
+  .card.accent-info{border-left:4px solid var(--info);}
+  .card.accent-pri{border-left:4px solid var(--primary);}
+  .card.accent-danger{border-left:4px solid var(--danger);}
+
+  .kpi .label{font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:700;}
+  .kpi .val{font-size:22px;font-weight:800;margin:4px 0 2px;letter-spacing:-.5px;}
+  .kpi .note{font-size:12.5px;color:var(--muted);line-height:1.5;}
+
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;
+    letter-spacing:.3px;text-transform:uppercase;}
+  .t-ok{background:var(--success-soft);color:#047857;}
+  .t-warn{background:var(--warning-soft);color:#B45309;}
+  .t-info{background:var(--info-soft);color:#1D4ED8;}
+  .t-pri{background:var(--primary-soft);color:#4338CA;}
+  .t-danger{background:var(--danger-soft);color:#B91C1C;}
+  .t-purple{background:var(--purple-soft);color:#6D28D9;}
+
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);
+    border-radius:12px;overflow:hidden;font-size:13.5px;}
+  th{background:var(--border-soft);text-align:left;padding:9px 12px;font-size:11.5px;
+    text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;}
+  td{padding:9px 12px;border-top:1px solid var(--border-soft);vertical-align:top;}
+  td.num{text-align:center;font-variant-numeric:tabular-nums;font-weight:700;}
+  tr.total td{background:#FAFAFA;font-weight:800;}
+
+  .bar{height:7px;background:var(--border-soft);border-radius:999px;overflow:hidden;margin-top:6px;}
+  .bar i{display:block;height:100%;border-radius:999px;}
+
+  ul.tight{list-style:none;}
+  ul.tight li{position:relative;padding-left:15px;margin-bottom:5px;font-size:13.3px;color:var(--ink-soft);}
+  ul.tight li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;
+    border-radius:50%;background:var(--muted-light);}
+  b{font-weight:700;color:var(--ink);}
+  code{background:var(--border-soft);padding:1px 5px;border-radius:4px;font-size:12px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+
+  .who{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
+  .av{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#fff;
+    font-weight:800;font-size:12px;flex:none;}
+  .who .n{font-weight:800;font-size:14.5px;line-height:1.2;}
+  .who .r{font-size:11.5px;color:var(--muted);}
+
+  .tl{border-left:2px solid var(--border);padding-left:16px;}
+  .tl .ev{position:relative;margin-bottom:12px;}
+  .tl .ev::before{content:"";position:absolute;left:-21px;top:6px;width:9px;height:9px;
+    border-radius:50%;background:var(--primary);border:2px solid #fff;box-shadow:0 0 0 2px var(--primary-soft);}
+  .tl .d{font-size:11.5px;font-weight:700;color:var(--primary);letter-spacing:.4px;}
+  .tl .x{font-size:13.3px;color:var(--ink-soft);}
+
+  .foot{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);
+    font-size:12px;color:var(--muted-light);text-align:center;line-height:1.7;}
+
+  @media print{
+    body{padding:0;background:#fff;font-size:12px;}
+    .card,table{break-inside:avoid;}
+    section{break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Weekly Report · Sprint 17–18 · Bản gộp</div>
+  <h1>Reward V2 — Báo cáo 2 tuần W30–W31</h1>
+  <p>20/07 → 31/07/2026 · 3 contributors + QC · rewards-v2 · reward-network · cdp-backend · cdp-frontend · mini-app</p>
+  <div class="chips">
+    <span class="chip">✅ UrBox nghiệm thu sandbox ĐẠT (27/07)</span>
+    <span class="chip">🚀 reward-network vào deploy staging (30/07)</span>
+    <span class="chip">⚙️ Onboarding merchant không cần dev</span>
+  </div>
+</header>
+
+<!-- 1. KẾT QUẢ NỔI BẬT -->
+<section>
+  <h2>🏁 Kết quả nổi bật 2 tuần <span class="sub">4 việc đáng báo cáo</span></h2>
+  <div class="grid g4">
+    <div class="card kpi accent-ok">
+      <div class="label">UrBox</div>
+      <div class="val">Nghiệm thu ĐẠT</div>
+      <div class="note">Sandbox 27/07 — hiển thị &amp; sync đều đạt. Trang chốt <b>go-live 7/8: e-voucher + quà vật lý sẵn sàng</b> (chỉ chưa có đối soát).</div>
+    </div>
+    <div class="card kpi accent-pri">
+      <div class="label">reward-network</div>
+      <div class="val">Vào staging</div>
+      <div class="note">Code <b>82% → 85%</b> (~28/33 task). Hardening bảo mật + tách DB riêng + Init CICD. <b>Chưa QA độc lập → thực ~17%</b>.</div>
+    </div>
+    <div class="card kpi accent-info">
+      <div class="label">Vận hành</div>
+      <div class="val">Onboard tự động</div>
+      <div class="note">API kích hoạt rewards-v2 cho CRM: <b>tạo account + nạp khách hàng</b> — merchant onboard không cần dev can thiệp.</div>
+    </div>
+    <div class="card kpi accent-ok">
+      <div class="label">GotIt (production)</div>
+      <div class="val">0 incident</div>
+      <div class="note">Live từ W22, đã bàn giao CG. 2 tuần chỉ fix duy trì: Webhook Secret + brand↔category parity.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. TIẾN ĐỘ 3 DỰ ÁN -->
+<section>
+  <h2>📊 Tiến độ 3 dự án con <span class="sub">đối chiếu code — biến động W30 → W31</span></h2>
+  <table>
+    <thead>
+      <tr><th style="width:23%">Dự án</th><th style="width:14%">Trạng thái</th><th style="width:22%">Tiến độ</th><th>Diễn biến W30 → W31</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>🤝 Kết nối GotIt</b><br><span style="font-size:12px;color:var(--muted)">6 nhóm tính năng</span></td>
+        <td><span class="tag t-ok">Live · duy trì</span></td>
+        <td><b>~95%</b><div class="bar"><i style="width:95%;background:var(--success)"></i></div></td>
+        <td>Không đổi. W31 fix nhỏ: mất Webhook Secret khi lưu credential version mới · mapping brand↔category parity (báo lỗi thật + retry + đúng thứ tự) · reconnect không bắn sync thừa. <b>Đối soát quà vật lý vẫn chưa làm</b> (chủ động giảm focus).</td>
+      </tr>
+      <tr>
+        <td><b>🔌 Kết nối UrBox</b><br><span style="font-size:12px;color:var(--muted)">kỹ thuật team kiểm soát</span></td>
+        <td><span class="tag t-ok">Nghiệm thu sandbox</span></td>
+        <td><b>~92%</b><div class="bar"><i style="width:92%;background:var(--info)"></i></div></td>
+        <td>W30 test staging (2 credential thật) → <b>W31 nghiệm thu sandbox ĐẠT (27/07)</b>. Thêm fan-out catalog + CICD + RSA key prod. Vật lý 6/7 phase (còn P7 real-time), evoucher 4/4, catalog 19/21. <b>Cutover prod gated bởi vendor</b>.</td>
+      </tr>
+      <tr>
+        <td><b>🌐 reward-network</b><br><span style="font-size:12px;color:var(--muted)">reward-hub · Phase 1</span></td>
+        <td><span class="tag t-warn">Nợ kiểm thử</span></td>
+        <td><b>~17% thực</b> <span style="font-size:11.5px;color:var(--muted)">(code ~85%)</span><div class="bar"><i style="width:17%;background:var(--warning)"></i></div></td>
+        <td>W30 khép kín vòng đời offer + voucher xuyên shop (D5) → code 82%. W31 hardening bảo mật + tách DB <code>reward_network_staging</code> + Init CICD → code 85%, <b>vào deploy staging 30/07</b>. Chưa QA/review độc lập → <b>hệ số 20% → ~17%</b>.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 3. DÒNG THỜI GIAN -->
+<section>
+  <h2>🗓 Hai tuần đã làm gì <span class="sub">W30 xây tính năng → W31 chuẩn bị triển khai</span></h2>
+  <div class="grid g2">
+    <div class="card accent-info">
+      <div style="margin-bottom:10px"><span class="tag t-info">W30 · 20→24/07</span> <b style="margin-left:6px">Xây tính năng</b></div>
+      <div class="tl">
+        <div class="ev"><div class="d">reward-network (Huy)</div><div class="x">Khép kín vòng đời offer shop tự góp: import mã → định giá → <b>CNV duyệt có gating</b> (chặn định giá = 0) → đồng bộ tồn kho. FE quản lý ưu đãi dùng được. <b>Voucher xuyên shop theo SĐT (D5)</b>. 2 shop được dùng trùng mã.</div></div>
+        <div class="ev"><div class="d">Đa vendor (Hải)</div><div class="x"><b>Verify credential UrBox/GotIt trước khi lưu</b> (hết kết nối "ma") · store-sync per-shop tách lib + diff-delete · guard catalog rỗng · fallback danh mục "Khác".</div></div>
+        <div class="ev"><div class="d">Bảo mật (Trang/Huy)</div><div class="x">Mask voucher <code>***1234</code> giữ 4 số cuối cho CSKH tra cứu · sanitize HTML chống stored-XSS 2 lớp · dọn CICD.</div></div>
+      </div>
+    </div>
+    <div class="card accent-pri">
+      <div style="margin-bottom:10px"><span class="tag t-pri">W31 · 27→31/07</span> <b style="margin-left:6px">Chuẩn bị triển khai</b></div>
+      <div class="tl">
+        <div class="ev"><div class="d">reward-network (Huy)</div><div class="x">Hardening trước deploy: bịt mã voucher rò qua <b>18 exception message</b>, track bằng <code>voucherCodeId</code> · <code>SecureRandom</code> sinh mã · filter CRM fail-closed · settlement lock-wait 5s · trim pool 90→70 conn · <b>tách DB <code>reward_network_staging</code></b>.</div></div>
+        <div class="ev"><div class="d">UrBox (Trang + Hải + QC)</div><div class="x"><b>Nghiệm thu sandbox ĐẠT 27/07</b> · fan-out catalog (1 job kéo quà mọi account) · CICD UrBox + RSA key prod · review go-live → <b>chốt 7/8</b>.</div></div>
+        <div class="ev"><div class="d">Hạ tầng + vận hành</div><div class="x">Init CICD reward-network: <code>.gitlab-ci.yml</code> 310 dòng + <b>Helm chart 5 module</b> + 8 sequence diagram (Trang) · <b>API onboarding tự động</b> cho CRM (Hải) · đồng bộ docs↔code 209 chỗ (Huy).</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. THEO NGƯỜI -->
+<section>
+  <h2>👥 Đóng góp theo người <span class="sub">~63 hạng mục · đánh giá theo độ khó + chiều sâu, KHÔNG theo commit count</span></h2>
+  <div class="grid g3">
+    <div class="card">
+      <div class="who"><div class="av" style="background:var(--m-trang)">NT</div>
+        <div><div class="n">Như Trang</div><div class="r">Tech Lead · 13 hạng mục</div></div></div>
+      <div style="margin-bottom:8px"><span class="tag t-pri">Định hướng + hạ tầng</span></div>
+      <ul class="tight">
+        <li>Review vận hành reward-v2 vs GotIt/UrBox → <b>phân công refactor</b>: Hải worker/onboard, Huy offer (đầu vào điều phối cả 2 tuần)</li>
+        <li><b>Review go-live UrBox → chốt 7/8</b>: e-voucher + quà vật lý sẵn sàng, chỉ chưa đối soát</li>
+        <li>Dựng trọn hạ tầng deploy RN: gitlab-ci 310 dòng + <b>Helm 5 module</b> + 8 sequence diagram</li>
+        <li>CICD UrBox / CRM admin / cleanup worker + RSA key prod · mask voucher <code>***1234</code></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="who"><div class="av" style="background:var(--m-hai)">H1</div>
+        <div><div class="n">Hồ Trung Hải</div><div class="r">Full-stack · 29 hạng mục</div></div></div>
+      <div style="margin-bottom:8px"><span class="tag t-warn">⭐ Khối lượng lớn nhất</span></div>
+      <ul class="tight">
+        <li><b>Onboarding tự động</b>: API kích hoạt rewards-v2 cho CRM (tạo account + nạp khách) — merchant onboard không cần dev</li>
+        <li><b>Fan-out UrBox catalog</b>: job 1 lần kéo quà cho mọi account + cờ <code>catalogSeeded</code></li>
+        <li>Verify credential parity + store-sync per-shop + đổi API key giữa lúc sync không bị bỏ im lặng</li>
+        <li>Sweep không tắt oan quà · GotIt catalog parity · FE trạng thái sync (bỏ banner 0% giả)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="who"><div class="av" style="background:var(--m-huy)">H</div>
+        <div><div class="n">Trần Lê Huy</div><div class="r">Full-stack · 21 hạng mục</div></div></div>
+      <div style="margin-bottom:8px"><span class="tag t-ok">⭐ Độ khó cao nhất</span></div>
+      <ul class="tight">
+        <li>Khép kín <b>vòng đời offer shop tự góp</b> + FE quản lý ưu đãi + duyệt có gating</li>
+        <li><b>Voucher xuyên shop theo SĐT (D5)</b> + gateway proxy cross-shop + sanitize XSS</li>
+        <li><b>Hardening bảo mật pre-deploy</b>: mask rò 18 exception · SecureRandom · fail-closed filter · lock-wait</li>
+        <li>Tách DB staging + ddl-auto + docs↔code 209 chỗ. Quy mô thật RN: <b>9 module · 5 app · 15 bảng</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 5. RN PHASE 1 -->
+<section>
+  <h2>🌐 reward-network Phase 1 — còn lại gì <span class="sub">33 task · 8 epic · ~90 PD</span></h2>
+  <div class="grid g2" style="align-items:start">
+    <table>
+      <thead><tr><th>Epic</th><th class="num" style="width:14%">Task</th><th class="num" style="width:14%">Đã code</th><th style="width:22%">Trạng thái</th></tr></thead>
+      <tbody>
+        <tr><td>1 · Contribution (tạo/đẩy quà)</td><td class="num">6</td><td class="num">5</td><td><span class="tag t-warn">Gần xong</span></td></tr>
+        <tr><td>2 · Marketplace API</td><td class="num">3</td><td class="num">3</td><td><span class="tag t-ok">Đủ</span></td></tr>
+        <tr><td>3 · Issue/Redeem + offline</td><td class="num">4</td><td class="num">4</td><td><span class="tag t-ok">Đủ</span></td></tr>
+        <tr><td>4 · CNV Admin (duyệt/gán cấp/reinstate)</td><td class="num">4</td><td class="num">4</td><td><span class="tag t-ok">Đủ</span></td></tr>
+        <tr><td>5 · Report chống quà rác</td><td class="num">2</td><td class="num">0</td><td><span class="tag t-danger">Chưa làm</span></td></tr>
+        <tr><td>6 · Integration rewards-v2</td><td class="num">7</td><td class="num">7</td><td><span class="tag t-ok">Đủ</span></td></tr>
+        <tr><td>7 · FE + Gateway</td><td class="num">4</td><td class="num">4</td><td><span class="tag t-ok">Đủ</span></td></tr>
+        <tr><td>8 · Test &amp; pilot</td><td class="num">3</td><td class="num">1</td><td><span class="tag t-danger">Nợ lớn</span></td></tr>
+        <tr class="total"><td>Tổng Phase 1</td><td class="num">33</td><td class="num">~28</td><td><span class="tag t-warn">~17% thực</span></td></tr>
+      </tbody>
+    </table>
+    <div class="card accent-warn">
+      <div style="font-weight:800;margin-bottom:8px">⚠️ Vì sao code 85% mà chỉ tính ~17%?</div>
+      <p style="font-size:13.3px;color:var(--ink-soft);margin-bottom:10px">
+        Theo phương pháp đánh giá đã thống nhất: <b>code xong nhưng chưa qua review + test độc lập chỉ tính 20% hoàn thành</b> —
+        1 tuần để code nhưng ~3 tuần để review + sửa đúng hướng + test, và review có thể phát sinh việc mới.
+        85% × 20% ≈ <b>17% hoàn thành thực</b>.
+      </p>
+      <div style="font-weight:800;margin-bottom:6px;font-size:13.5px">Còn nợ để đóng Phase 1</div>
+      <ul class="tight">
+        <li>Report chống quà rác (P1-18/19) — <b>chưa động</b></li>
+        <li>Admin config ngành/pool (P1-15/16)</li>
+        <li><b>QA staging + review độc lập</b> (đang là nút thắt)</li>
+        <li>E2E + pilot thử 20–50 shop F&amp;B/Retail</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 6. RỦI RO -->
+<section>
+  <h2>🛡 Rủi ro cần quyết <span class="sub">3 điểm chặn mốc</span></h2>
+  <div class="grid g3">
+    <div class="card accent-danger">
+      <span class="tag t-danger">🔥 High · Nợ kiểm thử</span>
+      <div style="font-weight:800;margin:8px 0 5px">RN vào staging nhưng chưa QA độc lập</div>
+      <p style="font-size:13px;color:var(--ink-soft)">Code ~85% do <b>một mình Huy</b> gánh (BE + bảo mật + migration deploy) — bus-factor 1 người. Review có thể phát sinh việc.</p>
+      <p style="font-size:13px;margin-top:7px"><b>Cần:</b> W32 QA staging + kéo Hải/Trang vào review độc lập chia tải.</p>
+    </div>
+    <div class="card accent-warn">
+      <span class="tag t-warn">🟠 Medium-high · Phụ thuộc vendor</span>
+      <div style="font-weight:800;margin:8px 0 5px">UrBox go-live 7/8 gated bởi UrBox</div>
+      <p style="font-size:13px;color:var(--ink-soft)">Phía CNV đã sẵn sàng e-voucher + quà vật lý. Chờ UrBox: <b>credential prod + whitelist IP + ký nghiệm thu 2 bên</b>; P7 real-time chờ API.</p>
+      <p style="font-size:13px;margin-top:7px"><b>Cần:</b> theo dõi vendor giao credential — chậm là trượt mốc 7/8.</p>
+    </div>
+    <div class="card accent-info">
+      <span class="tag t-info">🟡 Medium · Khoảng trống nghiệp vụ</span>
+      <div style="font-weight:800;margin:8px 0 5px">Đối soát (reconciliation) chưa phủ</div>
+      <p style="font-size:13px;color:var(--ink-soft)">UrBox: <b>chưa code đối soát</b> — đây là mục duy nhất thiếu trong 8 mục go-live. GotIt: đối soát quà vật lý vẫn chủ động giảm focus.</p>
+      <p style="font-size:13px;margin-top:7px"><b>Cần:</b> chốt thời điểm làm đối soát — trước hay sau khi có đơn thật.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. W32 -->
+<section>
+  <h2>🎯 Kế hoạch W32 <span class="sub">03/08 → 07/08</span></h2>
+  <div class="grid g2">
+    <div class="card accent-pri">
+      <ul class="tight">
+        <li><b>reward-network</b> — QA trên staging + review code độc lập (sửa phát sinh) + chạy migration DB <code>reward_network_staging</code></li>
+        <li><b>UrBox</b> — push prod e-voucher + quà vật lý, go-live target 7/8 <i>nếu</i> vendor giao credential prod + IP + ký nghiệm thu</li>
+      </ul>
+    </div>
+    <div class="card accent-ok">
+      <ul class="tight">
+        <li><b>Bảo mật + đóng epic</b> — hoàn tất mask mã voucher khi lưu · report chống quà rác · admin config ngành/pool → E2E + pilot thử</li>
+        <li><b>Bàn giao + chia tải</b> — render báo cáo nghiệm thu UrBox ra PDF để 2 bên ký · kéo Hải/Trang review RN (giảm bus-factor)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="foot">
+  Gộp từ <b>W30-2026-team-report.html</b> (Sprint 17 · 20→24/07) và <b>W31-2026-team-report.html</b> (Sprint 18 · 27→31/07)<br>
+  Nguồn: git log trên reward-network · rewards-v2 · net-core · cdp-backend · cdp-frontend + review/phân công (Trang) &amp; test (QC)<br>
+  Đánh giá theo <b>độ khó + chiều sâu + số việc</b> — không đo bằng commit count; code xong chưa review/test tính <b>20%</b>
+</div>
+
+</div>
+</body>
+</html>
