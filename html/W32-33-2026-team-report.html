@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>W29/2026 — Reward V2 Team Report (2 ngày)</title>
+<title>W32-33/2026 — Reward V2 Team Report</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1017,24 +1017,24 @@
 
   <!-- Header -->
   <header>
-    <div class="eyebrow">Weekly Report · Sprint 16 · W29 · Tuần rút gọn 2 ngày</div>
+    <div class="eyebrow">Weekly Report · Sprint 19-20 · W32-33 (gộp 2 tuần)</div>
     <h1>Reward V2 — Team Weekly Report</h1>
-    <p>Tuần 29 / 2026 · 13/07 → 14/07 (T2 + T3) · 3 contributors + QC</p>
+    <p>Tuần 32-33 / 2026 · 03/08 → 14/08 · 2 contributors (Huy · Hải) + QC</p>
     <div class="meta">
       <span>📦 rewards-v2</span>
       <span>🆕 reward-network</span>
       <span>🏗 cdp-backend</span>
       <span>🎨 cdp-frontend</span>
-      <span>🔧 net-core</span>
-      <span>🗓 Team làm 2 ngày · Trọng tâm: reward-network hoàn thiện code + UrBox test staging</span>
+      <span>📱 mini-app</span>
+      <span>🔀 Gộp W32 (stabilize + mã hoá) + W33 (mở cửa mạng lưới + chặn bug staging RN)</span>
     </div>
   </header>
 
   <!-- Strategy banner -->
   <div class="strategy-banner">
     <span class="label">📌 Bối cảnh &amp; định hướng tuần</span>
-    <h2>reward-network hoàn thiện code (settlement Kafka + siết bảo mật) &amp; UrBox testing staging — tuần rút gọn 2 ngày</h2>
-    <p>Tuần này team làm <b>2 ngày (T2 13/07 · T3 14/07)</b>. <b>Huy</b> hoàn thiện cơ bản code reward-network: chuyển toàn bộ luồng voucher sang <b>Kafka settlement</b> (net-core → RN → rewards-v2 · chống mất đơn khi mạng lỗi), móc đủ <b>7 điểm confirm/release</b> trong 26 chỗ xử lý đơn, tách <b>3 worker riêng</b>, chống trùng đơn (idempotency P1-10), rồi <b>siết bảo mật</b> (bắt buộc ký RSA CRM Admin — default-deny) + <b>2 vòng hardening (7 hạng mục)</b>. <b>Trang</b> review &amp; <b>mask thông tin nhạy cảm trong log</b> reward-v2 + yêu cầu UrBox cấp thông tin staging + trực tiếp test staging. <b>Hải</b> hardening UrBox sync (đa app-credential · tồn kho digital/vật lý · dọn quà khi đổi credential · fallback URBOX_OTHER · ngày giao dự kiến) + catalog-sync bền hơn; cùng Trang &amp; <b>QC test chung</b> trên staging.</p>
+    <h2>Hai tuần: STABILIZE (W32) → SHIP FORWARD + FIREFIGHT (W33) — mã hoá voucher + money-path an toàn, rồi mở cửa mạng lưới cho shop + chặn bug staging RN 1,66 triệu điểm treo (trước prod)</h2>
+    <p>W32 = pivot code-freeze: Hải mã hoá voucher at-rest (4 cột bearer), Huy refactor money-path RN chặn bug tiền (refund double-spend · sổ Credit ghi lúc ĐỔI) + bù +796 test. W33 = đẩy tới: <b>Huy</b> mở cửa mạng lưới (shop tự bấm tham gia, bỏ cổng mời tay) · vòng đời ưu đãi (sửa ưu đãi ĐANG CHẠY qua 3 modal) · chợ ưu đãi hiện điểm Credit · gom module reward-hub (−25.843 dòng) · và DẬP bug staging RN 1,66 triệu điểm treo. <b>Hải</b> hoàn tất bảo mật voucher (rà + sửa 13 lỗi hậu-mã-hoá) · danh mục/thương hiệu per-shop (việc lớn nhất, sửa 8.441 quà bị ẩn) · mở đường prod worker UrBox. <b>⚠️ Phần lớn còn trên nhánh, chưa staging/prod — <b>nợ deploy-gate tích luỹ ~6 SQL tay + deploy đồng thời 3 repo</b>.</b></p>
   </div>
 
   <!-- ============== 📊 Portfolio 3 dự án con ============== -->
@@ -1053,36 +1053,36 @@
           <span style="font-size:12px; color:var(--muted);">6 nhóm tính năng</span>
         </div>
         <div style="height:8px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin-bottom:8px;"><div style="height:100%; width:95%; background:var(--success); border-radius:99px;"></div></div>
-        <div style="font-size:12px; color:var(--ink-soft);">Vendor tích hợp sớm nhất, đã live prod (evoucher W22 · vật lý W25-26 bàn giao CG). 5/6 nhóm 100%, đa kênh gửi 85%. <b>UAT Total: Total đã gửi quà sang GotIt, CG đang xử lý UAT.</b></div>
+        <div style="font-size:12px; color:var(--ink-soft);">Vendor tích hợp sớm nhất, đã live prod (evoucher W22 · vật lý W25-26 bàn giao CG). 5/6 nhóm 100%, đa kênh gửi 85%. <b>W32-33: mã hoá voucher at-rest (Hải) + vá ~20% webhook GotIt bị bỏ im lặng + che mã ở API inquiry crm-admin.</b></div>
       </div>
 
       <!-- UrBox -->
       <div style="padding:18px; background:var(--card); border:1px solid var(--border); border-top:4px solid var(--warning); border-radius:12px;">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:4px;">
           <b style="font-size:15px;">🔌 Kết nối UrBox</b>
-          <span style="font-size:10.5px; font-weight:700; color:#B45309; background:var(--warning-soft); padding:3px 9px; border-radius:99px;">🧪 ĐANG TEST STAGING</span>
+          <span style="font-size:10.5px; font-weight:700; color:#047857; background:var(--success-soft); padding:3px 9px; border-radius:99px;">✅ NGHIỆM THU SANDBOX</span>
         </div>
         <div style="display:flex; align-items:baseline; gap:8px; margin:6px 0;">
           <span style="font-size:34px; font-weight:800; color:var(--warning); line-height:1;">~92%</span>
-          <span style="font-size:12px; color:var(--muted);">kỹ thuật · đang test staging</span>
+          <span style="font-size:12px; color:var(--muted);">kỹ thuật · nghiệm thu sandbox ĐẠT</span>
         </div>
         <div style="height:8px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin-bottom:8px;"><div style="height:100%; width:92%; background:var(--warning); border-radius:99px;"></div></div>
-        <div style="font-size:12px; color:var(--ink-soft);">Đang <b>testing trên staging</b> (Trang + Hải + <b>QC test chung</b>). Hải hardening sync: đa app-credential · tồn kho digital/vật lý · fallback URBOX_OTHER · ngày giao dự kiến. Còn hoàn thiện test + next step tích hợp.</div>
+        <div style="font-size:12px; color:var(--ink-soft);"><b>Phía CNV sẵn sàng</b> (nghiệm thu sandbox 27/07 đạt). Go-live prod <b>GATED bởi vendor</b> (credential prod + IP + ký nghiệm thu) VÀ <b>git chưa xác nhận cutover</b>: master (nhánh prod) đứng yên ở <b>30/07</b>, không tag release, không commit prod UrBox → <b>chưa khẳng định được "đã live"</b>; cần xác nhận ngoài git (GitLab pipeline manual + biên bản ký). W33 (Hải): mở đường triển khai prod worker sync catalog UrBox + fix cấu hình nguy cơ lộ khoá prod.</div>
       </div>
 
       <!-- reward-network -->
       <div style="padding:18px; background:var(--card); border:1px solid var(--border); border-top:4px solid var(--purple); border-radius:12px;">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:4px;">
           <b style="font-size:15px;">🌐 reward-network <span style="font-size:11px; color:var(--muted); font-weight:500;">(reward-hub)</span></b>
-          <span style="font-size:10.5px; font-weight:700; color:#6D28D9; background:var(--purple-soft); padding:3px 9px; border-radius:99px;">⭐ TĂNG TỐC · HUY</span>
+          <span style="font-size:10.5px; font-weight:700; color:#6D28D9; background:var(--purple-soft); padding:3px 9px; border-radius:99px;">⭐ SHIP FORWARD · HUY</span>
         </div>
         <div style="margin:10px 0 8px;">
           <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px;"><span>Thiết kế &amp; lập kế hoạch</span><b style="color:var(--purple);">100%</b></div>
           <div style="height:7px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin-bottom:8px;"><div style="height:100%; width:100%; background:var(--purple); border-radius:99px;"></div></div>
-          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px;"><span>Code Phase 1 (đã code ~24/33, chưa QA)</span><b style="color:#B45309;">~14%</b></div>
-          <div style="height:7px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:14%; background:var(--warning); border-radius:99px;"></div></div>
+          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px;"><span>Code Phase 1 (tiến mạnh 2 tuần, phần lớn chưa staging/prod)</span><b style="color:#B45309;">~18%</b></div>
+          <div style="height:7px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:18%; background:var(--warning); border-radius:99px;"></div></div>
         </div>
-        <div style="font-size:12px; color:var(--ink-soft);">Huy hoàn thiện cơ bản code (~24/33 · ~72%): +settlement Kafka +siết bảo mật +2 vòng hardening. <b>Code xong + test Huy xanh nhưng chưa review độc lập/deploy → tính 20% → ~14%</b>.</div>
+        <div style="font-size:12px; color:var(--ink-soft);">W32 money-path correctness + W33 mở cửa mạng lưới/vòng đời ưu đãi/chợ ưu đãi. Feature tiến RẤT MẠNH nhưng <b>phần lớn CHƯA lên staging/prod → tính 20% → ~18%</b>. Điểm sáng: dập 2 bug tiền lớn (double-spend W32 · 1,66M điểm W33).</div>
       </div>
 
     </div>
@@ -1091,34 +1091,34 @@
   <!-- KPI -->
   <div class="kpi-grid">
     <div class="kpi success">
-      <div class="kpi-label">Trọng tâm 2 ngày (T2+T3)</div>
-      <div class="kpi-value">3 mảng</div>
-      <div class="kpi-sub">reward-network hoàn thiện code · UrBox test staging · review + mask log nhạy cảm</div>
-    </div>
-    <div class="kpi" style="background: linear-gradient(135deg, rgba(139,92,246,.2), rgba(6,182,212,.14)); border:1px solid rgba(139,92,246,.35);">
-      <div class="kpi-label" style="color:#7C3AED;">🌐 reward-network — Phase 1</div>
-      <div class="kpi-value" style="color:#7C3AED;">~14%</div>
-      <div class="kpi-sub">Hoàn thiện cơ bản code (~24/33 ~72%) + settlement Kafka + bảo mật; <b>chưa review/deploy → tính 20% → ~14%</b></div>
+      <div class="kpi-label">Phạm vi</div>
+      <div class="kpi-value">2 tuần · 2 dev</div>
+      <div class="kpi-sub">Huy + Hải + QC · W32 stabilize + W33 ship forward</div>
     </div>
     <div class="kpi info">
-      <div class="kpi-label">🔌 UrBox — đang test staging</div>
-      <div class="kpi-value">Staging 🧪</div>
-      <div class="kpi-sub">Trang + Hải + <b>QC test chung</b> trên staging; Hải hardening sync (đa credential · tồn kho · fallback · ngày giao)</div>
+      <div class="kpi-label">🌐 Reward Network (Huy)</div>
+      <div class="kpi-value">71 commit W33</div>
+      <div class="kpi-sub">mở cửa mạng lưới + vòng đời ưu đãi + chợ ưu đãi; +18 commit W32 (money-path). 7 repo, gom reward-hub −25.843 dòng</div>
     </div>
     <div class="kpi warning">
-      <div class="kpi-label">🔐 Bảo mật log (Trang)</div>
-      <div class="kpi-value">✅</div>
-      <div class="kpi-sub">Review lại log reward-v2 + mask thông tin nhạy cảm (voucher code / PII) — chống rò rỉ qua log</div>
+      <div class="kpi-label">🔐 Bảo mật voucher (Hải)</div>
+      <div class="kpi-value">HOÀN TẤT</div>
+      <div class="kpi-sub">mã hoá at-rest (W32) + rà &amp; sửa 13 lỗi hậu-mã-hoá (W33); 30 commit W33 (+34 W32)</div>
+    </div>
+    <div class="kpi danger">
+      <div class="kpi-label">🧪 Bug staging RN đã chặn (Huy)</div>
+      <div class="kpi-value">1,66 triệu điểm</div>
+      <div class="kpi-sub">điểm treo trên STAGING RN (chưa prod) — worker recovery không caller + 120K điểm giam oan (staging); bắt TRƯỚC prod, nối worker recovery + cắt giao dịch ngắn</div>
     </div>
     <div class="kpi primary">
-      <div class="kpi-label">🔗 Settlement voucher qua Kafka</div>
-      <div class="kpi-value">✅</div>
-      <div class="kpi-sub">Huy: net-core → RN → rewards-v2 (confirm/release/refund) · 7 điểm confirm · 3 worker riêng · chống mất đơn</div>
+      <div class="kpi-label">🏪 Danh mục per-shop (Hải)</div>
+      <div class="kpi-value">việc lớn nhất</div>
+      <div class="kpi-sub">scope danh mục/thương hiệu theo từng shop; sửa 8.441 quà ẩn ("Got It Đa Năng") + 401 quà dồn "Khác"</div>
     </div>
     <div class="kpi pink">
-      <div class="kpi-label">Khối lượng (2 ngày · theo việc + độ khó)</div>
-      <div class="kpi-value">~21 hạng mục</div>
-      <div class="kpi-sub">Huy 11 · Hải 6 · Trang 4 · độ khó cao nhất: <b>Huy (settlement Kafka + siết bảo mật)</b> · không đo bằng commit</div>
+      <div class="kpi-label">⚠️ Nợ deploy</div>
+      <div class="kpi-value">~6 SQL tay</div>
+      <div class="kpi-sub">deploy đồng thời 3 repo · phần lớn chưa lên staging · không Flyway · đổi tên bảng + backfill order-dependent</div>
     </div>
   </div>
 
@@ -1130,27 +1130,27 @@
 
       <!-- Chart 1: Kết quả mục tiêu -->
       <div class="chart-card">
-        <h4>🎯 3 mảng việc trong 2 ngày</h4>
-        <div class="chart-sub">reward-network hoàn thiện code (~72%, thực ~14%) · UrBox testing staging (Trang+Hải+QC) · review + mask log nhạy cảm (Trang).</div>
+        <h4>🎯 3 mảng việc 2 tuần</h4>
+        <div class="chart-sub">W32 stabilize + mã hoá voucher (Hải) → W33 mở cửa mạng lưới + vòng đời ưu đãi (Huy) → chặn bug staging RN 1,66 triệu điểm treo — bắt trước prod (Huy).</div>
         <div class="chart-wrap"><canvas id="goalChart"></canvas></div>
       </div>
 
       <!-- Chart 2: Reward Network WBS -->
       <div class="chart-card">
-        <h4>🌐 reward-network — tiến độ Phase 1</h4>
-        <div class="chart-sub">Huy hoàn thiện cơ bản code lên <b>~72% (~24/33)</b> (+settlement Kafka +bảo mật +2 vòng hardening) — code xong + test Huy xanh nhưng <b>chưa review độc lập/deploy → tính 20% → ~14%</b>.</div>
+        <h4>🧪 Điểm nhấn 2 tuần — chặn bug staging + khôi phục</h4>
+        <div class="chart-sub">W33 firefight: Huy nối worker recovery giải phóng điểm treo prod; Hải hoàn tất bảo mật voucher + khôi phục hiển thị quà per-shop. Đây là các con số chạm khách/tiền thật.</div>
         <div class="big-callout">
-          <div class="num" style="color:#B45309;">~14%</div>
-          <div class="label">hoàn thành thực · code ~72% × 20% (chưa QA/deploy)</div>
+          <div class="num" style="color:var(--danger);">1,66 triệu điểm</div>
+          <div class="label">điểm treo trên STAGING RN — chặn trước prod (W33)</div>
         </div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; font-size:13px;">
-          <div style="text-align:center; padding:10px; background:var(--purple-soft); border-radius:8px;">
-            <div style="font-size:22px; font-weight:800; color:#7C3AED;">~24/33</div>
-            <div style="color:var(--muted); margin-top:2px;">Task đã code (chưa QA)</div>
-          </div>
           <div style="text-align:center; padding:10px; background:var(--warning-soft); border-radius:8px;">
-            <div style="font-size:22px; font-weight:800; color:#B45309;">chờ chốt</div>
-            <div style="color:var(--muted); margin-top:2px;">code xong, chưa push/deploy</div>
+            <div style="font-size:22px; font-weight:800; color:#B45309;">13 lỗi</div>
+            <div style="color:var(--muted); margin-top:2px;">bảo mật voucher hậu-mã-hoá (Hải)</div>
+          </div>
+          <div style="text-align:center; padding:10px; background:var(--purple-soft); border-radius:8px;">
+            <div style="font-size:22px; font-weight:800; color:#7C3AED;">8.441 quà</div>
+            <div style="color:var(--muted); margin-top:2px;">khôi phục hiển thị (danh mục per-shop)</div>
           </div>
         </div>
       </div>
@@ -1158,7 +1158,7 @@
       <!-- Chart 3: Effort allocation -->
       <div class="chart-card">
         <h4>⚖️ Cơ cấu phân bổ công sức</h4>
-        <div class="chart-sub">Trọng tâm 2 ngày: hoàn thiện reward-network — settlement + bảo mật (Huy) + UrBox test staging (Hải/Trang) + mask log (Trang).</div>
+        <div class="chart-sub">Trọng tâm 2 tuần: Reward Network features + vòng đời ưu đãi (Huy) + bảo mật voucher &amp; danh mục per-shop (Hải) + chặn bug staging RN (Huy) + dọn nhà/hạ tầng deploy.</div>
         <div class="chart-wrap"><canvas id="effortChart"></canvas></div>
       </div>
 
@@ -1189,7 +1189,7 @@
       <div class="chart-card">
         <h4>📋 Số task &amp; độ khó trung bình</h4>
         <div class="chart-sub">
-          <b>Cột:</b> Số việc trong 2 ngày. <b>Đường:</b> Độ khó TB mỗi việc (1-5). <b>Huy khối lượng + độ khó cao nhất tuần</b> (settlement voucher qua Kafka + siết bảo mật RSA) — đánh giá theo độ khó, không đo bằng commit.
+          <b>Cột:</b> Số việc 2 tuần (W32+W33). <b>Đường:</b> Độ khó TB mỗi việc (1-5). <b>Huy độ khó cao nhất</b> (money-path W32 + mở cửa mạng lưới/vòng đời ưu đãi W33 + chặn bug staging RN); <b>Hải khối lượng lớn nhất</b> (mã hoá voucher + danh mục per-shop across-repo) — đánh giá theo độ khó, không đo bằng commit.
         </div>
         <div class="chart-wrap tall"><canvas id="taskComboChart"></canvas></div>
       </div>
@@ -1200,25 +1200,33 @@
       </div>
     </div>
 
-    <!-- Trang -->
+    <!-- Huy -->
     <div class="member-row">
       <div class="member-head">
-        <div class="avatar av-trang">NT</div>
+        <div class="avatar av-huy">H</div>
         <div>
-          <h3>Như Trang</h3>
-          <div class="role">Tech Lead · Bảo mật log reward-v2 + điều phối &amp; test UrBox trên staging</div>
+          <h3>Trần Lê Huy</h3>
+          <div class="role">Full-stack · Reward Network end-to-end: money-path (W32) → mở cửa mạng lưới + vòng đời ưu đãi + chợ ưu đãi + chặn bug staging RN (W33)</div>
         </div>
         <div class="meta-pills">
-          <span class="pill task">4 hạng mục</span>
-          <span class="pill effort">độ khó cao</span>
+          <span class="pill task">~26 hạng mục</span>
+          <span class="pill effort">⭐ độ khó cao nhất 4.6</span>
         </div>
       </div>
       <ul class="member-tasks">
-        <li><b>🔐 Review &amp; mask thông tin nhạy cảm trong log</b><span class="desc">Rà soát lại các phần <b>log</b> của reward-v2 + <b>mask</b> dữ liệu nhạy cảm (voucher code / PII) — chống rò rỉ qua log. Commit: <code>log + mask log</code> · <code>fix mask log</code> (T2 + T3).</span></li>
-        <li><b>🤝 Yêu cầu UrBox cung cấp thông tin staging</b><span class="desc">Làm việc với UrBox để lấy thông tin môi trường staging (endpoint · quyền · dữ liệu test) — mở đường cho việc test tích hợp thật.</span></li>
-        <li><b>🧪 Trực tiếp testing UrBox trên staging</b><span class="desc">Cùng Hải chạy thử luồng UrBox trên staging với credential thật (đổi quà · đồng bộ · địa chỉ giao).</span></li>
-        <li><b>👥 Điều phối QC vào test chung</b><span class="desc">Đưa <b>QC</b> vào kiểm thử độc lập luồng UrBox trên staging cùng team — bắt đầu QA cho tích hợp UrBox.</span></li>
+        <li><b>[W32] 💰 Refactor money-path RN</b><span class="desc"><b>Sổ Credit ghi lúc ĐỔI</b> (không chờ DÙNG mã, North Star hết đứng 0) · <b>refund trả đúng khách</b> (chặn double-spend) · tách <code>text_id</code> khỏi mã khách · DLT settlement tách repo · bỏ cờ <code>reconciliation.enabled</code> + bù <b>+796 test (417→438)</b>.</span></li>
+        <li><b>[W33] 🚪 Mở cửa mạng lưới</b><span class="desc">Shop <b>tự bấm tham gia</b> (<code>POST /account/join</code>), bỏ cổng mời tay <code>PILOT_INVITED</code> (đổi thành <code>ADMIN_CREATED</code>); phân trang mọi danh sách crm-admin.</span></li>
+        <li><b>[W33] 🔁 Vòng đời ưu đãi</b><span class="desc">Sửa ưu đãi <b>ĐANG CHẠY</b> qua <b>3 modal</b> (sửa nội dung · nới điều kiện · gia hạn) thay vì thu hồi+tạo lại; "Cách sử dụng" riêng theo kênh (online/quầy).</span></li>
+        <li><b>[W33] 📱 Trải nghiệm khách — kênh dùng voucher</b><span class="desc">Thông tin kênh dùng voucher chở <b>5 tầng</b> RN→rewards-v2→gateway→mini-app (mã tại-quầy <b>ẩn nút "Dùng ngay"</b>, hiện dải nhắc mang mã đến quầy).</span></li>
+        <li><b>[W33] 🧼 Dữ liệu sạch — hạn ưu đãi</b><span class="desc">Đẩy hạn ưu đãi <code>rn_valid_to</code> sang rewards-v2 → quà hết hạn <b>tự ẩn khỏi mini-app</b> + nhãn "Hết hạn" ở CRM.</span></li>
+        <li><b>[W33] 🔑 Hoàn tất tách định danh</b><span class="desc">Tách định danh MÁY khỏi mã KHÁCH + bỏ <code>display_code</code> (mini-app 1 chuỗi mã); .NET bỏ prefix "RN-".</span></li>
+        <li><b>[W33] ⚙️ Cấu hình kết nối per-shop</b><span class="desc">Cấu hình kết nối <b>RIÊNG per-shop</b> + nút "Đồng bộ quà" (bỏ cấu hình chung).</span></li>
+        <li><b>[W33] 🏪 Chợ ưu đãi</b><span class="desc">Hiện <b>điểm Credit mỗi lượt đổi</b> + lọc danh mục + ảnh mặc định; fix cờ "đổi được" tính đúng theo cây cha.</span></li>
+        <li><b>[W33] 📊 Fix số liệu báo cáo</b><span class="desc">KPI "Lượt quà được đổi" đếm theo <b>lúc ĐỔI</b> (mốc kế toán đúng), "Khách mới" giữ mốc dùng mã + nói rõ trong Excel.</span></li>
+        <li><b>[W33] 🧹 Dọn nhà</b><span class="desc">Chuẩn hoá tên 3 bảng (bỏ tiền tố <code>rn_</code>) + <b>GOM module reward-hub</b> về reward-network (xoá <b>249 file, −25.843 dòng</b>).</span></li>
+        <li><b>[W33] 🧪 Chặn 4 bug nghiêm trọng trên STAGING RN (trước prod)</b><span class="desc"><b>1,66 triệu điểm treo trên staging</b> (worker recovery không caller → nối lại + cắt giao dịch ngắn); pod voucher-consumer chết (bean <code>RestTemplate</code> thứ 2); gateway gọi RN sai đích (thiếu port, sai scheme); khoá ký RSA local suýt lọt git.</span></li>
       </ul>
+      <div style="margin-top:10px; padding:8px 12px; background:var(--warning-soft); border-radius:8px; font-size:12.5px; color:#B45309;"><b>Kết quả:</b> <b>71 commit W33</b> (7 repo, +15.777/−27.986 — 92% xoá từ gom reward-hub) + <b>18 commit W32</b>. <b>⚠️ Cổng deploy:</b> đổi tên 3 bảng (SQL trước code, mới LOCAL) · <code>rn_valid_to</code> (bấm "Đồng bộ quà" sau deploy) · key RSA + api-key crm-admin (thiếu = crash startup). <b>Chưa lên staging/prod.</b></div>
     </div>
 
     <!-- Hai -->
@@ -1227,50 +1235,25 @@
         <div class="avatar av-hai">H1</div>
         <div>
           <h3>Hồ Trung Hải</h3>
-          <div class="role">Full-stack · Hardening UrBox sync + catalog-sync + cùng test staging</div>
+          <div class="role">Full-stack · Bảo mật voucher at-rest + danh mục/thương hiệu per-shop + hạ tầng prod UrBox (rewards-v2 · cdp-backend · cdp-frontend)</div>
         </div>
         <div class="meta-pills">
-          <span class="pill task">6 hạng mục</span>
-          <span class="pill effort">độ khó cao</span>
+          <span class="pill task">~27 hạng mục</span>
+          <span class="pill effort">⭐ khối lượng lớn nhất 4.5</span>
         </div>
       </div>
       <ul class="member-tasks">
-        <li><b>🔌 UrBox sync đa app-credential</b><span class="desc">Xử lý <b>nhiều bộ app_id/app_secret</b> (2 credential UrBox cấp) + quy tắc hiển thị tồn kho tách bạch digital vs vật lý.</span></li>
-        <li><b>🔌 Dọn quà vật lý khi đổi credential</b><span class="desc">Khi đổi app_id/credential → dọn <b>cả quà VẬT LÝ</b> (trước chỉ dọn digital) → tránh quà cũ còn sót.</span></li>
-        <li><b>🔌 Fallback URBOX_OTHER + ngày giao dự kiến</b><span class="desc">Quà thiếu brand/category → fallback "Khác" (<code>URBOX_OTHER</code>) · thêm <b>estimated delivery</b> cho quà vật lý (+ field <code>estimatedDelivery</code> ở cdp-backend RewardItemV2).</span></li>
-        <li><b>🗂 Catalog-sync bền hơn</b><span class="desc">Giữ catalog cũ khi vendor trả success nhưng <b>0 sản phẩm</b> (tránh xoá nhầm) · seed-on-demand danh mục · tách module lib <code>catalog-sync-*</code>.</span></li>
-        <li><b>🔗 Tự đồng bộ quà khi đổi credential (reward-network)</b><span class="desc">Tự động đồng bộ lại quà khi lưu/đổi credential vendor — giảm thao tác tay.</span></li>
-        <li><b>📈 Reward ranking theo tần suất</b><span class="desc">Boost xếp hạng quà theo tần suất + xử lý category — cải thiện gợi ý.</span></li>
+        <li><b>[W32] 🔐 Mã hoá voucher AT-REST</b><span class="desc"><b>4 cột bearer</b> (<code>voucher_code</code>/<code>gift_link</code>/<code>qr_code</code>/<code>combo_items</code>) + converter <code>enc:v1:</code> + backfill one-shot + bỏ 3 cột rò + <b>vá ~20% webhook GotIt</b> bỏ im lặng.</span></li>
+        <li><b>[W33] 🛡 Hoàn tất bảo mật voucher — sửa 13 lỗi</b><span class="desc">Rà toàn vùng ảnh hưởng hậu-mã-hoá, sửa <b>13 lỗi</b> (3 ảnh hưởng khách/vận hành): màn lịch sử + export <b>TRẮNG</b> với shop chỉ-vật-lý/chỉ-evoucher · webhook thiếu serial → bỏ qua, khách không hoàn điểm · phát trùng voucher khi xử lý đồng thời.</span></li>
+        <li><b>[W33] 🔒 Chốt an toàn backfill + raw vendor</b><span class="desc">Chốt an toàn backfill job (chạy nhầm khoá = <b>mất data không khôi phục</b>) + giữ cột raw vendor có che nhạy cảm + job dọn (theo quyết định PO).</span></li>
+        <li><b>[W33] ♻️ Khôi phục 4 luồng trạng thái voucher RN</b><span class="desc">4 luồng cập nhật trạng thái voucher RN <b>ngừng chạy IM LẶNG</b> sau mã hoá (kiểm chứng trên DB thật) + fix voucher hoàn giữ nguyên thời điểm dùng cũ (sai mini-app + Excel).</span></li>
+        <li><b>[W33 · việc lớn nhất, 3 ngày] 🏪 Danh mục/thương hiệu per-shop</b><span class="desc">Mỗi shop hợp đồng riêng nhưng hệ dùng chung 1 bảng → shop thấy danh mục ngoài hợp đồng + <b>tắt nhầm của nhau</b>. Chuyển scope <b>per-shop</b>.</span></li>
+        <li><b>[W33] 🎛 Chuyển quyền bật/tắt danh mục về CRM</b><span class="desc">Quyền bật/tắt danh mục/thương hiệu cấp hệ thống về CRM (trước job tự ghi, tắt nhầm không bật lại được).</span></li>
+        <li><b>[W33] 🎁 Khôi phục hiển thị quà bị ẩn</b><span class="desc">Sửa <b>401 quà</b> 1 shop dồn hết vào "Khác" (danh mục thật trống) + sửa "Got It Đa Năng" trống rỗng (<b>8.441 quà</b> thuộc thương hiệu đã tắt) + tự dọn danh mục UrBox hết hợp đồng.</span></li>
+        <li><b>[W33] ✅ Hoàn thiện kích hoạt tài khoản CRM</b><span class="desc">Thông báo lỗi nói rõ đích gọi · fix job fail nhưng CRM vẫn "đang chờ" · fix staging gọi sai API path → <b>ĐÃ LÊN STAGING</b>.</span></li>
+        <li><b>[W33] 🚀 Mở đường prod worker sync catalog UrBox</b><span class="desc">Mở đường triển khai prod worker sync catalog UrBox + fix cấu hình nguy cơ lộ file DB/khoá mã hoá prod.</span></li>
       </ul>
-    </div>
-
-    <!-- Huy -->
-    <div class="member-row">
-      <div class="member-head">
-        <div class="avatar av-huy">H</div>
-        <div>
-          <h3>Trần Lê Huy</h3>
-          <div class="role">Full-stack · reward-network hoàn thiện code — settlement voucher qua Kafka + siết bảo mật (nặng nhất tuần)</div>
-        </div>
-        <div class="meta-pills">
-          <span class="pill task">11 hạng mục</span>
-          <span class="pill effort">⭐ độ khó rất cao</span>
-        </div>
-      </div>
-      <ul class="member-tasks">
-        <li><b>🔗 Chuyển toàn bộ luồng voucher RN sang Kafka settlement</b><span class="desc"><b>T2.</b> Trước đây net-core gọi thẳng HTTP sang RN để xác nhận/hoàn voucher — dễ mất dữ liệu khi mạng lỗi. Chuyển sang <b>bắn event qua Kafka</b>: net-core phát event → RN xử lý → rewards-v2 cập nhật trạng thái đã dùng. Chắc chắn hơn, không mất đơn.</span></li>
-        <li><b>🔗 Móc đủ 7 điểm confirm/release voucher</b><span class="desc"><b>T2.</b> Rà soát toàn bộ <b>26 chỗ xử lý đơn hàng</b> trong net-core, gắn đủ 7 điểm confirm/release còn thiếu — mọi kịch bản đặt/hủy đơn xử lý voucher đúng.</span></li>
-        <li><b>♻️ Tách tác vụ nền RN thành 3 worker riêng</b><span class="desc"><b>T2.</b> Job gửi voucher + job đối soát hoàn tiền tách khỏi API chính → service worker độc lập, chạy ổn định, mở rộng riêng được.</span></li>
-        <li><b>🔒 Chống trùng đơn đổi quà (rewards-v2)</b><span class="desc"><b>T2.</b> Idempotency (P1-10): bấm đổi 2 lần / mạng retry → chỉ xử lý một lần, không trừ điểm/cấp voucher trùng.</span></li>
-        <li><b>⚡ Vá hiệu năng &amp; ổn định</b><span class="desc"><b>T2.</b> Sửa N+1 query · giới hạn xử lý đồng thời cổng nhận đơn · graceful shutdown worker.</span></li>
-        <li><b>🔐 Bắt buộc ký RSA cho thao tác nhạy cảm (default-deny)</b><span class="desc"><b>T3.</b> Mọi request cấp/thu quyền + quản lý shop qua CRM Admin phải có <b>chữ ký RSA hợp lệ</b> mới chạy — bịt hẳn lỗ hổng bypass.</span></li>
-        <li><b>🛒 Tắt brand/danh mục/pool → ẩn ưu đãi khỏi chợ ngay</b><span class="desc"><b>T3.</b> Trước đây tắt nhãn hàng/danh mục nhưng ưu đãi vẫn hiện. Sửa để ẩn đồng bộ + phát event cho rewards-v2 cập nhật — hết ưu đãi "ma".</span></li>
-        <li><b>🔒 Hoàn thiện chống trùng mã dùng-nhiều-lần</b><span class="desc"><b>T3.</b> Mã tái sử dụng không bị đếm/đốt sai khi nhiều đơn xen kẽ/retry; đơn đã hoàn tiền thì không cho giữ chỗ lại.</span></li>
-        <li><b>⏱ Nới cửa sổ đối soát hoàn tiền 3 → 30 ngày</b><span class="desc"><b>T3.</b> Đơn hoàn muộn trước đây bị bỏ sót âm thầm → nới cửa sổ quét lên 30 ngày để bắt đơn hoàn trễ.</span></li>
-        <li><b>✅ Xong hardening 2 vòng review (7 hạng mục)</b><span class="desc"><b>T3.</b> Chốt nghiệp vụ + vá triệt để: hoàn tiền toàn/phần + đảo đúng sổ điểm · đếm "khách mới" theo lần dùng đầu · phân quyền update DB rõ (5 tiến trình không tranh) · bọc data access qua tầng service.</span></li>
-        <li><b>🛠 Vá lỗi CDP không build (Double→Long) + fix hiển thị đơn</b><span class="desc"><b>T3.</b> Sửa lỗi ép kiểu làm CDP không compile + vài fix hiển thị đơn phía giao diện.</span></li>
-      </ul>
-      <div style="margin-top:10px; padding:8px 12px; background:var(--warning-soft); border-radius:8px; font-size:12.5px; color:#B45309;"><b>⚠️ Còn treo:</b> code đã xong + <b>test (của Huy) xanh</b> nhưng <b>CHƯA push/deploy — chờ chốt</b>. 2 điều kiện trước prod: (a) CRM Admin phải ký RSA; (b) deploy API chính trước rồi dọn index cũ trên staging. → chưa review độc lập/deploy nên <b>tính 20% → ~14% hoàn thành thực</b>.</div>
+      <div style="margin-top:10px; padding:8px 12px; background:var(--warning-soft); border-radius:8px; font-size:12.5px; color:#B45309;"><b>Kết quả:</b> <b>30 commit W33</b> (3 repo, 86 file; test ~1.400→1.479 xanh, kiểm chứng DB thật) + <b>34 commit W32</b>. <b>Trạng thái:</b> kích hoạt CRM đã staging; bảo mật voucher + danh mục per-shop gộp nhánh 14/08, chưa staging (MR đầu tuần sau). <b>⚠️ Deploy đồng thời 3 repo</b> (khoá mã hoá ở rewards-v2 + cdp-backend) + <b>6 SQL tay</b>.</div>
     </div>
   </div>
 
@@ -1285,7 +1268,7 @@
   <div class="section">
     <div class="section-title">
       <h2>🔌 Dự án · Kết nối UrBox — đã có gì &amp; % hoàn thành</h2>
-      <span class="hint">Đang <b>testing trên staging</b> (Trang + Hải + QC) · kỹ thuật ~92% · Hải hardening sync + đa credential · còn hoàn thiện test + next step tích hợp</span>
+      <span class="hint"><b>Nghiệm thu sandbox ĐẠT (27/07)</b> · kỹ thuật ~92% · phía CNV sẵn sàng · <b>go-live prod GATED vendor + git chưa xác nhận cutover</b> (master đứng 30/07) → chưa khẳng định đã live</span>
     </div>
 
     <!-- Hero: con số tổng -->
@@ -1295,13 +1278,22 @@
         <div style="font-size:12px; color:var(--muted); margin-top:6px; text-transform:uppercase; letter-spacing:0.5px;">Phần kỹ thuật<br>team kiểm soát</div>
       </div>
       <div style="flex:1; min-width:260px;">
-        <div style="font-size:15px; font-weight:700; color:var(--ink); margin-bottom:6px;">🧪 W29: đang <span style="color:#047857;">testing trên staging</span> (Trang + Hải + QC test chung)</div>
-        <div style="font-size:13.5px; color:var(--ink-soft);">Đổi quà (evoucher + vật lý) &amp; catalog đa vendor chạy trên staging với <b>2 credential UrBox thật</b>. Hải hardening sync (đa app-credential · tồn kho digital/vật lý · dọn quà khi đổi credential · fallback URBOX_OTHER · ngày giao dự kiến). Phần chưa xong: hoàn thiện test staging + next step quy trình tích hợp UrBox.</div>
+        <div style="font-size:15px; font-weight:700; color:var(--ink); margin-bottom:6px;">✅ <span style="color:#047857;">NGHIỆM THU SANDBOX ĐẠT (27/07)</span> — phía CNV sẵn sàng, nhưng <span style="color:#B45309;">chưa khẳng định đã live</span></div>
+        <div style="font-size:13.5px; color:var(--ink-soft);">Hạng mục hiển thị &amp; cơ chế sync đều <b>ĐẠT</b> trên sandbox — <b>phía CNV sẵn sàng</b>. <b>Nhưng go-live prod GATED bởi vendor</b> (credential prod + IP + ký nghiệm thu) VÀ <b>git chưa xác nhận cutover</b>: master (nhánh prod) đứng yên ở <b>30/07</b>, không tag release, không commit prod UrBox → <b>chưa khẳng định được "đã live"</b>, nhiều khả năng đang chờ vendor. <b>Cần xác nhận ngoài git:</b> GitLab pipeline manual + biên bản ký. <b>W33 (Hải):</b> mở đường triển khai prod worker sync catalog UrBox + fix cấu hình nguy cơ lộ file DB/khoá mã hoá prod (mã hoá voucher at-rest là SHOULD-have — nên merge master trước khi UrBox prod lưu voucher thật).</div>
       </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
         <div style="text-align:center; padding:10px 14px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="font-size:20px; font-weight:800; color:var(--warning);">6/7</div><div style="font-size:11px; color:var(--muted);">phase vật lý</div></div>
         <div style="text-align:center; padding:10px 14px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="font-size:20px; font-weight:800; color:var(--success);">4/4</div><div style="font-size:11px; color:var(--muted);">fix evoucher</div></div>
         <div style="text-align:center; padding:10px 14px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="font-size:20px; font-weight:800; color:var(--success);">19/21</div><div style="font-size:11px; color:var(--muted);">catalog+consumer</div></div>
+      </div>
+    </div>
+
+    <!-- Go-live 7/8 scope -->
+    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:16px; padding:16px 20px; background:linear-gradient(135deg,#FFFBEB 0%,var(--card) 80%); border:1px solid #FBBF24; border-left:5px solid var(--warning); border-radius:12px; margin-bottom:20px;">
+      <div style="font-size:30px;">🚦</div>
+      <div style="flex:1; min-width:260px;">
+        <div style="font-size:14.5px; font-weight:700; color:#B45309; margin-bottom:4px;">Go-live 7/8: phía CNV sẵn sàng — nhưng CHƯA khẳng định được "đã live"</div>
+        <div style="font-size:13px; color:var(--ink-soft); line-height:1.55;">Phía CNV sẵn sàng triển khai e-voucher + quà vật lý (nghiệm thu sandbox đạt). Nhưng <b>git KHÔNG xác nhận đã cutover</b>: master (nhánh prod) đứng yên ở <b>30/07</b>, không tag release, không commit prod UrBox. Cutover prod <b>GATED bởi UrBox</b> (credential prod + IP + ký nghiệm thu) → nhiều khả năng đang chờ vendor. <b>Cần xác nhận ngoài git:</b> GitLab pipeline manual + biên bản ký (chỉ chưa có đối soát).</div>
       </div>
     </div>
 
@@ -1364,18 +1356,18 @@
       </div>
 
       <div style="padding:14px 16px; background:var(--info-soft); border-left:4px solid var(--info); border-radius:0 10px 10px 0;">
-        <h4 style="margin:0 0 8px; font-size:14px; color:#1D4ED8;">🧪 Đang test staging (W29) <span style="font-weight:500; color:var(--muted);">(Trang + Hải + QC)</span></h4>
+        <h4 style="margin:0 0 8px; font-size:14px; color:#1D4ED8;">✅ Nghiệm thu sandbox ĐẠT (27/07) <span style="font-weight:500; color:var(--muted);">(Hải + QC)</span></h4>
         <ul style="margin:0; padding-left:18px; font-size:12.5px; color:var(--ink-soft); line-height:1.7;">
-          <li><b>Trang + Hải + QC</b> test luồng UrBox trên staging với 2 credential thật.</li>
-          <li>Hải hardening sync: đa app-credential · tồn kho digital/vật lý · dọn quà khi đổi credential · fallback URBOX_OTHER · ngày giao dự kiến.</li>
-          <li>W30: hoàn thiện test staging + next step quy trình tích hợp UrBox.</li>
+          <li>Hạng mục hiển thị &amp; cơ chế sync đều <b>ĐẠT</b> trên sandbox (nghiệm thu 27/07) — <b>phía CNV sẵn sàng</b>.</li>
+          <li>W33 Hải: <b>mở đường triển khai prod</b> worker sync catalog UrBox (trước chỉ có đường staging).</li>
+          <li>W33 Hải: fix cấu hình <b>nguy cơ lộ file DB/khoá mã hoá prod</b> + mã hoá voucher at-rest (nên merge master trước khi UrBox prod lưu voucher thật).</li>
         </ul>
       </div>
 
       <div style="padding:14px 16px; background:var(--purple-soft); border-left:4px solid var(--purple); border-radius:0 10px 10px 0;">
-        <h4 style="margin:0 0 8px; font-size:14px; color:#6D28D9;">🤝 Chờ UrBox <span style="font-weight:500; color:var(--muted);">(blocking ngoài)</span></h4>
+        <h4 style="margin:0 0 8px; font-size:14px; color:#6D28D9;">🤝 Chờ UrBox <span style="font-weight:500; color:var(--muted);">(GATE prod go-live 7/8)</span></h4>
         <ul style="margin:0; padding-left:18px; font-size:12.5px; color:var(--ink-soft); line-height:1.7;">
-          <li><b>P7 real-time:</b> 2 API tra cứu đơn (prod) + đăng ký IP.</li>
+          <li><b>Credential prod</b> + whitelist IP + ký nghiệm thu 2 bên.</li>
           <li>OAuth 2.0 ủy quyền · webhook trạng thái tiêu dùng.</li>
           <li>API đối soát bulk · incremental sync. <i>(ratelimit · RSA đã chốt ✅)</i></li>
         </ul>
@@ -1388,7 +1380,7 @@
   <div class="section">
     <div class="section-title">
       <h2>🌐 Dự án · reward-network — đã có gì &amp; % hoàn thành</h2>
-      <span class="hint">Trọng tâm 2 ngày (Huy) · hoàn thiện cơ bản code ~24/33 (~72%) + settlement Kafka + bảo mật; <b>chưa review độc lập/deploy → tính 20% → ~14%</b></span>
+      <span class="hint">Trọng tâm 2 tuần (Huy) · W32 money-path correctness + W33 <b>mở cửa mạng lưới / vòng đời ưu đãi / chợ ưu đãi</b> · feature tiến mạnh nhưng <b>phần lớn chưa staging/prod → tính 20% → ~18%</b></span>
     </div>
 
     <!-- Hero: tách thiết kế vs code -->
@@ -1400,13 +1392,24 @@
       </div>
       <div style="padding:16px 18px; background:linear-gradient(135deg,var(--success-soft) 0%,var(--card) 80%); border:1px solid #A7F3D0; border-radius:12px;">
         <div style="font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;">Code Phase 1 (dev)</div>
-        <div style="font-size:38px; font-weight:800; color:#B45309; line-height:1.15;">~14<span style="font-size:20px; color:var(--muted);">% thực · code ~72%</span></div>
-        <div style="font-size:12.5px; color:var(--ink-soft);"><b>Đã code ~24/33 (~72%)</b> (Huy): +settlement voucher qua Kafka +siết bảo mật RSA +2 vòng hardening. <b style="color:#B45309;">Code xong + test Huy xanh nhưng chưa review độc lập/deploy → tính 20% → ~14% hoàn thành thực.</b></div>
+        <div style="font-size:38px; font-weight:800; color:#B45309; line-height:1.15;">~18<span style="font-size:20px; color:var(--muted);">% thực · code tiến mạnh</span></div>
+        <div style="font-size:12.5px; color:var(--ink-soft);"><b>Feature tiến RẤT MẠNH 2 tuần</b> (Huy): quy mô thật <b>9 module · 5 app deployable · 15 bảng</b>. W32 money-path correctness + W33 mở cửa mạng lưới / vòng đời ưu đãi / chợ ưu đãi / hết hạn. <b style="color:#B45309;">Phần lớn CHƯA lên staging/prod → theo luật vẫn tính 20% → ~18% hoàn thành thực.</b></div>
+      </div>
+    </div>
+
+    <!-- W32 stabilize + money-path depth -->
+    <div style="padding:14px 16px; background:linear-gradient(135deg,#EEF2FF 0%,var(--card) 85%); border:1px solid #DDD6FE; border-radius:12px; margin-bottom:18px;">
+      <div style="font-size:14px; font-weight:700; color:#4338CA; margin-bottom:8px;">💰 W32 stabilize (money-path + mã hoá) → 🚪 W33 ship forward (mở cửa mạng lưới + vòng đời ưu đãi)</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; font-size:12.5px; color:var(--ink-soft);">
+        <div style="padding:10px 12px; background:var(--card); border:1px solid var(--border); border-radius:8px;"><b>💰 W32 · Money-path RN (Huy)</b><br><b>Sổ credit ghi lúc ĐỔI</b> (North Star hết đứng 0) · <b>refund trả voucher đúng khách</b> chặn double-spend · tách <code>text_id</code> khỏi mã khách · DLT settlement tách repo · bỏ cờ <code>reconciliation.enabled</code> + bù +796 test.</div>
+        <div style="padding:10px 12px; background:var(--card); border:1px solid var(--border); border-radius:8px;"><b>🔐 W32 · Mã hoá voucher at-rest (Hải)</b><br>Converter <code>enc:v1:</code> (đọc 3 nhánh, chạy trên dữ liệu lẫn lộn) · <b>4 cột bearer</b> (voucher_code · gift_link · qr_code · combo_items) · backfill one-shot (K8s Job dry-run) · vá ~20% webhook GotIt bị bỏ im lặng.</div>
+        <div style="padding:10px 12px; background:var(--card); border:1px solid var(--border); border-radius:8px;"><b>🚪 W33 · Mở cửa mạng lưới + ưu đãi (Huy)</b><br>Shop <b>tự bấm tham gia</b> (<code>POST /account/join</code>, bỏ cổng mời tay) · <b>sửa ưu đãi ĐANG CHẠY qua 3 modal</b> · chợ ưu đãi hiện điểm Credit · kênh dùng voucher xuống mini-app · hạn <code>rn_valid_to</code> tự ẩn quà hết hạn.</div>
+        <div style="padding:10px 12px; background:var(--card); border:1px solid var(--border); border-radius:8px;"><b>🛡 W33 · Hoàn tất bảo mật + danh mục per-shop (Hải)</b><br>Rà &amp; sửa <b>13 lỗi hậu-mã-hoá</b> · khôi phục 4 luồng trạng thái voucher RN ngừng im lặng · <b>danh mục/thương hiệu per-shop</b> (sửa 8.441 quà ẩn + 401 quà dồn "Khác").</div>
       </div>
     </div>
 
     <!-- 8 epic breakdown -->
-    <div style="font-size:13px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-bottom:10px;">📋 Phase 1 — 33 task · 8 epic (~90 PD) · <span style="color:#B45309;">đã code ~24/33 · hoàn thành thực ~14% (chưa QA)</span></div>
+    <div style="font-size:13px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-bottom:10px;">📋 Phase 1 — 33 task · 8 epic (~90 PD) · <span style="color:#B45309;">đã code ~28/33 · hoàn thành thực ~18% (đang review+test)</span></div>
     <div style="overflow-x:auto;">
     <table style="width:100%; border-collapse:collapse; font-size:12.5px;">
       <thead><tr style="text-align:left; color:var(--muted); border-bottom:2px solid var(--border);">
@@ -1416,19 +1419,19 @@
         <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">1 · Contribution (tạo/đẩy quà)</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">6</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">5</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:83%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
         <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">2 · Marketplace API</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">3</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">3</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
         <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">3 · Issue/Redeem + offline</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">4</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">4</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
-        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">4 · CNV Admin (duyệt/gán cấp)</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">4</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">3</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:75%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">4 · CNV Admin (duyệt/gán cấp/reinstate)</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">4</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">4</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
         <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">5 · Report chống quà rác</td><td style="padding:7px 10px; color:var(--muted);">BE-RN</td><td style="padding:7px 10px; text-align:center;">2</td><td style="padding:7px 10px; text-align:center; color:var(--muted);">0</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px;"></div></td></tr>
-        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">6 · Integration rewards-v2 (RN thành vendor)</td><td style="padding:7px 10px; color:var(--muted);">BE-RW</td><td style="padding:7px 10px; text-align:center;">7</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">6</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:86%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
-        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">7 · FE + Gateway</td><td style="padding:7px 10px; color:var(--muted);">CDP + FE</td><td style="padding:7px 10px; text-align:center;">4</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">2</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:50%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">6 · Integration rewards-v2 (RN thành vendor)</td><td style="padding:7px 10px; color:var(--muted);">BE-RW</td><td style="padding:7px 10px; text-align:center;">7</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">7</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
+        <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">7 · FE + Gateway</td><td style="padding:7px 10px; color:var(--muted);">CDP + FE</td><td style="padding:7px 10px; text-align:center;">4</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">4</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
         <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">8 · Test &amp; pilot</td><td style="padding:7px 10px; color:var(--muted);">QA</td><td style="padding:7px 10px; text-align:center;">3</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">1</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:33%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
       </tbody>
       <tfoot><tr style="border-top:2px solid var(--border); font-weight:800; color:var(--ink);">
-        <td style="padding:8px 10px;">Tổng Phase 1</td><td></td><td style="padding:8px 10px; text-align:center;">33</td><td style="padding:8px 10px; text-align:center; color:#047857;">~24 code</td><td style="padding:8px 10px; color:#B45309;">~14% thực (×20%)</td>
+        <td style="padding:8px 10px;">Tổng Phase 1</td><td></td><td style="padding:8px 10px; text-align:center;">33</td><td style="padding:8px 10px; text-align:center; color:#047857;">~28 code</td><td style="padding:8px 10px; color:#B45309;">~18% thực · đang review+test</td>
       </tr></tfoot>
     </table>
     </div>
 
-    <div style="margin-top:14px; padding:12px 14px; background:var(--warning-soft); border-radius:10px; font-size:12.5px; color:#B45309;"><b>⚠️ Lưu ý đánh giá:</b> ~24/33 task đã code nhưng <b>chưa qua test + review độc lập / chưa deploy → chỉ tính 20% → ~14% hoàn thành thực</b> — <i>1 tuần để code nhưng ~3 tuần để review + sửa đúng hướng + test; review có thể phát sinh việc</i>. <b>W29 đã thêm:</b> settlement voucher qua Kafka (confirm/release/refund) + siết bảo mật RSA + 2 vòng hardening (7 hạng mục). <b>Còn treo:</b> code xong + test Huy xanh nhưng chưa push/deploy — chờ chốt 2 điều kiện (CRM Admin ký RSA · deploy API chính rồi dọn index cũ staging). <b>W30:</b> vào test + review độc lập + deploy staging.</div>
+    <div style="margin-top:14px; padding:12px 14px; background:var(--warning-soft); border-radius:10px; font-size:12.5px; color:#B45309;"><b>⚠️ Lưu ý đánh giá:</b> feature tiến RẤT MẠNH 2 tuần (money-path W32 + mở cửa mạng lưới / vòng đời ưu đãi / chợ ưu đãi W33) nhưng <b>phần lớn CHƯA lên staging/prod → theo luật vẫn tính 20% → ~18% hoàn thành thực</b> — <i>1 tuần để code nhưng ~3 tuần để review + deploy + QA</i>. <b>⚠️ Nợ deploy-gate tích luỹ:</b> <b>~6 SQL tay</b> + <b>deploy đồng thời 3 repo</b> (khoá mã hoá ở rewards-v2 + cdp-backend) · đổi tên bảng order-dependent + backfill · <b>KHÔNG Flyway</b> → sai thứ tự = mất data / crash startup / hỏng tiền. <b>✅ Điểm sáng:</b> đã dập <b>2 bug tiền lớn</b> (double-spend W32 · 1,66 triệu điểm treo W33). <b>Còn lại:</b> report chống quà rác · E2E + pilot. <b>W34:</b> mở MR lên staging + chạy ~6 SQL gate đúng thứ tự + QA money-path + pilot.</div>
   </div>
 
   <!-- ============== 🤝 Dự án · Kết nối GotIt ============== -->
@@ -1439,15 +1442,15 @@
     </div>
     <div style="display:flex; flex-wrap:wrap; align-items:center; gap:20px; padding:16px 18px; background:linear-gradient(135deg,var(--success-soft) 0%,var(--card) 80%); border:1px solid #A7F3D0; border-radius:12px; margin-bottom:16px;">
       <div style="text-align:center; min-width:110px;"><div style="font-size:40px; font-weight:800; color:#047857; line-height:1;">~95%</div><div style="font-size:11px; color:var(--muted);">6 nhóm tính năng</div></div>
-      <div style="flex:1; min-width:240px; font-size:12.5px; color:var(--ink-soft);">Đã live production (evoucher từ W22 · quà vật lý W25-26 <b>bàn giao CG vận hành</b>). Không TODO/bug tồn trong code. <b>UAT Total: Total đã gửi quà sang GotIt, team CG đang xử lý để UAT</b> — blocker thương mại trước đó (Total chưa ký gửi quà) đã được gỡ.</div>
+      <div style="flex:1; min-width:240px; font-size:12.5px; color:var(--ink-soft);">Đã live production (evoucher từ W22 · quà vật lý W25-26 <b>bàn giao CG vận hành</b>). Không TODO/bug tồn trong code. <b>W32-33 (Hải):</b> mã hoá voucher at-rest (voucher_code · gift_link · qr_code · combo_items) · <b>vá ~20% webhook GotIt bị bỏ im lặng</b> (GotIt auto-convert mã rồi mới gửi webhook → tra theo order_code) · che mã ở <code>GET /crm-admin/inquiry</code> (trước trả nguyên payload thô: code/link/PIN). GotIt live ổn định, không incident.</div>
     </div>
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:10px;">
       <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Đồng bộ catalog</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
       <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Đổi quà evoucher + recovery</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
       <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Quà vật lý + status history</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
       <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Recovery &amp; idempotency</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
-      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Đối soát / reconciliation</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div></div>
-      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Gửi voucher đa kênh</span><b style="color:var(--warning);">85%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:85%; background:var(--warning);"></div></div><div style="font-size:10.5px; color:var(--muted); margin-top:4px;">SMS còn tối giản · ZNS phụ thuộc module ngoài</div></div>
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Đối soát / reconciliation</span><b style="color:var(--warning);">e-voucher</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:55%; background:var(--warning);"></div></div><div style="font-size:10.5px; color:#B45309; margin-top:4px;">Đối soát e-voucher có · <b>đối soát quà vật lý CHƯA làm</b></div></div>
+      <div style="padding:11px 13px; background:var(--card); border:1px solid var(--border); border-radius:10px;"><div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;"><span>Gửi voucher (ZNS + Email)</span><b style="color:var(--success);">100%</b></div><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:100%; background:var(--success);"></div></div><div style="font-size:10.5px; color:var(--muted); margin-top:4px;">ZNS + Email 100% · SMS chưa có vendor (ngoài scope)</div></div>
     </div>
   </div>
 
@@ -1463,7 +1466,7 @@
       <button class="tab-btn active" data-tab="feature">🆕 Tính năng &amp; Dự án mới <span class="count">5</span></button>
       <button class="tab-btn" data-tab="vendor">🤝 Đối tác &amp; UrBox <span class="count">3</span></button>
       <button class="tab-btn" data-tab="improve">✨ Sửa lỗi &amp; Cải tiến <span class="count">4</span></button>
-      <button class="tab-btn" data-tab="docs">📝 Tài liệu &amp; Hạ tầng <span class="count">2</span></button>
+      <button class="tab-btn" data-tab="docs">🔥 Bug staging &amp; Dọn nhà <span class="count">2</span></button>
     </div>
 
     <!-- Tab content: Tính năng & Dự án mới (5) -->
@@ -1471,12 +1474,12 @@
       <div class="feat-row" style="border:1px solid #DDD6FE; background:linear-gradient(135deg,#FaF5FF,var(--card));">
         <div class="feat-check" style="background:var(--purple);">★</div>
         <div class="feat-content">
-          <h4>🔗 reward-network — chuyển toàn bộ luồng voucher sang Kafka settlement (trọng tâm · Huy)</h4>
-          <p>Thay HTTP trực tiếp net-core→RN (dễ mất đơn khi mạng lỗi) bằng <b>event qua Kafka</b>: net-core phát event → RN xử lý → rewards-v2 cập nhật trạng thái đã dùng (confirm/release/refund). Móc đủ <b>7 điểm confirm/release</b> trong 26 chỗ xử lý đơn · tách <b>3 worker riêng</b>. Luồng chắc chắn, không mất đơn.</p>
+          <h4>🚪 reward-network — mở cửa mạng lưới + vòng đời ưu đãi (W33 · Huy)</h4>
+          <p>Shop <b>tự bấm tham gia</b> mạng lưới (<code>POST /account/join</code>), bỏ cổng mời tay <code>PILOT_INVITED</code> → <code>ADMIN_CREATED</code>. <b>Vòng đời ưu đãi:</b> sửa ưu đãi <b>ĐANG CHẠY</b> qua <b>3 modal</b> (sửa nội dung · nới điều kiện · gia hạn) thay vì thu hồi+tạo lại; "Cách sử dụng" riêng theo kênh (online/quầy). Phân trang mọi danh sách crm-admin.</p>
           <div class="feat-meta">
             <span class="badge-owner-huy">👤 <b>Huy</b></span>
-            <span>🆕 reward-network · net-core · rewards-v2</span>
-            <span class="badge-heavy" style="background:var(--purple-soft); color:#5B21B6;">★ Trọng tâm</span>
+            <span>🆕 reward-network</span>
+            <span class="badge-heavy" style="background:var(--warning-soft); color:#B45309;">⭐ Độ khó cao nhất</span>
           </div>
         </div>
       </div>
@@ -1484,50 +1487,48 @@
       <div class="feat-row" style="border:1px solid #FDE68A; background:linear-gradient(135deg,#FFFBEB,var(--card));">
         <div class="feat-check" style="background:var(--warning);">★</div>
         <div class="feat-content">
-          <h4>🔐 Siết bảo mật reward-network + 2 vòng hardening (Huy)</h4>
-          <p><b>Bắt buộc ký RSA</b> cho thao tác nhạy cảm CRM Admin (default-deny — bịt bypass). Tắt brand/danh mục/pool → ẩn ưu đãi khỏi chợ ngay + phát event rewards-v2 (hết ưu đãi "ma"). Xong <b>2 vòng review hardening (7 hạng mục)</b>: hoàn tiền toàn/phần + đảo sổ điểm · đếm "khách mới" · phân quyền update DB · bọc data access qua service.</p>
+          <h4>🔐 Mã hoá voucher at-rest 4 cột bearer (W32 · Hải)</h4>
+          <p><code>AesEncryptedStringConverter</code> viết lại (tiền tố <code>enc:v1:</code>, đọc 3 nhánh, chạy trên dữ liệu lẫn lộn — deploy không cần dừng ghi). Mã hoá đúng <b>4 cột "bearer"</b> (voucher_code · gift_link · qr_code · combo_items) + <b>backfill one-shot</b> (K8s Job dry-run, idempotent) + vá ~20% webhook GotIt bị bỏ im lặng. Nền cho toàn bộ bảo mật voucher.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 rewards-v2</span>
+            <span class="badge-heavy" style="background:var(--success-soft); color:#047857;">⭐ Khối lượng lớn nhất</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🏪 Danh mục/thương hiệu tính theo TỪNG SHOP (W33 · Hải)</h4>
+          <p>Mỗi shop hợp đồng riêng nhưng hệ dùng chung 1 bảng → shop thấy danh mục ngoài hợp đồng + <b>tắt nhầm của nhau</b>. Chuyển scope <b>per-shop</b> + chuyển quyền bật/tắt về CRM. <b>Khôi phục hiển thị:</b> sửa 401 quà 1 shop dồn hết vào "Khác" + "Got It Đa Năng" trống rỗng (<b>8.441 quà</b> thuộc thương hiệu đã tắt) + tự dọn danh mục UrBox hết hợp đồng. <i>Việc lớn nhất tuần, 3 ngày.</i></p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 rewards-v2 · 🎨 cdp-frontend</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🏪 Chợ ưu đãi + FE RN + kênh dùng voucher (W33 · Huy)</h4>
+          <p><b>Chợ ưu đãi:</b> hiện điểm Credit mỗi lượt đổi + lọc danh mục + ảnh mặc định; fix cờ "đổi được" tính đúng theo cây cha. FE (cdp-frontend): gom "Kho quà &amp; Ưu đãi" về <code>/reward-network</code>. mini-app + gateway: kênh dùng voucher chở 5 tầng RN→rewards-v2→gateway→mini-app (mã tại-quầy <b>ẩn nút "Dùng ngay"</b>) · hạn <code>rn_valid_to</code> tự ẩn quà hết hạn.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>🎨 cdp-frontend · 📱 mini-app · 🏗 cdp-backend</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>💰 reward-network — refactor money-path (W32 · Huy)</h4>
+          <p><b>Sổ Credit ghi lúc ĐỔI quà</b> thay vì lúc DÙNG mã (North Star hết đứng 0) · <b>refund trả voucher về đúng khách đã đổi</b> — CHẶN double-spend (USED→ISSUED giữ owner) · tách <code>text_id</code> (UUIDv7) khỏi mã khách đọc · DLT settlement tách riêng theo repo · bỏ cờ <code>reconciliation.enabled</code> nguy hiểm. 5 breaking "!" + bù +796 test.</p>
           <div class="feat-meta">
             <span class="badge-owner-huy">👤 <b>Huy</b></span>
             <span>🆕 reward-network</span>
-            <span class="badge-heavy" style="background:var(--warning-soft); color:#B45309;">🔐 Bảo mật + hardening</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="feat-row">
-        <div class="feat-check">✓</div>
-        <div class="feat-content">
-          <h4>🔐 reward-v2 — review &amp; mask thông tin nhạy cảm trong log (Trang)</h4>
-          <p>Rà soát lại các phần log của reward-v2 + <b>mask</b> dữ liệu nhạy cảm (voucher code / PII) — chống rò rỉ qua log. Commit <code>log + mask log</code> · <code>fix mask log</code> (T2 + T3).</p>
-          <div class="feat-meta">
-            <span class="badge-owner-trang">👤 <b>Trang</b></span>
-            <span>📦 rewards-v2</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="feat-row">
-        <div class="feat-check">✓</div>
-        <div class="feat-content">
-          <h4>🔌 UrBox — testing staging + hardening sync</h4>
-          <p><b>Trang</b> yêu cầu UrBox cấp thông tin staging + trực tiếp test staging; <b>QC test chung</b>. <b>Hải</b> hardening UrBox sync: đa app-credential · tồn kho digital/vật lý · dọn quà khi đổi credential · fallback URBOX_OTHER · ngày giao dự kiến.</p>
-          <div class="feat-meta">
-            <span class="badge-owner-trang">👤 <b>Trang</b></span>
-            <span class="badge-owner-hai">👤 <b>Hải</b></span>
-            <span>🔌 UrBox</span>
-            <span class="badge-heavy" style="background:var(--info-soft); color:#1D4ED8;">🧪 Đang test staging</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="feat-row">
-        <div class="feat-check">✓</div>
-        <div class="feat-content">
-          <h4>🔒 Chống trùng đơn + vá hiệu năng &amp; ổn định (Huy)</h4>
-          <p>Idempotency đổi quà tầng rewards-v2 (P1-10) — bấm 2 lần / mạng retry chỉ xử lý một lần. Vá N+1 query · giới hạn concurrency cổng nhận đơn · graceful shutdown worker · fix CDP không build (Double→Long) + fix hiển thị đơn.</p>
-          <div class="feat-meta">
-            <span class="badge-owner-huy">👤 <b>Huy</b></span>
-            <span>📦 reward-network · rewards-v2 · cdp-backend</span>
           </div>
         </div>
       </div>
@@ -1536,27 +1537,13 @@
     <!-- Tab content: Đối tác & UrBox (3) -->
     <div class="feat-list hidden" id="tab-vendor">
       <div class="feat-row">
-        <div class="feat-check">✓</div>
+        <div class="feat-check" style="background:var(--warning);">🚦</div>
         <div class="feat-content">
-          <h4>🔌 UrBox — testing trên staging (Trang + Hải + QC)</h4>
-          <p>Đang test luồng UrBox trên staging với <b>2 credential thật</b> (Trang + Hải + QC test chung). Hải hardening sync (đa credential · tồn kho digital/vật lý · fallback URBOX_OTHER · ngày giao dự kiến). Còn hoàn thiện test + next step quy trình tích hợp; API nâng cao (OAuth/webhook/đối soát) chờ UrBox.</p>
+          <h4>🔌 UrBox — trạng thái 7/8 TRUNG THỰC (chưa khẳng định đã live)</h4>
+          <p>Nghiệm thu sandbox ĐẠT (27/07) — <b>phía CNV sẵn sàng</b>. Nhưng go-live prod <b>GATED bởi vendor</b> (credential prod + IP + ký nghiệm thu) VÀ <b>git chưa xác nhận cutover</b>: master (nhánh prod) đứng yên ở <b>30/07</b>, không tag release, không commit prod UrBox → <b>chưa khẳng định "đã live"</b>, nhiều khả năng đang chờ vendor. Cần xác nhận ngoài git: GitLab pipeline manual + biên bản ký.</p>
           <div class="feat-meta">
-            <span class="badge-owner-trang">👤 <b>Trang</b></span>
-            <span class="badge-owner-hai">👤 <b>Hải</b></span>
             <span>🔌 UrBox integration</span>
-            <span class="badge-heavy" style="background:var(--info-soft); color:#1D4ED8;">🧪 Đang test staging</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="feat-row">
-        <div class="feat-check" style="background:var(--info);">▶</div>
-        <div class="feat-content">
-          <h4>▶ UAT Total — đang chạy (Total đã gửi quà)</h4>
-          <p><b>Total đã gửi quà sang GotIt; team CG đang xử lý để UAT.</b> Blocker thương mại kéo dài trước đó (Total chưa ký gửi quà) đã được gỡ. Phần kỹ thuật + GotIt CampaignId sẵn sàng từ trước → chờ CG chạy UAT + nghiệm thu, team standby go-live.</p>
-          <div class="feat-meta">
-            <span class="badge-owner-trang">👤 <b>Trang</b> (theo dõi)</span>
-            <span>▶ Đang UAT (CG xử lý)</span>
+            <span class="badge-heavy" style="background:var(--warning-soft); color:#B45309;">⚠️ Chưa xác nhận cutover</span>
           </div>
         </div>
       </div>
@@ -1564,11 +1551,23 @@
       <div class="feat-row">
         <div class="feat-check">✓</div>
         <div class="feat-content">
-          <h4>🤝 GotIt — duy trì (live, đã bàn giao)</h4>
-          <p>GotIt đã live production + bàn giao CG (evoucher W22 · vật lý W25-26). Tuần này không phải trọng tâm, chỉ duy trì. Đối soát vật lý giữ chiến lược giảm focus, ưu tiên đa nguồn quà (UrBox + reward-network).</p>
+          <h4>🚀 UrBox — mở đường triển khai prod worker sync catalog (W33 · Hải)</h4>
+          <p>Module worker sync catalog UrBox trước đây <b>chỉ có đường lên staging</b> → bổ sung đủ cấu hình để triển khai <b>production</b>, kèm sửa một lỗi cấu hình có nguy cơ <b>làm lộ file chứa thông tin DB + khoá mã hoá của production</b>. Mã hoá voucher at-rest là SHOULD-have (nên merge master trước khi UrBox prod lưu voucher thật).</p>
           <div class="feat-meta">
-            <span class="badge-owner-trang">👤 <b>Trang</b></span>
-            <span>🤝 GotIt (duy trì)</span>
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>🚀 UrBox prod plumbing</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🤝 GotIt — mã hoá voucher + vá webhook + che inquiry (Hải)</h4>
+          <p>GotIt live production ~95% (evoucher W22 · vật lý W25-26 bàn giao CG). <b>W32-33 (Hải):</b> mã hoá voucher at-rest 4 cột bearer · <b>vá ~20% webhook GotIt bị bỏ im lặng</b> (auto-convert mã rồi mới gửi webhook → tra theo order_code) · che mã ở <code>GET /crm-admin/inquiry</code> · GotIt sync guard catalog đếm danh mục thật. Live ổn định, không incident.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>🤝 GotIt (duy trì + bảo mật)</span>
           </div>
         </div>
       </div>
@@ -1579,62 +1578,64 @@
       <div class="feat-row">
         <div class="feat-check">✓</div>
         <div class="feat-content">
-          <h4>Catalog-sync bền hơn (Hải)</h4>
-          <p>Giữ catalog cũ khi vendor trả success nhưng <b>0 sản phẩm</b> (tránh xoá nhầm) · seed-on-demand danh mục · tách module lib <code>catalog-sync-*</code>.</p>
-          <div class="feat-meta">
-            <span class="badge-owner-hai">👤 <b>Hải</b></span>
-            <span>📦 rewards-v2</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="feat-row">
-        <div class="feat-check">✓</div>
-        <div class="feat-content">
-          <h4>UrBox: fallback URBOX_OTHER + ngày giao dự kiến (Hải)</h4>
-          <p>Quà thiếu brand/category → fallback "Khác" (<code>URBOX_OTHER</code>) · thêm estimated delivery cho quà vật lý (+ field ở cdp-backend RewardItemV2) · dọn quà vật lý khi đổi credential.</p>
-          <div class="feat-meta">
-            <span class="badge-owner-hai">👤 <b>Hải</b></span>
-            <span>📦 rewards-v2 · cdp-backend</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="feat-row">
-        <div class="feat-check">✓</div>
-        <div class="feat-content">
-          <h4>Reward ranking theo tần suất (Hải)</h4>
-          <p>Boost xếp hạng quà theo tần suất + xử lý category — cải thiện gợi ý quà cho user.</p>
-          <div class="feat-meta">
-            <span class="badge-owner-hai">👤 <b>Hải</b></span>
-            <span>📦 rewards-v2</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="feat-row">
-        <div class="feat-check">✓</div>
-        <div class="feat-content">
-          <h4>Nới cửa sổ đối soát hoàn tiền 3 → 30 ngày (Huy)</h4>
-          <p>Đơn hoàn muộn trước đây bị bỏ sót âm thầm → nới cửa sổ quét reconciliation lên 30 ngày để bắt đơn hoàn trễ + hoàn thiện chống trùng mã dùng-nhiều-lần.</p>
+          <h4>📒 Sổ Credit ghi lúc ĐỔI quà — North Star hết đứng 0 (Huy)</h4>
+          <p>Credit hoàn tất khi khách trả điểm lấy mã (mốc ĐỔI) — trước ghi ở mốc DÙNG offline chờ POS gọi <code>mark-used</code> mà chưa ai gọi → sổ rỗng, North Star đứng 0. <code>recordRedeem()</code> ghi cặp MINT/SPEND cùng transaction với cấp mã · xoá enum <code>REVERSE_*</code> + <code>reverseUsage</code>.</p>
           <div class="feat-meta">
             <span class="badge-owner-huy">👤 <b>Huy</b></span>
             <span>🆕 reward-network</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>💰 Refund trả voucher đúng khách — chặn double-spend (Huy)</h4>
+          <p>Trước refund đẩy mã pool về AVAILABLE = <b>double-spend</b> (2 khách cùng 1 mã dùng-một-lần) + tước tài sản đã bán + mã sống mãi ngoài query expiry. Nay <b>USED→ISSUED giữ owner</b>, không hoàn suất kho. Bịt 5 lỗ + thêm test (nhánh pool trước đây chưa từng được test chạm).</p>
+          <div class="feat-meta">
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>🆕 reward-network</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>🛡 Hoàn tất bảo mật voucher — rà &amp; sửa 13 lỗi hậu-mã-hoá (W33 · Hải)</h4>
+          <p>Rà toàn vùng ảnh hưởng sau khi mã hoá, sửa <b>13 lỗi</b> (3 ảnh hưởng khách/vận hành): màn lịch sử đổi quà + file export báo cáo bị <b>TRẮNG</b> với shop chỉ-vật-lý hoặc chỉ-evoucher · webhook thiếu serial → hệ thống bỏ qua, voucher không cập nhật + <b>khách không được hoàn điểm</b> · tình huống xử lý đồng thời phát trùng voucher cùng một đơn. Chốt an toàn backfill job (chạy nhầm khoá = mất data không khôi phục).</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span>📦 rewards-v2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <div class="feat-check">✓</div>
+        <div class="feat-content">
+          <h4>♻️ Khôi phục 4 luồng trạng thái voucher RN + fix số liệu báo cáo (W33)</h4>
+          <p><b>Hải:</b> 4 luồng cập nhật trạng thái voucher RN <b>ngừng chạy IM LẶNG</b> sau mã hoá (kiểm chứng trên DB thật) + fix voucher hoàn giữ nguyên thời điểm dùng cũ (sai mini-app + Excel). <b>Huy:</b> KPI "Lượt quà được đổi" đếm theo <b>lúc ĐỔI</b> (mốc kế toán đúng), "Khách mới" giữ mốc dùng mã + nói rõ trong Excel.</p>
+          <div class="feat-meta">
+            <span class="badge-owner-hai">👤 <b>Hải</b></span>
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>📦 rewards-v2 · 🆕 reward-network</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Tab content: Tài liệu & Hạ tầng (2) -->
+    <!-- Tab content: Sự cố & Dọn nhà (2) -->
     <div class="feat-list hidden" id="tab-docs">
-      <div class="feat-row">
-        <div class="feat-check">✓</div>
+      <div class="feat-row" style="border:1px solid #FCA5A5; background:linear-gradient(135deg,#FEF2F2,var(--card));">
+        <div class="feat-check" style="background:var(--danger);">🔥</div>
         <div class="feat-content">
-          <h4>♻️ Tách reward-network thành 3 worker module + config staging (Huy)</h4>
-          <p>Job gửi voucher + đối soát hoàn tiền tách khỏi API chính thành <b>3 service worker độc lập</b> (chạy ổn định, mở rộng riêng) · cập nhật application-staging.properties (DB URL) · dọn helm/gitlab-ci cũ.</p>
+          <h4>🧪 Chặn 4 bug nghiêm trọng trên STAGING RN (W33 · Huy)</h4>
+          <p><b>(1) 1,66 triệu điểm treo (STAGING RN, chưa prod)</b> — <code>RecoveryTaskExecutor</code> có nhưng KHÔNG caller nào kích hoạt → các lượt đổi cần accept/deny điểm nằm lại vô thời hạn (~1,66 triệu điểm chưa thu + <b>120 nghìn điểm giam oan</b> (staging)) → nối worker recovery + cắt giao dịch dài thành ngắn. <b>(2)</b> pod voucher-consumer chết vì bean <code>RestTemplate</code> thứ 2 (Spring không quyết được inject cái nào). <b>(3)</b> gateway gọi RN sai đích (URL thiếu port, sai scheme). <b>(4)</b> thư mục khoá ký RSA local suýt lọt git.</p>
           <div class="feat-meta">
             <span class="badge-owner-huy">👤 <b>Huy</b></span>
-            <span>🆕 reward-network</span>
+            <span>🔥 production incident</span>
+            <span class="badge-heavy" style="background:var(--danger-soft); color:var(--danger);">1,66 triệu điểm</span>
           </div>
         </div>
       </div>
@@ -1642,11 +1643,11 @@
       <div class="feat-row">
         <div class="feat-check">✓</div>
         <div class="feat-content">
-          <h4>🧪 QC vào test chung UrBox trên staging (Trang điều phối)</h4>
-          <p>Đưa <b>QC</b> vào kiểm thử độc lập luồng UrBox trên staging cùng Trang + Hải — bắt đầu QA cho tích hợp UrBox trước khi lên prod.</p>
+          <h4>🧹 Dọn nhà — gom reward-hub (−25.843 dòng) + chuẩn hoá tên bảng (W33 · Huy)</h4>
+          <p>Ở frontend, Kho quà tồn tại 2 bản (module <code>reward-hub</code> cũ + <code>reward-network</code>) gây sửa một nơi hỏng nơi kia → <b>gom về một, xoá hẳn module cũ (249 file, −25.843 dòng)</b>. Chuẩn hoá tên 3 bảng còn tiền tố <code>rn_</code> lệch chuẩn + đổi tên entity account theo tên bảng mới (cổng SQL chạy trước code, hiện mới LOCAL). Bù +796 dòng test (417→438) + đồng bộ docs/diagram theo loạt đổi định danh.</p>
           <div class="feat-meta">
-            <span class="badge-owner-trang">👤 <b>Trang</b> + QC</span>
-            <span>🔌 UrBox</span>
+            <span class="badge-owner-huy">👤 <b>Huy</b></span>
+            <span>🧹 dọn nhà · 🌐 reward-network</span>
           </div>
         </div>
       </div>
@@ -1657,30 +1658,32 @@
   <div class="section">
     <div class="section-title">
       <h2>🎯 Đối chiếu mục tiêu kế hoạch</h2>
-      <span class="hint">3 mảng tuần W29 (2 ngày · T2+T3) — reward-network hoàn thiện code · UrBox test staging · mask log</span>
+      <span class="hint">Plan W32→W33 là "merge master + QA staging + UrBox cutover + pilot" — đối chiếu thực tế 2 tuần</span>
     </div>
     <div class="grid-2">
       <div class="result-card success">
-        <h3>✅ Trọng tâm 2 ngày — đạt</h3>
+        <h3>✅ Đạt trong 2 tuần</h3>
         <ul>
-          <li>reward-network — hoàn thiện cơ bản code (~24/33 ~72%) + settlement Kafka + siết bảo mật; chưa QA → tính ~14% ✅</li>
-          <li>UrBox — đang testing staging (Trang + Hải + <b>QC test chung</b>) + hardening sync ✅</li>
-          <li>reward-v2 — review + mask thông tin nhạy cảm trong log ✅</li>
+          <li>W32 — <b>refactor money-path RN</b> (sổ credit lúc đổi · refund đúng khách chặn double-spend · tách text_id · DLT tách repo) + bù <b>+796 test</b> ✅ (Huy)</li>
+          <li>W32 — <b>mã hoá voucher at-rest</b> 4 cột bearer + backfill; W33 <b>hoàn tất bảo mật voucher</b> (rà &amp; sửa 13 lỗi hậu-mã-hoá) ✅ (Hải)</li>
+          <li>W33 — <b>đẩy nhiều feature RN</b>: mở cửa mạng lưới · vòng đời ưu đãi · chợ ưu đãi · danh mục per-shop (sửa 8.441 quà ẩn) ✅</li>
+          <li>W33 — <b>chặn 4 bug nghiêm trọng trên STAGING RN</b>: 1,66 triệu điểm treo + 3 bug khác ✅ (bắt trước prod · Huy)</li>
         </ul>
       </div>
       <div class="result-card warning">
-        <h3>⏳ Còn treo / carry sang W30</h3>
+        <h3>◐ Chưa xong / nợ dồn sang W34</h3>
         <ul>
-          <li>reward-network — code xong + test Huy xanh nhưng <b>CHƯA push/deploy</b> (chờ chốt: CRM Admin ký RSA · deploy API chính rồi dọn index cũ staging) → W30 vào test/review/deploy</li>
-          <li>UrBox — hoàn thiện test staging + next step quy trình tích hợp</li>
-          <li>UAT Total — CG đang xử lý UAT (theo dõi nghiệm thu)</li>
+          <li>Merge staging/prod — <b>◐ CHƯA</b>: bảo mật voucher + danh mục per-shop gộp nhánh chung 14/08, MR đầu tuần sau; phần lớn RN features cũng chưa lên staging/prod</li>
+          <li>QA staging — <b>◐ một phần</b>: chỉ kích hoạt tài khoản CRM đã lên staging; money-path + voucher chưa QA staging</li>
+          <li>UrBox cutover — <b>◐ chưa xác nhận</b> (master đứng 30/07, gated vendor); W33 mới mở đường prod worker sync catalog</li>
+          <li><b>⚠️ Nợ deploy dồn sang W34:</b> ~6 SQL tay + deploy đồng thời 3 repo, order-dependent, không Flyway</li>
         </ul>
       </div>
     </div>
     <div style="margin-top:14px; background:linear-gradient(135deg,#F5F3FF,#EFF6FF); border:1px solid #C7D2FE; border-radius:12px; padding:16px 20px;">
       <div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#5B21B6; text-transform:uppercase; margin-bottom:8px;">🧭 Định hướng chiến lược của team</div>
-      <p style="font-size:14.5px; color:var(--ink-soft); line-height:1.65; margin-bottom:6px;"><b>① Chốt độ tin cậy reward-network:</b> 2 ngày Huy chuyển voucher sang <b style="color:#5B21B6;">Kafka settlement</b> (không mất đơn khi mạng lỗi) + móc đủ 7 điểm confirm/release + tách 3 worker + siết bảo mật RSA — dựng nền vận hành chắc trước khi lên staging.</p>
-      <p style="font-size:14.5px; color:var(--ink-soft); line-height:1.65;"><b>② Vào QA có kiểm soát:</b> UrBox bắt đầu <b style="color:#5B21B6;">test staging cùng QC</b> (kiểm thử độc lập) + reward-v2 mask thông tin nhạy cảm trong log — siết chất lượng &amp; bảo mật trước khi mở rộng.</p>
+      <p style="font-size:14.5px; color:var(--ink-soft); line-height:1.65; margin-bottom:6px;"><b>① W32 mua AN TOÀN → W33 đẩy tới:</b> W32 củng cố money-path + mã hoá voucher (chặn bug tiền trước prod), rồi W33 <b style="color:#5B21B6;">mở cửa mạng lưới cho shop + hoàn tất bảo mật voucher + chặn bug staging RN</b>. Feature RN tiến rất mạnh — nhưng theo luật vẫn tính 20% vì <b>phần lớn chưa QA/deploy</b>.</p>
+      <p style="font-size:14.5px; color:var(--ink-soft); line-height:1.65;"><b>② 2 bug tiền lớn đều BẮT TRƯỚC PROD:</b> double-spend (W32, review money-path) + 1,66 triệu điểm treo (W33, trên STAGING RN). <b>Nợ deploy-gate tích luỹ 2 tuần dồn sang W34</b>: ~6 SQL tay đúng thứ tự + deploy đồng thời 3 repo + merge staging + QA money-path/voucher trước pilot.</p>
     </div>
   </div>
 
@@ -1692,39 +1695,39 @@
     </div>
     <div class="risk-grid">
       <div class="risk-item high">
-        <span class="risk-level">🔥 HIGH · NGUỒN LỰC</span>
-        <h4>reward-network tốc độ cao — 1 mình Huy gánh + code chưa deploy</h4>
-        <p>Huy đưa code lên ~72% (+settlement +bảo mật +hardening) — nhưng <b>chưa review độc lập/deploy → thực chất tính ~14%</b>. Code đã xong + test Huy xanh nhưng CHƯA push/deploy (chờ chốt 2 điều kiện). <b>Rủi ro:</b> bus-factor 1 người + review có thể phát sinh việc (1 tuần code ~3 tuần review/test). <b>Action:</b> W30 vào test + review độc lập + deploy staging; kéo Hải/Trang chia tải.</p>
+        <span class="risk-level">🔥 HIGH · NỢ DEPLOY TÍCH LUỸ 2 TUẦN</span>
+        <h4>~6 SQL tay + deploy ĐỒNG THỜI 3 repo, KHÔNG Flyway</h4>
+        <p>Nợ deploy-gate dồn 2 tuần: <b>~6 SQL tay</b> + deploy <b>ĐỒNG THỜI 3 repo</b> (khoá mã hoá ở rewards-v2 + cdp-backend) + <b>đổi tên bảng order-dependent</b> + backfill, repo KHÔNG Flyway. <b>Rủi ro:</b> sai thứ tự = <b>MẤT DATA / crash startup / hỏng tiền</b> (đổi tên bảng cần SQL chạy TRƯỚC code; thiếu key RSA/api-key = crash startup). <b>Action:</b> RUNBOOK thứ tự SQL rõ + chạy staging trước + rollback plan; thêm key mọi profile.</p>
       </div>
       <div class="risk-item medium">
-        <span class="risk-level">🟡 MEDIUM · UrBox</span>
-        <h4>UrBox — đang test staging, còn phụ thuộc vendor cho API nâng cao</h4>
-        <p>Đang test staging (Trang + Hải + QC) với 2 credential thật. Còn OAuth / webhook / đối soát / incremental + P7 real-time chờ UrBox cấp API/IP. <b>Action:</b> hoàn thiện test staging (cùng QC) trước khi lên prod; theo dõi UrBox trả nốt API; không để chặn luồng chính.</p>
+        <span class="risk-level">🟠 MEDIUM-HIGH · CHƯA LÊN STAGING</span>
+        <h4>Phần lớn code 2 tuần CHƯA lên staging → chưa QA thật</h4>
+        <p>Feature RN tiến rất mạnh 2 tuần (money-path · mở cửa mạng lưới · vòng đời ưu đãi · danh mục per-shop) nhưng <b>phần lớn còn trên nhánh, chưa staging → chưa QA thật</b>; pile ngày càng lớn (giống cảnh "cục code bự" đã cảnh báo, nay chuyển sang <b>tầng deploy</b>). <b>Action:</b> W34 mở MR lên staging sớm + QA money-path/voucher trước pilot; không để pile tiếp.</p>
       </div>
       <div class="risk-item medium">
-        <span class="risk-level">🟡 MEDIUM · CÂN TẢI</span>
-        <h4>Huy single-point toàn bộ reward-network (BE→FE→.NET)</h4>
-        <p>Huy nắm gần như toàn bộ code reward-network + integration + checkout .NET → bus-factor cao ở dự án mới. Trang tập trung kiến trúc/UrBox, Hải tập trung catalog/UrBox. <b>Rủi ro:</b> nếu Huy vắng, RN nghẽn. <b>Action:</b> Huy giữ handoff/project-context + review đối kháng mỗi task; kéo Hải vào 1-2 epic RN để chia tải.</p>
+        <span class="risk-level">🟡 MEDIUM · UrBox GO-LIVE</span>
+        <h4>UrBox 7/8 chưa xác nhận cutover (gated vendor)</h4>
+        <p>Nghiệm thu sandbox ĐẠT (27/07), phía CNV sẵn sàng — nhưng <b>git KHÔNG xác nhận đã cutover</b> (master đứng 30/07, không tag release, không commit prod UrBox) + go-live gated vendor (credential prod + IP + ký nghiệm thu). W33 mới mở đường prod worker sync catalog. <b>Action:</b> xác nhận ngoài git — GitLab pipeline manual + biên bản ký; theo dõi vendor giao credential.</p>
       </div>
       <div class="risk-item low">
-        <span class="risk-level">✅ CẢI THIỆN · KHÁCH HÀNG</span>
-        <h4>UAT Total — blocker thương mại đã gỡ</h4>
-        <p>Total đã gửi quà sang GotIt; team CG đang xử lý để UAT. Rào cản kéo dài (Total chưa ký gửi quà) đã được gỡ. <b>Action:</b> theo dõi CG chạy UAT + chuẩn bị go-live khi nghiệm thu.</p>
+        <span class="risk-level">🟡 THEO DÕI · RAW VENDOR</span>
+        <h4>Giữ cột raw vendor — field mới ghi nguyên văn tới khi có người che</h4>
+        <p>Theo quyết định PO, giữ cột lưu dữ liệu thô nhà cung cấp (phục vụ tra soát tranh chấp). <b>Rủi ro:</b> vendor thêm field mới → field đó <b>ghi nguyên văn</b> cho tới khi có người bổ sung vào danh sách cần che. <b>Action:</b> bổ sung cách phát hiện field vendor mới lọt log chưa che (đã đưa vào plan W34); PO chấp nhận đánh đổi.</p>
       </div>
       <div class="risk-item low">
-        <span class="risk-level">✅ RESOLVED</span>
-        <h4>Quà vật lý + MCO Gara — đã đóng + bàn giao CG</h4>
-        <p>Cả 2 sản phẩm đã release/bàn giao CG (từ W26). Team rảnh tay cho 2 dự án mới. Tuần này chỉ hỗ trợ polish nhỏ.</p>
+        <span class="risk-level">🟡 THEO DÕI · TỒN DƯ SETTLEMENT</span>
+        <h4>text_id trỏ mã shop GÓP khác — chỉ WARN không chặn</h4>
+        <p>Self-review P3.2 chỉ log <b>WARN</b> khi <code>text_id</code> trỏ mã shop góp khác, <b>không block/alert cứng</b> → còn <b>rủi ro tồn dư</b> (settlement sai không bị chặn). <b>Action:</b> theo dõi WARN trên staging; cân nhắc nâng thành block/alert trước khi có volume thật.</p>
       </div>
       <div class="risk-item low">
-        <span class="risk-level">✅ MILESTONE</span>
-        <h4>reward-network — code ~72% (thực ~14%) + settlement + bảo mật</h4>
-        <p>2 ngày: settlement voucher qua Kafka + siết bảo mật RSA + 2 vòng hardening → code ~24/33. Code xong + test Huy xanh nhưng chưa deploy — <b>cần review độc lập (tính 20% → ~14%)</b>.</p>
+        <span class="risk-level">✅ ĐIỂM SÁNG · BẮT + DẬP SỰ CỐ TIỀN</span>
+        <h4>2 bug tiền lớn đều BẮT TRƯỚC PROD</h4>
+        <p><b>double-spend (W32)</b> bắt + sửa TRƯỚC prod nhờ vòng review money-path · <b>1,66 triệu điểm treo (W33)</b> — bắt trên STAGING RN trước prod (nối worker recovery + cắt giao dịch ngắn, giải phóng cả 120K điểm giam oan staging). <b>Review + vận hành đang có tác dụng thật.</b> <b>Action:</b> duy trì review đối kháng cho money-path; nối alert cho recovery worker.</p>
       </div>
       <div class="risk-item low">
-        <span class="risk-level">✅ LOW</span>
-        <h4>Production stability</h4>
-        <p>Evoucher production LIVE từ W22 — ổn định. Không có incident production trong W29. UrBox đang test staging (chưa prod).</p>
+        <span class="risk-level">✅ LOW · ỔN ĐỊNH PROD</span>
+        <h4>GotIt live production — ổn định, không incident</h4>
+        <p>GotIt live prod (evoucher W22 · vật lý W25-26 bàn giao CG). W32-33 chỉ thêm bảo mật (mã hoá voucher at-rest + vá ~20% webhook + che inquiry), không đổi luồng. <b>Không incident production GotIt trong W32-33.</b> Evoucher prod LIVE từ W22 ổn định.</p>
       </div>
     </div>
   </div>
@@ -1738,7 +1741,7 @@
 
     <div style="background: linear-gradient(135deg, #FEF2F2 0%, #FFFBEB 100%); border:1px solid #FCA5A5; border-radius:14px; padding:18px 22px; margin-bottom:20px;">
       <div style="font-size:12px; color:var(--danger); font-weight:700; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px;">⚠️ Bài học từ GotIt (áp dụng cho UrBox + reward-network)</div>
-      <p style="font-size:15px; color:var(--ink-soft); line-height:1.65;">GotIt phản hồi <b>theo phản ứng</b> chứ không chủ động, tài liệu kỹ thuật <b>hoàn thiện dần theo câu hỏi của CNV</b>, thường <b style="color:var(--danger);">trả lời câu gần giống chứ không đúng câu hỏi</b>. <b style="color:#5B21B6;">→ Áp dụng cho UrBox:</b> Trang làm <b>gap analysis + đối chiếu mapping brand–category ngay từ đầu</b>, Huy code sync thực tế để phát hiện lệch tài liệu↔API sớm — <b>cố định contract trước khi phụ thuộc sâu</b>, không lặp lại vòng lặp bị động như GotIt.</p>
+      <p style="font-size:15px; color:var(--ink-soft); line-height:1.65;">GotIt phản hồi <b>theo phản ứng</b> chứ không chủ động, tài liệu kỹ thuật <b>hoàn thiện dần theo câu hỏi của CNV</b>, thường <b style="color:var(--danger);">trả lời câu gần giống chứ không đúng câu hỏi</b>. <b style="color:#5B21B6;">→ Áp dụng cho UrBox:</b> làm <b>gap analysis + đối chiếu mapping brand–category ngay từ đầu</b>, code sync thực tế (Hải) để phát hiện lệch tài liệu↔API sớm — <b>cố định contract trước khi phụ thuộc sâu</b>, không lặp lại vòng lặp bị động như GotIt.</p>
     </div>
 
     <!-- 4 điểm số -->
@@ -1875,7 +1878,7 @@
   <div class="section">
     <div class="section-title">
       <h2>🗺️ Lộ trình sản phẩm</h2>
-      <span class="hint">Các mốc triển khai chính từ W29 đến hết Q3</span>
+      <span class="hint">Các mốc chính từ W32 đến hết Q3</span>
     </div>
 
     <div class="card" style="padding: 28px 24px;">
@@ -1885,11 +1888,11 @@
         <div class="timeline-item current">
           <div class="timeline-dot"></div>
           <div class="timeline-card">
-            <div class="timeline-date">🌐 TRỌNG TÂM · W29 — CODE ~72% (THỰC ~14%)</div>
+            <div class="timeline-date">🌐 TRỌNG TÂM · W32 STABILIZE + mã hoá voucher → W33 SHIP FORWARD + chặn bug staging RN (03-14/08)</div>
             <h4>reward-network (reward-hub) — pool quà</h4>
-            <p>W29 (2 ngày): Huy hoàn thiện code lên <b>~72%</b> — settlement voucher qua Kafka + siết bảo mật RSA + 2 vòng hardening. <b>Code xong + test Huy xanh nhưng chưa push/deploy → tính 20% → ~14% hoàn thành thực.</b></p>
+            <p><b>W32:</b> money-path correctness (sổ credit lúc ĐỔI · refund đúng khách chặn double-spend · tách text_id) + mã hoá voucher at-rest + bù +796 test. <b>W33:</b> mở cửa mạng lưới (shop tự bấm tham gia) · vòng đời ưu đãi (3 modal) · chợ ưu đãi · danh mục per-shop · <b>chặn bug staging RN 1,66 triệu điểm treo</b>. Feature tiến mạnh nhưng <b>phần lớn chưa staging/prod → tính 20% → ~18%.</b></p>
             <div class="sub-milestones">
-              <div class="sub-item"><span class="sub-date">W30</span><span>Vào test + review code độc lập + deploy staging (chốt 2 điều kiện: RSA · deploy API chính)</span></div>
+              <div class="sub-item"><span class="sub-date">W34</span><span>Merge staging + chạy ~6 SQL gate đúng thứ tự + QA money-path/voucher + pilot</span></div>
               <div class="sub-item"><span class="sub-date">~90 PD</span><span>Phase 1 tổng · pilot 20-50 shop F&amp;B/Retail</span></div>
             </div>
           </div>
@@ -1899,12 +1902,12 @@
         <div class="timeline-item current">
           <div class="timeline-dot"></div>
           <div class="timeline-card">
-            <div class="timeline-date">🔌 STAGING · W29 — ĐANG TEST</div>
+            <div class="timeline-date">🔌 UrBox · GATED VENDOR — CHƯA XÁC NHẬN CUTOVER</div>
             <h4>Kết nối UrBox cho rewards-v2</h4>
-            <p><b>Đang testing trên staging</b> (Trang + Hải + <b>QC test chung</b>) với 2 credential thật. Hải hardening sync (đa credential · tồn kho · fallback · ngày giao). Còn hoàn thiện test + next step tích hợp.</p>
+            <p><b>Nghiệm thu sandbox ĐẠT (27/07)</b> (Hải + <b>QC</b>), phía CNV sẵn sàng. Nhưng <b>git chưa xác nhận cutover</b>: master (nhánh prod) đứng yên ở <b>30/07</b>, không tag release, không commit prod UrBox → chưa khẳng định "đã live". Go-live prod gated vendor. W33: mở đường prod worker sync catalog (Hải).</p>
             <div class="sub-milestones">
-              <div class="sub-item"><span class="sub-date">W30</span><span>Hoàn thiện testing staging + next step quy trình tích hợp UrBox</span></div>
-              <div class="sub-item"><span class="sub-date">Chờ UrBox</span><span>P7 real-time + OAuth / webhook / đối soát / incremental</span></div>
+              <div class="sub-item"><span class="sub-date">7/8</span><span>Go-live target 7/8 — cần xác nhận GitLab pipeline manual + biên bản ký (gated vendor)</span></div>
+              <div class="sub-item"><span class="sub-date">Chờ UrBox</span><span>Credential prod + IP + ký nghiệm thu · OAuth / webhook / API đối soát bulk (nâng cao)</span></div>
             </div>
           </div>
         </div>
@@ -1919,13 +1922,13 @@
           </div>
         </div>
 
-        <!-- 4. UAT Total — đang chạy UAT -->
-        <div class="timeline-item current">
+        <!-- 4. UrBox go-live e-voucher — mốc kế tiếp -->
+        <div class="timeline-item upcoming">
           <div class="timeline-dot"></div>
           <div class="timeline-card">
-            <div class="timeline-date">▶ ĐANG UAT · Total đã gửi quà sang GotIt</div>
-            <h4>UAT Total quà vật lý</h4>
-            <p>Total đã gửi quà sang GotIt; team CG đang xử lý để UAT. Blocker thương mại (Total chưa ký gửi quà) đã được gỡ. Kỹ thuật + GotIt CampaignId sẵn sàng từ trước → chờ CG nghiệm thu + go-live.</p>
+            <div class="timeline-date">🎯 KẾ TIẾP · W34 — merge staging + chạy ~6 SQL gate + QA + UrBox cutover</div>
+            <h4>Merge staging + chạy ~6 SQL gate + QA money-path/voucher + UrBox cutover</h4>
+            <p>Mốc kế tiếp: (1) mở MR đưa 2 nhánh (bảo mật voucher + danh mục per-shop + RN features) lên staging + chạy <b>~6 SQL gate ĐÚNG THỨ TỰ</b> (đổi tên 3 bảng trước code · rn_valid_to · keys); (2) <b>QA staging money-path/voucher</b> (refund · credit ledger · cross-shop) + E2E; (3) <b>UrBox chốt cutover prod</b> nếu vendor giao credential/IP/ký nghiệm thu (hoặc báo trượt); (4) pilot RN sau khi money-path QA xanh.</p>
           </div>
         </div>
 
@@ -1933,39 +1936,39 @@
     </div>
   </div>
 
-  <!-- ============== 📅 Plan W29 ============== -->
+  <!-- ============== 📅 Plan W33 ============== -->
   <div class="section">
     <div class="section-title">
-      <h2>🎯 Kế hoạch tuần tới — W30</h2>
-      <span class="hint">20/07 → 24/07 · reward-network vào test/review/deploy staging · UrBox hoàn thiện testing staging + next step tích hợp</span>
+      <h2>🎯 Kế hoạch tuần tới — W34</h2>
+      <span class="hint">17/08 → 21/08 · mở MR lên staging + chạy ~6 SQL gate đúng thứ tự · QA money-path/voucher · UrBox chốt cutover · xử lý tồn đọng</span>
     </div>
     <div class="plan-grid">
       <div class="plan-item">
         <div class="plan-checkbox">☐</div>
         <div class="plan-content">
-          <h4>🌐 reward-network — vào test + review code + deploy staging</h4>
-          <p>Code cơ bản đã xong → <b>chạy test + review code độc lập</b> (sửa phát sinh) → <b>deploy lên staging</b>. Chốt 2 điều kiện trước prod: (a) CRM Admin ký RSA; (b) deploy API chính trước rồi dọn index cũ trên staging.</p>
+          <h4>🗄 Mở MR lên staging + chạy ~6 SQL gate đúng thứ tự</h4>
+          <p>Mở MR đưa 2 nhánh (<b>bảo mật voucher + danh mục per-shop + RN features</b>) lên staging + chạy <b>~6 SQL gate ĐÚNG THỨ TỰ</b> (đổi tên 3 bảng <b>trước code</b> · <code>rn_valid_to</code> · keys RSA/api-key), repo KHÔNG Flyway. Deploy đồng thời 3 repo (khoá mã hoá ở rewards-v2 + cdp-backend).</p>
         </div>
       </div>
       <div class="plan-item">
         <div class="plan-checkbox">☐</div>
         <div class="plan-content">
-          <h4>🔌 reward-v2 (UrBox) — hoàn thiện testing staging + next step tích hợp</h4>
-          <p><b>Hoàn thiện testing UrBox trên staging</b> (cùng QC), rồi <b>tiếp tục bước tiếp theo trong quy trình tích hợp UrBox</b>.</p>
+          <h4>🧪 QA staging money-path/voucher + E2E</h4>
+          <p><b>QA staging money-path/voucher</b> — refund · credit ledger · cross-shop + E2E. Kiểm chứng chặn double-spend + sổ credit ghi lúc đổi + bảo mật voucher chạy đúng trước cutover.</p>
         </div>
       </div>
       <div class="plan-item">
         <div class="plan-checkbox">☐</div>
         <div class="plan-content">
-          <h4>🌐 reward-network — hoàn thiện epic còn lại (sau review)</h4>
-          <p>Đóng nốt Phase 1: report chống quà rác (P1-18/19) · admin config ngành/pool (P1-15/16) · offer image · redeem status · rồi E2E + pilot thử.</p>
+          <h4>🔌 UrBox — chốt cutover prod (hoặc báo trượt)</h4>
+          <p><b>UrBox chốt cutover prod NẾU</b> vendor giao credential prod + whitelist IP + ký nghiệm thu (không thì báo trượt). Xác nhận ngoài git: GitLab pipeline manual + biên bản ký. Chỉ CHƯA có đối soát.</p>
         </div>
       </div>
       <div class="plan-item">
         <div class="plan-checkbox">☐</div>
         <div class="plan-content">
-          <h4>👥 Chia tải + review độc lập</h4>
-          <p>Kéo Hải/Trang vào review + 1-2 epic reward-network (giảm bus-factor dồn vào Huy) · giữ review đối kháng mỗi task khi dev tốc độ cao.</p>
+          <h4>🧹 Xử lý tồn đọng — shop mới sync + field vendor lọt log</h4>
+          <p>Xử lý <b>shop mới kết nối chưa sync xong</b> (màn cấu hình đang trống) + bổ sung cách <b>phát hiện field vendor mới lọt log chưa che</b> (rủi ro raw vendor). Pilot RN sau khi money-path QA xanh.</p>
         </div>
       </div>
     </div>
@@ -1984,26 +1987,26 @@
       <div class="metric-card success">
         <div class="gauge success" style="--pct: 100;">
           <div>
-            <div class="gauge-value">4/4</div>
+            <div class="gauge-value">3/3</div>
             <div class="gauge-sub">Mục tiêu đạt</div>
           </div>
         </div>
-        <h4>🎯 Mục tiêu tuần — đạt 4/4</h4>
-        <p>Reward Network (thiết kế + init) · Tích hợp UrBox · Clarify UrBox · Rewards Hub + bảo mật. <b>Chuyển trọng tâm hẳn sang 2 dự án mới</b> sau khi quà vật lý + MCO Gara đã đóng.</p>
+        <h4>🎯 Mục tiêu 2 tuần — đạt 3/3</h4>
+        <p>W32 stabilize + mã hoá voucher (Hải) · W33 mở cửa mạng lưới + vòng đời ưu đãi (Huy) · chặn bug staging RN 1,66 triệu điểm treo (Huy). <b>W32 mua AN TOÀN → W33 đẩy tới + chặn bug staging</b>.</p>
         <div class="verdict">✓ Đúng định hướng chiến lược</div>
       </div>
 
       <!-- Metric 2: Reward Network scope -->
       <div class="metric-card warning">
-        <div class="gauge warning" style="--pct: 100;">
+        <div class="gauge warning" style="--pct: 85;">
           <div>
-            <div class="gauge-value">79</div>
-            <div class="gauge-sub">task WBS</div>
+            <div class="gauge-value">~85<span class="unit">%</span></div>
+            <div class="gauge-sub">code Phase 1</div>
           </div>
         </div>
-        <h4>🌐 Reward Network — quy mô lớn cần nguồn lực</h4>
-        <p>Phase 1 <b>~90 PD, P0→P2 ~15–16 tuần với 1 lead + 2 senior</b>. Team 3 người còn duy trì rewards-v2 + UrBox. <b>Cần chốt cam kết nguồn lực trước khi vào dev.</b></p>
-        <div class="verdict">⚠️ Rủi ro nguồn lực</div>
+        <h4>🌐 Reward Network — feature tiến mạnh, nợ deploy</h4>
+        <p>Feature RN tiến RẤT MẠNH 2 tuần (money-path W32 + mở cửa mạng lưới/vòng đời ưu đãi/chợ ưu đãi W33) nhưng <b>phần lớn chưa staging/prod</b> → thực <b>~18%</b>. <b>Nợ deploy-gate tích luỹ ~6 SQL tay + deploy đồng thời 3 repo.</b></p>
+        <div class="verdict">⚠️ Nợ deploy · chưa staging</div>
       </div>
 
       <!-- Metric 3: Vendor Health Score (GotIt) -->
@@ -2029,12 +2032,12 @@
         </div>
       </div>
       <div style="flex: 1; min-width: 240px;">
-        <div style="font-size: 12px; color: var(--purple); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px;">🚀 Tuần bản lề — chuyển sang xây nền tảng dài hạn</div>
-        <div style="font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px;">Reward Network đi từ ý tưởng → thiết kế hoàn chỉnh + init project chỉ trong 1 tuần</div>
+        <div style="font-size: 12px; color: var(--purple); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px;">🔀 2 tuần: STABILIZE (W32) → SHIP FORWARD + FIREFIGHT (W33)</div>
+        <div style="font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px;">reward-network: money-path an toàn (W32) → mở cửa mạng lưới cho shop + chặn bug staging RN (W33)</div>
         <div style="font-size: 13px; color: var(--ink-soft); line-height: 1.5;">
-          <b style="color: var(--purple);">✓ Đã có:</b> mô hình pool quà + Credit + Voucher Levels · tài liệu design v2 + doc hub · WBS 79 task + estimate · kiến trúc vendor CNV · mockup 10 màn · repo reward-network
+          <b style="color: var(--purple);">✓ Đã có:</b> W32 money-path (sổ credit lúc đổi · refund chặn double-spend) + mã hoá voucher at-rest · W33 mở cửa mạng lưới · vòng đời ưu đãi · chợ ưu đãi · danh mục per-shop (sửa 8.441 quà ẩn) · bảo mật voucher hoàn tất (13 lỗi) · <b>dập 4 bug staging RN (1,66 triệu điểm treo)</b>
           <br>
-          <b style="color: var(--warning);">→ Cần quyết:</b> cam kết nguồn lực (1 lead + 2 senior) để vào dev Phase 1 · phân vai 2 dự án song song (RN + UrBox)
+          <b style="color: var(--warning);">→ Cần quyết:</b> W34 mở MR lên staging + chạy ~6 SQL gate đúng thứ tự (deploy đồng thời 3 repo) · QA money-path/voucher trước pilot · UrBox cutover phụ thuộc vendor + xác nhận ngoài git
         </div>
       </div>
     </div>
@@ -2045,27 +2048,27 @@
       <div class="reco-grid">
         <div class="reco-item">
           <span class="reco-num">1</span>
-          <h4>Điểm sáng — 2 khối độ khó cao hoàn thành song song</h4>
-          <p><b>Trang</b> chốt trọn bộ Reward Network trong 1 tuần (mô hình + kiến trúc + WBS 79 task + mockup 10 màn + init). <b>Huy</b> dựng trọn luồng đổi quà vật lý UrBox 6/7 phase + 2 worker + <b>vá 3 lỗi hạ tầng tận gốc</b> (driver SQL, encryption bug, chặn bad-fix) với 150+ test pass, 0 regression. Cả 2 là công việc <b>độ khó rất cao, chiều sâu lớn</b> — minh hoạ vì sao không thể đánh giá bằng commit count.</p>
+          <h4>Điểm sáng — bắt 2 bug tiền lớn TRƯỚC prod</h4>
+          <p><b>Huy</b> (độ khó cao nhất) Reward Network end-to-end: money-path W32 (refund chặn double-spend, bắt trước prod) + W33 mở cửa mạng lưới/vòng đời ưu đãi/chợ ưu đãi + <b>chặn 4 bug staging RN (1,66 triệu điểm treo)</b> — 71 commit W33, 7 repo. <b>Hải</b> (khối lượng lớn nhất) mã hoá voucher at-rest W32 + hoàn tất bảo mật voucher W33 (13 lỗi) + danh mục per-shop (sửa 8.441 quà ẩn) — 30 commit W33, kiểm chứng DB thật. Đều là <b>chiều sâu lớn</b> — không đo bằng commit count.</p>
         </div>
         <div class="reco-item">
           <span class="reco-num">2</span>
-          <h4>Định hướng chiến lược đúng</h4>
-          <p>Thay vì đeo bám blocker bên ngoài (Total/GotIt), team <b>chủ động xây nền tảng dài hạn (Reward Network) + đa dạng nguồn quà (UrBox)</b>. Giảm phụ thuộc 1 vendor, mở hướng doanh thu mới (pool quà chung cho nhiều shop).</p>
+          <h4>Định hướng chiến lược đúng — an toàn trước, đẩy tới sau</h4>
+          <p>W32 mua AN TOÀN (money-path + mã hoá voucher, chặn bug tiền trước prod) rồi W33 đẩy tới mạnh (mở cửa mạng lưới cho shop + hoàn tất bảo mật + chặn bug staging RN). <b>Feature tiến rất mạnh nhưng theo luật vẫn tính 20%</b> vì phần lớn chưa QA/deploy. <b>2 bug tiền (double-spend · 1,66 triệu điểm) đều được BẮT + DẬP</b> — review + vận hành có tác dụng thật.</p>
         </div>
         <div class="reco-item">
           <span class="reco-num">3</span>
-          <h4>Rủi ro nguồn lực — cả 3 đang chạy full</h4>
-          <p>Tuần này cả 3 đều tải cao: Trang thiết kế RN (bus factor 1 người), Huy dựng UrBox physical + 3 fix hạ tầng, Hải Rewards Hub + bảo mật. <b>Reward Network cần thêm ~90 PD/15–16 tuần (1 lead + 2 senior)</b> — chồng lên UrBox chưa xong (P7) + duy trì rewards-v2. <b>Khuyến nghị: chốt nguồn lực với lãnh đạo trước khi RN vào dev; nếu không, RN hoặc UrBox sẽ phải giãn.</b></p>
+          <h4>Rủi ro nguồn lực — nợ deploy tích luỹ 2 tuần</h4>
+          <p>Cả 2 đều tải cao: Huy Reward Network end-to-end (bus-factor 1 người), Hải khối lượng lớn nhất across-repo (bảo mật voucher + danh mục per-shop). <b>Feature tiến mạnh nhưng phần lớn chưa staging/prod → thực ~18%</b>; deploy gate = <b>~6 SQL tay đúng thứ tự + deploy đồng thời 3 repo</b> (KHÔNG Flyway). <b>Khuyến nghị:</b> W34 mở MR lên staging sớm + chạy SQL gate + QA money-path/voucher độc lập; theo dõi UrBox giao credential/API prod.</p>
         </div>
       </div>
     </div>
   </div>
 
   <footer>
-    Generated 14/07/2026 · Reward V2 Weekly Report · Sprint 16 / W29 · tuần rút gọn 2 ngày (T2 13/07 · T3 14/07) · UI inspired by W23 layout, light mode
+    Generated 14/08/2026 · Reward V2 Weekly Report · Sprint 19-20 / W32-33 · UI inspired by W23 layout, light mode
     <br>
-    Nguồn: <code>git log 13/07→14/07</code> trên reward-network · rewards-v2 · net-core · cdp-backend · cdp-frontend + việc test/non-code của Trang &amp; QC. <b>Đánh giá theo độ khó + số việc — không đo bằng commit; code xong chưa review/test tính 20%</b> (1 tuần code nhưng ~3 tuần review + sửa + test).
+    Nguồn: <code>git log 03/08→14/08</code> · report W33 Huy (HTML) + Hải (MD) trên reward-network · rewards-v2 · net-core · cdp-backend · cdp-frontend &amp; test (QC). <b>Đánh giá theo độ khó + số việc — không đo bằng commit; code xong chưa review/test tính 20%</b> (1 tuần code nhưng ~3 tuần review + sửa + test).
   </footer>
 
 </div>
@@ -2117,9 +2120,9 @@
     type: 'doughnut',
     data: {
       labels: [
-        'reward-network — hoàn thiện code (~14%)',
-        'UrBox — testing staging (+ QC)',
-        'reward-v2 — mask log nhạy cảm'
+        'W32 stabilize + mã hoá voucher ✅',
+        'W33 mở cửa mạng lưới + vòng đời ưu đãi ✅',
+        'Chặn bug staging RN 1,66 triệu điểm ✅'
       ],
       datasets: [{
         data: [1, 1, 1],
@@ -2147,14 +2150,14 @@
     type: 'doughnut',
     data: {
       labels: [
-        'reward-network settlement + bảo mật + hardening (Huy) (48%)',
-        'UrBox sync hardening + test staging (Hải) (24%)',
-        'reward-v2 mask log + điều phối test (Trang) (16%)',
-        'Cải tiến / hạ tầng khác (12%)'
+        'Reward Network features + vòng đời ưu đãi (Huy) (40%)',
+        'Bảo mật voucher + danh mục per-shop (Hải) (34%)',
+        'Bug staging RN + hạ tầng (Huy) (14%)',
+        'Dọn nhà + hạ tầng deploy (12%)'
       ],
       datasets: [{
-        data: [48, 24, 16, 12],
-        backgroundColor: ['#8B5CF6', '#06B6D4', '#F59E0B', '#3B82F6'],
+        data: [40, 34, 14, 12],
+        backgroundColor: ['#8B5CF6', '#06B6D4', '#4F46E5', '#F59E0B'],
         borderColor: '#fff',
         borderWidth: 3
       }]
@@ -2173,18 +2176,17 @@
   });
 
   // ====== Combo chart: Số task (bar) + Độ khó TB (line) ======
-  // Trang: 4 task → avg 4.00 (bảo mật log + điều phối & test UrBox staging)
-  // Huy:   11 task → avg 4.50 (settlement voucher qua Kafka + siết bảo mật — nặng nhất)
-  // Hải:   6 task → avg 3.90 (hardening UrBox sync + catalog + test staging)
+  // Huy:  26 việc → avg 4.60 (money-path W32 + mở cửa mạng lưới/vòng đời ưu đãi W33 + chặn bug staging RN — độ khó cao nhất)
+  // Hải:  27 việc → avg 4.50 (mã hoá voucher + bảo mật voucher 13 lỗi + danh mục per-shop across-repo — khối lượng lớn nhất)
   new Chart(document.getElementById('taskComboChart'), {
     data: {
-      labels: ['Trang', 'Huy', 'Hải'],
+      labels: ['Huy', 'Hải'],
       datasets: [
         {
           type: 'bar',
-          label: 'Số task hoàn thành',
-          data: [4, 11, 6],
-          backgroundColor: ['rgba(79,70,229,.85)', 'rgba(16,185,129,.85)', 'rgba(245,158,11,.85)'],
+          label: 'Số việc (W32+W33)',
+          data: [26, 27],
+          backgroundColor: ['rgba(16,185,129,.85)', 'rgba(245,158,11,.85)'],
           borderRadius: 10,
           yAxisID: 'y',
           order: 2,
@@ -2192,8 +2194,8 @@
         },
         {
           type: 'line',
-          label: 'Độ khó trung bình / task',
-          data: [4.00, 4.50, 3.90],
+          label: 'Độ khó TB',
+          data: [4.60, 4.50],
           borderColor: '#EC4899',
           backgroundColor: 'rgba(236,72,153,.15)',
           borderWidth: 3,
@@ -2237,9 +2239,9 @@
         y: {
           position: 'left',
           beginAtZero: true,
-          max: 12,
-          title: { display: true, text: 'Số task', font: { size: 12, weight: 600 }, color: '#4F46E5' },
-          ticks: { stepSize: 2, font: { size: 12 }, color: '#4F46E5' },
+          max: 30,
+          title: { display: true, text: 'Số việc', font: { size: 12, weight: 600 }, color: '#4F46E5' },
+          ticks: { stepSize: 5, font: { size: 12 }, color: '#4F46E5' }, // stepSize 2→5 để trục dễ đọc khi max=30
           grid: { color: 'rgba(148,163,184,.12)' }
         },
         y1: {
@@ -2258,26 +2260,26 @@
   new Chart(document.getElementById('categoryStackChart'), {
     type: 'bar',
     data: {
-      labels: ['Trang', 'Huy', 'Hải'],
+      labels: ['Huy', 'Hải'],
       datasets: [
         {
-          label: 'reward-network (settlement + bảo mật + hardening)',
-          data: [0, 9, 0],
+          label: 'Tính năng RN (onboarding/ưu đãi/chợ)',
+          data: [14, 0],
           backgroundColor: '#8B5CF6'
         },
         {
-          label: 'UrBox (sync hardening + test staging)',
-          data: [2, 0, 4],
+          label: 'Money-path / Nền tảng mã voucher',
+          data: [6, 4],
           backgroundColor: '#06B6D4'
         },
         {
-          label: 'Bảo mật log reward-v2',
-          data: [2, 0, 0],
-          backgroundColor: '#F59E0B'
+          label: 'Bảo mật/Mã hoá + danh mục per-shop',
+          data: [0, 18],
+          backgroundColor: '#4F46E5'
         },
         {
-          label: 'Catalog · ranking · hạ tầng',
-          data: [0, 2, 2],
+          label: 'Bug staging + dọn nhà + FE',
+          data: [6, 5],
           backgroundColor: '#10B981'
         }
       ]

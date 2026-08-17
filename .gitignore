@@ -1,3 +1,5 @@
 .DS_Store
-.claude/
-sources/
+
+# Chỉ giữ folder html/ trong repo — ignore mọi folder khác (hiện tại & tương lai)
+/*/
+!/html/
