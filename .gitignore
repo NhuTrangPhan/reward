@@ -3,3 +3,5 @@
 # Chỉ giữ folder html/ trong repo — ignore mọi folder khác (hiện tại & tương lai)
 /*/
 !/html/
+project-context.md
+system-architecture.html
