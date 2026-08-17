@@ -1034,7 +1034,7 @@
   <div class="strategy-banner">
     <span class="label">📌 Bối cảnh &amp; định hướng tuần</span>
     <h2>Hai tuần: STABILIZE (W32) → SHIP FORWARD + FIREFIGHT (W33) — mã hoá voucher + money-path an toàn, rồi mở cửa mạng lưới cho shop + chặn bug staging RN 1,66 triệu điểm treo (trước prod)</h2>
-    <p>W32 = pivot code-freeze: Hải mã hoá voucher at-rest (4 cột bearer), Huy refactor money-path RN chặn bug tiền (refund double-spend · sổ Credit ghi lúc ĐỔI) + bù +796 test. W33 = đẩy tới: <b>Huy</b> mở cửa mạng lưới (shop tự bấm tham gia, bỏ cổng mời tay) · vòng đời ưu đãi (sửa ưu đãi ĐANG CHẠY qua 3 modal) · chợ ưu đãi hiện điểm Credit · gom module reward-hub (−25.843 dòng) · và DẬP bug staging RN 1,66 triệu điểm treo. <b>Hải</b> hoàn tất bảo mật voucher (rà + sửa 13 lỗi hậu-mã-hoá) · danh mục/thương hiệu per-shop (việc lớn nhất, sửa 8.441 quà bị ẩn) · mở đường prod worker UrBox. <b>⚠️ Phần lớn còn trên nhánh, chưa staging/prod — <b>nợ deploy-gate tích luỹ ~6 SQL tay + deploy đồng thời 3 repo</b>.</b></p>
+    <p>W32 = pivot code-freeze: Hải mã hoá voucher at-rest (4 cột bearer), Huy refactor money-path RN chặn bug tiền (refund double-spend · sổ Credit ghi lúc ĐỔI) + bù +796 test. W33 = đẩy tới: <b>Huy</b> mở cửa mạng lưới (shop tự bấm tham gia, bỏ cổng mời tay) · vòng đời ưu đãi (sửa ưu đãi ĐANG CHẠY qua 3 modal) · chợ ưu đãi hiện điểm Credit · gom module reward-hub (−25.843 dòng) · và DẬP bug staging RN 1,66 triệu điểm treo. <b>Hải</b> hoàn tất bảo mật voucher (rà + sửa 13 lỗi hậu-mã-hoá) · danh mục/thương hiệu per-shop (việc lớn nhất, sửa 8.441 quà bị ẩn) · mở đường prod worker UrBox. <b>⚠️ Phần lớn reward-network ĐÃ lên staging (đang test staging); nhánh rewards-v2 (bảo mật/danh mục) còn MR — <b>nợ deploy-gate ~6 SQL tay + deploy đồng thời 3 repo</b>.</b></p>
   </div>
 
   <!-- ============== 📊 Portfolio 3 dự án con ============== -->
@@ -1079,10 +1079,10 @@
         <div style="margin:10px 0 8px;">
           <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px;"><span>Thiết kế &amp; lập kế hoạch</span><b style="color:var(--purple);">100%</b></div>
           <div style="height:7px; background:var(--border-soft); border-radius:99px; overflow:hidden; margin-bottom:8px;"><div style="height:100%; width:100%; background:var(--purple); border-radius:99px;"></div></div>
-          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px;"><span>Code Phase 1 (tiến mạnh 2 tuần, phần lớn chưa staging/prod)</span><b style="color:#B45309;">~18%</b></div>
-          <div style="height:7px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:18%; background:var(--warning); border-radius:99px;"></div></div>
+          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px;"><span>Code Phase 1 (đã lên staging · đang test staging)</span><b style="color:#B45309;">~30%</b></div>
+          <div style="height:7px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:30%; background:var(--warning); border-radius:99px;"></div></div>
         </div>
-        <div style="font-size:12px; color:var(--ink-soft);">W32 money-path correctness + W33 mở cửa mạng lưới/vòng đời ưu đãi/chợ ưu đãi. Feature tiến RẤT MẠNH nhưng <b>phần lớn CHƯA lên staging/prod → tính 20% → ~18%</b>. Điểm sáng: dập 2 bug tiền lớn (double-spend W32 · 1,66M điểm W33).</div>
+        <div style="font-size:12px; color:var(--ink-soft);">W32 money-path correctness + W33 mở cửa mạng lưới/vòng đời ưu đãi/chợ ưu đãi. Feature tiến RẤT MẠNH nhưng <b>nay ĐÃ lên staging · đang test staging → thoát dần trần 20% → ~30%</b>. Điểm sáng: dập 2 bug tiền lớn (double-spend W32 · 1,66M điểm W33).</div>
       </div>
 
     </div>
@@ -1118,7 +1118,7 @@
     <div class="kpi pink">
       <div class="kpi-label">⚠️ Nợ deploy</div>
       <div class="kpi-value">~6 SQL tay</div>
-      <div class="kpi-sub">deploy đồng thời 3 repo · phần lớn chưa lên staging · không Flyway · đổi tên bảng + backfill order-dependent</div>
+      <div class="kpi-sub">reward-network đã lên staging (đang test) · nhánh rewards-v2 (bảo mật/danh mục) còn MR · deploy đồng thời 3 repo · không Flyway</div>
     </div>
   </div>
 
@@ -1380,7 +1380,7 @@
   <div class="section">
     <div class="section-title">
       <h2>🌐 Dự án · reward-network — đã có gì &amp; % hoàn thành</h2>
-      <span class="hint">Trọng tâm 2 tuần (Huy) · W32 money-path correctness + W33 <b>mở cửa mạng lưới / vòng đời ưu đãi / chợ ưu đãi</b> · feature tiến mạnh nhưng <b>phần lớn chưa staging/prod → tính 20% → ~18%</b></span>
+      <span class="hint">Trọng tâm 2 tuần (Huy) · W32 money-path correctness + W33 <b>mở cửa mạng lưới / vòng đời ưu đãi / chợ ưu đãi</b> · feature tiến mạnh nhưng <b>nay đã lên staging · đang test → ~30% (thoát dần trần 20%)</b></span>
     </div>
 
     <!-- Hero: tách thiết kế vs code -->
@@ -1392,8 +1392,8 @@
       </div>
       <div style="padding:16px 18px; background:linear-gradient(135deg,var(--success-soft) 0%,var(--card) 80%); border:1px solid #A7F3D0; border-radius:12px;">
         <div style="font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;">Code Phase 1 (dev)</div>
-        <div style="font-size:38px; font-weight:800; color:#B45309; line-height:1.15;">~18<span style="font-size:20px; color:var(--muted);">% thực · code tiến mạnh</span></div>
-        <div style="font-size:12.5px; color:var(--ink-soft);"><b>Feature tiến RẤT MẠNH 2 tuần</b> (Huy): quy mô thật <b>9 module · 5 app deployable · 15 bảng</b>. W32 money-path correctness + W33 mở cửa mạng lưới / vòng đời ưu đãi / chợ ưu đãi / hết hạn. <b style="color:#B45309;">Phần lớn CHƯA lên staging/prod → theo luật vẫn tính 20% → ~18% hoàn thành thực.</b></div>
+        <div style="font-size:38px; font-weight:800; color:#B45309; line-height:1.15;">~30<span style="font-size:20px; color:var(--muted);">% thực · đã lên staging, đang test</span></div>
+        <div style="font-size:12.5px; color:var(--ink-soft);"><b>Feature tiến RẤT MẠNH 2 tuần</b> (Huy): quy mô thật <b>9 module · 5 app deployable · 15 bảng</b>. W32 money-path correctness + W33 mở cửa mạng lưới / vòng đời ưu đãi / chợ ưu đãi / hết hạn. <b style="color:#B45309;">Nay ĐÃ lên staging · đang test staging → thoát dần trần 20% → ~30% hoàn thành thực.</b></div>
       </div>
     </div>
 
@@ -1409,7 +1409,7 @@
     </div>
 
     <!-- 8 epic breakdown -->
-    <div style="font-size:13px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-bottom:10px;">📋 Phase 1 — 33 task · 8 epic (~90 PD) · <span style="color:#B45309;">đã code ~28/33 · hoàn thành thực ~18% (đang review+test)</span></div>
+    <div style="font-size:13px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-bottom:10px;">📋 Phase 1 — 33 task · 8 epic (~90 PD) · <span style="color:#B45309;">đã code ~28/33 · hoàn thành thực ~30% (đã lên staging, đang test)</span></div>
     <div style="overflow-x:auto;">
     <table style="width:100%; border-collapse:collapse; font-size:12.5px;">
       <thead><tr style="text-align:left; color:var(--muted); border-bottom:2px solid var(--border);">
@@ -1426,12 +1426,12 @@
         <tr style="border-bottom:1px solid var(--border-soft);"><td style="padding:7px 10px;">8 · Test &amp; pilot</td><td style="padding:7px 10px; color:var(--muted);">QA</td><td style="padding:7px 10px; text-align:center;">3</td><td style="padding:7px 10px; text-align:center; color:#047857; font-weight:700;">1</td><td style="padding:7px 10px;"><div style="height:6px; background:var(--border-soft); border-radius:99px; overflow:hidden;"><div style="height:100%; width:33%; background:var(--purple); border-radius:99px;"></div></div></td></tr>
       </tbody>
       <tfoot><tr style="border-top:2px solid var(--border); font-weight:800; color:var(--ink);">
-        <td style="padding:8px 10px;">Tổng Phase 1</td><td></td><td style="padding:8px 10px; text-align:center;">33</td><td style="padding:8px 10px; text-align:center; color:#047857;">~28 code</td><td style="padding:8px 10px; color:#B45309;">~18% thực · đang review+test</td>
+        <td style="padding:8px 10px;">Tổng Phase 1</td><td></td><td style="padding:8px 10px; text-align:center;">33</td><td style="padding:8px 10px; text-align:center; color:#047857;">~28 code</td><td style="padding:8px 10px; color:#B45309;">~30% thực · đã lên staging, đang test</td>
       </tr></tfoot>
     </table>
     </div>
 
-    <div style="margin-top:14px; padding:12px 14px; background:var(--warning-soft); border-radius:10px; font-size:12.5px; color:#B45309;"><b>⚠️ Lưu ý đánh giá:</b> feature tiến RẤT MẠNH 2 tuần (money-path W32 + mở cửa mạng lưới / vòng đời ưu đãi / chợ ưu đãi W33) nhưng <b>phần lớn CHƯA lên staging/prod → theo luật vẫn tính 20% → ~18% hoàn thành thực</b> — <i>1 tuần để code nhưng ~3 tuần để review + deploy + QA</i>. <b>⚠️ Nợ deploy-gate tích luỹ:</b> <b>~6 SQL tay</b> + <b>deploy đồng thời 3 repo</b> (khoá mã hoá ở rewards-v2 + cdp-backend) · đổi tên bảng order-dependent + backfill · <b>KHÔNG Flyway</b> → sai thứ tự = mất data / crash startup / hỏng tiền. <b>✅ Điểm sáng:</b> đã dập <b>2 bug tiền lớn</b> (double-spend W32 · 1,66 triệu điểm treo W33). <b>Còn lại:</b> report chống quà rác · E2E + pilot. <b>W34:</b> mở MR lên staging + chạy ~6 SQL gate đúng thứ tự + QA money-path + pilot.</div>
+    <div style="margin-top:14px; padding:12px 14px; background:var(--warning-soft); border-radius:10px; font-size:12.5px; color:#B45309;"><b>⚠️ Lưu ý đánh giá:</b> feature tiến RẤT MẠNH 2 tuần (money-path W32 + mở cửa mạng lưới / vòng đời ưu đãi / chợ ưu đãi W33) nhưng <b>nay ĐÃ lên staging · đang test staging → thoát dần trần 20% → ~30% hoàn thành thực</b> — <i>1 tuần để code nhưng ~3 tuần để review + deploy + QA</i>. <b>⚠️ Nợ deploy-gate tích luỹ:</b> <b>~6 SQL tay</b> + <b>deploy đồng thời 3 repo</b> (khoá mã hoá ở rewards-v2 + cdp-backend) · đổi tên bảng order-dependent + backfill · <b>KHÔNG Flyway</b> → sai thứ tự = mất data / crash startup / hỏng tiền. <b>✅ Điểm sáng:</b> đã dập <b>2 bug tiền lớn</b> (double-spend W32 · 1,66 triệu điểm treo W33). <b>Còn lại:</b> report chống quà rác · E2E + pilot. <b>W34:</b> mở MR lên staging + chạy ~6 SQL gate đúng thứ tự + QA money-path + pilot.</div>
   </div>
 
   <!-- ============== 🤝 Dự án · Kết nối GotIt ============== -->
@@ -1673,8 +1673,8 @@
       <div class="result-card warning">
         <h3>◐ Chưa xong / nợ dồn sang W34</h3>
         <ul>
-          <li>Merge staging/prod — <b>◐ CHƯA</b>: bảo mật voucher + danh mục per-shop gộp nhánh chung 14/08, MR đầu tuần sau; phần lớn RN features cũng chưa lên staging/prod</li>
-          <li>QA staging — <b>◐ một phần</b>: chỉ kích hoạt tài khoản CRM đã lên staging; money-path + voucher chưa QA staging</li>
+          <li>Lên staging — <b>▶ reward-network ĐÃ lên staging (đang test)</b>; nhánh bảo mật voucher + danh mục per-shop (rewards-v2) MR đầu tuần sau</li>
+          <li>QA staging — <b>▶ đang chạy</b>: reward-network đang test staging; kích hoạt CRM đã staging; voucher (rewards-v2) chưa QA staging</li>
           <li>UrBox cutover — <b>◐ chưa xác nhận</b> (master đứng 30/07, gated vendor); W33 mới mở đường prod worker sync catalog</li>
           <li><b>⚠️ Nợ deploy dồn sang W34:</b> ~6 SQL tay + deploy đồng thời 3 repo, order-dependent, không Flyway</li>
         </ul>
@@ -1700,9 +1700,9 @@
         <p>Nợ deploy-gate dồn 2 tuần: <b>~6 SQL tay</b> + deploy <b>ĐỒNG THỜI 3 repo</b> (khoá mã hoá ở rewards-v2 + cdp-backend) + <b>đổi tên bảng order-dependent</b> + backfill, repo KHÔNG Flyway. <b>Rủi ro:</b> sai thứ tự = <b>MẤT DATA / crash startup / hỏng tiền</b> (đổi tên bảng cần SQL chạy TRƯỚC code; thiếu key RSA/api-key = crash startup). <b>Action:</b> RUNBOOK thứ tự SQL rõ + chạy staging trước + rollback plan; thêm key mọi profile.</p>
       </div>
       <div class="risk-item medium">
-        <span class="risk-level">🟠 MEDIUM-HIGH · CHƯA LÊN STAGING</span>
-        <h4>Phần lớn code 2 tuần CHƯA lên staging → chưa QA thật</h4>
-        <p>Feature RN tiến rất mạnh 2 tuần (money-path · mở cửa mạng lưới · vòng đời ưu đãi · danh mục per-shop) nhưng <b>phần lớn còn trên nhánh, chưa staging → chưa QA thật</b>; pile ngày càng lớn (giống cảnh "cục code bự" đã cảnh báo, nay chuyển sang <b>tầng deploy</b>). <b>Action:</b> W34 mở MR lên staging sớm + QA money-path/voucher trước pilot; không để pile tiếp.</p>
+        <span class="risk-level">🟡 MEDIUM · ĐANG TEST STAGING</span>
+        <h4>reward-network đã lên staging · đang test; nhánh rewards-v2 còn MR</h4>
+        <p>Feature RN tiến rất mạnh 2 tuần (money-path · mở cửa mạng lưới · vòng đời ưu đãi · danh mục per-shop) ; <b>reward-network nay ĐÃ lên staging · đang test</b> (thoát dần trần 20%); rủi ro giờ là <b>test có thể phát sinh lỗi cần sửa</b> + nhánh rewards-v2 (bảo mật/danh mục) còn chờ MR. <b>Action:</b> W34 QA staging money-path/voucher + đưa nốt nhánh rewards-v2 lên staging trước pilot.</p>
       </div>
       <div class="risk-item medium">
         <span class="risk-level">🟡 MEDIUM · UrBox GO-LIVE</span>
@@ -1890,7 +1890,7 @@
           <div class="timeline-card">
             <div class="timeline-date">🌐 TRỌNG TÂM · W32 STABILIZE + mã hoá voucher → W33 SHIP FORWARD + chặn bug staging RN (03-14/08)</div>
             <h4>reward-network (reward-hub) — pool quà</h4>
-            <p><b>W32:</b> money-path correctness (sổ credit lúc ĐỔI · refund đúng khách chặn double-spend · tách text_id) + mã hoá voucher at-rest + bù +796 test. <b>W33:</b> mở cửa mạng lưới (shop tự bấm tham gia) · vòng đời ưu đãi (3 modal) · chợ ưu đãi · danh mục per-shop · <b>chặn bug staging RN 1,66 triệu điểm treo</b>. Feature tiến mạnh nhưng <b>phần lớn chưa staging/prod → tính 20% → ~18%.</b></p>
+            <p><b>W32:</b> money-path correctness (sổ credit lúc ĐỔI · refund đúng khách chặn double-spend · tách text_id) + mã hoá voucher at-rest + bù +796 test. <b>W33:</b> mở cửa mạng lưới (shop tự bấm tham gia) · vòng đời ưu đãi (3 modal) · chợ ưu đãi · danh mục per-shop · <b>chặn bug staging RN 1,66 triệu điểm treo</b>. Feature tiến mạnh nhưng <b>nay đã lên staging · đang test → ~30% (thoát dần trần 20%).</b></p>
             <div class="sub-milestones">
               <div class="sub-item"><span class="sub-date">W34</span><span>Merge staging + chạy ~6 SQL gate đúng thứ tự + QA money-path/voucher + pilot</span></div>
               <div class="sub-item"><span class="sub-date">~90 PD</span><span>Phase 1 tổng · pilot 20-50 shop F&amp;B/Retail</span></div>
@@ -2004,9 +2004,9 @@
             <div class="gauge-sub">code Phase 1</div>
           </div>
         </div>
-        <h4>🌐 Reward Network — feature tiến mạnh, nợ deploy</h4>
-        <p>Feature RN tiến RẤT MẠNH 2 tuần (money-path W32 + mở cửa mạng lưới/vòng đời ưu đãi/chợ ưu đãi W33) nhưng <b>phần lớn chưa staging/prod</b> → thực <b>~18%</b>. <b>Nợ deploy-gate tích luỹ ~6 SQL tay + deploy đồng thời 3 repo.</b></p>
-        <div class="verdict">⚠️ Nợ deploy · chưa staging</div>
+        <h4>🌐 Reward Network — đã lên staging, đang test</h4>
+        <p>Feature RN tiến RẤT MẠNH 2 tuần (money-path W32 + mở cửa mạng lưới/vòng đời ưu đãi/chợ ưu đãi W33) nay <b>ĐÃ lên staging · đang test</b> → thực <b>~30%</b> (thoát dần trần 20%). <b>Nhánh rewards-v2 (bảo mật/danh mục) còn MR.</b></p>
+        <div class="verdict">▶ Đang test staging</div>
       </div>
 
       <!-- Metric 3: Vendor Health Score (GotIt) -->
@@ -2059,7 +2059,7 @@
         <div class="reco-item">
           <span class="reco-num">3</span>
           <h4>Rủi ro nguồn lực — nợ deploy tích luỹ 2 tuần</h4>
-          <p>Cả 2 đều tải cao: Huy Reward Network end-to-end (bus-factor 1 người), Hải khối lượng lớn nhất across-repo (bảo mật voucher + danh mục per-shop). <b>Feature tiến mạnh nhưng phần lớn chưa staging/prod → thực ~18%</b>; deploy gate = <b>~6 SQL tay đúng thứ tự + deploy đồng thời 3 repo</b> (KHÔNG Flyway). <b>Khuyến nghị:</b> W34 mở MR lên staging sớm + chạy SQL gate + QA money-path/voucher độc lập; theo dõi UrBox giao credential/API prod.</p>
+          <p>Cả 2 đều tải cao: Huy Reward Network end-to-end (bus-factor 1 người), Hải khối lượng lớn nhất across-repo (bảo mật voucher + danh mục per-shop). <b>Feature tiến mạnh; reward-network nay đã lên staging · đang test → thực ~30% (nhánh rewards-v2 còn MR)</b>; deploy gate = <b>~6 SQL tay đúng thứ tự + deploy đồng thời 3 repo</b> (KHÔNG Flyway). <b>Khuyến nghị:</b> W34 mở MR lên staging sớm + chạy SQL gate + QA money-path/voucher độc lập; theo dõi UrBox giao credential/API prod.</p>
         </div>
       </div>
     </div>
