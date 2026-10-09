@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Báo cáo 3 tuần W37–W39/2026 — Reward Network · Connection-CRM · rewards-v2</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #F8FAFC; --bg-soft: #F1F5F9; --card: #FFFFFF;
+    --border: #E5E7EB; --border-soft: #F1F5F9;
+    --ink: #111827; --ink-soft: #374151; --muted: #6B7280; --muted-light: #9CA3AF;
+    --primary: #4F46E5; --primary-soft: #EEF2FF;
+    --success: #10B981; --success-soft: #D1FAE5;
+    --warning: #F59E0B; --warning-soft: #FEF3C7;
+    --info: #3B82F6; --info-soft: #DBEAFE;
+    --purple: #8B5CF6; --purple-soft: #EDE9FE;
+    --pink: #EC4899; --pink-soft: #FCE7F3;
+    --rn: #10B981; --cc: #6366F1; --rv: #F59E0B;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg); color: var(--ink); min-height: 100vh;
+    padding: 28px; line-height: 1.65; font-size: 15px; -webkit-font-smoothing: antialiased;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; }
+
+  header {
+    background: linear-gradient(135deg, #ECFDF5 0%, #EEF2FF 50%, #FEF3C7 100%);
+    border: 1px solid #C7D2FE; border-radius: 16px;
+    padding: 34px 30px; margin-bottom: 24px; text-align: center;
+  }
+  header .eyebrow { display:inline-block; font-size: 12px; letter-spacing: 2.5px; color: var(--primary); text-transform: uppercase; margin-bottom: 10px; font-weight: 700; }
+  header h1 { font-size: 33px; font-weight: 800; letter-spacing: -0.9px; margin-bottom: 8px; }
+  header p { color: var(--muted); font-size: 15.5px; }
+  header .meta { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; font-size: 13px; color: var(--ink-soft); }
+  header .meta span { background: rgba(255,255,255,.72); border: 1px solid rgba(79,70,229,.15); padding: 6px 14px; border-radius: 20px; font-weight: 500; }
+  header .meta span b { font-weight: 700; }
+
+  .status-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .st-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; position: relative; overflow: hidden; }
+  .st-card::before { content:""; position:absolute; top:0; left:0; width:4px; height:100%; }
+  .st-card.rn::before { background: var(--rn); } .st-card.cc::before { background: var(--cc); } .st-card.rv::before { background: var(--rv); }
+  .st-top { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .st-ico { width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+  .st-card.rn .st-ico { background: var(--success-soft); } .st-card.cc .st-ico { background: var(--primary-soft); } .st-card.rv .st-ico { background: var(--warning-soft); }
+  .st-name { font-size: 15px; font-weight: 800; letter-spacing:-0.2px; }
+  .st-owner { font-size: 12px; color: var(--muted); }
+  .st-badge { display:inline-flex; align-items:center; gap:6px; font-size: 12px; font-weight:700; padding: 4px 11px; border-radius: 20px; white-space: nowrap; }
+  .st-badge.prod { background: var(--success-soft); color:#047857; }
+  .st-badge.rel { background: var(--pink-soft); color:#BE185D; }
+  .st-desc { font-size: 13px; color: var(--ink-soft); margin-top: 10px; }
+
+  .exec { background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); border: 1px solid #6EE7B7; border-radius: 14px; padding: 22px 26px; margin-bottom: 24px; }
+  .exec .label { display:inline-block; font-size: 11px; letter-spacing: 2px; color: #065F46; text-transform: uppercase; background: rgba(255,255,255,.6); padding: 4px 10px; border-radius: 6px; margin-bottom: 10px; font-weight: 700; }
+  .exec h2 { font-size: 19px; margin-bottom: 8px; font-weight: 700; letter-spacing: -0.3px; }
+  .exec p { color: var(--ink-soft); font-size: 15px; }
+  .exec b { color: #047857; font-weight: 700; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-bottom: 28px; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; position: relative; overflow: hidden; }
+  .kpi::before { content:""; position:absolute; top:0; left:0; width:4px; height:100%; }
+  .kpi.success::before { background: var(--success); } .kpi.info::before { background: var(--info); } .kpi.primary::before { background: var(--primary); } .kpi.pink::before { background: var(--pink); }
+  .kpi-label { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing:.6px; margin-bottom: 8px; font-weight: 700; }
+  .kpi-value { font-size: 29px; font-weight: 800; line-height: 1.05; letter-spacing: -1px; margin-bottom: 4px; }
+  .kpi-value.success { color: var(--success); } .kpi-value.primary { color: var(--primary); } .kpi-value.pink { color: #DB2777; }
+  .kpi-sub { font-size: 12.5px; color: var(--muted); font-weight: 500; }
+
+  .section { margin-bottom: 32px; }
+  .section-title { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; cursor: pointer; user-select: none; padding: 4px 8px 4px 0; border-radius: 8px; transition: background .15s; }
+  .section-title:hover { background: var(--bg-soft); }
+  .section-title h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; display: flex; align-items: center; }
+  .section-title h2::before { content:""; display:inline-block; width: 5px; height: 21px; background: linear-gradient(180deg, var(--primary), var(--pink)); border-radius: 3px; margin-right: 12px; }
+  .section-title.rn h2::before { background: linear-gradient(180deg, #10B981, #059669); }
+  .section-title.cc h2::before { background: linear-gradient(180deg, #6366F1, #4338CA); }
+  .section-title.rv h2::before { background: linear-gradient(180deg, #F59E0B, #D97706); }
+  .section-title .hint { font-size: 13.5px; color: var(--muted); flex: 1; }
+  .section-toggle { width: 32px; height: 32px; background: var(--bg-soft); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--muted); flex-shrink: 0; transition: transform .25s ease; }
+  .section.collapsed .section-toggle { transform: rotate(-90deg); }
+  .section > *:not(.section-title) { overflow: hidden; transition: max-height .35s ease, opacity .2s ease; max-height: 20000px; opacity: 1; }
+  .section.collapsed > *:not(.section-title) { max-height: 0; opacity: 0; margin: 0!important; padding-top:0; padding-bottom:0; border-width:0; }
+  .collapse-toolbar { display:flex; gap:8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .toolbar-btn { background: var(--card); border: 1px solid var(--border); color: var(--ink-soft); padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .toolbar-btn:hover { background: var(--primary-soft); color: var(--primary); border-color: var(--primary); }
+
+  .cto-dash { background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%); border: 1px solid #BFDBFE; border-radius: 16px; padding: 24px; margin-bottom: 28px; }
+  .cto-dash > h3 { font-size: 14px; color: var(--info); margin-bottom: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; }
+  .cto-dash > h3::before { content: "📊  "; }
+  .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .chart-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .chart-card .chart-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 14px; }
+  .chart-wrap { position: relative; height: 230px; }
+
+  /* Timeline */
+  .timeline { position: relative; margin: 8px 0 0 8px; padding-left: 26px; }
+  .timeline::before { content:""; position:absolute; left: 6px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 14px; }
+  .tl-dot { position: absolute; left: -26px; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--card); border: 3px solid var(--muted-light); }
+  .tl-item.prod .tl-dot { border-color: var(--success); background: var(--success-soft); }
+  .tl-item.rel .tl-dot { border-color: var(--pink); background: var(--pink-soft); }
+  .tl-item.done .tl-dot { border-color: var(--info); }
+  .tl-card { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--muted-light); border-radius: 10px; padding: 12px 16px; }
+  .tl-item.prod .tl-card { border-left-color: var(--success); background: linear-gradient(135deg, #ECFDF5 0%, var(--card) 70%); }
+  .tl-item.rel .tl-card { border-left-color: var(--pink); background: linear-gradient(135deg, #FDF2F8 0%, var(--card) 70%); }
+  .tl-date { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 6px; background: var(--bg-soft); color: var(--ink-soft); display:inline-block; margin-bottom: 6px; }
+  .tl-item.prod .tl-date { background: var(--success-soft); color:#047857; }
+  .tl-item.rel .tl-date { background: var(--pink-soft); color:#BE185D; }
+  .tl-card .tl-body { font-size: 13.5px; color: var(--ink-soft); }
+  .tl-card .tl-body .tag { font-weight: 700; }
+  .tl-card .tl-body .tag.rn { color: var(--rn); } .tl-card .tl-body .tag.cc { color: var(--cc); } .tl-card .tl-body .tag.rv { color: var(--rv); }
+
+  .proj-head { display: flex; align-items: center; gap: 16px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; margin-bottom: 16px; }
+  .proj-avatar { width: 52px; height: 52px; border-radius: 14px; display:flex; align-items:center; justify-content:center; font-size: 24px; flex-shrink: 0; }
+  .proj-avatar.rn { background: var(--success-soft); } .proj-avatar.cc { background: var(--primary-soft); } .proj-avatar.rv { background: var(--warning-soft); }
+  .proj-head .info { flex: 1; min-width: 0; }
+  .proj-head .info .name { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+  .proj-head .info .owner { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .proj-head .info .head-note { font-size: 13.5px; color: var(--ink-soft); margin-top: 8px; }
+  .proj-head .st-badge { flex-shrink:0; }
+
+  .theme { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 12px; }
+  .theme .th-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .theme .th-head .t { font-size: 15.5px; font-weight: 700; letter-spacing: -0.2px; flex: 1; min-width: 200px; }
+  .theme ul { list-style: none; }
+  .theme li { position: relative; padding-left: 20px; margin-bottom: 6px; font-size: 14px; color: var(--ink-soft); }
+  .theme li::before { content: "›"; position: absolute; left: 4px; color: var(--muted-light); font-weight: 700; }
+  .theme .value { margin-top: 10px; padding: 9px 12px; background: var(--bg-soft); border-radius: 8px; font-size: 13px; color: var(--ink-soft); }
+  .theme .value b { color: var(--ink); }
+  .theme .value::before { content: "💡 "; }
+
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 20px; letter-spacing: .3px; white-space: nowrap; }
+  .pill.w37 { background: var(--info-soft); color: #1D4ED8; }
+  .pill.w38 { background: var(--purple-soft); color: #6D28D9; }
+  .pill.w39 { background: var(--warning-soft); color: #B45309; }
+  .pill.prod { background: var(--success-soft); color: #047857; }
+  .pill.rel { background: var(--pink-soft); color: #BE185D; }
+
+  .assess { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; }
+  .assess .row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-soft); }
+  .assess .row:last-child { border-bottom: none; }
+  .assess .ico { width: 34px; height: 34px; border-radius: 9px; display:flex; align-items:center; justify-content:center; flex-shrink: 0; font-size: 17px; }
+  .assess .ico.good { background: var(--success-soft); } .assess .ico.next { background: var(--info-soft); }
+  .assess .row .txt { font-size: 14px; color: var(--ink-soft); }
+  .assess .row .txt b { color: var(--ink); }
+
+  .footer { text-align: center; color: var(--muted-light); font-size: 12.5px; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+  @page { size: A4; margin: 11mm 9mm; }
+  @media print {
+    body { padding: 0; background: #fff; font-size: 12.5px; }
+    .wrap { max-width: none; }
+    .collapse-toolbar, .section-toggle { display: none !important; }
+    .section.collapsed > *:not(.section-title) { max-height: none !important; opacity: 1 !important; }
+    header { padding: 22px 24px; margin-bottom: 16px; } header h1 { font-size: 26px; }
+    .section { margin-bottom: 16px; }
+    header, .exec, .kpi, .st-card, .chart-card, .proj-head, .theme, .tl-item, .assess .row, .cto-dash { break-inside: avoid; page-break-inside: avoid; }
+    .kpi-grid, .status-strip { break-inside: avoid; }
+    .section-title { break-after: avoid; }
+    .chart-wrap { height: 200px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="eyebrow">Báo cáo 3 tuần · CNV Reward</span>
+    <h1>Báo cáo 3 tuần W37–W39/2026</h1>
+    <p><b style="color:var(--rn)">Reward Network</b> · <b style="color:var(--cc)">Connection-CRM</b> · <b style="color:var(--rv)">rewards-v2</b> — từ go-live đến release chính thức</p>
+    <div class="meta">
+      <span>📅 Kỳ: <b>08 – 26/09/2026</b> (3 tuần)</span>
+      <span>🟢 Reward Network — <b>Huy</b></span>
+      <span>🔵 Connection-CRM — <b>Huy · Hải</b></span>
+      <span>🟡 rewards-v2 — <b>Hải</b></span>
+    </div>
+  </header>
+
+  <div class="status-strip">
+    <div class="st-card rn">
+      <div class="st-top"><div class="st-ico">🟢</div><div style="flex:1"><div class="st-name">Reward Network</div><div class="st-owner">Huy</div></div><span class="st-badge rel">🚀 Đã release</span></div>
+      <div class="st-desc"><b>Đã release, truyền thông và kèm HDSD.</b> 3 tuần: khép tích hợp CRM → dashboard Góp/Lấy → chuẩn hoá "đã dùng" &amp; thuật ngữ "Điểm mạng lưới".</div>
+    </div>
+    <div class="st-card cc">
+      <div class="st-top"><div class="st-ico">🔵</div><div style="flex:1"><div class="st-name">Connection-CRM</div><div class="st-owner">Huy · Hải</div></div><span class="st-badge prod">✔ Merged · Production</span></div>
+      <div class="st-desc">MR được anh Phú merge (W38), <b>toàn bộ lên production</b>. W39: partner-api triệt để, bộ chuẩn danh mục &amp; mapping, filter ngành, refactor menu.</div>
+    </div>
+    <div class="st-card rv">
+      <div class="st-top"><div class="st-ico">🟡</div><div style="flex:1"><div class="st-name">rewards-v2</div><div class="st-owner">Hải</div></div><span class="st-badge prod">✔ Production</span></div>
+      <div class="st-desc">Vận hành production ổn định; W38–39 dồn sức làm chắc <b>bộ chuẩn danh mục/thương hiệu</b> phục vụ mapping trên CRM.</div>
+    </div>
+  </div>
+
+  <div class="exec">
+    <span class="label">Tóm tắt 3 tuần</span>
+    <h2>Từ go-live đến release chính thức — Reward Network đã truyền thông ra thị trường kèm HDSD</h2>
+    <p>Ba tuần đi trọn một vòng: <b>W37</b> đưa reward-network + rewards-v2 lên production và gửi MR phần CRM; <b>W38</b> anh Phú merge — cả hệ CRM lên production, hoàn thiện dashboard; sau đó dự án <b>release chính thức, truyền thông kèm tài liệu HDSD</b>. <b>W39</b> chuyển sang hoàn thiện sau release với 9 đầu việc (Huy 6 · Hải 3): CRM gọi Reward Network <b>triệt để qua partner-api</b> (thôi gọi thẳng rewards-v2), <b>bộ chuẩn danh mục &amp; mapping category/brand</b>, filter ngành hàng, thống nhất thuật ngữ <b>"Điểm mạng lưới"</b>, và phân biệt rạch ròi voucher "đã dùng" do khách tự khai hay đối tác xác nhận.</p>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi pink">
+      <div class="kpi-label">Mốc lớn nhất</div>
+      <div class="kpi-value pink">Release</div>
+      <div class="kpi-sub">Truyền thông chính thức + kèm HDSD</div>
+    </div>
+    <div class="kpi success">
+      <div class="kpi-label">Trạng thái hệ sinh thái</div>
+      <div class="kpi-value success">3/3</div>
+      <div class="kpi-sub">RN · CRM · rewards-v2 đều production</div>
+    </div>
+    <div class="kpi primary">
+      <div class="kpi-label">Đầu việc W39</div>
+      <div class="kpi-value primary">9</div>
+      <div class="kpi-sub">Huy 6 · Hải 3 — hoàn thiện sau release</div>
+    </div>
+    <div class="kpi info">
+      <div class="kpi-label">Mốc CRM</div>
+      <div class="kpi-value" style="color:var(--info)">Merged</div>
+      <div class="kpi-sub">MR được duyệt, chạy production từ W38</div>
+    </div>
+  </div>
+
+  <div class="cto-dash">
+    <h3>Bức tranh 3 tuần</h3>
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h4>Đầu việc W39 theo mảng</h4>
+        <div class="chart-sub">9 đầu việc hoàn thiện sau release.</div>
+        <div class="chart-wrap"><canvas id="chArea"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h4>Đầu việc W39 theo người</h4>
+        <div class="chart-sub">Đánh giá theo độ khó &amp; chiều sâu, không theo số commit.</div>
+        <div class="chart-wrap"><canvas id="chPerson"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="section" id="sec-timeline">
+    <div class="section-title" onclick="toggleSec('sec-timeline')">
+      <h2>Dòng thời gian 3 tuần</h2>
+      <span class="hint">🟢 RN · 🔵 Connection-CRM · 🟡 rewards-v2</span>
+      <div class="section-toggle">▾</div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item prod"><div class="tl-dot"></div><div class="tl-card">
+        <span class="tl-date">W37 · 08–12/09</span>
+        <div class="tl-body"><span class="tag rn">RN</span> + <span class="tag rv">rewards-v2</span> go-live production toàn bộ tính năng; <span class="tag cc">Connection-CRM</span> hoàn tất khu quản trị mạng lưới (partner-api, duyệt 3 mệnh giá, ngành 2 cấp, mời shop, test 45/45) và <b>gửi MR cho anh Phú</b>.</div>
+      </div></div>
+      <div class="tl-item prod"><div class="tl-dot"></div><div class="tl-card">
+        <span class="tl-date">W38 · 15–19/09</span>
+        <div class="tl-body"><span class="tag cc">Connection-CRM</span> <b>được merge — toàn bộ hệ sinh thái lên production</b>. <span class="tag rn">RN:</span> refactor + mở rộng dashboard Tổng quan hai khối Góp/Lấy. <span class="tag cc">CRM:</span> khởi động bộ chuẩn danh mục &amp; mapping.</div>
+      </div></div>
+      <div class="tl-item rel"><div class="tl-dot"></div><div class="tl-card">
+        <span class="tl-date">🚀 RELEASE</span>
+        <div class="tl-body"><b>Reward Network release chính thức &amp; truyền thông ra thị trường, kèm tài liệu hướng dẫn sử dụng (HDSD).</b></div>
+      </div></div>
+      <div class="tl-item done"><div class="tl-dot"></div><div class="tl-card">
+        <span class="tl-date">W39 · 22–26/09</span>
+        <div class="tl-body">Hoàn thiện sau release — 9 đầu việc: <span class="tag cc">CRM</span> gọi RN triệt để qua partner-api, bộ chuẩn danh mục &amp; mapping category/brand, filter ngành hàng, refactor menu; <span class="tag rn">RN</span> phân biệt "đã dùng" khách tự khai vs đối tác, gom logic voucher đã dùng, đổi tên "Điểm mạng lưới", fix UI dashboard.</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="collapse-toolbar">
+    <button class="toolbar-btn" onclick="setAll(false)">▾ Mở tất cả</button>
+    <button class="toolbar-btn" onclick="setAll(true)">▸ Thu gọn tất cả</button>
+  </div>
+
+  <!-- Reward Network -->
+  <div class="section" id="sec-rn">
+    <div class="section-title rn" onclick="toggleSec('sec-rn')">
+      <h2>Reward Network</h2>
+      <span class="hint">Huy · đã release + truyền thông + HDSD</span>
+      <div class="section-toggle">▾</div>
+    </div>
+    <div class="proj-head">
+      <div class="proj-avatar rn">🟢</div>
+      <div class="info">
+        <div class="name">Reward Network — Chợ ưu đãi mạng lưới</div>
+        <div class="owner">Huy · Backend reward-network + FE quản trị</div>
+        <div class="head-note"><b>Đã release chính thức, truyền thông kèm HDSD.</b> Ba tuần: khép tích hợp CRM (W37) → dashboard Góp/Lấy (W38) → chuẩn hoá số liệu "đã dùng" và thuật ngữ sản phẩm (W39).</div>
+      </div>
+      <span class="st-badge rel">🚀 Đã release</span>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">1 · Khép kín tích hợp với CRM &amp; go-live</span><span class="pill w37">W37</span><span class="pill prod">Production</span></div>
+      <ul>
+        <li>Gỡ kênh quản trị RSA cũ, gom /crm-admin về kênh nội bộ; nhận đồng bộ ngành hàng do Connect đẩy sang; bắt buộc danh mục kinh doanh khi shop tham gia.</li>
+        <li>Lọc &amp; tìm kiếm cho 8 danh sách quản trị; kho mã trả cho CRM là mã đã che; vá 12 finding review vòng 2. Toàn bộ tính năng lên production.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Một cửa gọi duy nhất qua partner-api, nền tảng sẵn sàng cho CRM vận hành.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">2 · Dashboard Tổng quan hai khối Góp / Lấy</span><span class="pill w38">W38</span><span class="pill w39">W39</span></div>
+      <ul>
+        <li>Refactor + mở rộng dashboard: KPI chia hai khối quà mình góp / quà mình lấy; kho quà đã lấy chở thêm ngành hàng, <b>lý do quà bị ẩn</b> và đường bỏ quà khỏi kho.</li>
+        <li>Báo cáo Excel đổi tên khối khớp đúng màn hình ("Cần chú ý"); fix UI dashboard (cùng Trang).</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Shop trả lời "tham gia mạng lưới có đáng không" bằng số liệu, hiểu được vì sao một quà không hiện.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">3 · Phân biệt "đã dùng": khách tự khai vs đối tác xác nhận</span><span class="pill w39">W39</span></div>
+      <ul>
+        <li>Lời khai "đã dùng mã" của khách ghi vào <b>cột nguồn riêng</b>, không đụng vào số liệu đã đối soát với đối tác; mã đã đối soát không bị ghi đè cờ tự khai.</li>
+        <li>Dữ liệu voucher nói rõ mốc "đã dùng" đến từ nguồn nào; gỡ đánh dấu trên voucher còn hiệu lực xử lý êm, không ném lỗi.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Số liệu đối soát tiền giữa các shop không bị lời khai của khách làm nhiễu — hai loại "đã dùng" tách bạch rõ ràng.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">4 · Gom "voucher đã dùng" về một logic</span><span class="pill w39">W39</span></div>
+      <ul>
+        <li>Mọi con số "đã dùng" / "khách dùng" trên dashboard và báo cáo đếm theo <b>một logic thống nhất</b> (gộp cả lượt khách tự khai), tính bằng một truy vấn duy nhất.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Hết cảnh hai màn hình hai con số — số "đã dùng" ở đâu cũng khớp nhau.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">5 · Đổi "Credit" thành "Điểm mạng lưới"</span><span class="pill w39">W39</span></div>
+      <ul>
+        <li>Thống nhất thuật ngữ trên toàn giao diện: trang quản trị RN, khu quản trị CRM, báo cáo Excel và thông báo lỗi duyệt ưu đãi; bỏ đuôi "đ" ở các con số là điểm.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Shop hiểu ngay đây là điểm trao đổi trong mạng lưới, không nhầm với tiền — quan trọng khi đã truyền thông ra thị trường.</div>
+    </div>
+  </div>
+
+  <!-- Connection-CRM -->
+  <div class="section" id="sec-cc">
+    <div class="section-title cc" onclick="toggleSec('sec-cc')">
+      <h2>Connection-CRM</h2>
+      <span class="hint">Huy · Hải — merged &amp; production, hoàn thiện sau release</span>
+      <div class="section-toggle">▾</div>
+    </div>
+    <div class="proj-head">
+      <div class="proj-avatar cc">🔵</div>
+      <div class="info">
+        <div class="name">Connection-CRM — Quản trị mạng lưới trên CRM</div>
+        <div class="owner">Huy · Hải (W39 cả hai dồn về mảng này)</div>
+        <div class="head-note">W37 hoàn tất khu quản trị + gửi MR; W38 <b>được merge, lên production</b>; W39 hoàn thiện: đường gọi triệt để qua partner-api, bộ chuẩn danh mục &amp; mapping, filter ngành, menu.</div>
+      </div>
+      <span class="st-badge prod">✔ Merged · Production</span>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">1 · Khu quản trị mạng lưới hoàn chỉnh + MR</span><span class="pill w37">W37</span></div>
+      <ul>
+        <li>Đường gọi qua cdp partner-api (bỏ ký RSA); duyệt ưu đãi chốt 3 mệnh giá; ngành/danh mục 2 cấp chặn lưu lệch; mời shop từ dữ liệu CRM; 5 màn dùng chung bộ lọc; test 45/45 xanh.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> CNV vận hành trọn vòng đời mạng lưới ngay trong CRM.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">2 · MR được merge — lên production</span><span class="pill w38">W38</span><span class="pill prod">Production</span></div>
+      <ul>
+        <li>Anh Phú merge toàn bộ gói Connection-CRM; hệ CRM chính thức vận hành mạng lưới trên production — mảnh cuối để cả hệ sinh thái chạy thật 100%.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Điều kiện đủ để release và truyền thông ra thị trường.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">3 · Refactor triệt để đường gọi qua partner-api <span style="font-weight:600;color:var(--muted)">· Huy</span></span><span class="pill w39">W39</span></div>
+      <ul>
+        <li>CRM <b>thôi gọi trực tiếp rewards-v2</b> — mọi request (kể cả sang rewards-v2) đều đi qua cổng partner-api, đồng nhất với đường gọi Reward Network.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Một cửa duy nhất cho toàn bộ tích hợp: ít khoá bí mật, ít điểm hỏng, dễ kiểm soát truy cập.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">4 · Refactor menu khu quản trị (cùng Trang) <span style="font-weight:600;color:var(--muted)">· Huy</span></span><span class="pill w39">W39</span></div>
+      <ul>
+        <li>Sắp xếp lại menu khu Rewards Hub cho đúng luồng làm việc; màn danh mục chuẩn dời về đúng nhóm.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Người vận hành tìm đúng màn nhanh hơn khi số màn tăng sau release.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">5 · Bộ chuẩn danh mục &amp; mapping category / brand (cùng Trang) <span style="font-weight:600;color:var(--muted)">· Hải</span></span><span class="pill w38">W38</span><span class="pill w39">W39</span></div>
+      <ul>
+        <li>CRM có <b>danh mục chung đặt dưới ngành nghề</b> và nút <b>đồng bộ danh mục sang cả Reward Network lẫn rewards-v2</b>; mapping thương hiệu/danh mục giữa hệ CNV và các nguồn quà.</li>
+        <li>Chuẩn hoá thuật ngữ trên màn bộ chuẩn (hết gọi nhầm "ngành hàng", cột "RN" đổi nhãn dễ hiểu); lỗi kết nối Reward Network nói rõ sai ở đâu thay vì một câu chung.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Một cây danh mục chuẩn do CRM nắm, đẩy nhất quán xuống cả hai hệ — nền cho lọc, duyệt và định giá.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">6 · Filter Ngành hàng &amp; Danh mục mạng lưới (cùng Trang) <span style="font-weight:600;color:var(--muted)">· Hải</span></span><span class="pill w39">W39</span></div>
+      <ul>
+        <li>Bổ sung bộ lọc theo ngành hàng và danh mục mạng lưới; màn thương hiệu và nhóm ghép lọc được theo ngành.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Vận hành tra đúng nhóm dữ liệu trong vài giây khi mạng lưới phình ra sau release.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">7 · Rà soát CRM còn thiếu gì cho rewards-v2 <span style="font-weight:600;color:var(--muted)">· Hải</span></span><span class="pill w39">W39</span></div>
+      <ul>
+        <li>Kiểm tra hệ CRM còn thiếu API và giao diện nào cho rewards-v2 — kết quả rà soát trở thành đầu vào trực tiếp cho loạt vá bộ chuẩn danh mục/thương hiệu bên rewards-v2.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> CRM và rewards-v2 không lệch tính năng; lỗ hổng được tìm chủ động thay vì chờ vận hành vấp.</div>
+    </div>
+  </div>
+
+  <!-- rewards-v2 -->
+  <div class="section" id="sec-rv">
+    <div class="section-title rv" onclick="toggleSec('sec-rv')">
+      <h2>rewards-v2</h2>
+      <span class="hint">Hải · production ổn định, làm chắc bộ chuẩn danh mục</span>
+      <div class="section-toggle">▾</div>
+    </div>
+    <div class="proj-head">
+      <div class="proj-avatar rv">🟡</div>
+      <div class="info">
+        <div class="name">rewards-v2 — Dịch vụ đổi điểm lấy voucher</div>
+        <div class="owner">Hải · Backend rewards-v2 + vendor</div>
+        <div class="head-note">W37 vận hành production tuần đầu; W38–39 dồn sức <b>làm chắc bộ chuẩn danh mục/thương hiệu</b> — phần nền dữ liệu cho mapping trên CRM.</div>
+      </div>
+      <span class="st-badge prod">✔ Production</span>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">1 · Vận hành production tuần đầu</span><span class="pill w37">W37</span><span class="pill prod">Production</span></div>
+      <ul>
+        <li>Deploy nhóm an toàn tiền (đơn treo chờ kiểm, công cụ chốt đơn CRM); máy trạng thái voucher chống webhook đến muộn lật ngược; vá lỗi tương tranh + hoàn điểm có thử lại; bảng mã trạng thái vendor dùng chung.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Luồng đổi quà chạy thật ổn định ngay tuần đầu, không sự cố.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">2 · Làm chắc bộ chuẩn danh mục / thương hiệu sau rà soát</span><span class="pill w38">W38</span><span class="pill w39">W39</span></div>
+      <ul>
+        <li>Loạt vá từ kết quả rà soát trên CRM: gán/gỡ nguồn không xoá oan thương hiệu, không nhân đôi số quà, không bật lại quà mà nhà cung cấp đã tắt; dây thương hiệu ghi theo danh mục nguồn để chuyển danh mục không mất dấu.</li>
+        <li>Thao tác CRM không bị lượt đồng bộ kế tiếp đảo ngược (gán ngành quà vật lý, gỡ danh mục nguồn); xoá được danh mục/thương hiệu "mồ côi"; hai con số trên màn bộ chuẩn cộng khớp; thống nhất thuật ngữ, bước cân bằng chạy trong giao dịch.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Dữ liệu nền danh mục/thương hiệu tin được — mapping trên CRM đứng vững, khách không gặp danh mục ma hay số quà ảo.</div>
+    </div>
+  </div>
+
+  <!-- Đánh giá chung -->
+  <div class="section" id="sec-assess">
+    <div class="section-title" onclick="toggleSec('sec-assess')">
+      <h2>Tình hình chung &amp; tiếp theo</h2>
+      <span class="hint">Trạng thái dự án Reward Network</span>
+      <div class="section-toggle">▾</div>
+    </div>
+    <div class="assess">
+      <div class="row">
+        <div class="ico good">🚀</div>
+        <div class="txt"><b>Reward Network đã release và truyền thông chính thức, kèm tài liệu HDSD.</b> Cả ba mảng (reward-network, Connection-CRM, rewards-v2) đều chạy production — hệ sinh thái vận hành thật 100%.</div>
+      </div>
+      <div class="row">
+        <div class="ico good">✅</div>
+        <div class="txt"><b>Trọng tâm đã dịch chuyển đúng nhịp:</b> từ build tính năng (W37) sang vận hành + chuẩn hoá nền dữ liệu (W38–39) — taxonomy/mapping danh mục là nền cho lọc, duyệt và định giá khi mạng lưới có thêm shop sau truyền thông.</div>
+      </div>
+      <div class="row">
+        <div class="ico next">→</div>
+        <div class="txt"><b>Cả hai dev đang dồn về hệ CRM/Connect</b> (Huy: partner-api, menu; Hải: bộ chuẩn, mapping, filter) — hướng hoàn thiện trải nghiệm vận hành sau release.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Báo cáo 3 tuần W37–W39/2026 (08–26/09) · CNV Reward · Reward Network (Huy) · Connection-CRM (Huy, Hải) · rewards-v2 (Hải)<br>
+    Đối chiếu commit thực tế (reward-network, rewards-v2, cnv-connect) với danh sách đầu việc · Đánh giá theo độ khó &amp; chiều sâu, không theo số commit.
+  </div>
+
+</div>
+
+<script>
+  function toggleSec(id){ document.getElementById(id).classList.toggle('collapsed'); }
+  function setAll(c){ document.querySelectorAll('.section').forEach(function(s){ s.classList.toggle('collapsed', c); }); }
+
+  var GREEN='#10B981', INDIGO='#6366F1', AMBER='#F59E0B';
+  Chart.defaults.font.family='-apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif';
+  Chart.defaults.font.size=12; Chart.defaults.color='#6B7280';
+  Chart.defaults.animation=false;
+
+  new Chart(document.getElementById('chArea'), {
+    type: 'doughnut',
+    data: { labels: ['Connection-CRM / Connect', 'Reward Network'], datasets: [{ data: [5, 4], backgroundColor: [INDIGO, GREEN], borderWidth: 2, borderColor: '#fff' }] },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '60%',
+      plugins: { legend: { position: 'bottom', labels: { padding: 12, usePointStyle: true, pointStyle: 'circle' } },
+        tooltip: { callbacks: { label: function(c){ return c.label + ': ' + c.parsed + ' đầu việc'; } } } } }
+  });
+
+  new Chart(document.getElementById('chPerson'), {
+    type: 'bar',
+    data: { labels: ['Huy', 'Hải'], datasets: [{ label: 'Đầu việc W39', data: [6, 3], backgroundColor: [GREEN, AMBER], borderRadius: 8, barThickness: 46 }] },
+    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      scales: { x: { ticks: { stepSize: 1 }, grid: { color: '#F1F5F9' } }, y: { grid: { display: false } } },
+      plugins: { legend: { display: false } } }
+  });
+</script>
+</body>
+</html>

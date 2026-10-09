@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Danh mục chuẩn CNV × GotIt</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #16385f; --navy-2: #1f4e79; --navy-soft: #EAF1F8;
+    --ink: #1a2433; --ink-soft: #3b4a5e; --muted: #64748B; --border: #DDE5EE;
+    --green: #0E9F6E; --green-soft: #DEF7EC;
+    --red: #B91C1C; --red-soft: #FEE2E2;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: #fff; color: var(--ink); font-size: 13.5px; line-height: 1.55;
+    padding: 34px 40px; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  .doc-head { border-left: 6px solid var(--navy); padding-left: 18px; margin-bottom: 14px; }
+  .doc-head h1 { font-size: 28px; font-weight: 800; color: var(--navy); letter-spacing: -0.8px; }
+  .doc-head .sub { font-size: 15px; font-weight: 700; color: var(--navy-2); margin-top: 2px; }
+  .doc-head .scope { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+  .intro { background: #F6F9FC; border: 1px solid var(--border); border-radius: 10px; padding: 11px 16px; font-size: 12.8px; color: var(--ink-soft); margin-bottom: 14px; }
+  .intro b { color: var(--navy-2); }
+  table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  thead th { text-align: left; font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--navy-2); padding: 8px 10px 6px; border-bottom: 2px solid var(--navy-2); }
+  tbody td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 12.8px; color: var(--ink-soft); }
+  td.ic { width: 64px; text-align: center; }
+  td.ic .e { font-size: 24px; line-height: 1.1; display: block; }
+  td.ic .k { font-size: 9px; color: var(--muted); letter-spacing: .3px; }
+  td.cat { font-weight: 700; color: var(--ink); width: 185px; }
+  td.ng { width: 125px; color: var(--muted); font-size: 12px; }
+  td.src { width: 30%; }
+  .num { color: var(--navy); font-weight: 800; width: 26px; }
+  .sec { background: var(--navy); color: #fff; border-radius: 8px; padding: 8px 16px; display: flex; align-items: center; gap: 12px; margin: 20px 0 6px; }
+  .sec h2 { font-size: 14.5px; font-weight: 800; flex: 1; }
+  .sec .cnt { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.35); border-radius: 20px; padding: 2px 12px; font-size: 11px; font-weight: 700; }
+  .pill { display: inline-block; font-size: 9.5px; font-weight: 800; padding: 1px 8px; border-radius: 10px; white-space: nowrap; }
+  .p-attr { background: var(--red-soft); color: var(--red); }
+  .p-brand { background: var(--green-soft); color: var(--green); }
+  .note-box { background: #F6F9FC; border: 1px solid var(--border); border-radius: 10px; padding: 11px 16px; font-size: 12px; color: var(--muted); margin-top: 18px; }
+  .note-box b { color: var(--ink-soft); }
+  .footer { text-align: center; color: #94A3B8; font-size: 11.5px; margin-top: 20px; padding-top: 12px; border-top: 1px solid var(--border); }
+  @page { size: A4; margin: 10mm 9mm; }
+  @media print {
+    body { padding: 0; font-size: 12.5px; }
+    tr, .intro, .sec, .note-box { break-inside: avoid; page-break-inside: avoid; }
+    .sec { break-after: avoid; }
+    thead { display: table-header-group; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="doc-head">
+    <h1>Danh mục chuẩn CNV × GotIt</h1>
+    <div class="sub">19 danh mục quà chuẩn (kèm icon) — mapping đủ 22/22 danh mục GotIt</div>
+    <div class="scope">Bản rút gọn để nhập liệu màn Danh mục chuẩn + Mapping danh mục (CRM Connect — Rewards Hub) · Dựa trên Đề xuất v1.1 đã treo lên cây ngành nghề hiện hành · 10/2026</div>
+  </div>
+
+  <div class="intro">
+    Phạm vi bản này: <b>chỉ GotIt</b> (vendor đang chạy production). Các danh mục chỉ có nguồn UrBox (Trang sức, Điện tử &amp; Điện máy, Đồ công nghệ, Nhà sách &amp; Quà tặng, Gym &amp; Thể thao) và danh mục dành riêng Reward Network (Dịch vụ doanh nghiệp) sẽ bổ sung ở đợt mapping UrBox — xem Đề xuất v1.1. Icon: emoji dùng được ngay trên CRM/mini-app, kèm <b>từ khoá icon</b> (bộ Lucide/FontAwesome) để dev thay bằng icon vector khi cần.
+  </div>
+
+  <div class="sec"><h2>Danh sách danh mục chuẩn × mapping GotIt</h2><span class="cnt">19 danh mục · 12 ngành</span></div>
+  <table>
+    <thead><tr><th>#</th><th>Icon</th><th>Danh mục chuẩn</th><th>Thuộc ngành</th><th>← Danh mục GotIt</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td class="ic"><span class="e">🍜</span><span class="k">utensils</span></td><td class="cat">Nhà hàng &amp; Quán ăn</td><td class="ng">F&amp;B / Nhà hàng</td><td class="src">Nhà Hàng</td><td>Kệ chủ lực F&amp;B</td></tr>
+      <tr><td class="num">2</td><td class="ic"><span class="e">☕</span><span class="k">coffee</span></td><td class="cat">Cà phê &amp; Trà</td><td class="ng">F&amp;B / Nhà hàng</td><td class="src">Cafe &amp; bánh <i>(phần cafe)</i></td><td>Tần suất đổi cao nhất</td></tr>
+      <tr><td class="num">3</td><td class="ic"><span class="e">🍰</span><span class="k">cake</span></td><td class="cat">Bánh &amp; Ăn vặt</td><td class="ng">F&amp;B / Nhà hàng</td><td class="src">Cafe &amp; bánh <i>(phần bánh)</i></td><td>1 danh mục GotIt tách đôi khi gán lại quà</td></tr>
+      <tr><td class="num">4</td><td class="ic"><span class="e">🛒</span><span class="k">shopping-cart</span></td><td class="cat">Siêu thị &amp; Tiện lợi</td><td class="ng">Bán lẻ</td><td class="src">Siêu thị &amp; Mua sắm</td><td></td></tr>
+      <tr><td class="num">5</td><td class="ic"><span class="e">🌷</span><span class="k">flower</span></td><td class="cat">Thực phẩm tươi &amp; Hoa</td><td class="ng">Bán lẻ</td><td class="src">Hoa, Trái cây &amp; Thực phẩm sạch</td><td></td></tr>
+      <tr><td class="num">6</td><td class="ic"><span class="e">👗</span><span class="k">shirt</span></td><td class="cat">Thời trang &amp; Phụ kiện</td><td class="ng">Bán lẻ</td><td class="src">Thời trang &amp; Phụ kiện</td><td></td></tr>
+      <tr><td class="num">7</td><td class="ic"><span class="e">🏠</span><span class="k">home</span></td><td class="cat">Nhà cửa &amp; Đời sống</td><td class="ng">Bán lẻ</td><td class="src">Nhà cửa, Đời sống &amp; Thú cưng</td><td>Gồm thú cưng</td></tr>
+      <tr><td class="num">8</td><td class="ic"><span class="e">🍼</span><span class="k">baby</span></td><td class="cat">Mẹ &amp; Bé</td><td class="ng">Bán lẻ</td><td class="src">Mẹ &amp; bé</td><td>Shop ngành "Mẹ bầu"/"Trẻ 0-3th" góp quà gắn kệ này</td></tr>
+      <tr><td class="num">9</td><td class="ic"><span class="e">🛍️</span><span class="k">shopping-bag</span></td><td class="cat">Mua sắm online</td><td class="ng">Thương mại điện tử</td><td class="src">Mua Sắm Online</td><td></td></tr>
+      <tr><td class="num">10</td><td class="ic"><span class="e">💆</span><span class="k">sparkles</span></td><td class="cat">Spa &amp; Làm đẹp</td><td class="ng">Spa / Làm đẹp</td><td class="src">Spa &amp; Làm đẹp</td><td></td></tr>
+      <tr><td class="num">11</td><td class="ic"><span class="e">💄</span><span class="k">lipstick</span></td><td class="cat">Mỹ phẩm</td><td class="ng">Spa / Làm đẹp</td><td class="src">Mỹ phẩm</td><td></td></tr>
+      <tr><td class="num">12</td><td class="ic"><span class="e">🩺</span><span class="k">stethoscope</span></td><td class="cat">Chăm sóc sức khoẻ</td><td class="ng">Dược phẩm</td><td class="src">Chăm sóc sức khỏe</td><td>Nhà thuốc, khám, thiết bị y tế</td></tr>
+      <tr><td class="num">13</td><td class="ic"><span class="e">🎟️</span><span class="k">ticket</span></td><td class="cat">Giải trí &amp; Sự kiện</td><td class="ng">Giải trí</td><td class="src">Tiện ích &amp; Giải trí <i>(phần giải trí)</i> · Văn Hóa Nghệ Thuật</td><td>Phim, sự kiện, khu vui chơi</td></tr>
+      <tr><td class="num">14</td><td class="ic"><span class="e">🎮</span><span class="k">gamepad-2</span></td><td class="cat">Nạp thẻ &amp; Thẻ game</td><td class="ng">Game</td><td class="src">Thẻ game</td><td>Nhóm đổi nhiều nhất</td></tr>
+      <tr><td class="num">15</td><td class="ic"><span class="e">✈️</span><span class="k">plane</span></td><td class="cat">Du lịch &amp; Lưu trú</td><td class="ng">Khách sạn</td><td class="src">Du lịch &amp; Di chuyển <i>(phần du lịch)</i></td><td></td></tr>
+      <tr><td class="num">16</td><td class="ic"><span class="e">👑</span><span class="k">crown</span></td><td class="cat">Dịch vụ cao cấp</td><td class="ng">Khách sạn</td><td class="src">Dịch Vụ Cao Cấp · Đặc Quyền Cao Cấp · Dịch vụ quốc tế</td><td>Phòng chờ sân bay, concierge</td></tr>
+      <tr><td class="num">17</td><td class="ic"><span class="e">🚗</span><span class="k">car</span></td><td class="cat">Di chuyển</td><td class="ng">Vận tải</td><td class="src">Du lịch &amp; Di chuyển <i>(phần di chuyển)</i></td><td>Gồm xăng dầu (quà TotalEnergies)</td></tr>
+      <tr><td class="num">18</td><td class="ic"><span class="e">🎓</span><span class="k">graduation-cap</span></td><td class="cat">Khoá học &amp; Ngoại ngữ</td><td class="ng">Giáo dục</td><td class="src">Giáo dục &amp; Ngoại ngữ</td><td>Tên khác ngành cha để khỏi trùng</td></tr>
+      <tr><td class="num">19</td><td class="ic"><span class="e">💳</span><span class="k">credit-card</span></td><td class="cat">Tiện ích &amp; Thanh toán</td><td class="ng">Tài chính</td><td class="src">Tiện ích &amp; Giải trí <i>(phần tiện ích)</i> · Got It Đa Năng</td><td>Voucher đa năng, điện nước</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec"><h2>3 dòng GotIt KHÔNG map thành danh mục</h2></div>
+  <table>
+    <thead><tr><th style="width:230px">Dòng GotIt</th><th style="width:110px">Bản chất</th><th>Xử lý</th></tr></thead>
+    <tbody>
+      <tr><td>ĐỔI QUÀ - GIAO NGAY</td><td><span class="pill p-attr">Thuộc tính</span></td><td>Cách nhận quà (voucher điện tử nhận ngay) — nhãn lọc "Nhận ngay / Giao tận nơi", không chiếm kệ danh mục.</td></tr>
+      <tr><td>TotalEnergies</td><td><span class="pill p-brand">Brand</span></td><td>Thương hiệu xăng dầu → quà gán vào <b>#17 Di chuyển</b>, brand quản ở Mapping thương hiệu.</td></tr>
+      <tr><td>Got It Đa Năng</td><td><span class="pill p-brand">Dòng quà</span></td><td>Voucher đa năng của GotIt → gán vào <b>#19 Tiện ích &amp; Thanh toán</b> (đã tính trong bảng trên).</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-box">
+    <b>Kiểm phủ:</b> 22/22 danh mục GotIt (bản sao production) đều có đích — 19 danh mục chuẩn ở bảng trên + 2 dòng đặc biệt (thuộc tính giao nhận, brand). Hai danh mục GotIt dùng chung một kệ hoặc tách đôi được ghi chú tại dòng. <b>Icon:</b> cột emoji dùng ngay; từ khoá bên dưới là tên icon bộ Lucide để dev thay vector đồng bộ với giao diện. Khi mở mapping UrBox, bổ sung 6 danh mục còn lại theo Đề xuất v1.1 — không phải làm lại bảng này.
+  </div>
+
+  <div class="footer">Danh mục chuẩn CNV × GotIt · 19 danh mục · Đội Reward · 10/2026</div>
+</div>
+</body>
+</html>

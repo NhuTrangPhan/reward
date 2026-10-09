@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Báo cáo tuần 17–21/08/2026 · Team Reward</title>
+<style>
+  :root{
+    --bg:#f9f9f7; --card:#fcfcfb; --ink:#0b0b0b; --ink2:#52514e; --ink3:#898781;
+    --line:#e1e0d9; --axis:#c3c2b7;
+    --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+    --green:#006300; --green-soft:#eaf3ed; --amber:#8a6300; --amber-soft:#fdf4e0;
+    --red:#a33232; --red-soft:#fbecec; --blue-soft:#eaf0f6;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:36px 22px 70px}
+  header.top{border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:22px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--s1);font-weight:700}
+  h1{font-size:28px;line-height:1.2;margin:6px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--ink2);font-size:14px;margin:0}
+  h2{font-size:18px;margin:32px 0 10px;letter-spacing:-.01em}
+  h2 .num{font:600 12px/1 var(--mono);color:var(--ink3);letter-spacing:.08em;margin-right:8px}
+  p{margin:0 0 10px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:20px 0 4px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+  .stat .v{font:700 24px/1.1 var(--mono);letter-spacing:-.02em}
+  .stat .l{font-size:12px;color:var(--ink2);margin-top:4px}
+  .charts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 6px}
+  @media(max-width:720px){.charts{grid-template-columns:1fr}}
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+  .chart h3{font-size:14px;margin:0 0 2px}
+  .chart .cap{font-size:12px;color:var(--ink3);margin:0 0 12px}
+  .legend{display:flex;gap:14px;font-size:12px;color:var(--ink2);margin-bottom:10px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .donut{width:168px;height:168px;border-radius:50%;margin:8px auto 16px;position:relative;
+    background:conic-gradient(var(--s1) 0 31.6%, var(--card) 31.6% 32.3%,
+      var(--s2) 32.3% 59.6%, var(--card) 59.6% 60.3%,
+      var(--s3) 60.3% 81.6%, var(--card) 81.6% 82.3%,
+      var(--s4) 82.3% 99.3%, var(--card) 99.3% 100%)}
+  .donut::after{content:"";position:absolute;inset:23%;border-radius:50%;background:var(--card)}
+  .dlegend{font-size:12.5px;color:var(--ink2)}
+  .dlegend div{display:flex;align-items:baseline;gap:7px;margin-bottom:5px}
+  .dlegend i{width:10px;height:10px;border-radius:3px;flex:none;align-self:center}
+  .dlegend b{margin-left:auto;font:700 12px/1 var(--mono);color:var(--ink)}
+  .prow{margin-bottom:13px}
+  .prow .pl{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink2);margin-bottom:4px}
+  .prow .pl b{color:var(--ink);font-weight:600}
+  .prow .pv{font:700 12px/1 var(--mono);color:var(--ink)}
+  .track{height:14px;background:var(--line);border-radius:4px;overflow:hidden}
+  .fill{height:100%;background:var(--s1);border-radius:0 4px 4px 0}
+  .pstat{font-size:11.5px;color:var(--ink3);margin-top:3px}
+  .proj{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--s1);
+    border-radius:8px;padding:15px 18px;margin-bottom:12px}
+  .proj.p2{border-left-color:var(--s2)}
+  .proj h3{font-size:15.5px;margin:0 0 3px}
+  .meta{font:500 12px/1.6 var(--mono);color:var(--ink3);margin-bottom:9px}
+  .proj ul{margin:0;padding-left:17px}
+  .proj li{margin-bottom:7px;font-size:14px;color:var(--ink2)}
+  .proj li b{color:var(--ink);font-weight:600}
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+  th,td{padding:9px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);font-weight:700}
+  tr:last-child td{border-bottom:none}
+  .pill{display:inline-block;font:700 11px/1 var(--mono);padding:4px 8px;border-radius:5px;white-space:nowrap}
+  .pi-done{background:var(--green-soft);color:var(--green)}
+  .pi-run{background:var(--blue-soft);color:var(--s1)}
+  .pi-wait{background:var(--amber-soft);color:var(--amber)}
+  .pi-hold{background:var(--red-soft);color:var(--red)}
+  .note{background:var(--amber-soft);border:1px solid var(--line);border-radius:8px;
+    padding:13px 16px;font-size:13.5px;color:var(--ink2)}
+  .note b{color:var(--ink)}
+  ul.plain{padding-left:18px;margin:6px 0 0}
+  ul.plain li{margin-bottom:6px}
+  code{font:500 12.5px/1 var(--mono);background:var(--blue-soft);padding:2px 5px;border-radius:4px;color:var(--s1)}
+  footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--ink3)}
+  @media print{body{background:#fff}.proj,.stat,.chart,.tblwrap,.note{break-inside:avoid}h2{break-after:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Báo cáo tuần · Team Reward</div>
+  <h1>Tuần 17–21/08/2026</h1>
+  <p class="sub">Huy — Reward Network &nbsp;·&nbsp; Hải — Rewards-v2. Số liệu chốt 14:00 ngày 21/08, chỉ tính phần đã commit.</p>
+</header>
+
+<div class="stats">
+  <div class="stat"><div class="v" style="color:var(--s1)">81</div><div class="l">commit trên 5 repo (Huy 55 · Hải 26)</div></div>
+  <div class="stat"><div class="v">1.557</div><div class="l">ca test tự động xanh (+57 tuần này)</div></div>
+  <div class="stat"><div class="v" style="color:var(--green)">18/08</div><div class="l">danh mục per-shop lên staging</div></div>
+  <div class="stat"><div class="v" style="color:var(--amber)">1 MR</div><div class="l">trần lượt đổi (14 commit) đang review</div></div>
+</div>
+
+<p class="sub" style="margin-top:12px">Tuần này team chạy hai hướng song song. Bên Reward Network, Huy dựng cổng thu phí gói Rewards Hub — bước đầu tiên đưa module này ra thu tiền — và làm trần lượt đổi theo từng khách. Bên Rewards-v2, Hải xử lý dứt điểm nhóm lỗi đơn đổi quà bị kẹt, nhóm lỗi dính trực tiếp tới tiền của khách và của công ty. QC đang test staging phần reward-network; pilot sẽ chạy khi QA xanh. UrBox tạm dừng, chờ sale có khách mới bắt đầu UAT.</p>
+
+<h2 style="margin:26px 0 10px">Tổng quan điều hành</h2>
+<div class="charts" style="margin-top:0">
+  <div class="chart">
+    <h3>Cơ cấu phân bổ công sức</h3>
+    <p class="cap">Trọng tâm tuần: thu phí Rewards Hub + trần lượt đổi (Huy) · đơn kẹt + trải nghiệm đổi quà (Hải) · bảo mật voucher · kết nối &amp; nền tảng</p>
+    <div class="donut" role="img" aria-label="Cơ cấu phân bổ công sức: đơn kẹt và trải nghiệm đổi quà 32%, thu phí Hub và trần lượt đổi 28%, kết nối danh mục nền tảng 22%, bảo mật voucher và tra cứu CRM 18%"></div>
+    <div class="dlegend">
+      <div><i style="background:var(--s1)"></i>Đơn kẹt &amp; trải nghiệm đổi quà — Hải<b>32%</b></div>
+      <div><i style="background:var(--s2)"></i>Thu phí Hub &amp; trần lượt đổi — Huy<b>28%</b></div>
+      <div><i style="background:var(--s3)"></i>Kết nối, danh mục &amp; nền tảng — Huy<b>22%</b></div>
+      <div style="margin-bottom:0"><i style="background:var(--s4)"></i>Bảo mật voucher &amp; tra cứu CRM — Hải<b>18%</b></div>
+    </div>
+  </div>
+  <div class="chart">
+    <h3>Tiến độ 3 dự án con</h3>
+    <p class="cap">% hoàn thành, theo cách tính của báo cáo W32-33 (code chưa qua QA/deploy tính thấp)</p>
+    <div class="prow">
+      <div class="pl"><b>Kết nối GotIt</b><span class="pv">~95%</span></div>
+      <div class="track"><div class="fill" style="width:95%"></div></div>
+      <div class="pstat">Live production, không incident. Tuần này chỉ duy trì.</div>
+    </div>
+    <div class="prow">
+      <div class="pl"><b>Kết nối UrBox</b><span class="pv">~92%</span></div>
+      <div class="track"><div class="fill" style="width:92%"></div></div>
+      <div class="pstat">Kỹ thuật xong, nghiệm thu sandbox đạt. Tạm dừng — chờ sale có khách mới bắt đầu UAT.</div>
+    </div>
+    <div class="prow" style="margin-bottom:2px">
+      <div class="pl"><b>Reward Network — Phase 1</b><span class="pv">~35–40%</span></div>
+      <div class="track"><div class="fill" style="width:38%"></div></div>
+      <div class="pstat">Tăng từ ~30% tuần trước. Đã lên staging, QC đang test; pilot chạy sau khi QA xanh.</div>
+    </div>
+  </div>
+</div>
+
+<h2><span class="num">01</span>Reward Network (Huy)</h2>
+<div class="proj">
+  <div class="meta">55 commit · 5 repo · +5.323/−1.327 dòng · 38 commit đã vào nhánh tích hợp, 17 còn chờ (14 trong MR đang review)</div>
+  <ul>
+    <li><b>Dựng cổng thu phí gói Rewards Hub.</b> Xem chợ ưu đãi và góp quà miễn phí, phí chỉ thu ở đúng chỗ dùng dịch vụ thật — mở kết nối vendor RN. Kèm API cho job khoá kho quà khi hết hạn gói — shop gia hạn xong bấm kết nối lại là mọi cấu hình còn nguyên.</li>
+    <li><b>Trần lượt đổi theo từng khách</b> — chặn kịch bản một khách hốt sạch trần của quà hot. Làm đủ 4 tầng từ backend xuống mini-app, phân biệt rõ "quà hết" với "bạn hết lượt". Đang chờ review MR.</li>
+    <li><b>Cảnh báo voucher phát đi mà không ai nhận.</b> Shop bật kênh Automation nhưng chưa có chiến dịch hứng thì voucher rơi vào im lặng, khách không nhận được gì. Nay có banner ở Tổng quan kho quà kèm số voucher đã mất trong 30 ngày và mẫu chiến dịch clone một chạm.</li>
+    <li><b>Cây danh mục ngành hàng chuyển sang dùng mã riêng của hệ thống.</b> Trước đây danh mục quà bám theo id danh mục của Zalo Mini App — id do Zalo cấp và kiểm soát, shop không có Mini App là không dùng được, Zalo đổi là mình lệch theo. Nay mỗi ngành hàng và danh mục có mã cố định do mình tự đặt, không còn phụ thuộc bên thứ ba.</li>
+    <li>Tỷ lệ đổi điểm giờ chỉ quản trị viên sửa được; nhận diện vendor theo mã thay vì đoán theo tên; mở 5 kênh áp dụng cho ưu đãi; chẻ chunk mini-app cho lọt trần 3MB của Zalo.</li>
+  </ul>
+</div>
+
+<h2><span class="num">02</span>Rewards-v2 (Hải)</h2>
+<div class="proj p2">
+  <div class="meta">26 commit · 3 repo · 74 file · test 1.500 → 1.557, xanh toàn bộ</div>
+  <ul>
+    <li><b>Xử lý dứt điểm đơn đổi quà bị kẹt</b> (việc lớn nhất tuần, ~2,5 ngày). Phân biệt lỗi tạm thời với lỗi thật để không hoàn điểm nhầm khi vendor đã xuất mã — trước đây mất mạng cũng bị hoàn điểm, công ty vẫn trả tiền vendor. Bịt 3 đường làm đơn treo vĩnh viễn, thêm cảnh báo và API cho CRM chạy lại, giảm số lần gọi lại vendor từ ~288 xuống ~70 cho một đơn.</li>
+    <li><b>Chặn lỗi khách bị trừ điểm hai lần.</b> Đơn đang chờ vendor bị hiển thị "thất bại" kèm nút Thử lại, khách bấm là mất điểm gấp đôi. Đã tách màn "đang xử lý", bỏ nút Thử lại, thêm khoá chống đổi trùng ở tầng API.</li>
+    <li><b>CRM tra được đơn UrBox và đơn GotIt của shop đối tác</b> — trước tra không ra vì dùng nhầm tài khoản chung của CNV. Mã voucher trên màn CRM che chỉ còn 4 ký tự cuối.</li>
+    <li><b>Rà soát cuối bảo mật voucher:</b> tìm và sửa 9 điểm, nặng nhất là một lỗi có thể làm đơn chốt thất bại dù vendor đã xuất mã. Đã bàn giao cho review.</li>
+    <li>Danh mục per-shop (việc lớn tuần trước) được duyệt và <b>lên staging 18/08</b>. Ba nhánh tuần này xong code và test, gộp nhánh chung chiều 21/08, chờ đưa lên staging.</li>
+  </ul>
+</div>
+
+<h2><span class="num">03</span>Đối chiếu kế hoạch tuần trước</h2>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>Việc đã hẹn (W34)</th><th>Kết quả</th><th>Trạng thái</th></tr></thead>
+  <tbody>
+    <tr><td>Đưa các nhánh lên staging + chạy SQL gate</td><td>Danh mục per-shop lên staging 18/08; reward-network 38 commit đã vào nhánh tích hợp. Nhánh bảo mật voucher đã qua vòng rà soát, đang chờ review.</td><td><span class="pill pi-done">MỘT PHẦN</span></td></tr>
+    <tr><td>QA staging money-path / voucher</td><td>QC đang test staging phần reward-network.</td><td><span class="pill pi-run">ĐANG CHẠY</span></td></tr>
+    <tr><td>Pilot RN 20–50 shop</td><td>Chưa bắt đầu, chạy sau khi QA xanh.</td><td><span class="pill pi-wait">CHỜ QA</span></td></tr>
+    <tr><td>UrBox chốt cutover prod</td><td>Tạm dừng — chờ sale có khách mới bắt đầu UAT với vendor.</td><td><span class="pill pi-hold">PENDING</span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2><span class="num">04</span>Cần lưu ý trước khi deploy</h2>
+<div class="note">
+  Bốn điểm cần đúng thứ tự hoặc đủ cấu hình, thiếu là hỏng im lặng:
+  <ul class="plain">
+    <li><b>Trần lượt đổi mỗi khách:</b> deploy backend trước, rồi gateway, rồi frontend. Sai thứ tự thì shop lưu cấu hình xong reload thấy ô trống mà không có lỗi nào.</li>
+    <li><b>Worker xử lý đơn kẹt:</b> phải khai tên Kafka topic khi deploy, thiếu là pod không khởi động — chủ ý, vì Kafka staging và production dùng chung cụm, bắn nhầm topic nguy hiểm hơn dừng hẳn.</li>
+    <li><b>Tra cứu đơn UrBox trên production:</b> phải trỏ đúng địa chỉ UrBox production, thiếu cấu hình thì hệ thống lặng lẽ dùng sandbox.</li>
+    <li><b>Cổng thu phí Rewards Hub:</b> staging cần có sẵn gói <code>affiliates-v2</code> trước khi bật, không thì mọi shop bị báo chưa mua gói.</li>
+  </ul>
+</div>
+
+<h2><span class="num">05</span>Việc còn lại</h2>
+<div class="charts" style="margin-top:0">
+  <div class="proj p2" style="margin-bottom:0">
+    <h3>Rewards-v2 (Hải)</h3>
+    <ol style="margin:8px 0 0;padding-left:19px;font-size:14px;color:var(--ink2)">
+      <li style="margin-bottom:6px">Test lại màn tra cứu đơn (inquiry).</li>
+      <li style="margin-bottom:6px">Test lại luồng recovery sau khi có thêm tích hợp Reward Network.</li>
+      <li style="margin-bottom:6px">Deploy staging, test phần mã hoá voucher và migrate dữ liệu.</li>
+      <li>Test xong thì deploy production.</li>
+    </ol>
+  </div>
+  <div class="proj" style="margin-bottom:0">
+    <h3>Reward Network (Huy)</h3>
+    <ol style="margin:8px 0 0;padding-left:19px;font-size:14px;color:var(--ink2)">
+      <li style="margin-bottom:6px">Kiểm tra gói mua khi shop cài đặt tham gia Reward Hub.</li>
+      <li style="margin-bottom:6px">Test nốt các tính năng còn lại — chờ anh Phú chốt mô hình rồi tính tiếp.</li>
+      <li style="margin-bottom:6px">Chuẩn bị CI/CD và migrate để deploy reward network.</li>
+      <li style="margin-bottom:6px">Viết kịch bản deploy.</li>
+      <li>Fix bug và cải tiến trong lúc test.</li>
+    </ol>
+  </div>
+</div>
+
+<footer>
+  Tổng hợp từ báo cáo tuần 17–21/08 của Huy (Reward Network) và Hải (Rewards-v2), đối chiếu kế hoạch trong báo cáo W32-33. Số commit tính từ git log, chỉ gồm phần đã commit tới 14:00 ngày 21/08/2026.
+</footer>
+
+</div>
+</body>
+</html>

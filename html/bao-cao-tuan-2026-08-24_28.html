@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reward Network, tuần 24-28/08/2026</title>
+<style>
+  :root{
+    --bg:#f7f7f5; --card:#fff; --ink:#1a1a18; --ink2:#55534e; --ink3:#8a8780;
+    --line:#e3e1dc; --accent:#b4562a; --accent-soft:#fbf0ea;
+    --green:#2f6b46; --green-soft:#eaf3ed; --amber:#8a6300; --amber-soft:#fdf4e0;
+    --blue:#28527a; --blue-soft:#eaf0f6; --red:#a33232; --red-soft:#fbecec;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#17171a; --card:#1f1f23; --ink:#eceae5; --ink2:#b0ada6; --ink3:#7d7a74;
+      --line:#32323a; --accent:#e58b5f; --accent-soft:#2a201c;
+      --green:#7fc79b; --green-soft:#1c2620; --amber:#e0b256; --amber-soft:#282013;
+      --blue:#8fb6db; --blue-soft:#1a2029; --red:#e58b8b; --red-soft:#2a1b1b;
+    }
+  }
+  :root[data-theme="dark"]{
+      --bg:#17171a; --card:#1f1f23; --ink:#eceae5; --ink2:#b0ada6; --ink3:#7d7a74;
+      --line:#32323a; --accent:#e58b5f; --accent-soft:#2a201c;
+      --green:#7fc79b; --green-soft:#1c2620; --amber:#e0b256; --amber-soft:#282013;
+      --blue:#8fb6db; --blue-soft:#1a2029; --red:#e58b8b; --red-soft:#2a1b1b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+    font-size:15px;line-height:1.62;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:40px 22px 80px}
+  header.top{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:26px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:30px;line-height:1.2;margin:8px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--ink2);font-size:14px;margin:0}
+  h2{font-size:19px;margin:38px 0 12px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:10px}
+  h2 .num{font:600 12px/1 var(--mono);color:var(--ink3);letter-spacing:.08em}
+  h3{font-size:15.5px;margin:0 0 5px}
+  p{margin:0 0 10px}
+  .lead{color:var(--ink2)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin:22px 0 4px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .stat .v{font:700 26px/1.1 var(--mono);letter-spacing:-.02em}
+  .stat .l{font-size:12px;color:var(--ink2);margin-top:5px}
+  .stat.acc .v{color:var(--accent)}
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:600px}
+  th,td{padding:9px 14px;text-align:left;border-bottom:1px solid var(--line)}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);font-weight:700}
+  tr:last-child td{border-bottom:none}
+  td.n{text-align:right;font-family:var(--mono);white-space:nowrap}
+  .bar{height:7px;border-radius:4px;background:var(--accent);min-width:3px;display:block}
+  .barcell{width:24%}
+  tfoot td{font-weight:700;background:var(--accent-soft)}
+  .days{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+  .day{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .day.empty{opacity:.62}
+  .day .d{font:700 12px/1 var(--mono);color:var(--accent);letter-spacing:.06em}
+  .day.empty .d{color:var(--ink3)}
+  .day .c{font:700 22px/1.2 var(--mono);margin:6px 0 2px}
+  .day .c small{font:500 11px/1 var(--mono);color:var(--ink3)}
+  .day ul{margin:8px 0 0;padding-left:15px;font-size:12.5px;color:var(--ink2)}
+  .day li{margin-bottom:3px}
+  .theme{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:8px;padding:15px 17px;margin-bottom:12px}
+  .theme .tag{display:inline-block;font:700 10.5px/1 var(--mono);letter-spacing:.08em;
+    text-transform:uppercase;padding:4px 7px;border-radius:5px;margin-bottom:8px}
+  .t-feat{background:var(--green-soft);color:var(--green)}
+  .t-fix{background:var(--red-soft);color:var(--red)}
+  .t-ref{background:var(--blue-soft);color:var(--blue)}
+  .t-ops{background:var(--amber-soft);color:var(--amber)}
+  .theme p{font-size:14px;color:var(--ink2)}
+  .theme .why{color:var(--ink);font-size:14px}
+  .theme ol{font-size:14px;color:var(--ink2);padding-left:20px;margin:4px 0 10px}
+  .theme ol li{margin-bottom:6px}
+  .repos{margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);
+    font:500 11.5px/1.7 var(--mono);color:var(--ink3)}
+  .repos b{color:var(--ink2);font-weight:700}
+  .cnt{float:right;font:700 11.5px/1.9 var(--mono);color:var(--ink3)}
+  .note{background:var(--amber-soft);border:1px solid var(--line);border-radius:8px;
+    padding:13px 16px;font-size:13.5px;color:var(--ink2)}
+  .note.red{background:var(--red-soft)}
+  .note b{color:var(--ink)}
+  ul.plain{padding-left:18px;margin:6px 0 0}
+  ul.plain li{margin-bottom:6px;font-size:13.5px;color:var(--ink2)}
+  code{font:500 12.5px/1 var(--mono);background:var(--accent-soft);padding:2px 5px;border-radius:4px;color:var(--accent)}
+  footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--ink3)}
+  @media print{body{background:#fff}.theme,.stat,.day,.tblwrap{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Báo cáo tuần · Reward Network</div>
+  <h1>Tuần 24-28/08/2026</h1>
+  <p class="sub">Thứ Hai 24/08 đến thứ Sáu 28/08, số liệu chốt lúc 16:00 ngày 28/08. Chỉ tính phần <b>đã commit</b>, mọi thay đổi còn trong working tree không tính. Tác giả <b>huy</b>.</p>
+</header>
+
+<div class="stats">
+  <div class="stat acc"><div class="v">10</div><div class="l">commit đã tạo</div></div>
+  <div class="stat"><div class="v">4</div><div class="l">repo chạm tới</div></div>
+  <div class="stat"><div class="v">+4.177</div><div class="l">dòng thêm</div></div>
+  <div class="stat"><div class="v">-580</div><div class="l">dòng xoá</div></div>
+  <div class="stat"><div class="v" style="color:var(--green)">5</div><div class="l">đã vào staging/master2</div></div>
+  <div class="stat"><div class="v" style="color:var(--red)">5</div><div class="l">chưa push, chưa ai review</div></div>
+</div>
+<p class="sub" style="margin-top:10px">Tuần này ít commit nhưng mỗi commit nặng hơn hẳn: <b>418 dòng mỗi commit</b>, so với 99 dòng của tuần 17-21/08. Lý do là toàn bộ trọng lượng dồn vào một việc đổi cấu trúc dữ liệu, đó là cho danh mục và ngành hàng lồng nhau hai cấp, kéo theo sửa cả luật gán quà, luật lọc, luật tắt hiển thị và luật tìm pool phân phối.</p>
+
+<h2><span class="num">01</span> Khối lượng theo repo</h2>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>Repo</th><th class="n">Commit</th><th class="barcell">Dòng thêm</th><th class="n">Thêm</th><th class="n">Xoá</th><th class="n">File</th></tr></thead>
+  <tbody>
+    <tr><td>reward-network <span style="color:var(--ink3)">(lõi mạng lưới)</span></td><td class="n">5</td><td><span class="bar" style="width:100%"></span></td><td class="n">2.497</td><td class="n">101</td><td class="n">48</td></tr>
+    <tr><td>cdp-frontend <span style="color:var(--ink3)">(Angular, CRM shop)</span></td><td class="n">3</td><td><span class="bar" style="width:62%"></span></td><td class="n">1.540</td><td class="n">466</td><td class="n">34</td></tr>
+    <tr><td>rewards-v2 <span style="color:var(--ink3)">(kho quà, đổi quà)</span></td><td class="n">1</td><td><span class="bar" style="width:5%"></span></td><td class="n">122</td><td class="n">13</td><td class="n">8</td></tr>
+    <tr><td>cdp-backend <span style="color:var(--ink3)">(gateway)</span></td><td class="n">1</td><td><span class="bar" style="width:1%"></span></td><td class="n">18</td><td class="n">0</td><td class="n">1</td></tr>
+  </tbody>
+  <tfoot><tr><td>Tổng</td><td class="n">10</td><td></td><td class="n">4.177</td><td class="n">580</td><td class="n">91</td></tr></tfoot>
+</table>
+</div>
+<p class="sub" style="margin-top:9px">Trọng tâm đảo chiều so với tuần trước. Tuần 17-21/08 có 31 trong 57 commit ở giao diện, tuần này lõi reward-network chiếm 60% số dòng thêm, vì việc chính là đổi mô hình dữ liệu chứ không phải dựng màn hình.</p>
+
+<h2><span class="num">02</span> Nhịp theo ngày</h2>
+<div class="days">
+  <div class="day empty"><div class="d">T2 · 24/08</div><div class="c">0 <small>commit</small></div>
+    <ul><li>Không có commit nào trong ngày</li></ul></div>
+  <div class="day"><div class="d">T3 · 25/08</div><div class="c">3 <small>commit</small></div>
+    <ul><li>API sửa danh mục kinh doanh đã khai</li><li>Gateway chở đường sửa sang RN</li><li>Màn xem lại thiết lập và nhắc việc còn dở</li></ul></div>
+  <div class="day empty"><div class="d">T4 · 26/08</div><div class="c">0 <small>commit</small></div>
+    <ul><li>Không có commit nào trong ngày</li></ul></div>
+  <div class="day"><div class="d">T5 · 27/08</div><div class="c">2 <small>commit</small></div>
+    <ul><li>Bật kho voucher nội bộ cho staging</li><li>Sửa URL hub cho môi trường staging</li></ul></div>
+  <div class="day"><div class="d">T6 · 28/08</div><div class="c">5 <small>commit</small></div>
+    <ul><li>Danh mục quà hai cấp</li><li>Ngành hàng hai cấp</li><li>Mirror hai cấp ở rewards-v2</li><li>Hai ô chọn ở giao diện hiểu hai cấp</li></ul></div>
+</div>
+<p class="note" style="margin-top:12px">Hai ngày không có commit là dữ kiện, không phải kết luận. Git log không cho biết hai ngày đó làm gì, có thể là review, họp, hoặc code chưa commit. Em không suy diễn thêm, nếu cần thì anh Huy bổ sung tay vào mục này.</p>
+
+<h2><span class="num">03</span> Ba luồng việc</h2>
+<p class="lead">Sắp theo khối lượng. Mỗi khối nói vấn đề trước khi sửa, quyết định đã chọn, và những đánh đổi ghi lại được từ thân commit.</p>
+
+<div class="theme">
+  <span class="cnt">5 commit · 4.159 dòng thêm</span>
+  <span class="tag t-feat">Tính năng · Đổi mô hình dữ liệu</span>
+  <h3>Danh mục và ngành hàng lồng nhau hai cấp</h3>
+  <p class="why">Taxonomy của Mạng lưới trước đây phẳng: ngành hàng một cấp, danh mục một cấp. Tuần này cả hai thành cây sâu đúng hai cấp, nên chuỗi phân cấp đầy đủ từ nay là ngành gốc, ngành con, danh mục gốc, danh mục con. Bảng <code>category</code> và <code>industry</code> mỗi bảng thêm cột <code>parent_id</code>. 55 dòng danh mục hiện có đều trở thành danh mục gốc nên không phải backfill dữ liệu.</p>
+  <p>Phần khó không nằm ở cột mới mà ở các luật đi kèm, và chúng được ép trong code chứ không để thành quy ước. Ba luật của tầng danh mục:</p>
+  <ol>
+    <li>Quà chỉ gán vào danh mục lá (<code>CATEGORY_NOT_LEAF</code>), chặn ở cả hai đường ghi <code>offer.category_id</code>, đường shop góp hoặc sửa quà và đường admin duyệt có <code>categoryIdOverride</code>.</li>
+    <li>Lọc theo danh mục cha kéo theo quà của con. Mở rộng ở tầng giá trị chuỗi, đổi "5" thành "in__5,6,7", vì bộ lọc đi qua cơ chế phản chiếu chung của <code>BaseObjectFilter</code>, thêm predicate riêng cho một field thì phải nhân bản cả cơ chế đó.</li>
+    <li>Tắt danh mục cha ẩn luôn quà của mọi con, phải sửa ba nơi cho khớp nhau: bản in-memory, bản dịch SQL của nó (EXISTS lồng EXISTS), và đường phát Kafka flip cho cả nhánh. Thiếu chỗ thứ ba thì rewards-v2 vẫn bật quà mà chợ RN đã ẩn.</li>
+  </ol>
+  <p>Ba luật của tầng ngành, xếp theo mức rủi ro tăng dần:</p>
+  <ol>
+    <li>Danh mục chỉ gắn vào ngành lá (<code>INDUSTRY_NOT_LEAF</code>). Danh mục đã gắn trước khi ngành đó có con thì giữ nguyên, không ép dời.</li>
+    <li>Trọng số định giá của ngành con là giá trị riêng, bỏ trống lúc tạo thì chép của cha rồi hai dòng độc lập. Cố ý chốt giá trị thay vì suy động lên cha mỗi lần đọc, vì số này nhân thẳng vào giá trị quy đổi ghi sổ Credit: để nó phụ thuộc dòng khác thì sửa trọng số của cha là đổi tiền của những quà đã duyệt thuộc mọi ngành con.</li>
+    <li><b>Pool phân phối nay tìm theo ba bước</b>, dừng ở bước đầu tiên có pool: pool của đúng ngành ghi trên quà, pool của ngành cha, rồi pool chung. Bước hai là mục đích chính, tắt pool ở ngành cha thì chặn được cả nhánh đúng như những gì admin thấy trên cây. Nhưng bước ba đổi hành vi cũ của cả ngành gốc: trước đây ngành không khai pool riêng thì coi như không có pool khớp nên không chặn gì, kể cả khi tồn tại một pool chung đang tắt.</li>
+  </ol>
+  <p>Phía rewards-v2, mirror <code>reward_network_category</code> thêm cột <code>rn_parent_category_id</code>, neo bằng ID bên RN dạng chuỗi chứ không phải id nội bộ của bảng mirror, vì id nội bộ khác nhau giữa staging và prod và phụ thuộc thứ tự sync. Không khai khoá ngoại tự trỏ, vì dòng con có thể về trước dòng cha (đường đồng bộ từng offer chạm danh mục con trước khi master-sync chạy), khai FK thì biến ca đó thành lỗi ghi. Hàm <code>getOrCreateWithParent</code> tách riêng cho master-sync: để đường offer-sync gọi chung thì mỗi offer đi qua là xoá trắng quan hệ cha con vừa sync về, và hỏng im lặng vì dòng mirror vẫn còn, chỉ mất cấu trúc.</p>
+  <p>Giao diện sửa hai ô chọn. Ô danh mục ở màn góp ưu đãi loại sẵn dòng cha, gom danh mục con dưới nhóm "Ngành · Danh mục cha". Ô ngành hàng thì chỉ hiện những ngành đang thực sự có danh mục, lọc theo dữ liệu thật thay vì theo cờ <code>hasChildren</code>, vì ngành cha vẫn có thể còn danh mục cũ gắn từ trước lúc nó có con và shop vẫn phải chọn được. Nhãn ngành con ghép tên cha, dạng "F&amp;B › Cà phê", ở cả ô chọn lẫn bộ lọc màn chợ vì hai chỗ đó là danh sách phẳng. Bộ lọc màn chợ giữ cả hai cấp, chọn cha thì backend tự kéo quà của con.</p>
+  <div class="repos"><b>reward-network</b> daf0998 · 219e409 &nbsp;|&nbsp; <b>rewards-v2</b> 6a41de43 &nbsp;|&nbsp; <b>cdp-frontend</b> e82099d07 · 85e15a729</div>
+</div>
+
+<div class="theme">
+  <span class="cnt">3 commit</span>
+  <span class="tag t-feat">Tính năng · Onboarding</span>
+  <h3>Shop xem lại và sửa được ba thiết lập đã khai lúc kết nối</h3>
+  <p class="why">Luồng kết nối hỏi shop ba thứ (danh mục kinh doanh lúc tham gia mạng lưới, tỷ lệ đổi điểm, cách gửi voucher) rồi không trả lại ở đâu cả. Shop kết nối xong muốn xem lại mình khai gì thì không có chỗ, bỏ dở một bước thì hệ thống im lặng, còn voucher phát ra rơi vào hư vô mà không ai biết.</p>
+  <p>Đường sửa danh mục phải mở endpoint mới <code>PUT /account/membership</code> đứng riêng, vì <code>POST /account/join</code> cố ý chỉ lấp danh mục khi cột đang trống để giữ tính idempotent, gọi lại để sửa thì trả 200 mà chẳng đổi gì. Quyết định đáng lưu ý nhất ở đây: endpoint mới <b>ghi đè cả <code>industry_id</code> của thương hiệu mặc định</b> theo ngành của danh mục mới, kể cả khi CNV đã gán tay, vì màn hình hỏi shop cả ngành lẫn danh mục cùng lúc. Có ghi log để còn dò lại được. Shop đang treo hoặc cắt vẫn sửa được danh mục nhưng không được cấp thương hiệu mới. Kèm 7 test cho các nhánh, gồm ca ngành không đổi thì không ghi thừa.</p>
+  <p>Giao diện thêm khối "Ngành hàng và danh mục kinh doanh" ở tab Thông tin của trang chi tiết kết nối, sửa tại chỗ, và chỉ hiện với kết nối Mạng lưới ưu đãi vì Got It và UrBox không có khái niệm này. Đây là chỗ duy nhất sửa được hai ô đó. Trang Cấu hình chung thêm banner liệt kê mục còn thiếu, mỗi mục viết theo bốn phần: tên vấn đề, shop chưa làm gì, hệ quả với khách, việc cần làm. Có khối nhắc bật kênh phát sự kiện sang Automation khi shop đang bật email mà tắt kênh này.</p>
+  <div class="repos"><b>reward-network</b> f65c0b3 &nbsp;|&nbsp; <b>cdp-backend</b> 5595afa20 &nbsp;|&nbsp; <b>cdp-frontend</b> 54c70911b</div>
+</div>
+
+<div class="theme">
+  <span class="cnt">2 commit</span>
+  <span class="tag t-ops">Vận hành · Môi trường</span>
+  <h3>Bật kho voucher nội bộ cho staging</h3>
+  <p class="why">Mở cờ dùng internal vouchers hub ở môi trường staging, rồi sửa lại URL hub cho đúng môi trường đó. Hai commit này thuần cấu hình, không đổi logic.</p>
+  <div class="repos"><b>reward-network</b> 4fa516e · 0b7b75b</div>
+</div>
+
+<h2><span class="num">04</span> Trạng thái bàn giao</h2>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>Việc</th><th class="n">Commit</th><th>Trạng thái</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Xem lại và sửa thiết lập onboarding, bật hub cho staging</td>
+      <td class="n">5</td>
+      <td><b style="color:var(--green)">Đã vào nhánh tích hợp</b><br><span style="color:var(--ink3);font-size:12.5px">reward-network 3 vào staging, cdp-frontend 1 và cdp-backend 1 vào master2</span></td>
+    </tr>
+    <tr>
+      <td>Danh mục và ngành hàng hai cấp, nhánh <code>huytl/rn_category_multi_level</code></td>
+      <td class="n">5</td>
+      <td><b style="color:var(--red)">Chưa push lên remote</b><br><span style="color:var(--ink3);font-size:12.5px">reward-network 2, rewards-v2 1, cdp-frontend 2. Chưa có MR nên chưa ai review, và bản trên máy là bản duy nhất.</span></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p class="sub" style="margin-top:9px">Việc lớn nhất tuần này cũng là việc chưa ra khỏi máy. Năm commit của nhánh hai cấp mới nằm ở local ở cả ba repo, chưa push nên chưa có bản sao nào trên remote.</p>
+
+<h2><span class="num">05</span> Cần chốt trước khi deploy</h2>
+<div class="note red">
+  Việc hai cấp có một cổng bắt buộc và một bẫy đổi hành vi, cả hai đều nằm ở phần pool phân phối:
+  <ul class="plain">
+    <li><b>Ba script cổng SQL 06, 06b và 07 chưa chạy</b> ở môi trường nào. Deploy code trước cổng là lệch schema, cột <code>parent_id</code> chưa có thì mọi query mới chết.</li>
+    <li><b>Bẫy pool chung đang tắt.</b> Bước ba của luật tìm pool đổi hành vi cũ của cả ngành gốc: trước đây ngành không khai pool riêng thì không chặn gì, nay rơi về pool chung, nếu pool chung đó đang INACTIVE thì quà bị chặn. Khác biệt chỉ xuất hiện khi DB thật có pool chung INACTIVE. Khối kiểm (c) và (d) của script 07 in ra đúng danh sách đó cùng số quà bị ảnh hưởng, <b>phải chạy trước khi deploy</b> để biết mình đang đổi gì.</li>
+    <li><b>Thứ tự deploy</b> là reward-network trước, rồi gateway, rồi giao diện. Việc onboarding tuần này đã vào staging và master2 theo đúng thứ tự đó.</li>
+    <li><b>Push nhánh hai cấp</b> trước khi làm gì thêm. Năm commit đang chỉ có một bản trên máy.</li>
+  </ul>
+</div>
+
+<footer>
+  Nguồn: <code>git log --all --no-merges --since=2026-08-24 --author=huy</code> trên 30 repo git trong <code>~/Documents/Working</code>, ra 4 repo có commit. Trạng thái push và merge xác định bằng <code>git branch -r --contains &lt;hash&gt;</code> đối chiếu ref tích hợp thật của từng repo. Đã loại các bản ghi <code>index on …</code> của git stash và commit trùng do cherry-pick. Mọi thay đổi chưa commit trong working tree không được tính. Lập lúc 16:00 ngày 28/08/2026.
+</footer>
+
+</div>
+</body>
+</html>

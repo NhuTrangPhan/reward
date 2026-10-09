@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tổng quan 3 tuần 17/08–04/09/2026 · Team Reward</title>
+<style>
+  :root{
+    --bg:#f9f9f7; --card:#fcfcfb; --ink:#0b0b0b; --ink2:#52514e; --ink3:#898781;
+    --line:#e1e0d9; --axis:#c3c2b7;
+    --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+    --green:#006300; --green-soft:#eaf3ed; --amber:#8a6300; --amber-soft:#fdf4e0;
+    --red:#a33232; --red-soft:#fbecec; --blue-soft:#eaf0f6;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:36px 22px 70px}
+  header.top{border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:22px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--s1);font-weight:700}
+  h1{font-size:28px;line-height:1.2;margin:6px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--ink2);font-size:14px;margin:0}
+  h2{font-size:18px;margin:32px 0 10px;letter-spacing:-.01em}
+  h2 .num{font:600 12px/1 var(--mono);color:var(--ink3);letter-spacing:.08em;margin-right:8px}
+  p{margin:0 0 10px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:20px 0 4px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+  .stat .v{font:700 24px/1.1 var(--mono);letter-spacing:-.02em}
+  .stat .l{font-size:12px;color:var(--ink2);margin-top:4px}
+  .charts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 6px}
+  @media(max-width:720px){.charts{grid-template-columns:1fr}}
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+  .chart h3{font-size:14px;margin:0 0 2px}
+  .chart .cap{font-size:12px;color:var(--ink3);margin:0 0 12px}
+  .donut{width:168px;height:168px;border-radius:50%;margin:8px auto 16px;position:relative;
+    background:conic-gradient(var(--s1) 0 33.5%, var(--card) 33.5% 34%,
+      var(--s2) 34% 59.5%, var(--card) 59.5% 60%,
+      var(--s3) 60% 81.5%, var(--card) 81.5% 82%,
+      var(--s4) 82% 99.5%, var(--card) 99.5% 100%)}
+  .donut::after{content:"";position:absolute;inset:23%;border-radius:50%;background:var(--card)}
+  .dlegend{font-size:12.5px;color:var(--ink2)}
+  .dlegend div{display:flex;align-items:baseline;gap:7px;margin-bottom:5px}
+  .dlegend i{width:10px;height:10px;border-radius:3px;flex:none;align-self:center}
+  .dlegend b{margin-left:auto;font:700 12px/1 var(--mono);color:var(--ink)}
+  .prow{margin-bottom:13px}
+  .prow .pl{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink2);margin-bottom:4px}
+  .prow .pl b{color:var(--ink);font-weight:600}
+  .prow .pv{font:700 12px/1 var(--mono);color:var(--ink)}
+  .track{height:14px;background:var(--line);border-radius:4px;overflow:hidden}
+  .fill{height:100%;background:var(--s1);border-radius:0 4px 4px 0}
+  .pstat{font-size:11.5px;color:var(--ink3);margin-top:3px}
+  .proj{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--s1);
+    border-radius:8px;padding:15px 18px;margin-bottom:12px}
+  .proj.p2{border-left-color:var(--s2)}
+  .proj h3{font-size:15.5px;margin:0 0 3px}
+  .meta{font:500 12px/1.6 var(--mono);color:var(--ink3);margin-bottom:9px}
+  .proj ul{margin:0;padding-left:17px}
+  .proj li{margin-bottom:7px;font-size:14px;color:var(--ink2)}
+  .proj li b{color:var(--ink);font-weight:600}
+  .wk{display:inline-block;font:700 10.5px/1 var(--mono);padding:2px 6px;border-radius:4px;
+    background:var(--blue-soft);color:var(--s1);margin-right:6px;vertical-align:1px;letter-spacing:.03em}
+  .wk.w35{background:var(--green-soft);color:var(--green)}
+  .wk.w36{background:var(--amber-soft);color:var(--amber)}
+  .subhead{font:700 11.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin:2px 0 4px}
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+  th,td{padding:9px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);font-weight:700}
+  tr:last-child td{border-bottom:none}
+  .pill{display:inline-block;font:700 11px/1 var(--mono);padding:4px 8px;border-radius:5px;white-space:nowrap}
+  .pi-done{background:var(--green-soft);color:var(--green)}
+  .pi-run{background:var(--blue-soft);color:var(--s1)}
+  .pi-wait{background:var(--amber-soft);color:var(--amber)}
+  .pi-hold{background:var(--red-soft);color:var(--red)}
+  .note{background:var(--amber-soft);border:1px solid var(--line);border-radius:8px;
+    padding:13px 16px;font-size:13.5px;color:var(--ink2)}
+  .note b{color:var(--ink)}
+  footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--ink3)}
+  @media print{body{background:#fff}.proj,.stat,.chart,.tblwrap,.note{break-inside:avoid}h2{break-after:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Tổng quan 3 tuần (W34–36) · Team Reward</div>
+  <h1>Tuần 17/08 – 04/09/2026</h1>
+  <p class="sub">Huy — Reward Network &nbsp;·&nbsp; Hải — Rewards-v2. Tổng hợp 3 tuần. Tuần W36 chỉ làm 2 ngày (T5 03/09 + T6 04/09) do nghỉ lễ Quốc khánh 2/9.</p>
+</header>
+
+<div class="stats">
+  <div class="stat"><div class="v" style="color:var(--s1)">3 tuần</div><div class="l">W34–36 · 2 dev (Huy · Hải)</div></div>
+  <div class="stat"><div class="v" style="color:var(--green)">Production</div><div class="l">mã hoá voucher + quản lý gói bán đã lên prod</div></div>
+  <div class="stat"><div class="v">~1.790</div><div class="l">ca test tự động rewards-v2, xanh</div></div>
+  <div class="stat"><div class="v" style="color:var(--amber)">Sắp UAT</div><div class="l">RN chờ API CRM để nghiệm thu · rewards-v2 chờ UAT</div></div>
+</div>
+
+<p class="sub" style="margin-top:12px">Ba tuần đi từ <b>củng cố an toàn tiền trong luồng đổi quà</b> (W34–35) sang <b>hoàn thiện onboarding, tích hợp và đưa lên production</b> (W36). Reward Network đã đưa phần quản lý gói bán lên production, chuyển danh mục/ngành hàng sang mô hình hai cấp và đồng bộ ngành hàng từ CRM — đang chờ API cuối từ CRM để nghiệm thu toàn bộ. Rewards-v2 đã xử lý dứt điểm các tình huống có thể mất tiền hoặc hoàn điểm sai, đưa mã hoá voucher lên production, và rà soát lại toàn bộ worker khi tích hợp thêm UrBox và Reward Network — dự kiến deploy production và chờ UAT. UrBox tạm dừng, chờ Sale có khách hàng mới.</p>
+
+<h2 style="margin:26px 0 10px">Tổng quan điều hành</h2>
+<div class="charts" style="margin-top:0">
+  <div class="chart">
+    <h3>Cơ cấu phân bổ công sức (3 tuần)</h3>
+    <p class="cap">Trọng tâm dồn ở W34–35 (W36 chỉ 2 ngày): an toàn tiền đổi quà (Hải) · tính năng &amp; đổi mô hình danh mục (Huy) · bảo mật voucher</p>
+    <div class="donut" role="img" aria-label="Cơ cấu phân bổ công sức 3 tuần: an toàn tiền đơn đổi quà 34%, tính năng Reward Network 26%, đổi mô hình danh mục hai cấp và onboarding 22%, bảo mật voucher và tra cứu CRM 18%"></div>
+    <div class="dlegend">
+      <div><i style="background:var(--s1)"></i>An toàn tiền đơn đổi quà — Hải<b>34%</b></div>
+      <div><i style="background:var(--s2)"></i>Tính năng Reward Network (thu phí Hub · trần lượt đổi) — Huy<b>26%</b></div>
+      <div><i style="background:var(--s3)"></i>Đổi mô hình danh mục 2 cấp · onboarding · sync industry — Huy<b>22%</b></div>
+      <div style="margin-bottom:0"><i style="background:var(--s4)"></i>Bảo mật voucher &amp; tra cứu CRM — Hải<b>18%</b></div>
+    </div>
+  </div>
+  <div class="chart">
+    <h3>Tiến độ 3 dự án con</h3>
+    <p class="cap">% hoàn thành, theo cách tính báo cáo W32-33 (code chưa qua QA/deploy tính thấp)</p>
+    <div class="prow">
+      <div class="pl"><b>Kết nối GotIt</b><span class="pv">~95%</span></div>
+      <div class="track"><div class="fill" style="width:95%"></div></div>
+      <div class="pstat">Live production, không incident. Chủ yếu duy trì.</div>
+    </div>
+    <div class="prow">
+      <div class="pl"><b>Kết nối UrBox</b><span class="pv">~92%</span></div>
+      <div class="track"><div class="fill" style="width:92%"></div></div>
+      <div class="pstat">Kỹ thuật xong, nghiệm thu sandbox đạt. Tạm dừng — chờ Sale có khách mới bắt đầu UAT.</div>
+    </div>
+    <div class="prow" style="margin-bottom:2px">
+      <div class="pl"><b>Reward Network — Phase 1</b><span class="pv">~45%</span></div>
+      <div class="track"><div class="fill" style="width:45%"></div></div>
+      <div class="pstat">Từ ~40% cuối W35. Đã lên production phần quản lý gói bán + đồng bộ industry. Chờ API CRM để nghiệm thu toàn bộ.</div>
+    </div>
+  </div>
+</div>
+
+<h2><span class="num">01</span>Reward Network — Huy</h2>
+<div class="proj">
+  <div class="meta">3 tuần (W34–36) · trọng tâm: thương mại hoá Rewards Hub + đổi mô hình danh mục + đồng bộ CRM</div>
+  <ul>
+    <li><span class="wk">W34</span><b>Cổng thu phí gói Rewards Hub</b> (bước đầu đưa module ra thu tiền) + <b>trần lượt đổi quà theo từng khách</b> (chặn một khách hốt sạch quà hot).</li>
+    <li><span class="wk w35">W35</span><b>Danh mục &amp; ngành hàng sang cây hai cấp</b> — kèm 4 luật nghiệp vụ: <b>định giá quà theo từng ngành con</b> (mỗi ngành con một mức quy đổi riêng, tính thẳng vào Credit ghi sổ) · <b>kho phân phối dò 3 cấp</b> (đúng ngành → ngành cha → kho chung, ngành con thừa hưởng kho cha) · <b>tắt một nhánh là ẩn toàn bộ quà nhánh đó</b> khỏi cả chợ RN lẫn mini-app khách · quà bắt buộc gán nhóm cấp lá (lọc nhóm cha vẫn ra đủ quà con).</li>
+    <li><span class="wk w35">W35</span><b>Onboarding tự phục vụ + giao diện kết nối Mạng lưới:</b> shop tự xem &amp; sửa cấu hình đã khai; wizard kết nối gộp thêm bước <b>chọn kênh gửi voucher</b> (kết nối xong dùng được ngay); <b>popup cảnh báo khi đổi thiết lập dùng chung</b> (liệt kê kết nối bị ảnh hưởng + giá trị cũ→mới); gỡ hình thức "kết nối trọn gói qua CNV"; tạm khoá kênh "HUB" ở form góp ưu đãi.</li>
+    <li><span class="wk w36">W36</span><b>Job đồng bộ ngành hàng (industry) từ CRM.</b></li>
+    <li><b>Hiện trạng:</b> đã <b>deploy production</b> phần quản lý gói bán; sửa lại UI/UX cho onboarding; chặn số lượt đổi quà theo từng user.</li>
+  </ul>
+</div>
+
+<h2><span class="num">02</span>Rewards-v2 — Hải</h2>
+<div class="proj p2">
+  <div class="meta">3 tuần (W34–36) · trọng tâm: an toàn tiền trong luồng đổi quà + bảo mật voucher · test ~1.790 xanh</div>
+  <ul>
+    <li><span class="wk">W34</span><b>Xử lý dứt điểm đơn đổi quà bị kẹt</b> (không hoàn điểm nhầm khi vendor đã xuất mã; giảm gọi lại vendor ~288 → ~70/đơn) + <b>chặn khách bị trừ điểm hai lần</b>.</li>
+    <li><span class="wk w35">W35</span><b>Đơn không rõ kết quả → treo chờ người kiểm</b>, thôi tự hoàn điểm theo đồng hồ (tránh huỷ oan đơn mà vendor đã xuất mã) + công cụ chốt đơn trên CRM + sửa hạn voucher UrBox + dọn mã voucher lưu trần. <b>Mã hoá voucher</b> hoàn tất.</li>
+    <li><span class="wk w36">W36</span><b>Rà soát lại toàn bộ worker &amp; nghiệp vụ</b> khi tích hợp thêm UrBox và Reward Network, kèm loạt cải tiến vận hành đơn: <b>khách theo dõi được đơn đang treo</b> + lọc lịch sử đổi quà theo trạng thái · <b>cảnh báo tác vụ hoàn/trừ điểm bị chết + nút chạy lại trên CRM</b> (cứu điểm kẹt, khỏi sửa tay DB) · <b>đơn cứu muộn vẫn tự gửi voucher + chạy campaign shop</b> · <b>CRM làm mới trạng thái giao hàng quà vật lý tức thì</b> · <b>xử lý đơn treo hàng loạt (tới 200 đơn)</b> + chỉ vendor được kết luận đơn (tránh hoàn điểm oan).</li>
+    <li><b>Hiện trạng:</b> đã <b>deploy production</b> phần mã hoá voucher + migrate dữ liệu.</li>
+  </ul>
+</div>
+
+<h2><span class="num">03</span>Kế hoạch &amp; việc còn lại</h2>
+<div class="charts" style="margin-top:0">
+  <div class="proj" style="margin-bottom:0">
+    <h3>Reward Network (Huy)</h3>
+    <div class="subhead">Tuần tới</div>
+    <ul style="margin:0;padding-left:17px">
+      <li>Chờ API của CRM và hoàn thành API cuối cùng.</li>
+      <li>Test trùng voucher trên staging.</li>
+    </ul>
+    <div class="subhead" style="margin-top:10px">Còn lại</div>
+    <ul style="margin:0;padding-left:17px">
+      <li>Các tính năng ở CRM + test lại giữa 2 hệ thống (RN ↔ CRM).</li>
+      <li>Nghiệm thu toàn bộ tính năng và truyền thông.</li>
+    </ul>
+  </div>
+  <div class="proj p2" style="margin-bottom:0">
+    <h3>Rewards-v2 (Hải)</h3>
+    <div class="subhead">Tuần tới</div>
+    <ul style="margin:0;padding-left:17px">
+      <li>Deploy production (phần rà soát &amp; tích hợp UrBox + Reward Network).</li>
+    </ul>
+    <div class="subhead" style="margin-top:10px">Còn lại</div>
+    <ul style="margin:0;padding-left:17px">
+      <li>Test lại lần cuối các tính năng.</li>
+      <li>Chờ UAT để hỗ trợ.</li>
+    </ul>
+  </div>
+</div>
+<div class="note" style="margin-top:12px;background:var(--blue-soft)">
+  <b>UrBox:</b> tạm dừng triển khai tiếp — chờ Sale có khách hàng mới để bắt đầu UAT với vendor.
+</div>
+
+<footer>
+  Tổng hợp từ báo cáo tuần W34 (17–21/08), W35 (24–28/08) và cập nhật tuần W36 (2 ngày, 03–04/09) của Huy (Reward Network) và Hải (Rewards-v2). W36 là tuần rút gọn do nghỉ lễ Quốc khánh 2/9. Lập ngày 04/09/2026.
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bộ danh mục chuẩn CNV — Đề xuất v1.1</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #16385f; --navy-2: #1f4e79; --navy-soft: #EAF1F8;
+    --ink: #1a2433; --ink-soft: #3b4a5e; --muted: #64748B; --border: #DDE5EE;
+    --green: #0E9F6E; --green-soft: #DEF7EC;
+    --amber: #B45309; --amber-soft: #FDF0D5;
+    --indigo: #4F46E5; --indigo-soft: #E0E7FF;
+    --red: #B91C1C; --red-soft: #FEE2E2;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: #fff; color: var(--ink); font-size: 13.5px; line-height: 1.6;
+    padding: 34px 40px; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+  .doc-head { border-left: 6px solid var(--navy); padding-left: 18px; margin-bottom: 18px; }
+  .doc-head h1 { font-size: 30px; font-weight: 800; color: var(--navy); letter-spacing: -0.8px; }
+  .doc-head .sub { font-size: 16px; font-weight: 700; color: var(--navy-2); margin-top: 2px; }
+  .doc-head .scope { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+  .intro { background: #F6F9FC; border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; font-size: 13px; color: var(--ink-soft); margin-bottom: 16px; }
+  .intro b { color: var(--navy-2); }
+  .sec { background: var(--navy); color: #fff; border-radius: 8px; padding: 9px 16px; display: flex; align-items: center; gap: 12px; margin: 24px 0 8px; }
+  .sec h2 { font-size: 15.5px; font-weight: 800; flex: 1; }
+  .sec .cnt { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.35); border-radius: 20px; padding: 2px 12px; font-size: 11px; font-weight: 700; }
+  .sec-desc { font-size: 12.3px; color: var(--muted); margin: 6px 2px 6px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  thead th { text-align: left; font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--navy-2); padding: 8px 10px 6px; border-bottom: 2px solid var(--navy-2); }
+  tbody td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; font-size: 12.6px; color: var(--ink-soft); }
+  td.cat { font-weight: 700; color: var(--ink); width: 185px; }
+  td.src { width: 29%; }
+  .nganh-row td { background: var(--navy-soft); font-weight: 800; color: var(--navy); font-size: 13px; border-bottom: 1px solid #C9D9EA; }
+  .nganh-row .w { font-weight: 600; color: var(--muted); font-size: 11.5px; }
+  .pill { display: inline-block; font-size: 9.5px; font-weight: 800; padding: 1px 8px; border-radius: 10px; letter-spacing: .3px; white-space: nowrap; }
+  .p-gotit { background: var(--green-soft); color: var(--green); }
+  .p-urbox { background: var(--amber-soft); color: var(--amber); }
+  .p-new { background: var(--indigo-soft); color: var(--indigo); }
+  .p-attr { background: var(--red-soft); color: var(--red); }
+  ul.rules { list-style: none; margin: 6px 0; }
+  ul.rules li { position: relative; padding-left: 16px; margin-bottom: 5px; font-size: 12.8px; color: var(--ink-soft); }
+  ul.rules li::before { content: "•"; position: absolute; left: 2px; color: var(--navy-2); font-weight: 700; }
+  ul.rules b { color: var(--navy-2); }
+  .note-box { background: #F6F9FC; border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: 12px; color: var(--muted); margin-top: 22px; }
+  .note-box b { color: var(--ink-soft); }
+  .q { background: #FFFBEB; border: 1px solid #FDE68A; border-left: 5px solid var(--amber); border-radius: 10px; padding: 12px 16px; margin-top: 14px; font-size: 12.8px; color: var(--ink-soft); }
+  .q b { color: var(--amber); }
+  .footer { text-align: center; color: #94A3B8; font-size: 11.5px; margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--border); }
+  @page { size: A4; margin: 11mm 9mm; }
+  @media print {
+    body { padding: 0; font-size: 12.5px; }
+    tr, .intro, .sec, .note-box, .q { break-inside: avoid; page-break-inside: avoid; }
+    .sec { break-after: avoid; }
+    thead { display: table-header-group; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="doc-head">
+    <h1>Bộ danh mục chuẩn CNV</h1>
+    <div class="sub">Đề xuất v1.1 — treo 25 danh mục quà dùng chung lên cây ngành nghề hiện hành (19 ngành)</div>
+    <div class="scope">Trình: anh Phú duyệt &nbsp;·&nbsp; Soạn: đội Reward &nbsp;·&nbsp; 10/2026 &nbsp;·&nbsp; Áp dụng: màn Ngành hàng / Danh mục chuẩn &amp; Mapping trên CRM Connect (Rewards Hub) → đồng bộ sang Reward Network, rewards-v2, mini-app</div>
+  </div>
+
+  <div class="intro">
+    <b>Bài toán:</b> toàn hệ đang "mượn" bộ danh mục của GotIt (vendor đầu tiên, 22 danh mục) làm bộ mặc định; UrBox mang về 34 dòng có trùng lặp và biến thể chính tả; Reward Network có cấu trúc Ngành → Danh mục nhưng chưa có bộ dữ liệu chuẩn. <b>Cấp Ngành KHÔNG dựng mới:</b> dùng nguyên <b>cây ngành nghề 19 ngành đang chạy trên CRM</b> (mini-app đang dùng, doanh nghiệp đang được phân loại theo bộ này — không đổi tên, không tái cấu trúc). Tài liệu này đề xuất <b>25 danh mục quà chuẩn</b> treo dưới 12/19 ngành có quà, kèm bảng mapping đầy đủ 22 danh mục GotIt + 34 dòng UrBox về từng danh mục — duyệt một lần, dùng thống nhất: khách thấy MỘT bộ danh mục, quà từ nguồn nào cũng về đúng kệ.
+  </div>
+
+  <div class="sec"><h2>1 · Nguyên tắc thiết kế</h2></div>
+  <ul class="rules">
+    <li><b>Không đụng cấp Ngành:</b> 19 ngành nghề hiện hành (Bán lẻ, F&amp;B/Nhà hàng, Spa/Làm đẹp, Khách sạn, Vận tải, Game, Tài chính…) giữ nguyên tên và cấu trúc — doanh nghiệp đang được phân loại theo bộ này và mini-app đang dùng nó.</li>
+    <li><b>Danh mục chuẩn = cấp con, theo góc nhìn khách cuối đi tìm quà</b> — không theo cách vendor tổ chức catalog. Mỗi danh mục thuộc đúng một ngành.</li>
+    <li><b>Mỗi danh mục nguồn map về đúng MỘT danh mục chuẩn</b> (nhiều-về-một). Danh mục nguồn không bao giờ bị sửa/xoá — chỉ gán.</li>
+    <li><b>Ngành không có quà thì để trống</b> ("Chưa có ngành con" như hiện tại) — không đẻ danh mục cho đủ bộ.</li>
+    <li><b>Tên ngắn (≤ 4 từ), không tên vendor:</b> "TotalEnergies", "Got It Đa Năng" là quà/brand cụ thể — map theo nghĩa, không giữ làm danh mục.</li>
+    <li><b>Tách "loại quà" khỏi "cách nhận quà":</b> "ĐỔI QUÀ - GIAO NGAY" (GotIt), "Quà Tặng Vật Lý" (UrBox) là <i>thuộc tính giao nhận</i> — xử lý bằng nhãn lọc riêng (mục 3).</li>
+    <li><b>"Khác" là hàng đợi chờ gán</b>, dọn hằng tuần theo banner màn Mapping; <b>không xoá chỉ tắt</b>; đổi Trọng số định giá (đặt ở cấp ngành, mặc định 1.0) không hồi tố giá đã duyệt.</li>
+  </ul>
+
+  <div class="sec"><h2>2 · 25 danh mục chuẩn treo trên cây ngành hiện hành + mapping nguồn</h2><span class="cnt">12/19 ngành có quà</span></div>
+  <div class="sec-desc">Tên ngành (hàng xanh đậm) là <b>ngành nghề thật trên CRM — giữ nguyên</b>. Cột GotIt/UrBox liệt kê danh mục nguồn thật (GotIt 22/22 từ production; UrBox 34/34 dòng, biến thể trùng được gom). Ưu đãi Reward Network do shop góp sẽ chọn trực tiếp trong cây này.</div>
+  <table>
+    <thead><tr><th style="width:175px">Danh mục chuẩn</th><th class="src">← GotIt (22)</th><th class="src">← UrBox (34 dòng)</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr class="nganh-row"><td colspan="4">F&amp;B / NHÀ HÀNG <span class="w">· ngành hiện hành · trọng số 1.0</span></td></tr>
+      <tr><td class="cat">Nhà hàng &amp; Quán ăn</td><td>Nhà Hàng</td><td>Nhà Hàng</td><td>Kệ chủ lực của mạng lưới F&amp;B</td></tr>
+      <tr><td class="cat">Cà phê &amp; Trà</td><td>Cafe &amp; bánh <i>(phần cafe)</i></td><td>Café - Thức Uống</td><td>Tách khỏi bánh vì tần suất đổi cao nhất</td></tr>
+      <tr><td class="cat">Bánh &amp; Ăn vặt</td><td>Cafe &amp; bánh <i>(phần bánh)</i></td><td>Bánh Kem - Đồ Ăn Vặt</td><td>1 danh mục GotIt tách đôi — xử lý khi gán lại quà</td></tr>
+
+      <tr class="nganh-row"><td colspan="4">BÁN LẺ <span class="w">· ngành hiện hành · trọng số 1.0 · ngành rộng nhất: 9 danh mục</span></td></tr>
+      <tr><td class="cat">Siêu thị &amp; Tiện lợi</td><td>Siêu thị &amp; Mua sắm</td><td>Siêu Thị - Điện Máy - Mẹ Và Bé <i>(phần siêu thị)</i> · Hàng tiêu dùng</td><td></td></tr>
+      <tr><td class="cat">Thực phẩm tươi &amp; Hoa</td><td>Hoa, Trái cây &amp; Thực phẩm sạch</td><td>Hoa - Quả - Thực Phẩm Sạch · Sống Xanh</td><td></td></tr>
+      <tr><td class="cat">Thời trang &amp; Phụ kiện</td><td>Thời trang &amp; Phụ kiện</td><td>Thời trang · Thời Trang - Phụ Kiện · Thời trang - Phụ kiện - Mỹ phẩm <i>(3 biến thể → 1)</i></td><td></td></tr>
+      <tr><td class="cat">Trang sức</td><td>—</td><td>Vàng Bạc - Trang Sức</td><td><span class="pill p-urbox">chỉ UrBox</span></td></tr>
+      <tr><td class="cat">Điện tử &amp; Điện máy</td><td>—</td><td>Điện tử - Điện lạnh · Siêu Thị - Điện Máy… <i>(phần điện máy)</i></td><td><span class="pill p-urbox">chỉ UrBox</span></td></tr>
+      <tr><td class="cat">Đồ công nghệ</td><td>—</td><td>Đồ Công Nghệ</td><td><span class="pill p-urbox">chỉ UrBox</span></td></tr>
+      <tr><td class="cat">Nhà cửa &amp; Đời sống</td><td>Nhà cửa, Đời sống &amp; Thú cưng</td><td>Điện gia dụng</td><td>Gồm thú cưng</td></tr>
+      <tr><td class="cat">Mẹ &amp; Bé</td><td>Mẹ &amp; bé</td><td>Mẹ và Bé · <i>(phần Mẹ&amp;Bé của "Siêu Thị - Điện Máy - Mẹ Và Bé")</i></td><td>Loại quà bán lẻ; shop ngành "Mẹ bầu"/"Trẻ 0-3th" góp quà sẽ gắn vào kệ này</td></tr>
+      <tr><td class="cat">Nhà sách &amp; Quà tặng</td><td>—</td><td>Nhà Sách - Quà Tặng · Quà Lưu Niệm</td><td><span class="pill p-urbox">chỉ UrBox</span></td></tr>
+
+      <tr class="nganh-row"><td colspan="4">THƯƠNG MẠI ĐIỆN TỬ <span class="w">· ngành hiện hành · 1.0</span></td></tr>
+      <tr><td class="cat">Mua sắm online</td><td>Mua Sắm Online</td><td>Mua Sắm · Mua sắm online · Mua Sắm Online <i>(3 biến thể → 1)</i></td><td>Minh hoạ rõ nhất giá trị của bộ chuẩn</td></tr>
+
+      <tr class="nganh-row"><td colspan="4">SPA / LÀM ĐẸP <span class="w">· ngành hiện hành · 1.0</span></td></tr>
+      <tr><td class="cat">Spa &amp; Làm đẹp</td><td>Spa &amp; Làm đẹp</td><td>Làm đẹp - Sức khỏe · Làm Đẹp - Sức Khoẻ <i>(2 biến thể → 1)</i></td><td></td></tr>
+      <tr><td class="cat">Mỹ phẩm</td><td>Mỹ phẩm</td><td><i>(tách từ biến thể "…- Mỹ phẩm")</i></td><td></td></tr>
+      <tr><td class="cat">Gym &amp; Thể thao</td><td>—</td><td>Gym - Fitness · Đánh Golf</td><td><span class="pill p-urbox">chỉ UrBox</span> Xếp theo nhóm wellness — anh Phú duyệt vị trí</td></tr>
+
+      <tr class="nganh-row"><td colspan="4">DƯỢC PHẨM <span class="w">· ngành hiện hành · 1.0</span></td></tr>
+      <tr><td class="cat">Chăm sóc sức khoẻ</td><td>Chăm sóc sức khỏe</td><td>Chăm sóc - Sức khoẻ</td><td>Nhà thuốc, khám sức khoẻ, thiết bị y tế</td></tr>
+
+      <tr class="nganh-row"><td colspan="4">GIẢI TRÍ <span class="w">· ngành hiện hành · 1.0</span></td></tr>
+      <tr><td class="cat">Giải trí &amp; Sự kiện</td><td>Tiện ích &amp; Giải trí <i>(phần giải trí)</i> · Văn Hóa Nghệ Thuật</td><td>Giải Trí · Du Lịch - Giải Trí <i>(phần giải trí)</i></td><td>Phim, sự kiện, khu vui chơi</td></tr>
+
+      <tr class="nganh-row"><td colspan="4">GAME <span class="w">· ngành hiện hành · 1.0</span></td></tr>
+      <tr><td class="cat">Nạp thẻ &amp; Thẻ game</td><td>Thẻ game</td><td>Thẻ Điện Thoại - Thẻ Game</td><td>Nhóm đổi nhiều nhất của vendor</td></tr>
+
+      <tr class="nganh-row"><td colspan="4">KHÁCH SẠN <span class="w">· ngành hiện hành · 1.0</span></td></tr>
+      <tr><td class="cat">Du lịch &amp; Lưu trú</td><td>Du lịch &amp; Di chuyển <i>(phần du lịch)</i></td><td>Du Lịch - Giải Trí <i>(phần du lịch)</i> · Phụ kiện du lịch</td><td></td></tr>
+      <tr><td class="cat">Dịch vụ cao cấp</td><td>Dịch Vụ Cao Cấp · Đặc Quyền Cao Cấp · Dịch vụ quốc tế</td><td>Di Chuyển - Dịch Vụ <i>(phần dịch vụ)</i></td><td>Phòng chờ sân bay, concierge — xếp nhóm hospitality, anh Phú duyệt vị trí</td></tr>
+
+      <tr class="nganh-row"><td colspan="4">VẬN TẢI <span class="w">· ngành hiện hành · 1.0</span></td></tr>
+      <tr><td class="cat">Di chuyển</td><td>Du lịch &amp; Di chuyển <i>(phần di chuyển)</i></td><td>Di Chuyển - Dịch Vụ <i>(phần di chuyển)</i></td><td>Gồm xăng dầu — quà TotalEnergies gán vào đây</td></tr>
+
+      <tr class="nganh-row"><td colspan="4">GIÁO DỤC <span class="w">· ngành hiện hành · 1.0</span></td></tr>
+      <tr><td class="cat">Khoá học &amp; Ngoại ngữ</td><td>Giáo dục &amp; Ngoại ngữ</td><td>—</td><td><span class="pill p-gotit">chỉ GotIt</span> Đặt tên khác ngành cha để khỏi trùng</td></tr>
+
+      <tr class="nganh-row"><td colspan="4">TÀI CHÍNH <span class="w">· ngành hiện hành · 1.0</span></td></tr>
+      <tr><td class="cat">Tiện ích &amp; Thanh toán</td><td>Tiện ích &amp; Giải trí <i>(phần tiện ích)</i> · Got It Đa Năng</td><td>Tiện Ích</td><td>Voucher đa năng, điện nước, thanh toán</td></tr>
+
+      <tr class="nganh-row"><td colspan="4">CÔNG CỤ / TOOLS <span class="w">· ngành hiện hành (con: Marketing, Phần mềm) · 1.0</span></td></tr>
+      <tr><td class="cat">Dịch vụ doanh nghiệp</td><td>—</td><td>—</td><td><span class="pill p-new">dành cho RN</span> Ưu đãi B2B (phần mềm, marketing, dịch vụ DN) mà shop mạng lưới góp — vendor không có</td></tr>
+
+      <tr class="nganh-row"><td colspan="4">7 NGÀNH CHƯA CÓ DANH MỤC QUÀ <span class="w">· giữ "Chưa có ngành con"</span></td></tr>
+      <tr><td class="cat" colspan="4" style="font-weight:600;color:var(--muted)">Bất động sản · Chính phủ · Mẹ bầu · Ô tô · Rượu bia · Tin tức / Truyền thông · Trẻ 0-3th — không đẻ danh mục cho đủ bộ; khi có quà thật (vd "Chăm sóc xe" cho Ô tô) thì thêm sau theo quy tắc mục 4.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec"><h2>3 · Dòng nguồn KHÔNG map thành danh mục</h2></div>
+  <table>
+    <thead><tr><th style="width:260px">Dòng nguồn</th><th style="width:130px">Bản chất</th><th>Xử lý đề xuất</th></tr></thead>
+    <tbody>
+      <tr><td>ĐỔI QUÀ - GIAO NGAY <span class="pill p-gotit">GotIt</span></td><td><span class="pill p-attr">Thuộc tính</span></td><td>Là <b>cách nhận quà</b> (voucher điện tử nhận ngay) — thể hiện bằng nhãn lọc "Nhận ngay / Giao tận nơi" trên mini-app, không chiếm một kệ danh mục.</td></tr>
+      <tr><td>Quà Tặng Vật Lý <span class="pill p-urbox">UrBox</span></td><td><span class="pill p-attr">Thuộc tính</span></td><td>Tương tự — thuộc tính "Giao tận nơi" (đã có icon xe tải xanh trên mini-app); quà bên trong vẫn gán danh mục theo nghĩa (đồ gia dụng → Nhà cửa &amp; Đời sống, công nghệ → Đồ công nghệ…).</td></tr>
+      <tr><td>TotalEnergies <span class="pill p-gotit">GotIt</span></td><td>Brand</td><td>Là thương hiệu xăng dầu, không phải danh mục → quà gán vào <b>Di chuyển (Vận tải)</b>, brand quản ở Mapping thương hiệu.</td></tr>
+      <tr><td>Khác · (trống/NULL) <span class="pill p-urbox">UrBox</span></td><td>Hàng đợi</td><td>Giữ cơ chế "Khác" hiện có: quà thiếu phân loại rơi vào đây chờ gán — banner màn Mapping nhắc dọn, mục tiêu "Khác" ≤ 5% số quà.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec"><h2>4 · Quy tắc vận hành bộ chuẩn</h2></div>
+  <ul class="rules">
+    <li><b>Nguồn chuẩn duy nhất:</b> cây sống ở CRM Connect (Ngành hàng + Danh mục chuẩn), nút "Đồng bộ ngay" đẩy sang Reward Network và rewards-v2 — không hệ nào tự thêm danh mục riêng.</li>
+    <li><b>Mini-app chuyển về lọc theo Danh mục chuẩn</b> (hiện đang lọc theo ngành/danh mục vendor) — mỗi shop vẫn chỉ hiện danh mục có quà thật của shop đó.</li>
+    <li><b>Vendor thêm danh mục mới</b> → rơi vào "Chưa có nguồn" trên màn Mapping, CNV gán trong tuần; chỉ tạo danh mục chuẩn mới khi có ≥ ~10 quà xứng một kệ riêng.</li>
+    <li><b>Thêm / đổi tên / tắt danh mục chuẩn</b> là thao tác mức phê duyệt (ảnh hưởng mọi shop và mini-app); tắt danh mục = ẩn mọi quà của nó — cảnh báo số quà ảnh hưởng trước khi xác nhận.</li>
+    <li><b>Trọng số định giá đặt ở cấp Ngành</b> (19 ngành hiện hành), mặc định 1.0 toàn bộ khi ra mắt; chỉ điều chỉnh sau khi có dữ liệu đổi quà thực tế 4 tuần (thay đổi không hồi tố).</li>
+  </ul>
+
+  <div class="q">
+    <b>4 vị trí treo cần anh Phú duyệt</b> (cấp ngành đã chốt dùng cây hiện hành — chỉ còn duyệt chỗ đặt):&nbsp;
+    1) <b>Bán lẻ đang là ngành rộng nhất (9 danh mục)</b> — chấp nhận ở v1, hay tách "Thời trang &amp; Làm đẹp" thành ngành mới sau?&nbsp;
+    2) <b>Gym &amp; Thể thao</b> xếp dưới Spa / Làm đẹp (wellness) — ổn chưa?&nbsp;
+    3) <b>Dịch vụ cao cấp</b> (phòng chờ sân bay, concierge) xếp dưới Khách sạn — ổn chưa?&nbsp;
+    4) <b>Mẹ &amp; Bé</b> đặt dưới Bán lẻ (loại quà) thay vì dưới ngành "Mẹ bầu"/"Trẻ 0-3th" (phân khúc doanh nghiệp) — đồng ý không?&nbsp;
+    Và xác nhận cho mini-app <b>đổi bộ lọc từ danh mục vendor sang Danh mục chuẩn</b> trong đợt tới.
+  </div>
+
+  <div class="note-box">
+    <b>Nguồn dữ liệu (chỉ đọc):</b> cây 19 ngành = bảng ngành nghề đang chạy trên CRM (mini-app đang dùng, doanh nghiệp đang phân loại theo bộ này — xác nhận 10/2026); GotIt = 22/22 danh mục từ bản sao production; UrBox = 34/34 dòng từ catalog đồng bộ (có biến thể trùng và dòng trống — đã gom). Phủ nguồn: 22/22 GotIt + 34/34 UrBox đều có chỗ về trong cây chuẩn hoặc mục 3. Danh mục màn <i>/crm/categories</i> hiện tại (Nhân sự, Chấm công, Tài chính…) là danh mục tài liệu nội bộ CRM — không liên quan, không bị ảnh hưởng. <b>v1.1 thay v1:</b> cấp ngành đổi từ 8 ngành đề xuất sang 19 ngành hiện hành theo quyết định đội; đính chính số danh mục là 25 (v1 ghi nhầm 24).
+  </div>
+
+  <div class="footer">Bộ danh mục chuẩn CNV — Đề xuất v1.1 · Đội Reward · Trình anh Phú duyệt</div>
+</div>
+</body>
+</html>

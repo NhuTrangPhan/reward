@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Báo cáo Tháng 8/2026 — Reward Network & rewards-v2</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #F8FAFC; --bg-soft: #F1F5F9; --card: #FFFFFF;
+    --border: #E5E7EB; --border-soft: #F1F5F9;
+    --ink: #111827; --ink-soft: #374151; --muted: #6B7280; --muted-light: #9CA3AF;
+    --primary: #4F46E5; --primary-soft: #EEF2FF;
+    --success: #10B981; --success-soft: #D1FAE5;
+    --danger: #EF4444; --danger-soft: #FEE2E2;
+    --warning: #F59E0B; --warning-soft: #FEF3C7;
+    --info: #3B82F6; --info-soft: #DBEAFE;
+    --purple: #8B5CF6; --purple-soft: #EDE9FE;
+    --pink: #EC4899; --pink-soft: #FCE7F3;
+    --rn: #10B981;   /* reward-network / Huy */
+    --rv: #F59E0B;   /* rewards-v2 / Hải */
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg); color: var(--ink); min-height: 100vh;
+    padding: 28px; line-height: 1.65; font-size: 15px; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; }
+
+  /* Header */
+  header {
+    background: linear-gradient(135deg, #ECFDF5 0%, #EEF2FF 50%, #FEF3C7 100%);
+    border: 1px solid #DDD6FE; border-radius: 16px;
+    padding: 34px 30px; margin-bottom: 26px; text-align: center;
+  }
+  header .eyebrow {
+    display:inline-block; font-size: 12px; letter-spacing: 2.5px; color: var(--primary);
+    text-transform: uppercase; margin-bottom: 10px; font-weight: 700;
+  }
+  header h1 { font-size: 36px; font-weight: 800; letter-spacing: -0.9px; margin-bottom: 8px; }
+  header p { color: var(--muted); font-size: 15.5px; }
+  header .meta {
+    margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+    font-size: 13px; color: var(--ink-soft);
+  }
+  header .meta span {
+    background: rgba(255,255,255,.72); border: 1px solid rgba(79,70,229,.15);
+    padding: 6px 14px; border-radius: 20px; font-weight: 500;
+  }
+  header .meta span b { font-weight: 700; }
+
+  /* Executive banner */
+  .exec {
+    background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+    border: 1px solid #6EE7B7; border-radius: 14px; padding: 22px 26px; margin-bottom: 26px;
+  }
+  .exec .label {
+    display:inline-block; font-size: 11px; letter-spacing: 2px; color: #065F46;
+    text-transform: uppercase; background: rgba(255,255,255,.6);
+    padding: 4px 10px; border-radius: 6px; margin-bottom: 10px; font-weight: 700;
+  }
+  .exec h2 { font-size: 19px; margin-bottom: 8px; font-weight: 700; letter-spacing: -0.3px; }
+  .exec p { color: var(--ink-soft); font-size: 15px; }
+  .exec b { color: #047857; font-weight: 700; }
+
+  /* KPI */
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 15px; margin-bottom: 30px;
+  }
+  .kpi {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px 20px; position: relative; overflow: hidden;
+  }
+  .kpi::before { content:""; position:absolute; top:0; left:0; width:4px; height:100%; }
+  .kpi.success::before { background: var(--success); }
+  .kpi.warning::before { background: var(--warning); }
+  .kpi.info::before    { background: var(--info); }
+  .kpi.primary::before { background: var(--primary); }
+  .kpi-label { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing:.6px; margin-bottom: 8px; font-weight: 700; }
+  .kpi-value { font-size: 32px; font-weight: 800; line-height: 1.05; letter-spacing: -1px; margin-bottom: 4px; }
+  .kpi-value.success { color: var(--success); }
+  .kpi-value.warning { color: var(--warning); }
+  .kpi-value.primary { color: var(--primary); }
+  .kpi-sub { font-size: 12.5px; color: var(--muted); font-weight: 500; }
+
+  /* Section */
+  .section { margin-bottom: 34px; }
+  .section-title {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+    cursor: pointer; user-select: none; padding: 4px 8px 4px 0; border-radius: 8px; transition: background .15s;
+  }
+  .section-title:hover { background: var(--bg-soft); }
+  .section-title h2 { font-size: 23px; font-weight: 700; letter-spacing: -0.5px; display: flex; align-items: center; }
+  .section-title h2::before {
+    content:""; display:inline-block; width: 5px; height: 22px;
+    background: linear-gradient(180deg, var(--primary), var(--pink)); border-radius: 3px; margin-right: 12px;
+  }
+  .section-title.rn h2::before { background: linear-gradient(180deg, #10B981, #059669); }
+  .section-title.rv h2::before { background: linear-gradient(180deg, #F59E0B, #D97706); }
+  .section-title .hint { font-size: 13.5px; color: var(--muted); flex: 1; }
+  .section-toggle {
+    width: 32px; height: 32px; background: var(--bg-soft); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; color: var(--muted);
+    flex-shrink: 0; transition: transform .25s ease, background .15s, color .15s;
+  }
+  .section-title:hover .section-toggle { background: var(--primary-soft); color: var(--primary); }
+  .section.collapsed .section-toggle { transform: rotate(-90deg); }
+  .section > *:not(.section-title) {
+    overflow: hidden; transition: max-height .35s ease, opacity .2s ease, margin .3s ease;
+    max-height: 20000px; opacity: 1;
+  }
+  .section.collapsed > *:not(.section-title) {
+    max-height: 0; opacity: 0; margin-top: 0!important; margin-bottom: 0!important;
+    padding-top:0; padding-bottom:0; border-top-width:0; border-bottom-width:0;
+  }
+  .collapse-toolbar { display:flex; gap:8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .toolbar-btn {
+    background: var(--card); border: 1px solid var(--border); color: var(--ink-soft);
+    padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px; transition: all .15s; font-family: inherit;
+  }
+  .toolbar-btn:hover { background: var(--primary-soft); color: var(--primary); border-color: var(--primary); }
+
+  /* Charts dashboard */
+  .cto-dash {
+    background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+    border: 1px solid #BFDBFE; border-radius: 16px; padding: 24px; margin-bottom: 30px;
+  }
+  .cto-dash > h3 { font-size: 14px; color: var(--info); margin-bottom: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; }
+  .cto-dash > h3::before { content: "📊  "; }
+  .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .chart-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .chart-card .chart-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+  .chart-wrap { position: relative; height: 240px; }
+
+  /* Project header card */
+  .proj-head {
+    display: flex; align-items: center; gap: 16px; background: var(--card);
+    border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; margin-bottom: 16px;
+  }
+  .proj-avatar { width: 52px; height: 52px; border-radius: 14px; display:flex; align-items:center; justify-content:center; font-size: 24px; flex-shrink: 0; }
+  .proj-avatar.rn { background: var(--success-soft); }
+  .proj-avatar.rv { background: var(--warning-soft); }
+  .proj-head .info { flex: 1; min-width: 0; }
+  .proj-head .info .name { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+  .proj-head .info .owner { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .proj-head .info .head-note { font-size: 13.5px; color: var(--ink-soft); margin-top: 8px; }
+  .proj-head .done-pct { text-align: center; flex-shrink: 0; padding-left: 14px; border-left: 1px solid var(--border-soft); }
+  .proj-head .done-pct .num { font-size: 30px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
+  .proj-head .done-pct.rn .num { color: var(--rn); }
+  .proj-head .done-pct.rv .num { color: var(--rv); }
+  .proj-head .done-pct .cap { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-top: 4px; font-weight: 600; }
+
+  /* Theme card */
+  .theme {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 20px; margin-bottom: 12px;
+  }
+  .theme .th-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .theme .th-head .t { font-size: 15.5px; font-weight: 700; letter-spacing: -0.2px; flex: 1; min-width: 200px; }
+  .theme ul { list-style: none; margin: 0; padding: 0; }
+  .theme li { position: relative; padding-left: 20px; margin-bottom: 6px; font-size: 14px; color: var(--ink-soft); }
+  .theme li::before { content: "›"; position: absolute; left: 4px; color: var(--muted-light); font-weight: 700; }
+  .theme .value {
+    margin-top: 10px; padding: 9px 12px; background: var(--bg-soft); border-radius: 8px;
+    font-size: 13px; color: var(--ink-soft);
+  }
+  .theme .value b { color: var(--ink); }
+  .theme .value::before { content: "💡 "; }
+
+  /* Pills */
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 20px; letter-spacing: .3px; white-space: nowrap; }
+  .pill.prod { background: var(--success-soft); color: #047857; }
+  .pill.stag { background: var(--info-soft); color: #1D4ED8; }
+  .pill.prog { background: var(--warning-soft); color: #B45309; }
+  .pill.wait { background: var(--purple-soft); color: #6D28D9; }
+
+  /* Two-column blocks */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  @media (max-width: 820px){ .cols { grid-template-columns: 1fr; } }
+  .block { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .block.remain { border-left: 4px solid var(--warning); }
+  .block.next { border-left: 4px solid var(--info); }
+  .block h4 { font-size: 14px; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .block.remain h4 { color: #B45309; }
+  .block.next h4 { color: #1D4ED8; }
+  .block ul { list-style: none; margin: 0; padding: 0; }
+  .block li { position: relative; padding-left: 22px; margin-bottom: 11px; font-size: 14px; color: var(--ink-soft); }
+  .block.remain li::before { content: "○"; position: absolute; left: 3px; color: var(--warning); font-weight: 700; }
+  .block.next li::before { content: "→"; position: absolute; left: 3px; color: var(--info); font-weight: 700; }
+  .block li .why { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .block li .eta { font-size: 11px; font-weight: 700; color: #B45309; background: var(--warning-soft); padding: 1px 7px; border-radius: 10px; margin-left: 6px; }
+
+  /* Timeline */
+  .timeline { position: relative; margin: 8px 0 0 8px; padding-left: 26px; }
+  .timeline::before { content:""; position:absolute; left: 6px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 14px; }
+  .tl-dot { position: absolute; left: -26px; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--card); border: 3px solid var(--muted-light); }
+  .tl-item.prod .tl-dot { border-color: var(--success); background: var(--success-soft); }
+  .tl-item.done .tl-dot { border-color: var(--info); }
+  .tl-item.current .tl-dot { border-color: var(--warning); animation: pulse 2s infinite; }
+  .tl-item.upcoming .tl-dot { border-color: var(--purple); }
+  @keyframes pulse { 0%,100%{ box-shadow: 0 0 0 0 rgba(245,158,11,.4);} 50%{ box-shadow: 0 0 0 6px rgba(245,158,11,0);} }
+  .tl-card { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--muted-light); border-radius: 10px; padding: 12px 16px; }
+  .tl-item.prod .tl-card { border-left-color: var(--success); background: linear-gradient(135deg, #ECFDF5 0%, var(--card) 70%); }
+  .tl-item.current .tl-card { border-left-color: var(--warning); background: linear-gradient(135deg, #FFFBEB 0%, var(--card) 80%); }
+  .tl-item.upcoming .tl-card { border-left-color: var(--purple); }
+  .tl-date { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 6px; background: var(--bg-soft); color: var(--ink-soft); display:inline-block; margin-bottom: 6px; }
+  .tl-item.prod .tl-date { background: var(--success-soft); color:#047857; }
+  .tl-item.current .tl-date { background: var(--warning-soft); color:#B45309; }
+  .tl-item.upcoming .tl-date { background: var(--purple-soft); color:#6D28D9; }
+  .tl-card .tl-body { font-size: 13.5px; color: var(--ink-soft); }
+  .tl-card .tl-body .tag { font-weight: 700; }
+  .tl-card .tl-body .tag.rn { color: var(--rn); }
+  .tl-card .tl-body .tag.rv { color: var(--rv); }
+
+  /* Assessment / risks */
+  .assess { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; }
+  .assess .row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-soft); }
+  .assess .row:last-child { border-bottom: none; }
+  .assess .ico { width: 34px; height: 34px; border-radius: 9px; display:flex; align-items:center; justify-content:center; flex-shrink: 0; font-size: 17px; }
+  .assess .ico.good { background: var(--success-soft); }
+  .assess .ico.risk { background: var(--warning-soft); }
+  .assess .ico.dep { background: var(--purple-soft); }
+  .assess .row .txt { font-size: 14px; color: var(--ink-soft); }
+  .assess .row .txt b { color: var(--ink); }
+
+  .footer { text-align: center; color: var(--muted-light); font-size: 12.5px; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+  .note-foot { font-size: 12.5px; color: var(--muted); margin-top: 10px; padding: 10px 14px; background: var(--bg-soft); border-radius: 8px; }
+  .note-foot b { color: var(--ink-soft); }
+
+  /* Kế hoạch tháng 9 */
+  .plan9 { display: grid; grid-template-columns: 1fr; gap: 13px; }
+  .plan-card { display: flex; gap: 16px; background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--info); border-radius: 14px; padding: 18px 22px; }
+  .plan-card.p1 { border-left-color: var(--primary); }
+  .plan-card.p2 { border-left-color: var(--purple); }
+  .plan-card.p3 { border-left-color: var(--rv); }
+  .plan-num { width: 40px; height: 40px; border-radius: 11px; font-weight: 800; font-size: 19px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--info-soft); color: var(--info); }
+  .plan-card.p1 .plan-num { background: var(--primary-soft); color: var(--primary); }
+  .plan-card.p2 .plan-num { background: var(--purple-soft); color: var(--purple); }
+  .plan-card.p3 .plan-num { background: var(--warning-soft); color: #B45309; }
+  .plan-card .pc-body { flex: 1; min-width: 0; }
+  .plan-card .pc-title { font-size: 16px; font-weight: 700; letter-spacing: -0.2px; margin-bottom: 6px; }
+  .plan-card .pc-desc { font-size: 14px; color: var(--ink-soft); }
+  .plan-card .pc-desc b { color: var(--ink); }
+  .plan-card .pc-meta { margin-top: 11px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .pc-chip { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: var(--bg-soft); color: var(--ink-soft); letter-spacing: .2px; }
+  .pc-chip.rn { background: var(--success-soft); color: #047857; }
+  .pc-chip.rv { background: var(--warning-soft); color: #B45309; }
+  .pc-chip.act { background: var(--primary-soft); color: var(--primary); }
+  .pc-chip.wait { background: var(--purple-soft); color: #6D28D9; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="eyebrow">Báo cáo tháng · CNV Reward</span>
+    <h1>Báo cáo Tháng 8/2026</h1>
+    <p>Hai dự án song song — <b style="color:var(--rn)">Reward Network</b> &amp; <b style="color:var(--rv)">rewards-v2</b> · Đã làm / Còn lại</p>
+    <div class="meta">
+      <span>📅 Kỳ: <b>03/08 – 04/09/2026</b> (4 tuần LV + khép mốc đầu 9)</span>
+      <span>🟢 Reward Network — <b>Huy</b></span>
+      <span>🟡 rewards-v2 — <b>Hải</b></span>
+      <span>🗓 Cập nhật 07/09/2026</span>
+    </div>
+  </header>
+
+  <div class="exec">
+    <span class="label">Tóm tắt điều hành</span>
+    <h2>Tháng chuyển từ nền tảng sang thương mại hoá — hai hạng mục lớn nhất đều đã lên Production</h2>
+    <p>Tháng 8, cả hai dự án đưa được hạng mục quan trọng nhất của mình lên chạy thật: <b>cổng thu phí theo gói bán của Reward Network</b> (go-live 21/08) và <b>mã hoá mã quà của rewards-v2</b> (go-live ~27/08), <b>không sự cố production</b>. Toàn bộ phần còn lại đã lên môi trường thử nghiệm (staging), đang chờ API từ CRM và UAT để nghiệm thu — dự kiến ra thị trường trong tháng 9. Sự cố "1,66 triệu điểm treo" là bug <b>bắt được ở staging trước khi lên prod</b> nhờ review/QA, không phải sự cố thật.</p>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi success">
+      <div class="kpi-label">Lên Production</div>
+      <div class="kpi-value success">2</div>
+      <div class="kpi-sub">Gói bán RN (21/08) + Mã hoá voucher (27/08)</div>
+    </div>
+    <div class="kpi primary">
+      <div class="kpi-label">Nhóm tính năng</div>
+      <div class="kpi-value primary">15</div>
+      <div class="kpi-sub">8 Reward Network · 7 rewards-v2</div>
+    </div>
+    <div class="kpi success">
+      <div class="kpi-label">Ca test tự động</div>
+      <div class="kpi-value success">~1.790</div>
+      <div class="kpi-sub">rewards-v2, xanh toàn bộ (đầu tháng ~1.400)</div>
+    </div>
+    <div class="kpi success">
+      <div class="kpi-label">Sự cố production</div>
+      <div class="kpi-value success">0</div>
+      <div class="kpi-sub">1,66 triệu điểm: bug chặn ở staging</div>
+    </div>
+    <div class="kpi warning">
+      <div class="kpi-label">Hoàn thành thực</div>
+      <div class="kpi-value warning">RN 45% · RV 78%</div>
+      <div class="kpi-sub">Theo quy tắc 20% (staging chưa go-live)</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="cto-dash">
+    <h3>Bức tranh tháng 8</h3>
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h4>Nhóm tính năng theo dự án</h4>
+        <div class="chart-sub">Đánh giá theo độ khó &amp; chiều sâu, không theo số commit.</div>
+        <div class="chart-wrap"><canvas id="chFeatures"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h4>Hoàn thành thực (quy tắc 20%)</h4>
+        <div class="chart-sub">Code xong nhưng chưa go-live/nghiệm thu chỉ tính 20%.</div>
+        <div class="chart-wrap"><canvas id="chProgress"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h4>Trạng thái triển khai hạng mục</h4>
+        <div class="chart-sub">Số nhóm tính năng theo môi trường đang chạy.</div>
+        <div class="chart-wrap"><canvas id="chStatus"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="section" id="sec-timeline">
+    <div class="section-title" onclick="toggleSec('sec-timeline')">
+      <h2>Dòng thời gian tháng 8</h2>
+      <span class="hint">Các mốc chính của cả hai dự án · 🟢 RN · 🟡 rewards-v2</span>
+      <div class="section-toggle">▾</div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item done"><div class="tl-dot"></div><div class="tl-card">
+        <span class="tl-date">03–07/08 · W32</span>
+        <div class="tl-body"><span class="tag rn">RN:</span> nền mã voucher an toàn + sổ Credit ghi lúc đổi lên staging. <span class="tag rv">rewards-v2:</span> khởi động mã hoá mã quà at-rest, vá lỗ bảo mật API test không đăng nhập.</div>
+      </div></div>
+      <div class="tl-item done"><div class="tl-dot"></div><div class="tl-card">
+        <span class="tl-date">10–14/08 · W33</span>
+        <div class="tl-body"><span class="tag rn">RN:</span> mở cửa mạng lưới, sửa ưu đãi đang chạy, chở hạn/kênh voucher sang mini-app, gom module cũ. <span class="tag rv">rewards-v2:</span> hoàn tất mã hoá voucher + vá 13 lỗi hậu mã hoá.</div>
+      </div></div>
+      <div class="tl-item done"><div class="tl-dot"></div><div class="tl-card">
+        <span class="tl-date">17–21/08 · W34</span>
+        <div class="tl-body"><span class="tag rn">RN:</span> thu phí theo gói + gộp màn kết nối (tỷ lệ đổi điểm + kênh voucher). <span class="tag rv">rewards-v2:</span> đơn kẹt thôi hoàn oan (tách lỗi vendor 4xx/5xx/mất mạng), cảnh báo tác vụ cứu đơn chết + trần lượt đổi/khách.</div>
+      </div></div>
+      <div class="tl-item prod"><div class="tl-dot"></div><div class="tl-card">
+        <span class="tl-date">21/08 · GO-LIVE</span>
+        <div class="tl-body"><span class="tag rn">Reward Network lên PRODUCTION</span> — cổng quản lý gói bán / chặn kết nối kho quà theo gói (CICD production).</div>
+      </div></div>
+      <div class="tl-item prod"><div class="tl-dot"></div><div class="tl-card">
+        <span class="tl-date">24/08 · Deploy</span>
+        <div class="tl-body"><span class="tag rv">Phía rewards-v2</span> deploy worker đưa quà Reward Network vào kho từng shop — chạy liên thông đầu-cuối.</div>
+      </div></div>
+      <div class="tl-item done"><div class="tl-dot"></div><div class="tl-card">
+        <span class="tl-date">24–28/08 · W35</span>
+        <div class="tl-body"><span class="tag rn">RN:</span> danh mục/ngành hàng hai cấp + onboarding tự phục vụ. <span class="tag rv">rewards-v2:</span> công cụ chốt đơn trên CRM, fix voucher UrBox vô hạn bị đóng dấu 30 ngày, dọn cột mã trần.</div>
+      </div></div>
+      <div class="tl-item prod"><div class="tl-dot"></div><div class="tl-card">
+        <span class="tl-date">~27/08 · GO-LIVE</span>
+        <div class="tl-body"><span class="tag rv">rewards-v2 lên PRODUCTION</span> — mã hoá mã quà at-rest + job mã hoá lại toàn bộ dữ liệu voucher cũ.</div>
+      </div></div>
+      <div class="tl-item current"><div class="tl-dot"></div><div class="tl-card">
+        <span class="tl-date">03–04/09 · W36 (2 ngày)</span>
+        <div class="tl-body"><span class="tag rn">RN:</span> ngành hàng hai cấp + CRM thành nguồn taxonomy (chờ API CRM). <span class="tag rv">rewards-v2:</span> rà soát &amp; củng cố toàn bộ worker khi tích hợp UrBox + Reward Network, hoàn thiện theo dõi giao hàng. <em>(nghỉ lễ Quốc khánh 2/9)</em></div>
+      </div></div>
+      <div class="tl-item upcoming"><div class="tl-dot"></div><div class="tl-card">
+        <span class="tl-date">Tháng 9 · Sắp tới</span>
+        <div class="tl-body"><span class="tag rv">rewards-v2:</span> đưa nhóm an toàn tiền lên production + chờ UAT. <span class="tag rn">RN:</span> test trùng voucher + liên thông CRM → nghiệm thu Phase 1 → truyền thông ra thị trường.</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="collapse-toolbar">
+    <button class="toolbar-btn" onclick="setAll(false)">▾ Mở tất cả</button>
+    <button class="toolbar-btn" onclick="setAll(true)">▸ Thu gọn tất cả</button>
+  </div>
+
+  <!-- PROJECT 1: Reward Network -->
+  <div class="section" id="sec-rn">
+    <div class="section-title rn" onclick="toggleSec('sec-rn')">
+      <h2>Dự án 1 — Reward Network</h2>
+      <span class="hint">Chợ ưu đãi mạng lưới · Huy</span>
+      <div class="section-toggle">▾</div>
+    </div>
+
+    <div class="proj-head">
+      <div class="proj-avatar rn">🟢</div>
+      <div class="info">
+        <div class="name">Reward Network — Chợ ưu đãi mạng lưới</div>
+        <div class="owner">Chủ dự án: Huy · Backend reward-network + FE quản trị (cdp-frontend)</div>
+        <div class="head-note">Tháng 8 đi từ <b>làm chắc nền tảng an toàn</b> (mã voucher chống trùng, sổ Credit ghi lúc đổi, đối soát chống lật lẫn voucher giữa các shop) sang <b>thương mại hoá</b> và hoàn thiện trải nghiệm shop. Điểm nhấn: hạng mục quản lý gói bán — cổng thu tiền của mạng lưới — đã lên production (21/08), không sự cố.</div>
+      </div>
+      <div class="done-pct rn"><div class="num">45%</div><div class="cap">Phase 1<br>(quy tắc 20%)</div></div>
+    </div>
+
+    <!-- Đã làm -->
+    <div class="theme">
+      <div class="th-head"><span class="t">1 · Thương mại hoá mạng lưới — thu phí theo gói bán</span><span class="pill prod">● Production</span></div>
+      <ul>
+        <li>Mở mạng lưới cho mọi shop, nhưng chỉ shop có gói dịch vụ mới kết nối được kho quà chung — <b>cổng thu tiền đầu tiên</b> của mạng lưới.</li>
+        <li>Đã có cổng khoá/ngắt kết nối kho quà theo vòng đời gói; shop gia hạn xong bấm kết nối lại là giữ nguyên cấu hình cũ. <em>(Tín hiệu "gói hết hạn" tự động còn chờ CRM cấp — xem phần còn lại.)</em></li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Bật nguồn doanh thu đầu tiên của mạng lưới, vận hành theo đúng vòng đời hợp đồng mà không cần can thiệp tay.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">2 · Mô hình mã voucher an toàn — chống trùng mã, chống mất tài sản</span><span class="pill stag">Staging</span></div>
+      <ul>
+        <li>Tách mã khách đọc khỏi định danh nội bộ của hệ thống, neo mỗi mã vào đúng shop sở hữu — hai shop khác nhau <b>không thể dán trùng mã và lật lẫn voucher</b> của nhau.</li>
+        <li>Chặn shop dán trùng mã khuyến mãi nội bộ của chính mình; hoàn/refund trả voucher về đúng khách đã đổi (chặn một mã dùng-một-lần bị hai khách cùng dùng).</li>
+        <li>Thôi in mã voucher trần ra nhật ký, che mã ngắn để tránh lộ.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Bảo vệ tài sản voucher và tiền của mạng lưới, chống gian lận trùng mã ngay từ nền tảng.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">3 · Sổ điểm Credit ghi ngay lúc ĐỔI quà + chỉ số Tổng quan</span><span class="pill stag">Staging</span></div>
+      <ul>
+        <li>Ghi Credit vào sổ <b>ngay khi khách đổi điểm lấy quà</b>, thay vì chờ tới lúc khách dùng mã — trước đây sổ trống nên chỉ số Tổng quan đứng 0.</li>
+        <li>Chuẩn hoá tên và đơn vị các chỉ số ở trang Tổng quan và báo cáo Excel theo đúng cách shop hiểu (đếm theo lúc đổi, không theo lúc dùng mã).</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Shop nhìn thấy giá trị mạng lưới sinh ra theo thời gian thực; báo cáo kinh doanh có số liệu thật để ra quyết định.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">4 · Đối soát voucher mạng lưới chống lật lẫn giữa hai shop trùng mã</span><span class="pill stag">Staging</span></div>
+      <ul>
+        <li>Đối soát phân định theo đúng shop góp quà, để hai shop tình cờ trùng chuỗi mã không bị lẫn voucher.</li>
+        <li>Đơn gặp lỗi lưu dữ liệu được chốt thất bại ngay, thôi giam điểm khách 24 giờ.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Đối soát chính xác, không giam oan điểm khách, chuẩn bị cho vận hành đối soát thật.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">5 · Taxonomy ngành hàng &amp; danh mục hai cấp, lấy CRM làm nguồn</span><span class="pill stag">Staging</span><span class="pill wait">Chờ API CRM</span></div>
+      <ul>
+        <li>Chuyển ngành hàng và danh mục từ một cấp sang <b>cây hai cấp</b>; quà chỉ gắn vào nhóm cấp lá, nhưng lọc theo nhóm cha vẫn ra đủ quà con.</li>
+        <li>Định giá quà theo từng ngành con (mỗi ngành con một mức quy đổi Credit riêng); kho phân phối dò ba cấp: đúng ngành → ngành cha → kho chung. Tắt một nhánh là ẩn toàn bộ quà nhánh đó khỏi cả chợ ưu đãi lẫn mini-app.</li>
+        <li>Neo phân loại bằng mã do hệ thống tự đặt (thay vì bám id Zalo); đưa CRM thành nguồn chuẩn ngành hàng, có job đồng bộ (chờ API CRM để chạy liên thông).</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Phân loại quà đúng ngành, định giá linh hoạt theo từng ngành, dữ liệu danh mục thống nhất một nguồn với CRM.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">6 · Mở cửa mạng lưới + onboarding tự phục vụ</span><span class="pill stag">Staging</span></div>
+      <ul>
+        <li>Shop tự bấm tham gia mạng lưới từ trang Tổng quan, bỏ cổng mời tay; tự khai ngành hàng/danh mục kinh doanh, sau đó xem lại và sửa được các thiết lập đã khai.</li>
+        <li>Banner nhắc các mục shop còn thiếu; cảnh báo voucher đã phát đi mà chưa ai nhận.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Mở rộng mạng lưới mà không cần vận hành mời từng shop; shop tự chủ hồ sơ, ít phụ thuộc hỗ trợ.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">7 · Màn kết nối &amp; cấu hình nhà cung cấp gọn lại</span><span class="pill stag">Staging</span></div>
+      <ul>
+        <li>Gộp bước khai tỷ lệ đổi điểm và kênh gửi voucher vào cùng luồng kết nối — kết nối xong dùng được ngay; bỏ hình thức kết nối trọn gói qua CNV; tạm khoá kênh HUB và Zalo Mini App vì chưa sẵn sàng.</li>
+        <li>Cảnh báo rõ khi shop đổi thiết lập dùng chung sẽ ảnh hưởng những kết nối nào.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Onboarding ít bước, ít sai sót; shop hiểu rõ hệ quả trước khi thay đổi cấu hình.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">8 · Shop tự sửa ưu đãi ĐANG CHẠY + chở hạn/kênh voucher sang mini-app</span><span class="pill stag">Staging</span></div>
+      <ul>
+        <li>Shop sửa được ưu đãi đang chạy: đổi nội dung, nới điều kiện, nhập cách sử dụng riêng theo từng kênh — không phải thu hồi rồi tạo lại.</li>
+        <li>Quà hết hạn tự ẩn khỏi mini-app; mở 5 kênh áp dụng ưu đãi; báo trước cho khách mã dùng online hay tại quầy, thay vì để khách bấm rồi mới báo lỗi.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Shop linh hoạt điều chỉnh ưu đãi không gián đoạn; khách có trải nghiệm sạch, không đổi nhầm quà hết hạn hay sai kênh.</div>
+    </div>
+
+    <div class="note-foot"><b>Nền tảng vận hành (kỹ thuật):</b> phân trang toàn bộ danh sách trong CRM-admin; tách riêng luồng xử lý bản tin lỗi (DLT) theo từng hệ để hai hệ trùng tên không lẫn nhau.</div>
+
+    <!-- Còn lại + Kế hoạch -->
+    <div class="cols">
+      <div class="block remain">
+        <h4>⚠ Còn lại / Chưa làm</h4>
+        <ul>
+          <li>Hoàn thành các API cuối và chờ <b>API nguồn ngành hàng từ CRM</b><span class="eta">T9</span><span class="why">Taxonomy hai cấp và đồng bộ ngành hàng cần CRM cấp nguồn dữ liệu chuẩn để chạy liên thông.</span></li>
+          <li>Test kịch bản <b>trùng voucher</b> trên staging<span class="eta">T9</span><span class="why">Xác nhận cơ chế chống hai shop dán trùng mã hoạt động đúng trước khi ra production.</span></li>
+          <li>Các tính năng phía CRM + <b>test liên thông RN ↔ CRM</b> (đầu-cuối)<span class="eta">T9</span><span class="why">Nghiệp vụ đi qua cả hai hệ thống, phải kiểm tra để không lệch dữ liệu.</span></li>
+          <li>Nghiệm thu toàn bộ <b>Phase 1</b> và truyền thông ra thị trường<span class="eta">T9</span><span class="why">Chốt chất lượng trước khi mời shop dùng thật và go-to-market.</span></li>
+        </ul>
+      </div>
+      <div class="block next">
+        <h4>→ Kế hoạch tháng 9</h4>
+        <ul>
+          <li>Hoàn thiện các API cuối và phối hợp CRM cấp API nguồn ngành hàng.</li>
+          <li>Chạy test trùng voucher và test liên thông Reward Network ↔ CRM trên staging.</li>
+          <li>Nghiệm thu toàn bộ Phase 1 rồi truyền thông ra thị trường.</li>
+          <li>Pilot 20–50 shop sau khi QA xanh (chờ chốt mô hình thu phí).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 2: rewards-v2 -->
+  <div class="section" id="sec-rv">
+    <div class="section-title rv" onclick="toggleSec('sec-rv')">
+      <h2>Dự án 2 — rewards-v2</h2>
+      <span class="hint">Dịch vụ đổi điểm lấy voucher · Hải</span>
+      <div class="section-toggle">▾</div>
+    </div>
+
+    <div class="proj-head">
+      <div class="proj-avatar rv">🟡</div>
+      <div class="info">
+        <div class="name">rewards-v2 — Dịch vụ đổi điểm lấy voucher</div>
+        <div class="owner">Chủ dự án: Hải · Backend rewards-v2 + vendor UrBox/GotIt</div>
+        <div class="head-note">Tháng 8 tập trung <b>bảo vệ tài sản của khách</b> (mã quà chính là tiền) và <b>siết an toàn tiền trong luồng đổi quà</b>: đã đưa mã hoá mã quà lên production, và đổi một quyết định quan trọng — đơn hỏi vendor mãi không rõ nay treo chờ người kiểm thay vì tự hoàn điểm theo đồng hồ.</div>
+      </div>
+      <div class="done-pct rv"><div class="num">78%</div><div class="cap">Ước tính<br>(quy tắc 20%)</div></div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">1 · Bảo mật mã quà trong kho dữ liệu</span><span class="pill prod">● Production ~27/08</span></div>
+      <ul>
+        <li>Mã hoá toàn bộ các trường mang mã quà (mã voucher, đường dẫn quà, mã QR, gói combo) khi lưu trữ — <b>người xem trộm cơ sở dữ liệu cũng không đọc được mã</b>.</li>
+        <li>Job chạy một lần mã hoá lại toàn bộ voucher cũ đã phát hành; dọn triệt để bản sao mã còn nằm trần (kể cả một cột định danh của GotIt vô tình chép nguyên văn mã trên 174/174 dòng).</li>
+        <li>Che mã quà ở nhật ký, màn tra cứu CRM và ô tìm kiếm; <b>gỡ một API test gửi voucher không cần đăng nhập và ngừng trả khoá bí mật ra response</b> (lỗ hở bảo mật thật).</li>
+        <li>Rà &amp; vá 13 lỗi phát sinh sau mã hoá (màn lịch sử/xuất Excel trắng với một số loại shop, webhook bị bỏ sót im lặng, nguy cơ phát trùng voucher khi xử lý đồng thời).</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Bảo vệ tài sản khách hàng và giảm rủi ro rò rỉ dữ liệu nhạy cảm — hạng mục đã chạy thật trên production.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">2 · Đơn đổi quà bị kẹt — thôi hoàn điểm oan, treo chờ người kiểm</span><span class="pill stag">Staging</span></div>
+      <ul>
+        <li>Đơn hỏi nhà cung cấp mãi không rõ kết quả nay <b>treo chờ người kiểm</b> và giữ nguyên điểm, tiền của khách, thay vì tự động hoàn điểm sau một khoảng thời gian — tránh huỷ oan đơn mà nhà cung cấp đã xuất mã (khách được hoàn điểm nhưng công ty vẫn phải trả tiền).</li>
+        <li>Ngưỡng nay đo bằng <b>số lần thật sự hỏi được nhà cung cấp, không đếm giờ</b>; chỉ kết luận đơn hỏng khi nhà cung cấp trả lời dứt khoát; phân biệt lỗi vendor với lỗi mạng/hệ thống của mình.</li>
+        <li>Giảm mạnh số lần gọi lại nhà cung cấp cho mỗi đơn kẹt (~288 → ~70), nhẹ tải cho cả hai bên.</li>
+        <li>Chặn được (trên staging, trước khi lên thật) lỗi khiến <b>1,66 triệu điểm của khách bị treo</b> do tiến trình cứu đơn không chạy nốt việc cộng/trừ điểm.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Chặn thất thoát tiền và huỷ đơn oan — nhóm rủi ro tiền lớn nhất của luồng đổi quà; người vận hành nắm sự cố sớm hơn.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">3 · Công cụ cho người trực tự xử lý đơn treo trên CRM</span><span class="pill stag">Staging</span></div>
+      <ul>
+        <li>Người trực chốt hoặc hỏi lại nhà cung cấp cho một đơn ngay trên CRM, không phải chờ hệ thống chạy vòng — dùng lại đúng luồng xử lý tự động để không phát sinh sai lệch tiền; xử lý hàng loạt tới <b>200 đơn/lần</b> khi vendor gián đoạn rồi hồi phục.</li>
+        <li>Ràng buộc an toàn, yêu cầu ký duyệt như các thao tác đụng tiền khác, ghi nhật ký ai xử lý đơn nào; cảnh báo tác vụ cộng/trừ điểm chết kèm <b>nút chạy lại ngay trên CRM</b>.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Đội vận hành tự xử lý sự cố đơn hàng, giảm phụ thuộc lập trình viên; mọi thao tác đụng tiền đều có dấu vết.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">4 · Trải nghiệm khách trung thực khi đơn chưa xong</span><span class="pill stag">Staging</span></div>
+      <ul>
+        <li>Khách theo dõi được đơn đang treo và lọc lịch sử đổi quà theo trạng thái; bỏ lời hứa sai "ưu đãi sẽ xuất hiện sau ít phút" với đơn không còn tiến trình tự động.</li>
+        <li>Đơn được cứu muộn vẫn tự động gửi voucher cho khách qua Email/ZNS và chạy tiếp chương trình của shop.</li>
+        <li>Sửa lỗi voucher vô thời hạn của UrBox bị đóng dấu hạn 30 ngày — trước đây sau ngày thứ 31 khách mất quyền dùng dù mã vẫn còn nguyên giá trị.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Khách được thông tin đúng và không mất voucher đã đổi; giữ uy tín chương trình.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">5 · Theo dõi giao quà vật lý đến tay khách</span><span class="pill stag">Staging</span></div>
+      <ul>
+        <li>Tiến trình theo dõi trạng thái giao hàng quà vật lý chạy nhịp đều, chỉ cập nhật đúng phần trạng thái giao hàng mà không ghi đè toàn bộ thông tin đơn.</li>
+        <li>CRM làm mới được trạng thái giao hàng tức thì; bổ sung tra cứu đơn quà vật lý (GotIt, UrBox) trên màn tra cứu — trước đây tra nhầm đường nên đơn vật lý luôn báo như đơn hỏng.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Đơn quà vật lý được theo dõi minh bạch đến khi giao xong; hỗ trợ chăm sóc khách.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">6 · Hiển thị đúng kho quà theo từng shop</span><span class="pill prod">● Deploy 24/08</span></div>
+      <ul>
+        <li>Mỗi shop chỉ thấy và chỉ bật/tắt được danh mục, thương hiệu trong hợp đồng của mình — không còn thấy hay tắt nhầm của shop khác; chuyển quyền bật/tắt cấp hệ thống về cho CRM quản lý tập trung.</li>
+        <li>Khôi phục hàng nghìn quà bị ẩn oan (~8.441 quà thuộc thương hiệu đã tắt và ~401 quà bị dồn nhầm vào nhóm "Khác").</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Khách nhìn thấy đúng kho quà thuộc chương trình của mình; đội vận hành kiểm soát hiển thị tập trung.</div>
+    </div>
+
+    <div class="theme">
+      <div class="th-head"><span class="t">7 · Công bằng phân phối quà và củng cố nền tảng</span><span class="pill stag">Staging</span></div>
+      <ul>
+        <li>Áp <b>trần số lượt đổi theo từng khách</b> cho mỗi món quà — chặn một khách hốt sạch quà hot; phân biệt rõ "quà đã hết" với "bạn đã hết lượt".</li>
+        <li>Giới hạn số đơn xử lý mỗi lượt quét để tồn đọng lớn không làm nghẽn khâu xử lý điểm của các đơn khác.</li>
+        <li>Rà soát lại toàn bộ các tiến trình nền của hệ thống khi chuẩn bị kết nối thêm UrBox và Reward Network.</li>
+      </ul>
+      <div class="value"><b>Giá trị:</b> Phân phối quà công bằng hơn; hệ thống ổn định và sẵn sàng khi mở rộng thêm nhà cung cấp.</div>
+    </div>
+
+    <div class="cols">
+      <div class="block remain">
+        <h4>⚠ Còn lại / Chưa làm</h4>
+        <ul>
+          <li>Đưa <b>nhóm an toàn tiền</b> (đơn treo chờ kiểm, công cụ chốt đơn CRM, củng cố worker tích hợp UrBox + RN) lên production<span class="eta">Đầu T9</span><span class="why">Đã code xong, review độc lập và test tự động xanh, nhưng chưa go-live nên chưa tính là hoàn thành thực.</span></li>
+          <li>Rà &amp; sửa <b>dữ liệu voucher UrBox cũ</b> bị gán sai hạn 30 ngày<span class="eta">T9</span><span class="why">Số ước tính hiện là con số tối thiểu do nhật ký chỉ lưu 90 ngày; cần rà đủ để không bỏ sót voucher của khách.</span></li>
+          <li>Dọn dữ liệu cũ ở cột định danh voucher GotIt bị chép trùng mã<span class="eta">Kèm deploy</span><span class="why">Chạy bằng lệnh tay lúc triển khai; không gấp vì không chức năng nào còn đọc cột này.</span></li>
+          <li>Theo dõi số đơn rơi vào trạng thái <b>chờ kiểm</b> sau go-live để chỉnh ngưỡng cho sát thực tế<span class="eta">Sau go-live</span><span class="why">Ngưỡng hiện đặt theo ước lượng, cần dữ liệu vận hành thật để tinh chỉnh.</span></li>
+          <li>Test lần cuối và chờ <b>UAT</b> để hỗ trợ nghiệm thu<span class="eta">Theo Sale</span><span class="why">UrBox tạm dừng chờ Sale có khách hàng mới mới bắt đầu UAT với nhà cung cấp.</span></li>
+        </ul>
+      </div>
+      <div class="block next">
+        <h4>→ Kế hoạch tháng 9</h4>
+        <ul>
+          <li>Triển khai production nhóm an toàn tiền — <b>deploy đồng thời</b> backend + mini-app + CRM để tránh hiển thị lệch giữa app khách và CRM.</li>
+          <li>Theo dõi số đơn rơi vào trạng thái chờ kiểm sau khi lên thật, điều chỉnh ngưỡng cho sát thực tế.</li>
+          <li>Rà soát và sửa dữ liệu voucher UrBox cũ bị gán sai hạn sử dụng.</li>
+          <li>Test lần cuối các tính năng và sẵn sàng hỗ trợ UAT (UrBox chờ Sale có khách hàng mới).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Assessment -->
+  <div class="section" id="sec-assess">
+    <div class="section-title" onclick="toggleSec('sec-assess')">
+      <h2>Đánh giá chung &amp; lưu ý</h2>
+      <span class="hint">Điểm sáng · rủi ro · phụ thuộc ngoài đội</span>
+      <div class="section-toggle">▾</div>
+    </div>
+    <div class="assess">
+      <div class="row">
+        <div class="ico good">✅</div>
+        <div class="txt"><b>QA/review đang phát huy tác dụng.</b> Sự cố "1,66 triệu điểm treo" và hai lỗi nghiêm trọng khác đều được <b>bắt ở môi trường thử nghiệm trước khi lên production</b>, sau đó bổ sung test khoá lại — 0 sự cố production trong tháng.</div>
+      </div>
+      <div class="row">
+        <div class="ico good">✅</div>
+        <div class="txt"><b>Hai cột mốc thương mại quan trọng đã go-live.</b> Cổng thu phí theo gói của Reward Network và mã hoá mã quà của rewards-v2 đã chạy thật — nền tảng bắt đầu có doanh thu và đạt mức bảo mật tài sản khách.</div>
+      </div>
+      <div class="row">
+        <div class="ico risk">⚠️</div>
+        <div class="txt"><b>Nhóm đơn treo phải deploy đồng thời 3 phần.</b> Backend rewards-v2 + mini-app + CRM phải lên cùng lúc; nếu lệch, đơn ở trạng thái mới sẽ biến mất khỏi màn khách và bị CRM hiển thị như đơn đã thành công → người trực dễ đóng đơn nhầm.</div>
+      </div>
+      <div class="row">
+        <div class="ico risk">⚠️</div>
+        <div class="txt"><b>Nợ dữ liệu voucher UrBox.</b> Voucher UrBox cũ bị gán sai hạn 30 ngày chưa được xử lý; nhật ký chỉ giữ 90 ngày nên số đếm được là tối thiểu — cần rà sớm để không bỏ sót voucher của khách.</div>
+      </div>
+      <div class="row">
+        <div class="ico dep">🔗</div>
+        <div class="txt"><b>Phụ thuộc ngoài đội.</b> Reward Network chờ <b>API nguồn ngành hàng từ CRM</b> để chốt taxonomy và cơ chế tự khoá kết nối theo gói hết hạn; rewards-v2 chờ <b>Sale có khách hàng mới</b> để bắt đầu UAT với UrBox. Hai nút thắt này nằm ngoài tầm kiểm soát của đội kỹ thuật.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kế hoạch tháng 9 -->
+  <div class="section" id="sec-plan9">
+    <div class="section-title" onclick="toggleSec('sec-plan9')">
+      <h2>Kế hoạch tháng 9</h2>
+      <span class="hint">Định hướng chung của đội cho tháng tới</span>
+      <div class="section-toggle">▾</div>
+    </div>
+    <div class="plan9">
+      <div class="plan-card p1">
+        <div class="plan-num">1</div>
+        <div class="pc-body">
+          <div class="pc-title">Chủ động vào repo CRM — làm phần API và giao diện</div>
+          <div class="pc-desc">Đội bắt đầu tham gia trực tiếp vào hệ CRM để <b>tự phát triển các API và giao diện</b> còn thiếu, thay vì chờ đội CRM — gỡ nút thắt liên thông <b>Reward Network ↔ CRM</b> (nguồn ngành hàng, tín hiệu gói hết hạn).</div>
+          <div class="pc-meta"><span class="pc-chip act">Chủ động</span><span class="pc-chip rn">Phục vụ Reward Network</span></div>
+        </div>
+      </div>
+      <div class="plan-card p2">
+        <div class="plan-num">2</div>
+        <div class="pc-body">
+          <div class="pc-title">Chờ anh Phú đưa hướng đi Phase 2 &amp; tiếp tục phát triển Reward Network</div>
+          <div class="pc-desc">Phase 1 phần thương mại hoá đã lên production; chờ <b>anh Phú</b> chốt định hướng Phase 2 để tiếp tục mở rộng Reward Network theo đúng hướng sản phẩm.</div>
+          <div class="pc-meta"><span class="pc-chip wait">Chờ định hướng</span><span class="pc-chip rn">Reward Network</span></div>
+        </div>
+      </div>
+      <div class="plan-card p3">
+        <div class="plan-num">3</div>
+        <div class="pc-body">
+          <div class="pc-title">UAT với UrBox sau khi có khách hàng đầu tiên</div>
+          <div class="pc-desc">Nhóm an toàn tiền của rewards-v2 đã sẵn sàng; <b>UAT với UrBox</b> bắt đầu ngay khi Sale có khách hàng đầu tiên để nghiệm thu với nhà cung cấp.</div>
+          <div class="pc-meta"><span class="pc-chip rv">rewards-v2</span><span class="pc-chip">Theo lịch khách / Sale</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Báo cáo tháng 8/2026 · CNV Reward · Reward Network (Huy) &amp; rewards-v2 (Hải)<br>
+    Đối chiếu commit thực tế 3 repo (reward-network, rewards-v2, cdp-frontend) với báo cáo tuần · Đánh giá theo độ khó &amp; chiều sâu, không theo số commit · Quy tắc 20% cho code chưa go-live.
+  </div>
+
+</div>
+
+<script>
+  function toggleSec(id){ document.getElementById(id).classList.toggle('collapsed'); }
+  function setAll(collapsed){
+    document.querySelectorAll('.section').forEach(function(s){
+      s.classList.toggle('collapsed', collapsed);
+    });
+  }
+
+  var GREEN = '#10B981', AMBER = '#F59E0B', BLUE = '#3B82F6', PURPLE = '#8B5CF6', GREY = '#CBD5E1';
+  Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif';
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#6B7280';
+
+  // 1 — feature groups doughnut
+  new Chart(document.getElementById('chFeatures'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Reward Network', 'rewards-v2'],
+      datasets: [{ data: [8, 7], backgroundColor: [GREEN, AMBER], borderWidth: 2, borderColor: '#fff' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '62%',
+      plugins: {
+        legend: { position: 'bottom', labels: { padding: 14, usePointStyle: true, pointStyle: 'circle' } },
+        tooltip: { callbacks: { label: function(c){ return c.label + ': ' + c.parsed + ' nhóm'; } } }
+      }
+    }
+  });
+
+  // 2 — real completion horizontal bar
+  new Chart(document.getElementById('chProgress'), {
+    type: 'bar',
+    data: {
+      labels: ['Reward Network', 'rewards-v2'],
+      datasets: [{
+        label: 'Hoàn thành thực (%)', data: [45, 78],
+        backgroundColor: [GREEN, AMBER], borderRadius: 8, barThickness: 40
+      }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      scales: {
+        x: { min: 0, max: 100, ticks: { callback: function(v){ return v + '%'; } }, grid: { color: '#F1F5F9' } },
+        y: { grid: { display: false } }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: function(c){ return c.parsed.x + '% (quy tắc 20% cho phần chưa go-live)'; } } }
+      }
+    }
+  });
+
+  // 3 — deployment status stacked bar
+  new Chart(document.getElementById('chStatus'), {
+    type: 'bar',
+    data: {
+      labels: ['Reward Network', 'rewards-v2'],
+      datasets: [
+        { label: 'Production', data: [1, 2], backgroundColor: GREEN, borderRadius: 4 },
+        { label: 'Staging', data: [6, 5], backgroundColor: BLUE, borderRadius: 4 },
+        { label: 'Đang hoàn thiện', data: [1, 0], backgroundColor: PURPLE, borderRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, ticks: { stepSize: 2 }, grid: { color: '#F1F5F9' }, title: { display: true, text: 'Số nhóm tính năng' } }
+      },
+      plugins: { legend: { position: 'bottom', labels: { padding: 12, usePointStyle: true, pointStyle: 'circle' } } }
+    }
+  });
+</script>
+</body>
+</html>
