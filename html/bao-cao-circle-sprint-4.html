@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Báo cáo Circle Sprint 4</title>
+<style>
+  :root{
+    --page:#f4f4f1; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,.10);
+    --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4;
+    --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+    --good-text:#006300; --warn-text:#8a5a00; --crit-text:#a62828;
+    --r:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--page);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+  header{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+  h1{font-size:28px;margin:0 0 4px;letter-spacing:-.01em}
+  .sub{color:var(--ink-2);font-size:14px}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--border);background:var(--surface);white-space:nowrap}
+  .pill.good{color:var(--good-text);background:#eaf7ea;border-color:#bfe4bf}
+  .pill.warn{color:var(--warn-text);background:#fff6df;border-color:#f3dc9a}
+  .pill.crit{color:var(--crit-text);background:#fdecec;border-color:#f1b9b9}
+  h2{font-size:17px;margin:34px 0 12px;display:flex;align-items:center;gap:10px}
+  h2 .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--ink);color:#fff;font-size:12px}
+  .grid{display:grid;gap:14px}
+  .g4{grid-template-columns:repeat(4,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:900px){.g4{grid-template-columns:repeat(2,1fr)} .g3,.g2{grid-template-columns:1fr}}
+  @media(max-width:520px){.g4{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px}
+  .card h3{margin:0 0 2px;font-size:14.5px}
+  .card .hint{color:var(--muted);font-size:12.5px;margin-bottom:12px}
+  .tile .v{font-size:34px;font-weight:700;line-height:1.1;margin-top:6px}
+  .tile .l{color:var(--ink-2);font-size:13px}
+  .tile .d{font-size:12.5px;margin-top:6px;color:var(--ink-2)}
+  .tldr{border-left:4px solid var(--s1)}
+  .tldr p{margin:6px 0}
+  ul.clean{margin:8px 0 0;padding-left:18px} ul.clean li{margin:6px 0}
+  .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--ink-2);margin-top:8px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  svg{display:block;width:100%;height:auto;font-family:inherit}
+  svg text{fill:var(--ink-2);font-size:12px}
+  svg .ax{stroke:var(--axis)} svg .gl{stroke:var(--grid)}
+  svg .lbl{fill:var(--ink);font-weight:600}
+  svg .mut{fill:var(--muted);font-size:11px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--grid);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:0}
+  .bar{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}
+  .bar b{display:block;height:100%;border-radius:4px}
+  .tip{position:fixed;pointer-events:none;background:#1a1a19;color:#f0efec;font-size:12.5px;padding:7px 10px;border-radius:8px;opacity:0;transition:opacity .12s;z-index:9;max-width:260px}
+  .risk{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--grid)} .risk:last-child{border-bottom:0}
+  .risk .ico{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;font-weight:700;font-size:14px}
+  .risk .t{font-weight:600} .risk .m{color:var(--ink-2);font-size:13.5px}
+  footer{margin-top:40px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--grid);padding-top:14px}
+  .small{font-size:12.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="tip" id="tip"></div>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>Báo cáo tiến độ · Circle Sprint 4</h1>
+    <div class="sub">Team Technology · 12/10 – 25/10/2026 · 3 dự án: NeoX|CNV, Reward Network, Affiliate (TECH TEAM) · Cập nhật 23/10/2026</div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <span class="pill good">● Đúng tiến độ</span>
+    <span class="pill">Còn 2 ngày</span>
+    <span class="pill">13 task · 4 người</span>
+  </div>
+</header>
+
+<!-- TL;DR -->
+<div class="card tldr">
+  <h3>Tóm tắt 30 giây</h3>
+  <p><b>Sprint đã đi 86% thời gian, khối lượng công việc hoàn thành ≈ 90%.</b> 10/13 task đã xong, 3 task còn lại đều đang làm (70%, 50%, 50%), không có task bị tạm ngưng hay chưa bắt đầu.</p>
+  <p><b>Nổi bật:</b> Reward Network ra 5 tính năng cho miniapp/Hub và deploy ngày 20/10; NeoX hoàn tất nghiên cứu + dựng xong nền tảng dịch vụ thanh toán thẻ <i>cnv-payment</i>; mini app demo đã được chỉnh để qua kiểm duyệt Zalo.</p>
+  <p><b>Cần chú ý:</b> 3 task đang làm có khả năng kéo sang Sprint 5 (E2E pilot Reward Network mở từ 03/07; 2 task Affiliate mới ở 50%). Toàn bộ task chưa có deadline/ước lượng giờ nên chưa đo được độ chính xác kế hoạch.</p>
+</div>
+
+<!-- KPI tiles -->
+<h2><span class="n">1</span>Chỉ số chính</h2>
+<div class="grid g4">
+  <div class="card tile"><div class="l">Hoàn thành</div><div class="v" style="color:var(--good-text)">10<span style="font-size:18px;color:var(--muted)"> /13</span></div><div class="d">77% số task · 3 task đang làm</div></div>
+  <div class="card tile"><div class="l">Khối lượng hoàn thành (có trọng số %)</div><div class="v">90%</div><div class="d">So với 86% thời gian sprint đã trôi qua</div></div>
+  <div class="card tile"><div class="l">Dự án xong 100%</div><div class="v">1<span style="font-size:18px;color:var(--muted)"> /3</span></div><div class="d">NeoX|CNV · RN 96% · Affiliate 50%</div></div>
+  <div class="card tile"><div class="l">Rủi ro kéo sang Sprint 5</div><div class="v" style="color:var(--warn-text)">3 task</div><div class="d">1 task RN · 2 task Affiliate</div></div>
+</div>
+
+<!-- Charts row 1 -->
+<h2><span class="n">2</span>Tổng quan tiến độ</h2>
+<div class="grid g3">
+  <div class="card">
+    <h3>Trạng thái task toàn sprint</h3><div class="hint">13 task trong Sprint 4</div>
+    <div id="c-donut"></div>
+  </div>
+  <div class="card">
+    <h3>Thời gian đã dùng vs. việc đã xong</h3><div class="hint">Ngày 12/14 của sprint</div>
+    <div id="c-burn"></div>
+  </div>
+  <div class="card">
+    <h3>% hoàn thành theo dự án</h3><div class="hint">Có trọng số theo % từng task</div>
+    <div id="c-proj-pct"></div>
+  </div>
+</div>
+
+<div class="grid g2" style="margin-top:14px">
+  <div class="card">
+    <h3>Số task theo dự án &amp; trạng thái</h3><div class="hint">Hoàn thành vs. đang làm</div>
+    <div id="c-proj-stack"></div>
+  </div>
+  <div class="card">
+    <h3>Tích luỹ task hoàn thành trong sprint</h3><div class="hint">So với đường lý tưởng (đều mỗi ngày)</div>
+    <div id="c-burnup"></div>
+    <div class="small" style="margin-top:6px">* 7 task được cập nhật trạng thái “Hoàn thành” trên hệ thống cùng ngày 23/10; ngày hoàn thành thực tế có thể sớm hơn.</div>
+  </div>
+</div>
+
+<!-- Theo người -->
+<h2><span class="n">3</span>Phân bổ công việc theo người</h2>
+<div class="grid g2">
+  <div class="card">
+    <h3>Số task mỗi người tham gia, theo dự án</h3><div class="hint">1 task có thể có nhiều người cùng làm</div>
+    <div id="c-people"></div>
+  </div>
+  <div class="card">
+    <h3>Tỷ lệ hoàn thành phần việc của từng người</h3><div class="hint">Task đã xong / task tham gia</div>
+    <div id="c-people-pct"></div>
+  </div>
+</div>
+
+<!-- Theo nhóm việc & lead time -->
+<h2><span class="n">4</span>Cơ cấu công việc &amp; thời gian xử lý</h2>
+<div class="grid g2">
+  <div class="card">
+    <h3>Task theo nhóm công việc (task list)</h3><div class="hint">Sprint tập trung chủ yếu vào Reward Network</div>
+    <div id="c-list"></div>
+  </div>
+  <div class="card">
+    <h3>Thời gian từ lúc tạo đến khi xong (ngày)</h3><div class="hint">Task đã hoàn thành · 2 task mở từ trước sprint</div>
+    <div id="c-lead"></div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h3>Dòng thời gian task trong Sprint 4</h3><div class="hint">Thanh = từ ngày tạo đến ngày xong (hoặc đến hôm nay nếu chưa xong) · vùng xám = ngoài sprint</div>
+  <div id="c-gantt"></div>
+</div>
+
+<!-- Theo dự án -->
+<h2><span class="n">5</span>Kết quả theo dự án</h2>
+<div class="grid g3">
+  <div class="card">
+    <h3><span class="dot" style="background:var(--s1)"></span>NeoX|CNV — Thanh toán thẻ</h3>
+    <div class="hint">3/3 task hoàn thành · Như Trang, Trần Lê Huy</div>
+    <div class="bar"><b style="width:100%;background:var(--s1)"></b></div>
+    <ul class="clean">
+      <li>Làm rõ yêu cầu thanh toán thẻ qua NeoX: thanh toán thẻ, lưu thẻ, đối soát (Phase 1); thanh toán định kỳ (Phase 2).</li>
+      <li>Test xong API sandbox NeoX (thẻ quốc tế, QR/chuyển khoản).</li>
+      <li>Dựng xong nền dịch vụ <i>cnv-payment</i>: cấu trúc DB, kết nối NeoX &amp; Connect, nhận thông báo thanh toán (IPN), job tự động đối soát.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3><span class="dot" style="background:var(--s2)"></span>Reward Network — Ưu đãi &amp; quà tặng</h3>
+    <div class="hint">7/8 task hoàn thành · Trang, Huy, Hải, Báu</div>
+    <div class="bar"><b style="width:96%;background:var(--s2)"></b></div>
+    <ul class="clean">
+      <li>Gộp quà nội bộ shop + Urbox + RN + GotIt về một menu Ưu đãi duy nhất trên miniapp; tìm được cả ưu đãi cũ.</li>
+      <li>Áp dụng voucher RN ngay trên miniapp; admin tự chỉnh kênh áp dụng trên Hub không cần duyệt lại.</li>
+      <li>Hạn mức chỉ áp cho quà 0đ; mini app demo hiện popup/nhãn “Demo” để Zalo duyệt; deploy 20/10.</li>
+      <li><b>Đang làm (70%):</b> kịch bản E2E pilot toàn luồng đóng góp → duyệt → khách nhận &amp; dùng mã.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3><span class="dot" style="background:var(--s3)"></span>Affiliate — Khách hàng Thực Phẩm Sạch</h3>
+    <div class="hint">2 task · đang làm 50% · Huy &amp; Trang</div>
+    <div class="bar"><b style="width:50%;background:var(--s3)"></b></div>
+    <ul class="clean">
+      <li>Hỗ trợ khách hàng Thực Phẩm Sạch thêm tính năng xuất Excel báo cáo khách hàng và thông tin chi tiết về sản phẩm có hoa hồng của khách.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Rủi ro & đề xuất -->
+<h2><span class="n">6</span>Rủi ro, điểm cần chú ý &amp; đề xuất</h2>
+<div class="grid g2">
+  <div class="card">
+    <h3>Rủi ro &amp; điểm cần chú ý</h3>
+    <div class="risk"><div class="ico" style="background:#fff6df;color:var(--warn-text)">!</div><div><div class="t">E2E pilot Reward Network có thể không kịp 25/10</div><div class="m">Đang 70%, task mở từ 03/07 (112 ngày), cần 3 người phối hợp. Nếu trễ sẽ lùi mốc mở pilot.</div></div></div>
+    <div class="risk"><div class="ico" style="background:#fff6df;color:var(--warn-text)">!</div><div><div class="t">2 task Affiliate mới ở 50%, còn 2 ngày</div><div class="m">Nhiều khả năng chuyển tiếp sang Sprint 5; cần chốt với khách hàng Thực Phẩm Sạch về thời điểm bàn giao.</div></div></div>
+    <div class="risk"><div class="ico" style="background:#eef3fb;color:var(--s1)">i</div><div><div class="t">Tải tập trung vào Như Trang</div><div class="m">Tham gia 12/13 task (team lead kiêm dev). Cần cân nhắc phân bổ khi NeoX vào giai đoạn code chính.</div></div></div>
+    <div class="risk"><div class="ico" style="background:#eef3fb;color:var(--s1)">i</div><div><div class="t">Thiếu dữ liệu kế hoạch trên hệ thống</div><div class="m">13/13 task không có deadline, ước lượng giờ, độ ưu tiên đều “Bình thường” → chưa đo được độ chính xác ước lượng &amp; velocity.</div></div></div>
+  </div>
+  <div class="card">
+    <h3>Đề xuất cho Sprint 5</h3>
+    <ul class="clean">
+      <li><b>Chốt phần dở dang trước:</b> ưu tiên đóng E2E pilot (30% còn lại) và 2 task Affiliate ngay đầu sprint để không dồn carry-over.</li>
+      <li><b>Chuẩn hoá task:</b> mỗi task có deadline, ước lượng (giờ/PD) và độ ưu tiên thật — chỉ cần 3 trường này là sprint sau có chart velocity &amp; burndown chuẩn.</li>
+      <li><b>Cập nhật trạng thái theo ngày:</b> tránh đóng hàng loạt cuối sprint để báo cáo phản ánh đúng nhịp làm việc.</li>
+      <li><b>NeoX:</b> lên kế hoạch các bước tiếp theo của luồng thanh toán thẻ sau khi nền tảng đã dựng xong.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Bảng chi tiết -->
+<h2><span class="n">7</span>Danh sách task chi tiết</h2>
+<div class="card" style="padding:6px 20px 10px">
+  <table id="tbl">
+    <thead><tr><th>Dự án</th><th>Task</th><th>Người làm</th><th>Tạo</th><th>Xong</th><th class="num">Tiến độ</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<footer>Nguồn: connect.cnvwork.com — bảng Kanban Sprint 4 của 3 dự án, trích xuất 23/10/2026 16:20. Tiến độ 70% / 50% của 3 task đang làm do PO xác nhận. Phân bổ theo người đếm số task mỗi người có tên trong danh sách thực hiện.</footer>
+</div>
+
+<script>
+// ---------- DATA ----------
+const SPRINT = {start:'2026-10-12', end:'2026-10-25', today:'2026-10-23'};
+const P = {NeoX:{name:'NeoX|CNV',c:'var(--s1)',hex:'#2a78d6'}, RN:{name:'Reward Network',c:'var(--s2)',hex:'#eb6834'}, AFF:{name:'Affiliate',c:'var(--s3)',hex:'#1baf7a'}};
+const T = [
+ {p:'NeoX',list:'NeoX – Phase 1',title:'Tìm hiểu yêu cầu thanh toán thẻ qua NeoX & tính năng áp dụng hiện tại',short:'Tìm hiểu yêu cầu NeoX',who:['Như Trang','Trần Lê Huy'],created:'2026-10-19',done:'2026-10-23',pct:100},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'Testing API của NeoX (sandbox)',short:'Test API NeoX',who:['Như Trang','Trần Lê Huy'],created:'2026-10-20',done:'2026-10-23',pct:100},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T02a · cnv-payment: dựng khung project, 3 bảng DB, tích hợp NeoX + Connect, webhook IPN, job',short:'Dựng nền cnv-payment',who:['Như Trang'],created:'2026-10-21',done:'2026-10-23',pct:100},
+ {p:'RN',list:'Reward v2',title:'Đồng bộ quà nội bộ shop + Urbox + RN + GotIt về 1 menu Ưu đãi',short:'Đồng bộ quà về 1 menu',who:['Như Trang','Hồ Trung Hải'],created:'2026-08-11',done:'2026-10-14',pct:100},
+ {p:'RN',list:'Reward v2',title:'Cho phép tìm kiếm tên ưu đãi cũ trong màn hình ưu đãi chung',short:'Tìm kiếm ưu đãi cũ',who:['Hồ Trung Hải','Như Trang'],created:'2026-10-14',done:'2026-10-15',pct:100},
+ {p:'RN',list:'Reward v2',title:'Mini app shop test: thêm popup và nhãn Demo để Zalo duyệt',short:'Popup Demo (Zalo duyệt)',who:['Hồ Trung Hải'],created:'2026-10-20',done:'2026-10-21',pct:100},
+ {p:'RN',list:'Reward v2',title:'Cài đặt hạn mức chỉ cho quà 0đ',short:'Hạn mức quà 0đ',who:['Như Trang','Hồ Trung Hải'],created:'2026-10-09',done:'2026-10-23',pct:100},
+ {p:'RN',list:'Reward v2',title:'Deploy ngày 20/10',short:'Deploy 20/10',who:['Như Trang'],created:'2026-10-20',done:'2026-10-23',pct:100},
+ {p:'RN',list:'Rn Phase 2',title:'[RN] Apply voucher RN trên miniapp',short:'Apply voucher miniapp',who:['Như Trang','Trần Lê Huy','Trần Ngọc Báu'],created:'2026-10-08',done:'2026-10-23',pct:100},
+ {p:'RN',list:'Rn Phase 2',title:'[RN] Cho phép chỉnh sửa kênh áp dụng trên Hub',short:'Sửa kênh áp dụng (Hub)',who:['Như Trang','Trần Lê Huy'],created:'2026-10-16',done:'2026-10-23',pct:100},
+ {p:'RN',list:'Rn Phase 1',title:'[RN] P1-32 · E2E pilot flow',short:'E2E pilot flow',who:['Hồ Trung Hải','Như Trang','Trần Lê Huy'],created:'2026-07-03',done:null,pct:70},
+ {p:'AFF',list:'Affiliate',title:'4.1 Màn “Khách hàng mua hàng”: doanh thu / hoa hồng tạo ra per khách + 2 nút export',short:'4.1 Export KH mua hàng',who:['Trần Lê Huy','Như Trang'],created:'2026-09-29',done:null,pct:50},
+ {p:'AFF',list:'Affiliate',title:'4.2 Export “Khách hàng được giới thiệu” (F1–F2, trạng thái, ngày kích hoạt)',short:'4.2 Export KH giới thiệu',who:['Trần Lê Huy','Như Trang'],created:'2026-09-29',done:null,pct:50},
+];
+const PEOPLE = ['Như Trang','Trần Lê Huy','Hồ Trung Hải','Trần Ngọc Báu'];
+const DONE='#0ca30c', WIP='#fab219';
+
+// ---------- helpers ----------
+const d=s=>new Date(s+'T00:00:00');
+const days=(a,b)=>Math.round((d(b)-d(a))/86400000);
+const fmt=s=>s?s.slice(8,10)+'/'+s.slice(5,7):'—';
+const tip=document.getElementById('tip');
+function hover(el,text){el.addEventListener('mousemove',e=>{tip.textContent=text;tip.style.opacity=1;tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY+12)+'px';});el.addEventListener('mouseleave',()=>tip.style.opacity=0);}
+const svg=(w,h)=>{const s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);return s;};
+function el(n,a={},txt){const e=document.createElementNS('http://www.w3.org/2000/svg',n);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
+function legend(id,items){const l=document.createElement('div');l.className='legend';l.innerHTML=items.map(i=>`<span><i style="background:${i[1]}"></i>${i[0]}</span>`).join('');document.getElementById(id).appendChild(l);}
+
+// ---------- 1. Donut ----------
+(function(){
+  const done=T.filter(t=>t.pct===100).length, wip=T.length-done;
+  const s=svg(320,200), cx=100,cy=100,r=70,sw=22, C=2*Math.PI*r;
+  const segs=[['Hoàn thành',done,DONE],['Đang làm',wip,WIP]]; let off=0;
+  segs.forEach(([n,v,c])=>{const len=v/T.length*C-3;const p=el('circle',{cx,cy,r,fill:'none',stroke:c,'stroke-width':sw,'stroke-dasharray':`${len} ${C-len}`,'stroke-dashoffset':-off,transform:`rotate(-90 ${cx} ${cy})`,'stroke-linecap':'butt'});hover(p,`${n}: ${v} task (${Math.round(v/T.length*100)}%)`);s.appendChild(p);off+=v/T.length*C;});
+  s.appendChild(el('text',{x:cx,y:cy-4,'text-anchor':'middle',class:'lbl',style:'font-size:30px'},done+'/'+T.length));
+  s.appendChild(el('text',{x:cx,y:cy+18,'text-anchor':'middle',class:'mut'},'hoàn thành'));
+  [[done,'Hoàn thành',DONE,70],[wip,'Đang làm',WIP,110]].forEach(([v,n,c,y])=>{s.appendChild(el('rect',{x:200,y:y-10,width:12,height:12,rx:3,fill:c}));s.appendChild(el('text',{x:220,y:y,class:'lbl'},v));s.appendChild(el('text',{x:238,y:y},n));});
+  document.getElementById('c-donut').appendChild(s);
+})();
+
+// ---------- 2. Time vs work ----------
+(function(){
+  const total=days(SPRINT.start,SPRINT.end)+1, used=days(SPRINT.start,SPRINT.today)+1;
+  const tPct=Math.round(used/total*100), wPct=Math.round(T.reduce((a,t)=>a+t.pct,0)/T.length);
+  const s=svg(320,200);
+  [[ 'Thời gian đã dùng',tPct,'#898781',40,`${used}/${total} ngày`],['Khối lượng đã xong',wPct,'#2a78d6',115,`trung bình % của 13 task`]].forEach(([n,v,c,y,sub])=>{
+    s.appendChild(el('text',{x:0,y:y,class:'lbl'},n)); s.appendChild(el('text',{x:320,y:y,'text-anchor':'end',class:'lbl',style:'font-size:18px'},v+'%'));
+    s.appendChild(el('rect',{x:0,y:y+10,width:320,height:14,rx:4,fill:'var(--grid)'}));
+    const b=el('rect',{x:0,y:y+10,width:3.2*v,height:14,rx:4,fill:c});hover(b,`${n}: ${v}% — ${sub}`);s.appendChild(b);
+    s.appendChild(el('text',{x:0,y:y+40,class:'mut'},sub));
+  });
+  s.appendChild(el('text',{x:0,y:190,class:'mut'},'Việc đi nhanh hơn thời gian ≈ 4 điểm %'));
+  document.getElementById('c-burn').appendChild(s);
+})();
+
+// ---------- 3. % by project ----------
+(function(){
+  const s=svg(320,200); let y=18;
+  Object.keys(P).forEach(k=>{const ts=T.filter(t=>t.p===k);const v=Math.round(ts.reduce((a,t)=>a+t.pct,0)/ts.length);
+    s.appendChild(el('text',{x:0,y:y,class:'lbl'},P[k].name)); s.appendChild(el('text',{x:320,y:y,'text-anchor':'end',class:'lbl'},v+'%'));
+    s.appendChild(el('rect',{x:0,y:y+8,width:320,height:14,rx:4,fill:'var(--grid)'}));
+    const b=el('rect',{x:0,y:y+8,width:3.2*v,height:14,rx:4,fill:P[k].hex});hover(b,`${P[k].name}: ${v}% · ${ts.filter(t=>t.pct===100).length}/${ts.length} task xong`);s.appendChild(b);
+    s.appendChild(el('text',{x:0,y:y+36,class:'mut'},`${ts.filter(t=>t.pct===100).length}/${ts.length} task hoàn thành`)); y+=62;});
+  document.getElementById('c-proj-pct').appendChild(s);
+})();
+
+// ---------- 4. Stacked bar by project ----------
+(function(){
+  const W=520,H=190,L=130,R=30,top=14,bh=28,gap=16; const s=svg(W,H);
+  const max=8, sc=(W-L-R)/max;
+  for(let v=0;v<=max;v+=2){const x=L+v*sc;s.appendChild(el('line',{x1:x,x2:x,y1:top,y2:H-30,class:'gl'}));s.appendChild(el('text',{x,y:H-14,'text-anchor':'middle',class:'mut'},v));}
+  Object.keys(P).forEach((k,i)=>{const ts=T.filter(t=>t.p===k);const dn=ts.filter(t=>t.pct===100).length,wp=ts.length-dn;const y=top+8+i*(bh+gap);
+    s.appendChild(el('text',{x:L-10,y:y+bh/2+4,'text-anchor':'end',class:'lbl'},P[k].name));
+    let x=L; if(dn){const r=el('rect',{x,y,width:dn*sc-2,height:bh,rx:4,fill:DONE});hover(r,`${P[k].name} · Hoàn thành: ${dn}`);s.appendChild(r);s.appendChild(el('text',{x:x+dn*sc/2-1,y:y+bh/2+4,'text-anchor':'middle',fill:'#fff',class:'lbl',style:'fill:#fff'},dn));x+=dn*sc;}
+    if(wp){const r=el('rect',{x,y,width:wp*sc-2,height:bh,rx:4,fill:WIP});hover(r,`${P[k].name} · Đang làm: ${wp}`);s.appendChild(r);s.appendChild(el('text',{x:x+wp*sc/2-1,y:y+bh/2+4,'text-anchor':'middle',class:'lbl'},wp));}
+  });
+  s.appendChild(el('line',{x1:L,x2:L,y1:top,y2:H-30,class:'ax'}));
+  document.getElementById('c-proj-stack').appendChild(s); legend('c-proj-stack',[['Hoàn thành',DONE],['Đang làm',WIP]]);
+})();
+
+// ---------- 5. Burn-up ----------
+(function(){
+  const W=520,H=220,L=36,R=16,top=16,bot=34; const s=svg(W,H);
+  const n=days(SPRINT.start,SPRINT.end)+1, total=T.length, px=(W-L-R)/(n-1), py=(H-top-bot)/total;
+  const X=i=>L+i*px, Y=v=>H-bot-v*py;
+  for(let v=0;v<=total;v+=2){s.appendChild(el('line',{x1:L,x2:W-R,y1:Y(v),y2:Y(v),class:'gl'}));s.appendChild(el('text',{x:L-8,y:Y(v)+4,'text-anchor':'end',class:'mut'},v));}
+  for(let i=0;i<n;i++){const dt=new Date(d(SPRINT.start));dt.setDate(dt.getDate()+i);if(i%2==0)s.appendChild(el('text',{x:X(i),y:H-12,'text-anchor':'middle',class:'mut'},String(dt.getDate()).padStart(2,'0')+'/'+String(dt.getMonth()+1).padStart(2,'0')));}
+  // ideal
+  s.appendChild(el('line',{x1:X(0),y1:Y(0),x2:X(n-1),y2:Y(total),stroke:'#898781','stroke-width':1.5,'stroke-dasharray':'4 4'}));
+  // actual cumulative
+  const todayI=days(SPRINT.start,SPRINT.today); let cum=0; const pts=[];
+  for(let i=0;i<=todayI;i++){const dt=new Date(d(SPRINT.start));dt.setDate(dt.getDate()+i);const iso=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');cum+=T.filter(t=>t.done===iso).length;pts.push([i,cum]);}
+  s.appendChild(el('path',{d:pts.map((p,i)=>(i?'L':'M')+X(p[0])+' '+Y(p[1])).join(' '),fill:'none',stroke:'#2a78d6','stroke-width':2.5,'stroke-linejoin':'round'}));
+  pts.forEach(([i,v],k)=>{if(k&&v===pts[k-1][1]&&i!==todayI)return;const c=el('circle',{cx:X(i),cy:Y(v),r:4.5,fill:'#2a78d6',stroke:'#fcfcfb','stroke-width':2});hover(c,`Đến ngày ${i+12}/10: ${v} task xong`);s.appendChild(c);});
+  const last=pts[pts.length-1]; s.appendChild(el('text',{x:X(last[0])-8,y:Y(last[1])-10,'text-anchor':'end',class:'lbl'},last[1]+' task'));
+  s.appendChild(el('text',{x:X(6)+6,y:Y(6)+14,class:'mut'},'lý tưởng'));
+  // today line
+  s.appendChild(el('line',{x1:X(todayI),x2:X(todayI),y1:top,y2:H-bot,stroke:'#c3c2b7','stroke-dasharray':'2 3'}));
+  s.appendChild(el('text',{x:X(todayI)+4,y:top+10,class:'mut'},'hôm nay'));
+  s.appendChild(el('line',{x1:L,x2:W-R,y1:Y(0),y2:Y(0),class:'ax'}));
+  document.getElementById('c-burnup').appendChild(s); legend('c-burnup',[['Thực tế (tích luỹ)','#2a78d6'],['Lý tưởng','#898781']]);
+})();
+
+// ---------- 6. People stacked ----------
+(function(){
+  const W=520,H=230,L=120,R=30,top=10,bh=30,gap=18; const s=svg(W,H); const max=12, sc=(W-L-R)/max;
+  for(let v=0;v<=max;v+=3){const x=L+v*sc;s.appendChild(el('line',{x1:x,x2:x,y1:top,y2:H-30,class:'gl'}));s.appendChild(el('text',{x,y:H-14,'text-anchor':'middle',class:'mut'},v));}
+  PEOPLE.forEach((p,i)=>{const y=top+6+i*(bh+gap);s.appendChild(el('text',{x:L-10,y:y+bh/2+4,'text-anchor':'end',class:'lbl'},p));let x=L,tot=0;
+    Object.keys(P).forEach(k=>{const c=T.filter(t=>t.p===k&&t.who.includes(p)).length;if(!c)return;const r=el('rect',{x,y,width:c*sc-2,height:bh,rx:4,fill:P[k].hex});hover(r,`${p} · ${P[k].name}: ${c} task`);s.appendChild(r);if(c*sc>18)s.appendChild(el('text',{x:x+c*sc/2-1,y:y+bh/2+4,'text-anchor':'middle',style:'fill:#fff;font-weight:600'},c));x+=c*sc;tot+=c;});
+    s.appendChild(el('text',{x:x+6,y:y+bh/2+4,class:'lbl'},tot));});
+  s.appendChild(el('line',{x1:L,x2:L,y1:top,y2:H-30,class:'ax'}));
+  document.getElementById('c-people').appendChild(s); legend('c-people',Object.values(P).map(p=>[p.name,p.hex]));
+})();
+
+// ---------- 7. People completion % ----------
+(function(){
+  const s=svg(520,230); let y=22;
+  PEOPLE.forEach(p=>{const ts=T.filter(t=>t.who.includes(p));const dn=ts.filter(t=>t.pct===100).length;const v=Math.round(dn/ts.length*100);
+    s.appendChild(el('text',{x:0,y:y,class:'lbl'},p)); s.appendChild(el('text',{x:520,y:y,'text-anchor':'end',class:'lbl'},`${dn}/${ts.length} · ${v}%`));
+    s.appendChild(el('rect',{x:0,y:y+8,width:520,height:14,rx:4,fill:'var(--grid)'}));
+    const b=el('rect',{x:0,y:y+8,width:5.2*v,height:14,rx:4,fill:DONE});hover(b,`${p}: ${dn} task xong / ${ts.length} task tham gia`);s.appendChild(b);
+    const wip=ts.filter(t=>t.pct<100).map(t=>t.short).join(', ');
+    s.appendChild(el('text',{x:0,y:y+36,class:'mut'},wip?('Đang làm: '+wip):'Đã xong toàn bộ')); y+=52;});
+  document.getElementById('c-people-pct').appendChild(s);
+})();
+
+// ---------- 8. By task list ----------
+(function(){
+  const lists={}; T.forEach(t=>{(lists[t.list]=lists[t.list]||{n:0,p:t.p}).n++;});
+  const keys=Object.keys(lists).sort((a,b)=>lists[b].n-lists[a].n);
+  const W=520,H=230,L=130,R=40,top=10,bh=24,gap=12; const s=svg(W,H); const max=5,sc=(W-L-R)/max;
+  for(let v=0;v<=max;v++){const x=L+v*sc;s.appendChild(el('line',{x1:x,x2:x,y1:top,y2:H-30,class:'gl'}));s.appendChild(el('text',{x,y:H-14,'text-anchor':'middle',class:'mut'},v));}
+  keys.forEach((k,i)=>{const y=top+6+i*(bh+gap);const o=lists[k];s.appendChild(el('text',{x:L-10,y:y+bh/2+4,'text-anchor':'end',class:'lbl'},k));const r=el('rect',{x:L,y,width:o.n*sc-2,height:bh,rx:4,fill:P[o.p].hex});hover(r,`${k} (${P[o.p].name}): ${o.n} task`);s.appendChild(r);s.appendChild(el('text',{x:L+o.n*sc+6,y:y+bh/2+4,class:'lbl'},o.n));});
+  s.appendChild(el('line',{x1:L,x2:L,y1:top,y2:H-30,class:'ax'}));
+  document.getElementById('c-list').appendChild(s); legend('c-list',Object.values(P).map(p=>[p.name,p.hex]));
+})();
+
+// ---------- 9. Lead time ----------
+(function(){
+  const rows=T.filter(t=>t.done).map(t=>({t,v:days(t.created,t.done)})).sort((a,b)=>b.v-a.v);
+  const W=520,H=rows.length*26+40,L=170,R=40,top=6,bh=16,gap=10; const s=svg(W,H); const max=70,sc=(W-L-R)/max;
+  for(let v=0;v<=max;v+=10){const x=L+v*sc;s.appendChild(el('line',{x1:x,x2:x,y1:top,y2:H-28,class:'gl'}));s.appendChild(el('text',{x,y:H-12,'text-anchor':'middle',class:'mut'},v));}
+  rows.forEach(({t,v},i)=>{const y=top+4+i*(bh+gap);s.appendChild(el('text',{x:L-10,y:y+bh/2+4,'text-anchor':'end'},t.short));const r=el('rect',{x:L,y,width:Math.max(v*sc,3)-1,height:bh,rx:4,fill:P[t.p].hex});hover(r,`${t.title}\n${fmt(t.created)} → ${fmt(t.done)}: ${v} ngày`);s.appendChild(r);s.appendChild(el('text',{x:L+Math.max(v*sc,3)+6,y:y+bh/2+4,class:'lbl'},v+'n'));});
+  const med=rows.map(r=>r.v).sort((a,b)=>a-b)[Math.floor(rows.length/2)];
+  s.appendChild(el('line',{x1:L,x2:L,y1:top,y2:H-28,class:'ax'}));
+  document.getElementById('c-lead').appendChild(s);
+  const n=document.createElement('div');n.className='small';n.style.marginTop='6px';n.textContent=`Trung vị ${med} ngày · 8/10 task xong trong ≤ 15 ngày · task “Đồng bộ quà” kéo dài 64 ngày do mở từ Sprint trước.`;document.getElementById('c-lead').appendChild(n);
+})();
+
+// ---------- 10. Gantt ----------
+(function(){
+  const W=1100,rowH=26,L=330,R=20,top=28; const H=top+T.length*rowH+30; const s=svg(W,H);
+  const t0='2026-10-05', t1='2026-10-28'; const n=days(t0,t1); const sc=(W-L-R)/n; const X=iso=>L+Math.max(0,Math.min(n,days(t0,iso)))*sc;
+  // outside-sprint shading
+  s.appendChild(el('rect',{x:L,y:top-4,width:X(SPRINT.start)-L,height:H-top-26,fill:'#f0efec'}));
+  s.appendChild(el('rect',{x:X('2026-10-26'),y:top-4,width:W-R-X('2026-10-26'),height:H-top-26,fill:'#f0efec'}));
+  for(let i=0;i<=n;i++){const dt=new Date(d(t0));dt.setDate(dt.getDate()+i);const x=L+i*sc;s.appendChild(el('line',{x1:x,x2:x,y1:top-4,y2:H-30,class:'gl'}));if(i%3==0)s.appendChild(el('text',{x,y:top-10,'text-anchor':'middle',class:'mut'},String(dt.getDate()).padStart(2,'0')+'/'+String(dt.getMonth()+1).padStart(2,'0')));}
+  const order=[...T].sort((a,b)=>d(a.created)-d(b.created));
+  order.forEach((t,i)=>{const y=top+i*rowH;const name=t.title.length>46?t.title.slice(0,45)+'…':t.title;
+    s.appendChild(el('circle',{cx:8,cy:y+rowH/2,r:4,fill:P[t.p].hex}));s.appendChild(el('text',{x:18,y:y+rowH/2+4},name));
+    const end=t.done||SPRINT.today; const x1=X(t.created), x2=Math.max(X(end),x1+6);
+    const before=days(t0,t.created)<0;
+    if(before){s.appendChild(el('text',{x:L+2,y:y+rowH/2+4,class:'mut'},'◀ '+fmt(t.created)));}
+    const r=el('rect',{x:before?L+56:x1,y:y+6,width:Math.max(x2-(before?L+56:x1),6),height:rowH-12,rx:4,fill:t.pct===100?P[t.p].hex:'none',stroke:P[t.p].hex,'stroke-width':t.pct===100?0:2,'stroke-dasharray':t.pct===100?'':'4 3'});
+    hover(r,`${t.title}\nTạo ${fmt(t.created)} → ${t.done?'xong '+fmt(t.done):'đang làm '+t.pct+'%'}`);s.appendChild(r);
+    if(t.pct<100)s.appendChild(el('text',{x:x2+6,y:y+rowH/2+4,class:'lbl'},t.pct+'%'));
+  });
+  const tx=X(SPRINT.today);s.appendChild(el('line',{x1:tx,x2:tx,y1:top-4,y2:H-30,stroke:'#d03b3b','stroke-width':1.5}));s.appendChild(el('text',{x:tx-4,y:H-18,'text-anchor':'end',style:'fill:#a62828;font-size:11px'},'hôm nay 23/10'));
+  s.appendChild(el('text',{x:X(SPRINT.start)+4,y:H-18,class:'mut'},'bắt đầu sprint 12/10'));s.appendChild(el('text',{x:X('2026-10-26')+4,y:H-18,class:'mut'},'kết thúc 25/10'));
+  document.getElementById('c-gantt').appendChild(s); legend('c-gantt',[...Object.values(P).map(p=>[p.name,p.hex]),['Viền đứt = đang làm','#fff']]);
+})();
+
+// ---------- Table ----------
+(function(){
+  const tb=document.querySelector('#tbl tbody');
+  [...T].sort((a,b)=>a.p.localeCompare(b.p)||a.pct-b.pct).forEach(t=>{const tr=document.createElement('tr');
+    tr.innerHTML=`<td><span class="dot" style="background:${P[t.p].hex}"></span>${P[t.p].name}</td><td>${t.title}</td><td>${t.who.join(', ')}</td><td>${fmt(t.created)}</td><td>${fmt(t.done)}</td><td class="num"><span class="pill ${t.pct===100?'good':'warn'}">${t.pct===100?'✓ Xong':'● '+t.pct+'%'}</span></td>`;tb.appendChild(tr);});
+})();
+</script>
+</body>
+</html>
