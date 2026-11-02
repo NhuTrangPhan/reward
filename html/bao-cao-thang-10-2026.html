@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Báo cáo Tháng 10/2026 — Tính năng theo dự án</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #F8FAFC; --bg-soft: #F1F5F9; --card: #FFFFFF;
+    --border: #E5E7EB; --border-soft: #F1F5F9;
+    --ink: #111827; --ink-soft: #374151; --muted: #6B7280; --muted-light: #9CA3AF;
+    --primary: #4F46E5; --primary-soft: #EEF2FF;
+    --success: #10B981; --success-soft: #D1FAE5;
+    --warning: #F59E0B; --warning-soft: #FEF3C7;
+    --info: #3B82F6; --info-soft: #DBEAFE;
+    --purple: #8B5CF6; --purple-soft: #EDE9FE;
+    --pink: #EC4899; --pink-soft: #FCE7F3;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg); color: var(--ink); padding: 28px; line-height: 1.6; font-size: 14.5px;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+
+  header { background: linear-gradient(135deg, #ECFDF5 0%, #EEF2FF 50%, #FEF3C7 100%);
+    border: 1px solid #C7D2FE; border-radius: 16px; padding: 30px; margin-bottom: 20px; text-align: center; }
+  header .eyebrow { display:inline-block; font-size: 12px; letter-spacing: 2.5px; color: var(--primary); text-transform: uppercase; margin-bottom: 10px; font-weight: 700; }
+  header h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.9px; margin-bottom: 8px; }
+  header p { color: var(--muted); font-size: 15px; }
+  header .meta { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; font-size: 13px; color: var(--ink-soft); }
+  header .meta span { background: rgba(255,255,255,.72); border: 1px solid rgba(79,70,229,.15); padding: 6px 14px; border-radius: 20px; font-weight: 500; }
+
+  .exec { background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); border: 1px solid #6EE7B7; border-radius: 14px; padding: 18px 24px; margin-bottom: 20px; }
+  .exec p { color: var(--ink-soft); font-size: 14.5px; }
+  .exec b { color: #047857; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 13px; margin-bottom: 22px; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 15px 18px; position: relative; overflow: hidden; }
+  .kpi::before { content:""; position:absolute; top:0; left:0; width:4px; height:100%; }
+  .kpi.g::before { background: var(--success); } .kpi.y::before { background: var(--warning); } .kpi.b::before { background: var(--info); } .kpi.p::before { background: var(--purple); }
+  .kpi-label { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing:.6px; margin-bottom: 6px; font-weight: 700; }
+  .kpi-value { font-size: 28px; font-weight: 800; line-height: 1.05; }
+  .kpi.g .kpi-value { color: var(--success); } .kpi.y .kpi-value { color: #B45309; } .kpi.b .kpi-value { color: var(--info); } .kpi.p .kpi-value { color: var(--purple); }
+  .kpi-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+  .flexrow { display: grid; grid-template-columns: 340px 1fr; gap: 16px; margin-bottom: 22px; align-items: stretch; }
+  @media (max-width: 860px){ .flexrow { grid-template-columns: 1fr; } }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+  .chart-card h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 10px; }
+  .chart-wrap { position: relative; height: 215px; }
+  .legend-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 22px; }
+  .legend-box h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 10px; }
+  .legend-box .lg { display:flex; gap:10px; align-items:flex-start; margin-bottom: 9px; font-size: 13.5px; color: var(--ink-soft); }
+  .legend-box .lg:last-child { margin-bottom: 0; }
+
+  .tag { display:inline-flex; align-items:center; gap:5px; font-size: 11.5px; font-weight: 800; padding: 3px 11px; border-radius: 20px; white-space: nowrap; }
+  .t-rel { background: var(--success-soft); color:#047857; }
+  .t-test { background: var(--warning-soft); color:#B45309; }
+  .t-sign { background: var(--purple-soft); color:#6D28D9; }
+  .t-dev { background: var(--info-soft); color:#1D4ED8; }
+  .t-doc { background: var(--bg-soft); color: var(--muted); }
+
+  .proj { margin-bottom: 26px; }
+  .proj-head { display:flex; align-items:center; gap:14px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-bottom: 10px; }
+  .proj-head .ico { width: 46px; height: 46px; border-radius: 12px; display:flex; align-items:center; justify-content:center; font-size: 22px; flex-shrink:0; }
+  .proj-head .info { flex:1; min-width: 0; }
+  .proj-head .name { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+  .proj-head .st { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
+  .proj.p1 .ico { background: var(--success-soft); } .proj.p2 .ico { background: var(--warning-soft); } .proj.p3 .ico { background: var(--purple-soft); } .proj.p4 .ico { background: var(--pink-soft); }
+
+  table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  thead th { text-align: left; font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft); padding: 9px 12px 7px; background: var(--bg-soft); border-bottom: 2px solid var(--border); }
+  tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border-soft); vertical-align: top; font-size: 13.4px; color: var(--ink-soft); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num { font-weight: 800; color: var(--primary); width: 28px; }
+  td.ft b { color: var(--ink); }
+  td.tagc { width: 170px; text-align: right; }
+
+  .note-box { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--warning); border-radius: 12px; padding: 14px 18px; font-size: 13.3px; color: var(--ink-soft); margin-top: 6px; }
+  .note-box b { color: var(--ink); }
+  .footer { text-align: center; color: var(--muted-light); font-size: 12.5px; margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--border); }
+
+  @page { size: A4; margin: 10mm 9mm; }
+  @media print {
+    body { padding: 0; background: #fff; font-size: 12.3px; }
+    header, .exec, .kpi, .chart-card, .legend-box, .proj-head, tr, .note-box { break-inside: avoid; page-break-inside: avoid; }
+    .kpi-grid, .flexrow { break-inside: avoid; }
+    .proj-head { break-after: avoid; }
+    thead { display: table-header-group; }
+    header h1 { font-size: 26px; } header { padding: 20px 24px; }
+    .chart-wrap { height: 190px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="eyebrow">Báo cáo tháng · CNV Reward & Payment</span>
+    <h1>Báo cáo Tháng 10/2026</h1>
+    <p>Tính năng theo từng dự án — gắn tag trạng thái: Đã release · Đang thử nghiệm · Chờ ký hợp đồng</p>
+    <div class="meta">
+      <span>📅 Kỳ: <b>29/09 – 31/10/2026</b></span>
+      <span>4 dự án: Kho quà & Ưu đãi · Mạng lưới ưu đãi · NeoX · Affiliate v2</span>
+    </div>
+  </header>
+
+  <div class="exec">
+    <p><b>Tháng 10 theo 4 dự án:</b> <b>Kho quà & Ưu đãi</b> release đều trên production — nổi bật là gom toàn bộ ưu đãi về một màn hình duy nhất trên mini-app và gói dịch vụ nhà cung cấp có vòng đời. <b>Mạng lưới ưu đãi (Reward Network)</b> hoàn tất loạt tính năng Phase 2, toàn bộ đang thử nghiệm và bắt đầu pilot nội bộ từ 30/10. <b>NeoX</b> hoàn thành tích hợp sandbox + nghiệm thu SIT — sẵn sàng về kỹ thuật, chờ ký hợp đồng để lên production. <b>Affiliate v2</b> ra thêm bộ xuất Excel và trang chào mừng tuỳ biến.</p>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi g"><div class="kpi-label">✅ Đã release</div><div class="kpi-value">13</div><div class="kpi-sub">đang chạy production</div></div>
+    <div class="kpi y"><div class="kpi-label">🧪 Đang thử nghiệm</div><div class="kpi-value">13</div><div class="kpi-sub">staging · pilot nội bộ</div></div>
+    <div class="kpi p"><div class="kpi-label">📝 Chờ ký hợp đồng</div><div class="kpi-value">5</div><div class="kpi-sub">NeoX — SIT đã nghiệm thu</div></div>
+  </div>
+
+  <div class="flexrow">
+    <div class="chart-card">
+      <h4>Tính năng theo trạng thái</h4>
+      <div class="chart-wrap"><canvas id="chStatus"></canvas></div>
+    </div>
+    <div class="legend-box">
+      <h4>Chú thích tag trạng thái</h4>
+      <div class="lg"><span class="tag t-rel">✅ Đã release</span><span>Đang chạy production, khách hàng/shop dùng được ngay.</span></div>
+      <div class="lg"><span class="tag t-test">🧪 Đang thử nghiệm</span><span>Đã hoàn thiện, chạy trên môi trường thử nghiệm (staging) hoặc pilot nội bộ — chưa mở cho khách hàng.</span></div>
+      <div class="lg"><span class="tag t-sign">📝 Chờ ký hợp đồng</span><span>Hoàn thành kỹ thuật và nghiệm thu với đối tác — chỉ chờ thủ tục hợp đồng để lên production.</span></div>
+    </div>
+  </div>
+
+  <!-- 1. Kho quà & Ưu đãi -->
+  <div class="proj p1">
+    <div class="proj-head">
+      <div class="ico">🛒</div>
+      <div class="info">
+        <div class="name">1 · Kho quà & Ưu đãi</div>
+        <div class="st">Hệ đổi quà – ưu đãi cho shop và khách cuối (mini-app · trang quản trị · CRM) — <b>đang vận hành production</b>, release 10 tính năng trong tháng</div>
+      </div>
+      <span class="tag t-rel">✅ Production</span>
+    </div>
+    <table><thead><tr><th>#</th><th>Tính năng</th><th style="text-align:right">Trạng thái</th></tr></thead><tbody>
+      <tr><td class="num">1</td><td class="ft"><b>Gom màn ưu đãi cũ và ưu đãi từ đối tác thành MỘT màn hình duy nhất trên mini-app</b> — khách xem và đổi mọi ưu đãi (nội bộ, GotIt, UrBox, mạng lưới) ở một chỗ</td><td class="tagc"><span class="tag t-rel">✅ Đã release</span></td></tr>
+      <tr><td class="num">2</td><td class="ft">Tìm kiếm ưu đãi cũ ngay trong màn ưu đãi chung — khách quen tên chương trình cũ vẫn tìm thấy</td><td class="tagc"><span class="tag t-rel">✅ Đã release</span></td></tr>
+      <tr><td class="num">3</td><td class="ft">Hạn mức đổi quà cho quà 0đ — chặn một khách gom sạch quà miễn phí; quà có giá không bị siết</td><td class="tagc"><span class="tag t-rel">✅ Đã release</span></td></tr>
+      <tr><td class="num">4</td><td class="ft">Gói dịch vụ nhà cung cấp (GotIt / UrBox / Mạng lưới) có vòng đời — bán & gia hạn trên CRM, hết hạn kho quà tự tạm khoá, banner thông báo rõ cho shop</td><td class="tagc"><span class="tag t-rel">✅ Đã release</span></td></tr>
+      <tr><td class="num">5</td><td class="ft">Trang Tổng quan Kho quà bản mới — một trang duy nhất: số liệu, xu hướng, việc "Cần xử lý", xuất Excel</td><td class="tagc"><span class="tag t-rel">✅ Đã release</span></td></tr>
+      <tr><td class="num">6</td><td class="ft">Cảnh báo voucher sắp hết hạn (số đếm + bộ lọc); voucher quá hạn không còn tính là "chưa dùng"</td><td class="tagc"><span class="tag t-rel">✅ Đã release</span></td></tr>
+      <tr><td class="num">7</td><td class="ft">Sắp thứ tự danh mục ưu đãi từ CRM — áp thống nhất xuống mini-app và trang quản trị của shop</td><td class="tagc"><span class="tag t-rel">✅ Đã release</span></td></tr>
+      <tr><td class="num">8</td><td class="ft">Xử lý đơn đổi quà hàng loạt trên CRM — làm mới trạng thái, cập nhật giao hàng nhiều đơn một lượt</td><td class="tagc"><span class="tag t-rel">✅ Đã release</span></td></tr>
+      <tr><td class="num">9</td><td class="ft">Mini-app shop demo hiển thị nhãn "Demo" — qua vòng kiểm duyệt của Zalo</td><td class="tagc"><span class="tag t-rel">✅ Đã release</span></td></tr>
+      <tr><td class="num">10</td><td class="ft">Tài liệu hướng dẫn sử dụng công khai trên docs.cnvcdp — khách và đội hỗ trợ tự tra cứu</td><td class="tagc"><span class="tag t-rel">✅ Đã phát hành</span> <span class="tag t-doc">Tài liệu</span></td></tr>
+      <tr><td class="num">11</td><td class="ft">Gửi voucher đến khách qua Email / ZNS — shop tự cấu hình kênh gửi, có cảnh báo khi chưa bật kênh nào</td><td class="tagc"><span class="tag t-test">🧪 Đang thử nghiệm</span></td></tr>
+      <tr><td class="num">12</td><td class="ft">Nâng cấp cứu đơn đổi quà treo — chốt tay đơn thành công khách vẫn nhận voucher; hết lỗi khi hai khách đổi cùng lúc</td><td class="tagc"><span class="tag t-test">🧪 Đang thử nghiệm</span></td></tr>
+    </tbody></table>
+  </div>
+
+  <!-- 2. Mạng lưới ưu đãi -->
+  <div class="proj p2">
+    <div class="proj-head">
+      <div class="ico">🕸</div>
+      <div class="info">
+        <div class="name">2 · Mạng lưới ưu đãi (Reward Network)</div>
+        <div class="st">Chợ ưu đãi dùng chung giữa các doanh nghiệp — <b>toàn bộ tính năng đang thử nghiệm</b>, bắt đầu <b>pilot nội bộ từ 30/10</b>; lên production sau khi qua nghiệm thu đầu-cuối (hiện đạt 70%)</div>
+      </div>
+      <span class="tag t-test">🧪 Staging · Pilot</span>
+    </div>
+    <table><thead><tr><th>#</th><th>Tính năng</th><th style="text-align:right">Trạng thái</th></tr></thead><tbody>
+      <tr><td class="num">1</td><td class="ft"><b>Áp mã giảm giá mạng lưới ngay tại trang thanh toán mini-app</b> — khách chọn/nhập mã, hệ thống tự tính lại tổng tiền và phí ship</td><td class="tagc"><span class="tag t-test">🧪 Đang thử nghiệm</span></td></tr>
+      <tr><td class="num">2</td><td class="ft">Hạn mức đổi quà mỗi khách — shop góp, shop lấy và CNV cùng kiểm soát; chống gom quà 0đ hàng loạt</td><td class="tagc"><span class="tag t-test">🧪 Đang thử nghiệm</span></td></tr>
+      <tr><td class="num">3</td><td class="ft">Đổi nhiều suất quà trong một lần — chọn số lượng, nhận trọn bộ mã, trừ điểm đúng số suất</td><td class="tagc"><span class="tag t-test">🧪 Đang thử nghiệm</span></td></tr>
+      <tr><td class="num">4</td><td class="ft">Ví voucher chia 3 tab (Chưa dùng / Đã dùng / Hết hạn); khách tự đánh dấu "Đã dùng"; voucher quá hạn tự chuyển trạng thái</td><td class="tagc"><span class="tag t-test">🧪 Đang thử nghiệm</span></td></tr>
+      <tr><td class="num">5</td><td class="ft">Nhận diện chủ voucher theo số điện thoại — đổi ở shop này, dùng được ở shop góp quà</td><td class="tagc"><span class="tag t-test">🧪 Đang thử nghiệm</span></td></tr>
+      <tr><td class="num">6</td><td class="ft">Shop tự thêm kênh áp dụng cho ưu đãi đang chạy, không cần duyệt lại; mở kênh Zalo Mini App cho ưu đãi mạng lưới</td><td class="tagc"><span class="tag t-test">🧪 Đang thử nghiệm</span></td></tr>
+      <tr><td class="num">7</td><td class="ft">Thông báo lỗi đổi quà thân thiện — khách hiểu vì sao chưa đổi được và có nên thử lại không</td><td class="tagc"><span class="tag t-test">🧪 Đang thử nghiệm</span></td></tr>
+      <tr><td class="num">8</td><td class="ft">Đối soát nguồn mạng lưới trên CRM — kỳ đối soát hiển thị cho shop như các nguồn quà khác</td><td class="tagc"><span class="tag t-test">🧪 Đang thử nghiệm</span></td></tr>
+      <tr><td class="num">9</td><td class="ft">Quyền dùng mạng lưới gắn với gói dịch vụ — shop chưa có gói được hướng dẫn rõ cần gói nào</td><td class="tagc"><span class="tag t-test">🧪 Đang thử nghiệm</span></td></tr>
+      <tr><td class="num">10</td><td class="ft">Trang Tổng quan Mạng lưới bản mới + hàng đợi việc "Cần chú ý" cho shop</td><td class="tagc"><span class="tag t-test">🧪 Pilot 30/10</span></td></tr>
+      <tr><td class="num">11</td><td class="ft">Bộ công cụ vận hành cho CNV — phân quyền, bộ danh mục chung & ghép nguồn quà (mapping), bộ lọc danh sách</td><td class="tagc"><span class="tag t-test">🧪 Đang thử nghiệm</span></td></tr>
+    </tbody></table>
+  </div>
+
+  <!-- 3. NeoX -->
+  <div class="proj p3">
+    <div class="proj-head">
+      <div class="ico">💳</div>
+      <div class="info">
+        <div class="name">3 · NeoX — Thanh toán thẻ</div>
+        <div class="st"><b>Hoàn thành tích hợp môi trường sandbox và nghiệm thu SIT với NeoX.</b> Chưa deploy production — <b>đợi ký hợp đồng với NeoX</b>.</div>
+      </div>
+      <span class="tag t-sign">📝 Chờ ký hợp đồng</span>
+    </div>
+    <table><thead><tr><th>#</th><th>Tính năng</th><th style="text-align:right">Trạng thái</th></tr></thead><tbody>
+      <tr><td class="num">1</td><td class="ft">Thanh toán bằng thẻ ATM / VISA / MASTERCARD</td><td class="tagc"><span class="tag t-sign">📝 Chờ ký hợp đồng</span></td></tr>
+      <tr><td class="num">2</td><td class="ft">Lưu thẻ cho lần thanh toán sau</td><td class="tagc"><span class="tag t-sign">📝 Chờ ký hợp đồng</span></td></tr>
+      <tr><td class="num">3</td><td class="ft">Thanh toán bằng thẻ đã lưu</td><td class="tagc"><span class="tag t-sign">📝 Chờ ký hợp đồng</span></td></tr>
+      <tr><td class="num">4</td><td class="ft">Shop quản lý danh sách thẻ đã lưu</td><td class="tagc"><span class="tag t-sign">📝 Chờ ký hợp đồng</span></td></tr>
+      <tr><td class="num">5</td><td class="ft">Kế toán CNV xem danh sách giao dịch thẻ trên CRM</td><td class="tagc"><span class="tag t-sign">📝 Chờ ký hợp đồng</span></td></tr>
+    </tbody></table>
+  </div>
+
+  <!-- 4. Affiliate v2 -->
+  <div class="proj p4">
+    <div class="proj-head">
+      <div class="ico">🤝</div>
+      <div class="info">
+        <div class="name">4 · Affiliate v2</div>
+        <div class="st">Tiếp thị liên kết — <b>đang vận hành production</b>, bổ sung xuất dữ liệu & trang chào mừng tuỳ biến</div>
+      </div>
+      <span class="tag t-rel">✅ Production</span>
+    </div>
+    <table><thead><tr><th>#</th><th>Tính năng</th><th style="text-align:right">Trạng thái</th></tr></thead><tbody>
+      <tr><td class="num">1</td><td class="ft">Xuất Excel danh sách chi tiết đơn hàng — chi tiết tới từng món trong đơn</td><td class="tagc"><span class="tag t-rel">✅ Đã release</span></td></tr>
+      <tr><td class="num">2</td><td class="ft">Lọc danh sách khách hàng theo trạng thái ghi nhận</td><td class="tagc"><span class="tag t-rel">✅ Đã release</span></td></tr>
+      <tr><td class="num">3</td><td class="ft">Tuỳ biến trang chào mừng — đưa vào menu mới kèm các tính năng đi kèm</td><td class="tagc"><span class="tag t-rel">✅ Đã release</span></td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="note-box">
+    <b>Ghi chú trạng thái:</b> tag "Đã release / Đang thử nghiệm" được chốt theo bằng chứng triển khai thực tế (lịch sử deploy), không theo nhãn trong tài liệu cũ — bản kiểm kê 28/09 từng ghi nhầm Mạng lưới ưu đãi là "production", đã được đính chính ngày 21/10. <b>Điều kiện lên production của Mạng lưới ưu đãi:</b> hoàn tất kịch bản nghiệm thu đầu-cuối (hiện 70%) và qua Production Gate. <b>Điều kiện của NeoX:</b> ký hợp đồng với đối tác.
+  </div>
+
+  <div class="footer">
+    Báo cáo tháng 10/2026 (29/09–31/10) · Nguồn: báo cáo tuần W40–41, báo cáo Sprint 4, bản kiểm kê tính năng 21/10, lịch sử triển khai 4 hệ thống.
+  </div>
+</div>
+
+<script>
+Chart.defaults.font.family='-apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif';
+Chart.defaults.font.size=12; Chart.defaults.color='#6B7280'; Chart.defaults.animation=false;
+new Chart(document.getElementById('chStatus'), { type:'doughnut',
+  data:{ labels:['✅ Đã release','🧪 Đang thử nghiệm','📝 Chờ ký hợp đồng'],
+    datasets:[{ data:[13,13,5], backgroundColor:['#10B981','#F59E0B','#8B5CF6'], borderWidth:2, borderColor:'#fff' }] },
+  options:{ responsive:true, maintainAspectRatio:false, cutout:'58%',
+    plugins:{ legend:{ position:'bottom', labels:{ padding:10, usePointStyle:true, pointStyle:'circle' } } } } });
+</script>
+</body>
+</html>
