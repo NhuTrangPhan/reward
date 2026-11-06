@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CNV Reward Network — Release tính năng sản phẩm</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #16385f; --navy-2: #1f4e79; --navy-soft: #EAF1F8;
+    --ink: #1a2433; --ink-soft: #3b4a5e; --muted: #64748B; --border: #DDE5EE;
+    --green: #0E9F6E; --green-soft: #DEF7EC;
+    --amber: #B45309; --amber-soft: #FDF0D5;
+    --indigo: #4F46E5; --indigo-soft: #E0E7FF;
+    --slate: #475569; --slate-soft: #E2E8F0;
+    --purple: #6D28D9; --purple-soft: #EDE9FE;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: #fff; color: var(--ink); font-size: 13.5px; line-height: 1.6;
+    padding: 34px 40px; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+
+  /* Title block */
+  .doc-head { border-left: 6px solid var(--navy); padding-left: 18px; margin-bottom: 18px; }
+  .doc-head h1 { font-size: 34px; font-weight: 800; color: var(--navy); letter-spacing: -0.8px; }
+  .doc-head .sub { font-size: 17px; font-weight: 700; color: var(--navy-2); margin-top: 2px; }
+  .doc-head .scope { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+
+  .intro {
+    background: #F6F9FC; border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 18px; font-size: 13px; color: var(--ink-soft); margin-bottom: 16px;
+  }
+  .intro b { color: var(--navy-2); }
+
+  /* Stats strip */
+  .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+  .stat {
+    flex: 1; min-width: 104px; background: var(--navy-soft); border: 1px solid #C9D9EA;
+    border-radius: 10px; padding: 10px 10px; text-align: center;
+  }
+  .stat .v { font-size: 22px; font-weight: 800; color: var(--navy); line-height: 1.1; }
+  .stat .l { font-size: 11px; color: var(--ink-soft); font-weight: 600; margin-top: 2px; }
+
+  /* Highlights */
+  .hl {
+    border: 1px solid #BFD5EA; border-left: 5px solid var(--navy-2); border-radius: 10px;
+    background: #F4F8FC; padding: 14px 18px; margin-bottom: 20px;
+  }
+  .hl h3 { font-size: 14px; color: var(--navy); margin-bottom: 8px; }
+  .hl h3::before { content: "★ "; }
+  .hl ul { list-style: none; }
+  .hl li { position: relative; padding-left: 16px; margin-bottom: 5px; font-size: 12.8px; color: var(--ink-soft); }
+  .hl li::before { content: "•"; position: absolute; left: 2px; color: var(--navy-2); font-weight: 700; }
+  .hl b { color: var(--navy-2); }
+
+  /* Legend */
+  .legend { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 22px; font-size: 11.5px; color: var(--muted); }
+  .legend .lt { font-weight: 700; color: var(--ink-soft); }
+
+  /* Theme bar */
+  .theme-bar {
+    background: var(--navy); color: #fff; border-radius: 8px;
+    padding: 10px 16px; display: flex; align-items: center; gap: 12px;
+    margin: 26px 0 0;
+  }
+  .theme-bar h2 { font-size: 16.5px; font-weight: 800; letter-spacing: -0.2px; flex: 1; }
+  .theme-bar .cnt { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.35); border-radius: 20px; padding: 2px 12px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+  .theme-desc { font-size: 12.3px; color: var(--muted); margin: 8px 2px 2px; }
+
+  /* Feature table */
+  table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+  thead th {
+    text-align: left; font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--navy-2); padding: 8px 10px 6px; border-bottom: 2px solid var(--navy-2);
+  }
+  tbody td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; font-size: 12.8px; color: var(--ink-soft); }
+  td.num { font-weight: 800; color: var(--navy); width: 34px; }
+  td.name { font-weight: 700; color: var(--ink); width: 210px; }
+  td.what { width: 46%; }
+  .pill { display: inline-block; font-size: 9.5px; font-weight: 800; padding: 1px 8px; border-radius: 10px; letter-spacing: .3px; white-space: nowrap; vertical-align: 1px; }
+  .p-shop { background: var(--green-soft); color: var(--green); }
+  .p-user { background: var(--amber-soft); color: var(--amber); }
+  .p-cnv  { background: var(--indigo-soft); color: var(--indigo); }
+  .p-sys  { background: var(--slate-soft); color: var(--slate); }
+  .p-merge{ background: var(--purple-soft); color: var(--purple); }
+  .p-ext  { background: var(--amber-soft); color: var(--amber); }
+  .p-new  { background: var(--green-soft); color: var(--green); }
+  .p-upd  { background: var(--indigo-soft); color: var(--indigo); }
+  .p-confirm { background: var(--amber); color: #fff; }
+  .confirm { margin-top: 6px; padding: 6px 9px; border-radius: 6px; background: var(--amber-soft); color: var(--amber); font-size: 11.8px; }
+  .confirm b { color: var(--amber); }
+  .sec { margin-top: 26px; }
+  .sec h3 { font-size: 15px; color: var(--navy); margin-bottom: 8px; padding-bottom: 4px; border-bottom: 2px solid var(--navy-2); }
+  .sec ul { padding-left: 18px; font-size: 12.6px; color: var(--ink-soft); }
+  .sec li { margin-bottom: 4px; }
+  .sec table td, .sec table th { font-size: 12.4px; }
+  .warn { background: var(--amber-soft); border: 1px solid #F3D8A8; border-left: 5px solid var(--amber); border-radius: 10px; padding: 12px 16px; font-size: 12.6px; color: var(--ink-soft); margin-bottom: 16px; }
+  .warn b { color: var(--amber); }
+  .name .pills { margin-top: 4px; display: flex; gap: 4px; flex-wrap: wrap; }
+
+  .note-box { background: #F6F9FC; border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: 12px; color: var(--muted); margin-top: 26px; }
+  .note-box b { color: var(--ink-soft); }
+  .footer { text-align: center; color: #94A3B8; font-size: 11.5px; margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--border); }
+
+  @page { size: A4; margin: 11mm 9mm; }
+  @media print {
+    body { padding: 0; font-size: 12.5px; }
+    tr, .stat, .intro, .warn, .theme-bar, .note-box { break-inside: avoid; page-break-inside: avoid; }
+    .hl li { break-inside: avoid; page-break-inside: avoid; margin-bottom: 3px; }
+    .theme-bar, .sec h3 { break-after: avoid; page-break-after: avoid; }
+    .sec li, .sec tr { break-inside: avoid; page-break-inside: avoid; }
+    thead { display: table-header-group; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="doc-head">
+    <h1>CNV Reward Network</h1>
+    <div class="sub">Release tính năng sản phẩm — Chợ ưu đãi dùng chung của các shop trên CNV CDP</div>
+    <div class="scope">Phạm vi: Mạng lưới ưu đãi và hệ thống đổi quà · Trang quản trị shop (CNV CDP) · Zalo Mini App · Công cụ vận hành của CNV (Rewards Hub trên CRM Connect) &nbsp;·&nbsp; Phiên bản 11/2026 · cập nhật 03/11/2026</div>
+  </div>
+
+  <div class="intro">
+    <b>Reward Network</b> (menu <b>Mạng lưới ưu đãi</b> trên CNV CDP) là chợ ưu đãi dùng chung của các doanh nghiệp trên nền tảng CNV CDP. Khách hàng của một shop có thể dùng điểm tích luỹ để đổi ưu đãi do shop khác đóng góp, ngay trên Zalo Mini App. Với shop, mạng lưới giúp có thêm quà cho khách đổi điểm mà không phải tự xây dựng ưu đãi, đồng thời đưa ưu đãi của mình đến khách của các shop khác. Giá trị trao đổi giữa các shop được ghi nhận bằng <b>Điểm mạng lưới</b> ngay khi khách đổi quà.
+    <br><br>
+    Tài liệu giới thiệu <b>106 tính năng</b>, chia thành 9 nhóm theo 4 vai trò sử dụng; thuật ngữ và tên màn hình thống nhất với tài liệu "Hướng dẫn sử dụng Reward Network — Mạng lưới ưu đãi". Phần nền đổi quà (đã có tài liệu "CNV Reward V2 — Tổng quan tính năng") và tính năng riêng của nhà cung cấp UrBox, Got It <b>không thuộc phạm vi</b> tài liệu này.
+    <br><br>
+    Trạng thái: <b>toàn bộ tính năng đã phát hành chính thức</b> trên Mạng lưới ưu đãi, hệ thống đổi quà, Rewards Hub trên CRM Connect, trang quản trị CNV CDP và Zalo Mini App. Riêng Zalo Mini App, mỗi shop cần <b>cập nhật Mini App của mình lên phiên bản mới</b> để sử dụng (xem lưu ý bên dưới).
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="v">106</div><div class="l">Tính năng</div></div>
+    <div class="stat"><div class="v">9</div><div class="l">Nhóm tính năng</div></div>
+    <div class="stat"><div class="v">4</div><div class="l">Vai trò sử dụng</div></div>
+    <div class="stat"><div class="v">Chính thức</div><div class="l">Toàn bộ tính năng đã phát hành</div></div>
+  </div>
+
+  <div class="warn">
+    <b>Lưu ý triển khai — Zalo Mini App của từng shop:</b> mỗi shop có một Zalo Mini App riêng. Để khách đổi được quà (trang Ưu đãi, đổi quà, chọn voucher mạng lưới ở trang thanh toán), <b>Mini App của shop cần được cập nhật lên phiên bản mới</b>. Đội triển khai CNV thực hiện cập nhật qua công cụ nội bộ CNV Tracker, sau đó Zalo xét duyệt trong khoảng 1–2 ngày.<br>
+    Các bước cho một shop: CNV kích hoạt gói trên CRM Connect → shop kết nối nguồn quà và chọn quà → <b>CNV cập nhật Mini App của shop</b> → shop thêm trang Ưu đãi vào Mini App → đổi thử một quà.
+  </div>
+
+  <div class="hl">
+    <h3>Một số tính năng nổi bật</h3>
+    <ul>
+      <li><b>Đổi điểm chéo thương hiệu</b><br>Dùng điểm loyalty tại một shop để đổi ưu đãi từ các shop khác trong mạng lưới, ngay trên Zalo Mini App.</li>
+      <li><b>Chọn quà, đặt giới hạn</b><br>Linh hoạt bật/tắt ưu đãi theo thương hiệu, danh mục; thiết lập giới hạn lượt đổi cho từng ưu đãi và từng khách hàng.</li>
+      <li><b>Gửi voucher đa kênh</b><br>Phát voucher qua Zalo Mini App, email hoặc triển khai chiến dịch gửi qua Automation.</li>
+      <li><b>Theo dõi hiệu quả, nhận gợi ý</b><br>Theo dõi lượt đổi, tỷ lệ sử dụng và hiệu quả ưu đãi; xuất báo cáo Excel, xem các việc cần xử lý và gợi ý hành động.</li>
+      <li><b>Quản lý tập trung, bảo mật xuyên suốt</b><br>CNV quản lý việc duyệt ưu đãi, phân quyền, danh mục và hoạt động mạng lưới; mã voucher được mã hóa, hạn chế lộ lọt trong quá trình xử lý.</li>
+    </ul>
+  </div>
+
+  <div class="legend">
+    <span class="lt">Vai trò:</span>
+    <span class="pill p-shop">Shop</span> doanh nghiệp dùng CNV CDP &nbsp;
+    <span class="pill p-user">Khách hàng</span> khách của shop trên Zalo Mini App &nbsp;
+    <span class="pill p-cnv">CNV quản trị</span> đội vận hành CNV &nbsp;
+    <span class="pill p-sys">Hệ thống</span> hệ thống tự xử lý, không cần thao tác
+  </div>
+
+  <div id="doc"></div>
+
+  <div class="sec">
+    <h3>Phạm vi đã điều chỉnh so với bản thí điểm (Release Note 08/2026) — không cam kết với khách</h3>
+    <table><thead><tr><th>Bản thí điểm từng nêu</th><th>Phạm vi phát hành hiện tại</th></tr></thead><tbody>
+      <tr><td class="what">Ba cách cấp mã: shop nhập kho mã, hệ thống tạo lô mã riêng, tạo mã khi khách đổi</td><td>Chỉ còn <b>kho mã shop tự nhập</b> (dán trực tiếp hoặc tải tệp Excel, CSV), mỗi khách một mã.</td></tr>
+      <tr><td class="what">Phạm vi áp dụng: toàn gian hàng, theo danh mục hoặc từng sản phẩm</td><td>Chỉ áp dụng cho <b>toàn bộ sản phẩm của shop</b>, giới hạn bằng giá trị đơn tối thiểu; chưa có miễn phí vận chuyển hay ưu đãi theo từng sản phẩm.</td></tr>
+      <tr><td class="what">Tự động đối soát mã đã dùng với đơn hàng</td><td>Hệ thống tự đối soát mã dùng online; tệp đối soát nguồn Mạng lưới ưu đãi do <b>CNV tải lên CRM</b>, shop chưa tự tải được.</td></tr>
+      <tr><td class="what">Khách hàng báo cáo ưu đãi kém chất lượng</td><td>Chưa có kênh báo vi phạm: shop chưa có nơi gửi báo cáo; màn Báo cáo vi phạm trên Rewards Hub <b>đang tạm ẩn</b> (vẫn giữ để mở lại). CNV vẫn có thể tạm dừng hoặc cắt ưu đãi trực tiếp.</td></tr>
+      <tr><td class="what">Kênh Zalo Mini App, kênh HUB</td><td>Kênh Zalo Mini App đã mở; <b>kênh HUB vẫn tạm khoá</b>.</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="sec">
+    <h3>Giới hạn hiện tại</h3>
+    <ul>
+      <li><b>Xác nhận dùng mã tại cửa hàng chỉ có một bước:</b> thao tác đánh dấu đã dùng có hiệu lực ngay; chưa có bước xem trước thông tin mã (tên ưu đãi, khách, hạn dùng), nên thu ngân cần đối chiếu trên màn hình của khách.</li>
+      <li><b>Gom danh mục:</b> chưa hiện số quà đang bị ẩn <i>trước</i> khi gán; chỉ biết số quà được cập nhật sau khi gán.</li>
+      <li><b>Hệ số ngành:</b> đang dùng mặc định 1,0; bộ hệ số cho từng ngành chưa được chốt chính thức.</li>
+      <li><b>Điểm mạng lưới:</b> chưa chặn shop có số dư âm, hiện chỉ cảnh báo cho CNV; Điểm mạng lưới không quy đổi ra tiền.</li>
+      <li><b>Ưu đãi hiện chạy ở Cấp 1:</b> mọi ưu đãi trên Chợ ưu đãi đang ở Cấp 1, mọi shop trong mạng lưới đều thấy và lấy được. Ưu đãi Cấp 2 trở lên, chỉ dành cho shop được CNV cấp quyền, sẽ mở ở giai đoạn sau.</li>
+      <li><b>Đơn chờ kiểm tra chưa có nút chốt thất bại thủ công:</b> đơn đã hết số lần hỏi lại chỉ được xử lý khi nhà cung cấp trả kết quả rõ ràng (có mã, hoặc lỗi nằm trong danh sách lỗi đã biết của nhà cung cấp); nếu nhà cung cấp tiếp tục trả mã lỗi lạ, điểm của khách vẫn bị giữ.</li>
+      <li><b>Kiểm thử áp mã ở trang thanh toán:</b> phần áp mã tại trang thanh toán (hệ thống bán hàng → Mạng lưới ưu đãi → đối soát) chưa có môi trường thử nghiệm riêng; việc kiểm thử phải thực hiện trên môi trường chính thức bằng shop thử nghiệm.</li>
+    </ul>
+  </div>
+
+  <div class="note-box">
+    <b>Nguồn &amp; quy ước:</b> danh sách tính năng được tổng hợp từ Mạng lưới ưu đãi, hệ thống đổi quà, trang quản trị CNV CDP và CRM Connect, đối chiếu với phiên bản đang chạy chính thức ngày 02/11/2026. Một tính năng có mặt ở nhiều hệ thống chỉ được tính một lần. Thuật ngữ và tên màn hình theo <b>tài liệu Hướng dẫn sử dụng chính thức</b>. Khi trích dẫn, xin ghi "Release tính năng sản phẩm — phiên bản 11/2026 (03/11/2026)".
+  </div>
+
+  <div class="footer">CNV Reward Network — Release tính năng sản phẩm · Phiên bản 11/2026 (03/11/2026) · Đi kèm tài liệu "CNV Reward V2 — Tổng quan tính năng"</div>
+</div>
+
+<script>
+const WHO = { S: ['Shop','p-shop'], U: ['Khách hàng','p-user'], C: ['CNV quản trị','p-cnv'], H: ['Hệ thống','p-sys'] };
+// Mỗi dòng: [vai trò, tên, mô tả, lợi ích, ghi chú cần xác nhận (không bắt buộc)]
+const THEMES = [
+ {
+  "t": "Nhóm 1 — Khách hàng đổi điểm lấy ưu đãi và dùng voucher",
+  "d": "Trải nghiệm của khách trên Zalo Mini App: đổi điểm lấy ưu đãi từ các shop trong mạng lưới, nhận voucher và dùng tại cửa hàng hoặc khi mua online.",
+  "f": [
+   [
+    "U",
+    "Đổi điểm lấy ưu đãi của shop khác",
+    "Khách dùng điểm tích luỹ (loyalty) tại shop A để đổi ưu đãi do shop B đóng góp, ngay trên Zalo Mini App quen thuộc. Khách lỡ bấm đổi hai lần thì chỉ bị trừ điểm một lần.",
+    "Điểm của khách dùng được ở nhiều thương hiệu trong mạng lưới, không chỉ gói gọn trong một shop."
+   ],
+   [
+    "U",
+    "Đổi nhiều suất trong một lần",
+    "Khách chọn số lượng khi đổi. Hệ thống cấp đủ số mã trong một lần đổi và trừ điểm đúng theo số lượng. Kho không đủ mã thì cả lượt đổi bị từ chối, không cấp thiếu. Mỗi lượt đổi không bị giới hạn ở 10 mã.",
+    "Khách mua quà tặng số lượng lớn chỉ cần đổi một lần và không bị trừ điểm khi chưa nhận đủ mã."
+   ],
+   [
+    "H",
+    "Yêu cầu số điện thoại khi đổi quà mạng lưới",
+    "Tài khoản chưa có số điện thoại không đổi được quà của mạng lưới và được báo rõ lý do; quà UrBox, Got It không bị ảnh hưởng. Voucher gắn với số điện thoại của tài khoản, không theo số khách tự nhập.",
+    "Voucher luôn xác định được chủ sở hữu khi khách mang sang shop khác sử dụng."
+   ],
+   [
+    "U",
+    "Dùng voucher tại shop đóng góp",
+    "Voucher mạng lưới nhận diện khách theo số điện thoại: đổi ở shop này, khách vẫn thấy và dùng được ở shop đóng góp. Màn chi tiết voucher có mã vạch, mã QR và mã chữ (có nút sao chép) để xuất trình hoặc nhập, kèm hai nút \"Xem thêm quà tặng\" và \"Đổi thêm\".",
+    "Khách đổi ở một shop và dùng ở shop khác một cách liền mạch."
+   ],
+   [
+    "H",
+    "Hiển thị đầy đủ thông tin ưu đãi",
+    "Mô tả, điều kiện sử dụng, kênh dùng (online hay tại cửa hàng), hướng dẫn cho từng kênh, số mã còn lại và danh mục được hiển thị cho khách đúng như shop đóng góp đã khai.",
+    "Khách nắm đúng điều kiện trước khi đổi, hạn chế khiếu nại do dùng sai kênh."
+   ],
+   [
+    "H",
+    "Áp mã ưu đãi khi mua online",
+    "Khách nhập mã khi mua online: hệ thống tự tính mức giảm, giữ mã trong lúc thanh toán, xác nhận khi đơn thành công và trả mã lại khi khách bỏ giỏ hàng. Không áp mã khi số tiền giảm bằng hoặc lớn hơn tiền hàng; mỗi đơn chỉ giữ một mã; mã chưa phát cho ai được báo như mã không tồn tại; đơn đã hoàn không giữ được mã. Khi đối soát, hệ thống chỉ chốt mã có trên đơn và không trả mã lại nếu hệ thống bán hàng đang lỗi.",
+    "Mã mạng lưới dùng được ở trang thanh toán online như mã của chính shop; không bị kẹt mã khi khách bỏ dở, không giảm hai lần cho một đơn."
+   ],
+   [
+    "U",
+    "Chọn voucher mạng lưới ở trang thanh toán Zalo Mini App",
+    "Ở trang thanh toán trên Mini App của shop đóng góp, khu vực \"Chọn mã giảm giá\" hiện các voucher mạng lưới khách đang có và dùng được tại shop; \"Xem tất cả\" có mục riêng cho voucher mạng lưới. Chọn hoặc bỏ voucher thì tổng tiền và phí giao hàng được tính lại; mã bị gỡ giữa chừng được báo rõ. Mã chỉ áp trong lượt thanh toán đang mở; mở ứng dụng bằng đường dẫn có sẵn mã thì mã không bị mất.",
+    "Khách đổi quà ở shop A dùng được ngay khi mua hàng trên Mini App của shop B, không phải chép mã."
+   ],
+   [
+    "H",
+    "Xác nhận dùng mã tại cửa hàng",
+    "Thu ngân đánh dấu voucher đã sử dụng bằng một thao tác; hệ thống kiểm tra mã thuộc đúng khách và đúng shop trước khi chấp nhận.",
+    "Xác nhận nhanh, tránh dùng nhầm mã của người khác."
+   ],
+   [
+    "H",
+    "Cập nhật trạng thái \"Đã dùng\" vào ví voucher",
+    "Khi khách dùng mã tại shop đóng góp, trạng thái được cập nhật về ví voucher gần như ngay lập tức. Hai shop có mã trùng nhau không bị cập nhật nhầm; hoàn tiền không làm voucher quay lại trạng thái chưa dùng. Lần cập nhật nào bị lỗi thì hệ thống tự thử lại và bù các lượt bị sót.",
+    "Ví voucher của khách luôn đúng thực tế; mỗi mã chỉ dùng được một lần."
+   ],
+   [
+    "U",
+    "Khách tự đánh dấu \"Đã dùng\"",
+    "Khách của shop lấy quà bật ô \"Đã dùng\" ở chi tiết voucher. Thông tin này được ghi riêng, tách với xác nhận của thu ngân; mã khách đã đánh dấu thì cửa hàng quét lại sẽ bị từ chối.",
+    "Khách tự quản lý ví voucher; shop đóng góp có thêm dữ liệu về lượt khách đã dùng."
+   ],
+   [
+    "H",
+    "Voucher quá hạn tự chuyển sang \"Hết hạn\"",
+    "Hệ thống tự chuyển voucher quá hạn sử dụng sang trạng thái Hết hạn. Mục Ưu đãi của tôi chia ba nhóm: Chưa dùng, Đã dùng, Hết hạn. Mã hết hạn bị từ chối khi quét tại cửa hàng.",
+    "Khách và thu ngân thấy đúng trạng thái; mã quá hạn shop đã khai không dùng được nữa."
+   ],
+   [
+    "U",
+    "Theo dõi đơn đang xử lý và lọc lịch sử đổi quà",
+    "Đơn đang xử lý có mã đơn để theo dõi thay vì không có phản hồi. Lịch sử đổi quà lọc được theo trạng thái và loại quà; tệp Excel xuất ra đúng theo bộ lọc đang chọn.",
+    "Khách biết đơn của mình đang ở đâu, giảm câu hỏi gửi về shop."
+   ],
+   [
+    "S",
+    "Giới hạn lượt đổi của mỗi khách — ba lớp cùng áp dụng",
+    "Shop lấy quà đặt \"Giới hạn mỗi khách\" (số lượt đổi tối đa của một khách) ở chi tiết quà trong Kho quà. Shop đóng góp và CNV có thể đặt thêm hạn mức trọn đời cho mỗi khách với từng quà (xem hai dòng tương ứng): hạn mức áp dụng là số nhỏ hơn giữa phía shop đóng góp và phía CNV, mỗi phía ưu tiên số riêng hơn số chung; giới hạn của shop lấy quà được kiểm thêm khi đổi. Khách chạm giới hạn thấy thông báo \"đã đạt mức tối đa\", khác với thông báo \"hết quà\".",
+    "Không để một khách đổi hết quà đang được ưa chuộng; ưu đãi được chia cho nhiều khách hơn."
+   ],
+   [
+    "H",
+    "Danh mục và thương hiệu hiển thị theo từng shop",
+    "Bộ lọc trên màn của khách chỉ hiện danh mục, thương hiệu có quà thật trong kho của shop (kể cả quà mạng lưới), không hiện danh mục trống. Thương hiệu mạng lưới của chính shop được ẩn khỏi màn cấu hình.",
+    "Khách xem quà gọn gàng, đúng với kho quà thực tế của từng shop."
+   ],
+   [
+    "H",
+    "Mục \"Khác\" cho quà chưa phân loại",
+    "Quà mạng lưới thiếu thông tin thương hiệu hoặc danh mục được tự xếp vào mục \"Khác\"; có nhiều mục \"Khác\" thì tên ngành được ghép kèm để phân biệt.",
+    "Không quà nào bị ẩn chỉ vì khai thiếu thông tin phân loại."
+   ],
+   [
+    "H",
+    "Gợi ý quà phù hợp hơn",
+    "Danh sách gợi ý ưu tiên quà cần ít điểm, dễ đổi; cộng thêm điểm ưu tiên theo mức độ khách tương tác và theo danh mục.",
+    "Khách thấy ngay những quà vừa với số điểm đang có."
+   ],
+   [
+    "U",
+    "Thông báo lỗi dễ hiểu khi đổi quà",
+    "Khi đổi quà mạng lưới không thành công, khách thấy câu thông báo dễ hiểu thay vì mã lỗi hay thuật ngữ nội bộ. Lỗi do số lượng hoặc thiếu thông tin có nút thử lại; quà không còn đổi được thì không hiện nút thử lại.",
+    "Khách tự biết cần làm gì; shop nhận ít yêu cầu hỗ trợ hơn."
+   ]
+  ]
+ },
+ {
+  "t": "Nhóm 2 — Shop tham gia mạng lưới và gói dịch vụ",
+  "d": "Shop tự tham gia, khai ngành hàng, tìm hiểu bảng giá và xem thử trước khi mua; quyền sử dụng gắn với gói dịch vụ.",
+  "f": [
+   [
+    "S",
+    "Shop tự tham gia mạng lưới",
+    "Shop mở trang giới thiệu Mạng lưới từ menu và tự bấm Tham gia, không cần chờ CNV tạo tài khoản. Tư cách thành viên miễn phí.",
+    "Shop tham gia được ngay khi có nhu cầu."
+   ],
+   [
+    "S",
+    "Khai ngành hàng và danh mục kinh doanh",
+    "Khi tham gia, shop chọn ngành hàng trước, sau đó chọn danh mục thuộc ngành đó (chỉ chọn được danh mục cấp cuối). Đây là thông tin bắt buộc.",
+    "Ưu đãi của shop được phân loại đúng ngay từ đầu, làm căn cứ để định giá theo ngành."
+   ],
+   [
+    "S",
+    "Xem lại thiết lập và việc còn thiếu",
+    "Shop xem lại toàn bộ thiết lập đã khai lúc kết nối, được nhắc các bước còn thiếu và sửa được danh mục kinh doanh sau khi tham gia.",
+    "Shop tự hoàn thiện hồ sơ, không cần nhờ CNV."
+   ],
+   [
+    "S",
+    "Menu mở cho mọi shop, quyền dùng theo gói dịch vụ",
+    "Mọi shop trên CNV CDP đều thấy menu Mạng lưới ưu đãi và Kho quà &amp; Ưu đãi. Kho quà mở khi shop có tài khoản đổi quà và có gói hoặc đã kết nối nhà cung cấp; Mạng lưới mở khi shop đã tham gia; phần chưa mở dẫn tới trang giới thiệu. Quyền kết nối kho quà chỉ có khi gói còn hiệu lực và tự ngắt khi gói hết hạn; gia hạn xong, kết nối lại vẫn giữ cấu hình cũ. Quyền được kiểm theo gói đăng ký trên tài khoản CNV ID: shop chưa có gói khi lấy quà hoặc thêm kết nối sẽ thấy thông báo nêu rõ gói cần mua; quà UrBox, Got It vẫn được kiểm theo gói tại Kho quà.",
+    "Mọi shop đều biết đến mạng lưới; quyền sử dụng thực tế gắn với gói đã mua."
+   ],
+   [
+    "S",
+    "Trang giới thiệu và bảng giá",
+    "Phần menu chưa mở dẫn tới trang giới thiệu; phần đã mở có mục \"Giới thiệu\" ở đầu. Trang giới thiệu nêu tính năng nổi bật, các bước bắt đầu, những điều cần biết trước khi mua hoặc tham gia, và bảng giá: Gói UrBox, Gói Got It 200.000.000đ năm đầu, gia hạn 80.000.000đ/năm; Gói Mạng lưới 30.000.000đ/năm; thành viên Mạng lưới miễn phí. Giá chưa gồm VAT; mỗi gói ghi rõ ai trả tiền quà. Nút \"Liên hệ mua gói\" mở kênh Zalo của CNV (CNV CDP không thu tiền gói trực tiếp); shop đang có gói thấy trạng thái \"Đang dùng\" kèm ngày hết hạn. Shop đã mở nhưng chưa có dữ liệu thấy trang giới thiệu kèm gợi ý, thay vì bảng số toàn 0.",
+    "Shop chưa sử dụng vẫn tìm hiểu được tính năng, giá và gửi yêu cầu mua ngay trên CNV CDP."
+   ],
+   [
+    "S",
+    "Hướng dẫn từng bước với dữ liệu mẫu",
+    "Hai bài hướng dẫn: Kho quà 4 bước (kết nối Mạng lưới → tỷ lệ đổi điểm và kênh gửi voucher → cấu hình quà → Kho quà, kết thúc bằng lời nhắc thêm trang Ưu đãi vào Mini App) và Mạng lưới 4 bước (góp ưu đãi → lấy từ chợ → Quà đã lấy → Tổng quan). Hướng dẫn tự mở một lần khi Tổng quan còn trống, mở lại bằng nút \"Xem hướng dẫn\". Shop chưa mua hoặc chưa tham gia vẫn xem thử được; mọi thao tác chỉ chạy trên dữ liệu mẫu, không ghi vào dữ liệu thật.",
+    "Shop thử trọn quy trình trước khi mua và tự học cách dùng."
+   ],
+   [
+    "H",
+    "Logo thương hiệu lấy theo ảnh đại diện shop",
+    "Logo thương hiệu của shop trong mạng lưới lấy từ ảnh đại diện shop trên CNV ID: khi shop tham gia, khi CNV mời shop và mỗi lần shop mở Mạng lưới trên CNV CDP. Shop đổi ảnh đại diện thì logo đổi theo; CRM Connect không nhập hay sửa logo.",
+    "Ưu đãi trên chợ và trên Mini App luôn có logo đúng của shop."
+   ]
+  ]
+ },
+ {
+  "t": "Nhóm 3 — Shop đóng góp ưu đãi vào chợ chung",
+  "d": "Shop đưa ưu đãi của mình lên Chợ ưu đãi bằng kho mã sẵn có và quản lý ưu đãi từ lúc tạo đến khi đang chạy.",
+  "f": [
+   [
+    "S",
+    "Đóng góp ưu đãi bằng kho mã của shop",
+    "Shop nhập kho mã voucher của mình (dán trực tiếp hoặc tải tệp Excel), viết mô tả có định dạng, thêm ảnh minh hoạ; mọi ô đều có gợi ý nhập. Shop chọn danh mục ưu đãi theo cây Ngành → Danh mục của mạng lưới. Mức giảm áp dụng cho toàn bộ sản phẩm của shop, giới hạn bằng giá trị \"Đơn tối thiểu\".",
+    "Shop góp ưu đãi từ chương trình sẵn có, không phụ thuộc nhà cung cấp bên ngoài."
+   ],
+   [
+    "S",
+    "Hạn dùng voucher",
+    "Shop khai \"Hạn dùng voucher\": số ngày voucher còn hiệu lực kể từ lúc khách đổi (mặc định 30 ngày); hệ thống kiểm tra hạn khi khách dùng mã. Khác với \"Hiệu lực từ ngày / Đến ngày\" là khoảng thời gian ưu đãi được đổi trên chợ.",
+    "Shop kiểm soát được thời gian phải phục vụ ưu đãi, không có mã dùng mãi."
+   ],
+   [
+    "S",
+    "Tách \"Mô tả\" và \"Điều kiện sử dụng\"",
+    "Hai ô nhập riêng trên form; điều kiện sử dụng được hiển thị riêng khi khách xem quà.",
+    "Khách đọc rõ điều kiện trước khi đổi, giảm khiếu nại \"không dùng được mã\"."
+   ],
+   [
+    "S",
+    "Chọn kênh áp dụng và hướng dẫn cho từng kênh",
+    "Shop chọn bốn kênh dùng ưu đãi: ứng dụng di động, website, tại cửa hàng và Zalo Mini App (áp mã ngay tại giỏ hàng); kênh HUB đang tạm khoá. Mỗi kênh đã chọn bắt buộc có phần hướng dẫn sử dụng riêng, hiển thị cho khách đúng theo kênh.",
+    "Một ưu đãi dùng được ở nhiều nơi, khách luôn có hướng dẫn phù hợp."
+   ],
+   [
+    "S",
+    "Quản lý ưu đãi từ bản nháp đến khi gửi duyệt",
+    "Shop lưu nháp, sửa hoặc xoá bản nháp, gửi CNV duyệt và rút lại khi đang chờ duyệt; xem và sửa mã đã nhập; thao tác hàng loạt ngay trên danh sách và trang chi tiết.",
+    "Shop chủ động quản lý ưu đãi trước khi lên chợ."
+   ],
+   [
+    "S",
+    "Sửa ưu đãi đang chạy",
+    "Shop sửa nội dung hiển thị và nới điều kiện sử dụng ngay trên trang chi tiết, không phải gỡ ưu đãi xuống để tạo lại.",
+    "Sửa thông tin hoặc nới điều kiện ngay, quà vẫn hiển thị liên tục trên Mini App."
+   ],
+   [
+    "S",
+    "Nạp thêm mã và tạm dừng ưu đãi đang chạy",
+    "Nút \"Nạp thêm kho\" cho phép dán hoặc tải mã mới: hệ thống đếm số mã sẽ nạp, bỏ qua mã trùng, từ chối mã đang dùng ở ưu đãi khác và nêu rõ ưu đãi đang giữ mã đó. Nút \"Tạm dừng / Mở lại\" dừng nhận đổi; khách đang giữ voucher vẫn dùng được đến hết hạn.",
+    "Ưu đãi được ưa chuộng không bị gián đoạn vì hết mã; shop tự dừng nhận đổi khi cần."
+   ],
+   [
+    "S",
+    "Shop đóng góp đặt hạn mức cho mỗi khách",
+    "Shop đóng góp đặt số mã tối đa một khách được đổi cho một quà, tính trên toàn bộ thời gian: một số chung cho mọi quà ở trang Thiết lập và số riêng cho từng ưu đãi (số riêng thay cho số chung, nên có thể nới riêng một quà). Tối đa 9.999; sửa được khi ưu đãi đã gửi duyệt hoặc đang chạy, mã khách đã đổi vẫn giữ nguyên. Hạn mức áp dụng là số nhỏ hơn giữa phía shop đóng góp và phía CNV.",
+    "Shop đóng góp tự hạn chế việc gom quà từ phía mình, không phụ thuộc cài đặt của shop lấy quà."
+   ],
+   [
+    "S",
+    "Thêm kênh áp dụng cho ưu đãi đang chạy",
+    "Shop thêm kênh áp dụng cho ưu đãi đang chạy ngay tại chỗ; voucher khách đang giữ dùng được thêm ở kênh mới. Muốn bỏ một kênh, shop cần tạm dừng ưu đãi trước, vì ưu đãi đang chạy vẫn tiếp tục phát mã.",
+    "Mở thêm nơi dùng ưu đãi mà không ảnh hưởng đến khách đang giữ mã."
+   ],
+   [
+    "H",
+    "Chống trùng mã voucher",
+    "Mã chỉ cần không trùng trong cùng một shop đóng góp; hai shop khác nhau có mã giống nhau vẫn hợp lệ. Mã trùng với khuyến mãi riêng của chính shop bị chặn. Quy định độ dài chỉ áp dụng cho mã do hệ thống tạo, mã shop tự nhập không bị ép theo.",
+    "Shop nhập kho mã sẵn có mà không bị từ chối sai; mã mạng lưới không chồng lên chương trình khuyến mãi riêng của shop."
+   ],
+   [
+    "H",
+    "Mã khuyến mãi riêng của shop không trùng mã mạng lưới",
+    "Trước khi phát mã khuyến mãi riêng, hệ thống Loyalty của shop kiểm tra với Mạng lưới ưu đãi xem mã có đang được giữ cho shop không (kể cả trong ưu đãi nháp). Thông báo trùng nêu tên chương trình đang giữ mã (tối đa 3 chương trình). Shop đang bị tạm treo vẫn được kiểm tra để không phát trùng; số mã tối đa mỗi lần kiểm tra được thống nhất giữa hai hệ thống.",
+    "Mỗi mã chỉ có một ý nghĩa trong toàn bộ chương trình của shop, dù được tạo ở đâu."
+   ],
+   [
+    "H",
+    "Kiểm tra chất lượng trước khi lên chợ",
+    "Ưu đãi bắt buộc gắn thương hiệu của shop. Ưu đãi có mức giảm 0đ không được duyệt; riêng quà có giá đổi 0đ (đổi miễn phí) vẫn hợp lệ. Mọi thay đổi đều được ghi nhật ký.",
+    "Chợ ưu đãi không có quà thiếu thương hiệu hay ưu đãi không có giá trị."
+   ]
+  ]
+ },
+ {
+  "t": "Nhóm 4 — Shop lấy ưu đãi và theo dõi hiệu quả",
+  "d": "Shop chọn ưu đãi từ Chợ ưu đãi để phát cho khách của mình và đo hiệu quả tham gia mạng lưới.",
+  "f": [
+   [
+    "S",
+    "Chợ ưu đãi — chọn và lấy quà về",
+    "Shop xem các ưu đãi do shop khác đóng góp (đã được CNV duyệt) và bấm \"Lấy về kho quà\" để phát cho khách của mình.",
+    "Kho quà có thêm ưu đãi từ nhiều thương hiệu mà shop không phải tự xây dựng."
+   ],
+   [
+    "S",
+    "Lọc theo ngành, danh mục, thương hiệu",
+    "Bộ lọc và cột thông tin theo ngành hàng, danh mục, thương hiệu (kèm shop sở hữu); danh mục được nhóm theo ngành; có ô tìm kiếm ở cả 5 màn danh sách. Nút \"Quà tôi đã góp\" chuyển nhanh sang danh sách đóng góp. Shop có thể tạo mục xem riêng, chuyển giữa dạng bảng và dạng lưới, chọn cột hiển thị và chọn nhiều dòng cùng lúc.",
+    "Shop nhanh chóng tìm được ưu đãi phù hợp với khách của mình."
+   ],
+   [
+    "S",
+    "Điểm mạng lưới cộng/trừ trên từng ưu đãi",
+    "Danh sách Đóng góp ưu đãi có cột \"Điểm mạng lưới (+)\": số điểm shop được cộng mỗi lượt quà mình góp được đổi. Chợ ưu đãi có cột \"Điểm mạng lưới (−)\": số điểm bị trừ mỗi lượt khách đổi, và cột \"Số điểm đổi\": số điểm khách bỏ ra. Số 0 là giá trị thật (lấy miễn phí).",
+    "Shop tính được phần nhận về và phần bỏ ra trước khi quyết định, không có chi phí ẩn."
+   ],
+   [
+    "S",
+    "Quà đã lấy — theo dõi quà đang phát cho khách",
+    "Menu Quà đã lấy có mục \"Khách không đổi được\" và cột \"Trạng thái\" kèm lý do quà đang bị ẩn (hết mã, hết hạn, shop đóng góp tạm dừng hoặc bị cắt, thiếu giá, hết quyền…). Kho mã là số mã còn lại chung của shop đóng góp; shop có thể bấm \"Bỏ khỏi kho\".",
+    "Shop biết chính xác vì sao khách không thấy một món quà và tự xử lý, không cần gửi yêu cầu hỗ trợ."
+   ],
+   [
+    "S",
+    "Tổng quan hoạt động góp và lấy",
+    "Hai khối \"Bạn góp cho mạng lưới\" và \"Bạn lấy từ mạng lưới\" kèm mức tăng giảm so với kỳ trước: khách mới đến từ mạng lưới, lượt quà được đổi, lượt đã dùng mã, Điểm mạng lưới tích luỹ và đã dùng, số shop phân phối và thương hiệu đối tác. Khối \"Điểm mạng lưới của bạn\": Số dư = Tích luỹ − Đã dùng (toàn bộ thời gian).",
+    "Shop đánh giá việc tham gia mạng lưới bằng số liệu cụ thể."
+   ],
+   [
+    "S",
+    "Hành trình của quà đã góp",
+    "Biểu đồ phễu trên Tổng quan, tính trên toàn bộ thời gian: Suất đã góp (tổng mã) → Đã được đổi (% trên kho) → Đã dùng mã (% trên lượt đổi) → Khách đã dùng. Mỗi bước cho thấy quà đang dừng lại ở đâu.",
+    "Shop thấy khâu nào cần cải thiện, thay vì chỉ nhìn tổng lượt đổi."
+   ],
+   [
+    "S",
+    "Tình trạng ưu đãi, Top 5 và biểu đồ theo ngày",
+    "Chỉ số \"Sức khoẻ ưu đãi\": tỷ lệ ưu đãi có lượt dùng trong 30 ngày (mục tiêu từ 60% trở lên) kèm phân bố trạng thái. Biểu đồ hai đường theo ngày: lượt quà shop góp được đổi và lượt khách của shop đổi quà mạng lưới. Top 5 ưu đãi shop góp hiệu quả nhất và quà mạng lưới được khách của shop yêu thích nhất; chọn tháng để so với kỳ trước; biểu tượng ⓘ giải thích cách tính.",
+    "Shop biết ưu đãi nào nên tiếp tục, ưu đãi nào cần điều chỉnh."
+   ],
+   [
+    "S",
+    "\"Cần chú ý\" — danh sách việc cần làm",
+    "Danh sách việc cần xử lý ngay trên Tổng quan, mỗi dòng dẫn tới đúng màn xử lý: ưu đãi sắp hết mã → Nạp kho; bị CNV từ chối → Xem lý do; hết hạn trong 7 ngày → Gia hạn; quà đã lấy không hiện với khách → Xem; voucher đã phát nhưng chưa ai nhận; ưu đãi đang chờ duyệt. Mỗi việc mở danh sách Đóng góp ưu đãi đã lọc sẵn; danh sách có bộ lọc \"Cần chú ý\" riêng.",
+    "Shop không bỏ sót việc khiến quà biến mất khỏi danh sách của khách."
+   ],
+   [
+    "S",
+    "Xuất báo cáo Excel",
+    "Tệp Excel có các khối số liệu đặt tên giống màn Tổng quan và ghi rõ cách tính từng chỉ số. Lượt đã dùng gồm cả lượt khách tự đánh dấu \"Đã dùng\"; Điểm mạng lưới ghi số thực tế.",
+    "Số liệu mang đi báo cáo khớp với màn hình, không phải giải thích lại."
+   ],
+   [
+    "S",
+    "Chi tiết quà trên màn quản trị",
+    "Màn chi tiết quà hiện đủ thông tin như khách nhìn thấy; số liệu thống nhất giữa các mục; số mã còn lại và nhãn nguồn quà mạng lưới hiển thị rõ.",
+    "Shop tin tưởng số liệu đang xem, không phải đối chiếu chéo."
+   ]
+  ]
+ },
+ {
+  "t": "Nhóm 5 — Kết nối nguồn quà và hiển thị cho khách",
+  "d": "Shop kết nối Mạng lưới ưu đãi như một nguồn quà, cấu hình cách gửi voucher và đưa quà lên Zalo Mini App.",
+  "f": [
+   [
+    "S",
+    "Kết nối Mạng lưới ưu đãi như một nguồn quà",
+    "Shop kết nối ngay trong màn kết nối nhà cung cấp, khai tỷ lệ đổi điểm và kênh gửi voucher trong cùng một bước; xong là dùng được. Ưu đãi từ chợ chung về Kho quà và đi theo quy trình đổi quà chuẩn, có cơ chế tự xử lý lại khi đơn bị kẹt.",
+    "Shop có thêm quà từ nhiều thương hiệu mà không phải ký thêm hợp đồng hay tích hợp riêng."
+   ],
+   [
+    "S",
+    "Gửi voucher qua email hoặc chiến dịch Automation",
+    "Trong Cấu hình chung → Gửi voucher đến khách hàng, shop bật \"Gửi email\" (gửi ngay, không cần chiến dịch) và/hoặc \"Phát sự kiện sang Automation\" (công cụ chiến dịch tự động trên CNV CDP) để chạy chiến dịch \"Voucher đã phát hành\": gửi tin nhắn Zalo ZNS (tin chăm sóc khách hàng qua Zalo), gắn thẻ khách… Chưa bật kênh nào thì có cảnh báo màu đỏ và khách chỉ xem được voucher trong ứng dụng. Áp dụng cho cả quà mạng lưới và quà của nhà cung cấp.",
+    "Khách nhận voucher ngay sau khi đổi; đây là bước bắt buộc khi thiết lập nên shop không bỏ sót."
+   ],
+   [
+    "S",
+    "Quà lấy về tự hiển thị cho khách",
+    "Quà mạng lưới lấy về được tự bật cho khách, không cần bật từng món.",
+    "Kết nối xong là khách đổi được ngay."
+   ],
+   [
+    "S",
+    "Shop tự thêm trang Ưu đãi vào Zalo Mini App",
+    "Mọi shop chọn được màn Ưu đãi đối tác và Ưu đãi tổng hợp khi cấu hình đường dẫn, nút và hành động trang trên Mini App, không cần nhờ CNV. Mini App của shop cần được cập nhật lên phiên bản mới thì trang này mới đổi được quà (xem lưu ý triển khai ở đầu tài liệu).",
+    "Shop tự đưa quà đến khách mà không phải chờ CNV cấu hình."
+   ],
+   [
+    "H",
+    "Tự ẩn quà mạng lưới hết hiệu lực",
+    "Quà hết hạn hoặc thiếu giá tự ẩn khỏi màn của khách (giá 0đ vẫn hợp lệ). Khi shop đóng góp rút ưu đãi, chỉ những shop đã lấy quà đó bị tắt quà.",
+    "Khách không đổi phải ưu đãi đã hết hiệu lực; shop không phải tự dọn kho."
+   ],
+   [
+    "S",
+    "Đồng bộ quà theo yêu cầu",
+    "Nút \"Đồng bộ quà\" cho kết nối Mạng lưới; tiến độ đồng bộ hiện trên các mục chi tiết kết nối, kể cả ngay sau khi vừa kết nối.",
+    "Shop biết quà đang về đến đâu, không lo hệ thống bị treo."
+   ],
+   [
+    "S",
+    "Cấu hình riêng cho từng kết nối",
+    "Mỗi kết nối nhà cung cấp có cấu hình riêng (không dùng cấu hình chung hay hình thức trọn gói qua CNV). Thay đổi ảnh hưởng đến nhiều nhà cung cấp được cảnh báo trước khi lưu.",
+    "Chỉnh một nguồn quà không làm ảnh hưởng nguồn khác."
+   ],
+   [
+    "S",
+    "Quản lý tỷ lệ đổi điểm",
+    "Chỉ chủ cửa hàng sửa được tỷ lệ đổi điểm. Shop chưa khai tỷ lệ thì hệ thống báo rõ, không hiện giá trị mặc định dễ gây hiểu nhầm.",
+    "Thông số ảnh hưởng trực tiếp đến điểm của khách không bị sửa nhầm."
+   ],
+   [
+    "S",
+    "Hiển thị người sửa cấu hình gần nhất",
+    "Ô \"Liên kết bởi\" trên màn chi tiết kết nối cho biết ai là người sửa cấu hình gần nhất.",
+    "Nhiều người cùng quản trị vẫn biết ai vừa thay đổi khi cần kiểm tra."
+   ]
+  ]
+ },
+ {
+  "t": "Nhóm 6 — Điểm mạng lưới và định giá ưu đãi",
+  "d": "Cách mạng lưới ghi nhận giá trị trao đổi giữa các shop: Điểm mạng lưới được cộng, trừ theo từng lượt đổi và giá ưu đãi được tính theo ngành.",
+  "f": [
+   [
+    "H",
+    "Shop đóng góp được cộng Điểm mạng lưới ngay khi khách đổi quà",
+    "Điểm được ghi cho shop đóng góp ngay lúc khách đổi, không chờ đến khi khách dùng mã. Tổng điểm cộng và tổng điểm trừ trên toàn mạng luôn cân bằng; từng lượt đổi đều tra cứu được. Khách để mã hết hạn hoặc đơn bị hoàn thì shop đóng góp vẫn giữ điểm, vì quà đã được phân phối.",
+    "Shop đóng góp thấy điểm về ngay, đúng cơ chế đã công bố, có thêm động lực góp quà."
+   ],
+   [
+    "C",
+    "Định giá ưu đãi khi duyệt",
+    "Khi duyệt, CNV chốt ba giá trị: Điểm mạng lưới shop đóng góp nhận, Điểm mạng lưới shop lấy quà trả và Giá bán cho khách (đ) — giá này được quy ra số điểm đổi theo tỷ lệ đổi điểm của shop lấy quà. Hệ thống gợi ý theo công thức giá trị ưu đãi × hệ số ngành; CNV có thể bật \"Tự nhập giá\" để nhập giá khác.",
+    "CNV điều chỉnh giá theo từng ngành thay vì áp một mức chung, ví dụ khuyến khích ngành đang thiếu ưu đãi."
+   ],
+   [
+    "H",
+    "Cảnh báo khi góp và lấy ưu đãi mất cân đối",
+    "Hệ thống đo mức chênh lệch giữa lượng góp và lượng lấy của từng shop và cảnh báo khi vượt ngưỡng. Hiện chỉ cảnh báo, chưa chặn.",
+    "Sớm nhận ra shop chỉ lấy mà không góp."
+   ],
+   [
+    "C",
+    "Theo dõi và đối soát Điểm mạng lưới giữa các shop",
+    "Năm chỉ số: Tổng điểm đã cộng, Tổng điểm đã dùng, Chênh lệch toàn mạng (bình thường bằng 0), Số shop trong mạng, Số shop lấy nhiều hơn góp. Bảng số dư từng shop (điểm được cộng, điểm đã dùng, số dư) xếp shop có số dư cao nhất lên đầu; có mục riêng cho shop có số dư âm.",
+    "CNV theo dõi dòng giá trị giữa các shop để đối soát và phát hiện chênh lệch sớm."
+   ],
+   [
+    "C",
+    "Điều chỉnh Điểm mạng lưới có lưu vết",
+    "Sai lệch trong vận hành được điều chỉnh bằng một bút toán ghi vào sổ điểm, có lưu vết; không sửa trực tiếp số dư.",
+    "Mọi lần điều chỉnh đều giải trình được."
+   ]
+  ]
+ },
+ {
+  "t": "Nhóm 7 — CNV vận hành mạng lưới trên Rewards Hub",
+  "d": "Đội CNV quản lý shop, ưu đãi, danh mục và đơn đổi quà của mọi nguồn trong module Rewards Hub trên CRM Connect (công cụ vận hành nội bộ của CNV).",
+  "f": [
+   [
+    "C",
+    "Module Rewards Hub trên CRM Connect",
+    "Module ở menu bên trái của CRM Connect, chỉ nhân viên CNV nhìn thấy, gồm Tổng quan và 4 nhóm: Vận hành đổi quà (Đơn đổi quà, Tài khoản, Báo cáo, Nhật ký thao tác — dùng chung cho mọi nguồn quà); Danh mục &amp; Thương hiệu (kèm Nhật ký thao tác ưu đãi); Mạng lưới ưu đãi (Duyệt ưu đãi, Shop &amp; quyền, Sổ điểm mạng lưới; mục Báo cáo vi phạm đang tạm ẩn); Cài đặt.",
+    "Đội CNV vận hành toàn bộ hoạt động đổi quà trong công cụ làm việc hằng ngày."
+   ],
+   [
+    "C",
+    "Tổng quan cho người trực",
+    "Chỉ số đổi quà 7 ngày và 30 ngày so với kỳ trước (đơn thành công, giá trị quà, điểm đã dùng, số khách đổi); số liệu hiện tại của mạng lưới (số shop, ưu đãi đang chạy, chênh lệch sổ điểm); biểu đồ đơn theo ngày, giá trị quà theo nhà cung cấp, ưu đãi theo trạng thái; khối \"Việc cần làm\" dẫn tới màn xử lý và khối \"Hàng chờ duyệt\".",
+    "Đầu ca trực, người trực nắm được tình hình và biết việc nào cần làm trước."
+   ],
+   [
+    "C",
+    "Phân quyền ba mức: xem, cấu hình, phê duyệt",
+    "Thao tác không hoàn tác được hoặc ảnh hưởng đến điểm (duyệt, cắt ưu đãi, xử lý vi phạm, khôi phục shop) cần quyền phê duyệt riêng; hai mức còn lại là xem và cấu hình.",
+    "Người chỉ có quyền xem không thể vô tình chốt giá hay cắt ưu đãi."
+   ],
+   [
+    "H",
+    "Thông báo lỗi tiếng Việt và cảnh báo khi chưa cấu hình",
+    "Lỗi nghiệp vụ từ Mạng lưới ưu đãi được hiển thị bằng tiếng Việt kèm cách khắc phục. Chưa cấu hình kết nối thì hiện cảnh báo thay vì báo lỗi liên tục.",
+    "Người vận hành tự xử lý lỗi thường gặp, không cần nhờ đội kỹ thuật."
+   ],
+   [
+    "C",
+    "Chuyển giữa môi trường thật và môi trường thử nghiệm",
+    "Chuyển toàn bộ Rewards Hub giữa môi trường thật và môi trường thử nghiệm; một lựa chọn áp dụng cho cả đổi quà và mạng lưới, chỉ lưu trên trình duyệt đang dùng. Ở môi trường thử nghiệm, mọi màn có dải cảnh báo vàng và nút \"Về môi trường thật\"; hai ô \"Kết nối máy chủ\" cho biết đang kết nối tới môi trường nào, địa chỉ nào.",
+    "Thao tác thử không lẫn vào dữ liệu thật — điều quan trọng vì duyệt ưu đãi là chốt giá không hoàn tác."
+   ],
+   [
+    "C",
+    "Mời shop tham gia mạng lưới",
+    "Nút \"Mời shop tham gia\" cho phép chọn shop từ danh sách khách hàng trên CRM (mã shop hiện trước tên, tìm được theo mã); tên và logo tự lấy (logo theo ảnh đại diện shop trên CNV ID, CRM không sửa). Bắt buộc chọn ngành hàng và danh mục kinh doanh; không mời trùng shop đã tham gia. Cột \"Diện tham gia\" phân biệt shop do CNV tạo hộ và shop tự tham gia.",
+    "CNV đưa shop vào mạng lưới có kiểm soát, đúng thông tin và ngành hàng ngay từ đầu."
+   ],
+   [
+    "C",
+    "Khôi phục shop bị tạm treo hoặc bị cắt",
+    "CNV gỡ hình thức xử phạt kèm lý do bắt buộc. Kết quả cho biết việc còn lại: bao nhiêu ưu đãi tự mở lại, bao nhiêu phải tạo mới; điều kiện hiển thị của ưu đãi được tính lại.",
+    "Việc xử phạt có hướng khôi phục rõ ràng, shop biết cần làm gì tiếp theo."
+   ],
+   [
+    "C",
+    "Ngành hàng và danh mục của mạng lưới",
+    "Hai màn trong nhóm Danh mục &amp; Thương hiệu. Mỗi ngành có hệ số định giá (ví dụ 1,25 là cao hơn 25%, 0,8 là thấp hơn 20%); đổi hệ số không áp lại cho ưu đãi đã duyệt. Ngành có ngành con; danh mục thuộc ngành. Không có nút xoá, chỉ bật/tắt để giữ lịch sử; tắt danh mục sẽ ẩn mọi ưu đãi thuộc danh mục đó khỏi chợ và Mini App (cần quyền phê duyệt).",
+    "CNV quản lý một bộ phân loại chung cho toàn mạng, điều chỉnh giá theo ngành mà không mất dữ liệu."
+   ],
+   [
+    "C",
+    "CNV đặt hạn mức cho mỗi khách",
+    "CNV đặt một số chung cho toàn mạng và số riêng cho từng shop đóng góp (số riêng thay cho số chung). Sau khi đổi số, mọi quà đang chạy được cập nhật lại để Mini App hiện đúng số lượt còn lại; xoá số là bỏ giới hạn từ phía CNV.",
+    "CNV có công cụ ngăn việc gom quà trên toàn mạng hoặc tại một shop đóng góp."
+   ],
+   [
+    "C",
+    "Ràng buộc ngành và danh mục khi nhập liệu",
+    "Ô chọn danh mục chỉ hiện danh mục thuộc ngành đang chọn; chọn danh mục khác ngành sẽ không lưu được. Form thương hiệu bắt buộc có danh mục kinh doanh và sửa trực tiếp được.",
+    "Không còn quà gắn sai danh mục, giúp việc lọc và duyệt chính xác."
+   ],
+   [
+    "C",
+    "Đồng bộ ngành và danh mục từ CRM Connect",
+    "Mỗi lần lưu trên CRM Connect, ngành và danh mục được tự gửi sang Mạng lưới ưu đãi; nút \"Đồng bộ ngay\" dùng để gửi lại toàn bộ. Ngành bị ẩn trên CRM thì được tắt ở mạng lưới nhưng vẫn giữ liên kết với ưu đãi và thương hiệu; hiện lại thì bật lại — không xoá ngành. Không tạo ngành thủ công ở mạng lưới; thứ tự danh mục theo sắp xếp trên CRM.",
+    "Ngành hàng trên CRM và trên mạng lưới luôn khớp, không phải cập nhật tay ở hai nơi, không mất lịch sử khi ẩn ngành."
+   ],
+   [
+    "C",
+    "Quản lý thương hiệu trong mạng lưới",
+    "Xem danh sách thương hiệu (lọc theo shop), gán ngành hàng và chuyển trạng thái: chờ xác nhận, hoạt động, tạm treo.",
+    "Thương hiệu được kiểm duyệt và xếp đúng ngành trước khi khách nhìn thấy."
+   ],
+   [
+    "C",
+    "Nhóm ghép ưu đãi theo Cấp và ngành hàng",
+    "Mỗi nhóm ghép gồm tên, Cấp, ngành hàng (để trống là nhóm chung) và trạng thái; hiện tại mọi nhóm ghép đều ở Cấp 1, mở cho mọi shop trong mạng lưới. Không tạo trùng cặp Cấp và ngành. Tắt một nhóm ghép sẽ ẩn các ưu đãi thuộc nhóm khỏi chợ — chỉ nên dùng khi thật sự cần.",
+    "Ưu đãi cùng mức giá trị được xếp chung nhóm để việc quy đổi giữa các shop công bằng."
+   ],
+   [
+    "C",
+    "Duyệt hoặc từ chối ưu đãi",
+    "Khi duyệt, CNV chọn Cấp (hiện tại là Cấp 1), xác nhận hoặc điều chỉnh danh mục (có gợi ý ngành và hệ số áp vào giá), nhập đủ ba giá trị định giá (có mức tối đa). Duyệt là chốt giá và khoá kho mã shop đã nhập, ưu đãi lên chợ — không hoàn tác được. Từ chối bắt buộc nêu lý do.",
+    "Mọi ưu đãi lên chợ đều được thẩm định giá trị và phạm vi hiển thị; hạn chế chốt nhầm giá."
+   ],
+   [
+    "C",
+    "Xem kho mã của từng ưu đãi",
+    "CNV mở danh sách mã shop đã nhập để đối chiếu số lượng và trạng thái (20 mã mỗi trang). Mã được che một phần và giao diện ghi rõ mã đang được che.",
+    "Kiểm tra kho mã có thật và khớp số lượng duyệt mà không cần xem mã đầy đủ."
+   ],
+   [
+    "C",
+    "Tạm dừng hoặc cắt ưu đãi đang chạy",
+    "CNV tạm dừng ưu đãi (mở lại được) hoặc cắt hẳn kèm lý do; ưu đãi đã cắt không mở lại được.",
+    "Xử lý ngay khi ưu đãi có vấn đề, phân biệt rõ dừng tạm thời và dừng hẳn."
+   ],
+   [
+    "C",
+    "Bộ lọc và tìm kiếm chung cho 5 màn danh sách",
+    "Năm màn danh sách dùng cùng bộ lọc và ô tìm kiếm; nút chế độ xem sáng đúng theo bộ lọc đang áp dụng. Danh sách có phân trang, lọc theo trạng thái, bản ghi mới ở trên cùng; thống nhất gọi là \"ưu đãi\".",
+    "Học một lần dùng được cả năm màn; tìm đúng bản ghi nhanh chóng."
+   ],
+   [
+    "C",
+    "Gom danh mục từ các nguồn quà về danh mục chung",
+    "Mỗi dòng là một danh mục chung khách thấy trên Mini App; ba cột Got It, UrBox, Mạng lưới ưu đãi cho biết danh mục nào của từng nguồn đang được gom vào (bấm ô để chọn hoặc đổi). Cột Quà là tổng số quà đang gom; trạng thái Đang hiện hoặc Đang ẩn; các mục lọc: Tất cả, Gom từ 2 nguồn trở lên, Chưa có nguồn, Đang ẩn.",
+    "Quà từ nhiều nguồn được xếp chung một cây danh mục, khách lọc quà nhất quán dù quà đến từ đâu."
+   ],
+   [
+    "C",
+    "Gom thương hiệu và tạo danh mục, thương hiệu chung",
+    "Màn gom thương hiệu hoạt động như màn gom danh mục (3 cột nguồn). Nút \"Tạo danh mục / thương hiệu chung\" (tên hiển thị và ảnh, mã do hệ thống cấp). Cảnh báo \"N danh mục nguồn chưa gán — đang nằm ở danh mục Khác\"; gán lại được bất cứ lúc nào, danh mục nguồn không bị mất.",
+    "Thương hiệu từ nhiều nguồn được thống nhất; không còn danh mục bị bỏ quên trong mục \"Khác\"."
+   ],
+   [
+    "C",
+    "Danh sách shop đã kích hoạt và nguồn quà đang kết nối",
+    "Màn Tài khoản liệt kê shop đã kích hoạt dịch vụ đổi quà kèm mã CNV, các nhà cung cấp đang kết nối (UrBox, Got It, Mạng lưới ưu đãi) và thời điểm kích hoạt; nhà cung cấp bị gạch ngang là kết nối đã ngắt (gói hết hạn hoặc bị tạm ngưng).",
+    "Trả lời ngay câu hỏi \"shop đã kết nối Mạng lưới chưa\" khi tiếp nhận hỗ trợ."
+   ],
+   [
+    "C",
+    "Báo cáo đổi quà theo kỳ",
+    "Chọn kỳ 7 ngày, 30 ngày, tháng này hoặc tuỳ chọn; xem theo từng shop hoặc toàn hệ thống. Bốn chỉ số chính so với kỳ trước; top 10 thương hiệu và top 10 quà (theo giá trị quà hoặc số đơn); bảng theo nhà cung cấp: tổng đơn, thành công, tỷ lệ, giá trị quà, tỷ trọng, số đơn được hệ thống tự xử lý lại.",
+    "CNV thấy nhanh nguồn quà nào hay gặp lỗi, thương hiệu nào được đổi nhiều để điều chỉnh."
+   ],
+   [
+    "C",
+    "Đối soát nguồn Mạng lưới ưu đãi",
+    "CNV tải tệp đối soát của nguồn Mạng lưới ưu đãi lên CRM để shop xem kỳ đối soát như các nguồn khác (shop chưa tự tải được như với Got It). Hệ thống tự đối soát mã dùng online theo đơn đã thanh toán và trả lại mã của đơn huỷ.",
+    "Khớp mã đã dùng với đơn hàng thật, phát hiện chênh lệch giữa shop đóng góp và shop sử dụng."
+   ],
+   [
+    "C",
+    "Nhật ký thao tác đổi quà",
+    "Ghi lại mọi thao tác của nhân viên CNV và của hệ thống: thời gian, người thao tác, thao tác, đối tượng, kết quả; lọc theo Tất cả, Thất bại, Nhân viên CNV, Hệ thống. Bấm một dòng để xem giá trị trước và sau khi đổi cùng thông tin truy vết (địa chỉ IP, mã yêu cầu, trình duyệt).",
+    "Tìm ra ai đã thay đổi gì trong vài phút khi có sự cố."
+   ],
+   [
+    "C",
+    "Nhật ký thao tác ưu đãi",
+    "Màn trong nhóm Danh mục &amp; Thương hiệu: xem các thao tác trên ưu đãi của mạng lưới (CNV duyệt, từ chối, tạm dừng, cắt; shop sửa ưu đãi đang chạy); lọc theo người thực hiện, loại thao tác, khoảng ngày và mã ưu đãi; bấm một dòng để xem lý do và chi tiết thay đổi. Dùng chung quyền xem với màn Duyệt ưu đãi.",
+    "Biết được ai đã duyệt hay cắt một ưu đãi và vì sao, không cần hỏi đội kỹ thuật."
+   ],
+   [
+    "H",
+    "Kết nối an toàn từ CRM Connect sang Mạng lưới ưu đãi",
+    "Mọi yêu cầu từ CRM Connect sang Mạng lưới ưu đãi đi qua cổng kết nối chung của CNV CDP; có bước kiểm tra kết nối trước khi thao tác.",
+    "Ít điểm có thể gặp sự cố, ít khoá bí mật phải quản lý; lỗi kết nối được phát hiện trước khi người vận hành thao tác."
+   ],
+   [
+    "C",
+    "Kích hoạt dịch vụ đổi quà cho shop mới",
+    "Một thao tác trên CRM tạo tài khoản đổi quà cho shop và nạp danh sách khách hàng của shop vào hệ thống.",
+    "Đưa shop mới vào hệ thống đổi quà nhanh, không phải xử lý thủ công trong cơ sở dữ liệu."
+   ]
+  ]
+ },
+ {
+  "t": "Nhóm 8 — Xử lý đơn đổi quà ổn định",
+  "d": "Đơn đổi quà gặp sự cố được hệ thống tự xử lý lại; người trực có công cụ kiểm tra và xử lý ngay trên màn Đơn đổi quà.",
+  "f": [
+   [
+    "C",
+    "Tra cứu đơn đổi quà của mọi nguồn",
+    "Một màn cho mọi đơn của mọi nguồn quà: tìm theo mã giao dịch, số điện thoại hoặc email khách; lọc theo Tất cả, Cần kiểm tra tay, Thất bại, Đang xử lý, Thành công; có cột nguồn quà (Mạng lưới ưu đãi, UrBox, Got It) và số phần quà; nút xuất tệp CSV (mở được bằng Excel).",
+    "Người trực tìm đúng đơn của khách trong vài giây và xuất được dữ liệu để đối soát."
+   ],
+   [
+    "H",
+    "Đơn chưa rõ kết quả được chuyển chờ kiểm tra",
+    "Với đơn bị kẹt, hệ thống đếm số lần thực sự hỏi lại nhà cung cấp (hiện là 3 lần). Hết số lần mà vẫn chưa rõ kết quả, đơn chuyển sang chờ người trực kiểm tra; điểm và tiền của khách được giữ nguyên. Mọi loại quà đều có hướng xử lý, không hứa hoàn điểm ở nơi không hoàn được.",
+    "Không hoàn điểm cho khách trong khi nhà cung cấp đã phát voucher, tránh mất cả điểm lẫn quà."
+   ],
+   [
+    "H",
+    "Phân biệt loại lỗi trước khi kết luận đơn",
+    "Chỉ lỗi nghiệp vụ rõ ràng mới khiến đơn bị chốt thất bại; lỗi máy chủ của nhà cung cấp hoặc mất kết nối thì hệ thống thử lại; mã lỗi lạ thì hỏi lại thay vì hoàn điểm. Trước khi gửi lại yêu cầu, hệ thống kiểm tra trạng thái để không phát trùng voucher.",
+    "Một sự cố mạng ngắn không dẫn tới hoàn điểm sai."
+   ],
+   [
+    "H",
+    "Đơn xử lý thành công muộn vẫn gửi voucher",
+    "Đơn được chốt thành công muộn — do hệ thống tự xử lý lại hoặc do người trực chốt tay trên CRM — vẫn gửi voucher cho khách theo kênh shop đã cấu hình (email hoặc chiến dịch Automation), như đơn bình thường.",
+    "Khách của đơn bị kẹt vẫn nhận được quà mà không phải khiếu nại."
+   ],
+   [
+    "H",
+    "Tự thử lại khi hoàn điểm thất bại",
+    "Lượt hoàn điểm bị lỗi được tự thử lại, không bị bỏ quên; mọi luồng xử lý dùng chung một cách hoàn điểm.",
+    "Điểm của khách chắc chắn được trả lại."
+   ],
+   [
+    "H",
+    "Điểm tạm giữ luôn được xử lý đến cùng",
+    "Khi việc xác nhận hoặc trả lại điểm tạm giữ bị lỗi giữa chừng, tác vụ được đưa lại hàng chờ để xử lý tiếp phần còn dở.",
+    "Điểm của khách và shop luôn về đúng trạng thái cuối cùng."
+   ],
+   [
+    "H",
+    "Đổi quà mạng lưới lỗi rõ ràng thì trả điểm ngay",
+    "Kết quả chưa rõ thì đơn được giữ ở trạng thái chờ xác minh, tránh tạo ra voucher không có chủ. Lỗi rõ ràng ngay lúc ghi nhận thì đơn được chốt thất bại và trả điểm ngay, thay vì giữ điểm 24 giờ.",
+    "Khách được trả điểm nhanh, không bị giữ điểm cả ngày."
+   ],
+   [
+    "C",
+    "Chốt tay đơn đang treo",
+    "Người trực chốt một đơn đang treo ngay, không chờ lượt quét tự động; kết quả luôn dựa trên phản hồi thực tế của nhà cung cấp, không thể chốt sai bằng tay.",
+    "Xử lý khiếu nại của khách trong vài giây."
+   ],
+   [
+    "C",
+    "Làm mới trạng thái và cập nhật giao hàng hàng loạt",
+    "Trên màn Đơn đổi quà, người trực hỏi lại nhà cung cấp cho từng đơn (quà điện tử và quà vật lý), hoặc chọn nhiều đơn trên một trang (tối đa 20) để: \"Làm mới trạng thái\" — hỏi nhà cung cấp rồi chốt đơn, cần quyền Duyệt; \"Cập nhật giao hàng\" — chỉ cập nhật tình trạng giao của quà vật lý, không ảnh hưởng điểm hay tiền, cần quyền Sửa. Đơn được gửi theo từng lô 5 đơn, có kết quả cho từng đơn. Đơn đang chờ kiểm tra cần xác nhận thêm vì có thể bị chốt thất bại và hoàn điểm ngay.",
+    "Xử lý sự cố của nhà cung cấp trong vài thao tác, không phải bấm từng đơn."
+   ],
+   [
+    "C",
+    "Cảnh báo tác vụ xử lý lại bị dừng",
+    "Tác vụ xử lý lại đã hết số lần thử được hiện thành cảnh báo, kèm nút chạy lại trên CRM; mọi trường hợp đơn bị kẹt đều được đếm.",
+    "Người trực xử lý kịp thời trước khi khách khiếu nại."
+   ],
+   [
+    "H",
+    "Voucher không quay lại trạng thái chưa dùng khi nhận thông báo trễ",
+    "Trạng thái voucher được xác định theo thời điểm phát sinh sự việc phía nhà cung cấp: voucher đã dùng hoặc đã hết hạn không quay về trạng thái còn hiệu lực; đơn đã huỷ là trạng thái cuối cùng. Hai khách đổi cùng một quà cùng lúc không bị ảnh hưởng lẫn nhau.",
+    "Một mã voucher không thể được dùng lần thứ hai."
+   ],
+   [
+    "H",
+    "Tắt nhanh tính năng áp mã online",
+    "Đội vận hành bật hoặc tắt việc áp mã mạng lưới ở trang thanh toán ngay khi hệ thống đang chạy, không cần khởi động lại. Khi tắt, trang thanh toán hoạt động như trước (không áp mã mạng lưới); việc xác nhận hoặc trả lại mã đã giữ vẫn tiếp tục để các đơn đang thanh toán hoàn tất được.",
+    "Có phương án dừng ngay khi trang thanh toán gặp sự cố mà không làm kẹt đơn đang thanh toán."
+   ]
+  ]
+ },
+ {
+  "t": "Nhóm 9 — Bảo mật voucher và an toàn hệ thống",
+  "d": "Mã voucher có giá trị như tiền nên được mã hoá, che bớt và kiểm soát ở mọi khâu.",
+  "f": [
+   [
+    "H",
+    "Voucher gắn với chủ sở hữu",
+    "Mã khách nhìn thấy được tách khỏi mã nhận diện nội bộ của hệ thống và gắn với chủ sở hữu. Khi hoàn đơn, voucher trả về đúng khách đã đổi, không quay lại kho chung cho người khác lấy.",
+    "Mã không bị lộ qua nhật ký hệ thống, không nhận nhầm chủ; hoàn đơn không làm khách mất quà."
+   ],
+   [
+    "H",
+    "Mã hoá mã voucher khi lưu trữ",
+    "Toàn bộ mã voucher và các thông tin có thể dùng để lấy quà được mã hoá trước khi lưu. Dữ liệu voucher cũ đã được mã hoá lại một lần.",
+    "Kể cả khi dữ liệu bị lộ, người khác cũng không đọc được mã để sử dụng."
+   ],
+   [
+    "H",
+    "Không lưu bản sao mã ở dạng đọc được",
+    "Mã không được lưu ở dạng đọc được tại bất kỳ nơi nào khác (cột phụ, dữ liệu gốc từ nhà cung cấp, bảng đối soát, nhật ký kết nối); thêm cơ chế chặn hai luồng xử lý cùng phát một voucher.",
+    "Mã chỉ còn ở một nơi và đã được mã hoá, giảm nguy cơ lộ lọt."
+   ],
+   [
+    "C",
+    "Che mã voucher trên màn quản trị",
+    "Nhật ký hệ thống và màn tra cứu quản trị chỉ hiện phần cuối của mã (dạng ***1234); người trực xử lý đơn không thấy mã đầy đủ.",
+    "Nhân viên vận hành làm việc mà không tiếp cận mã của khách."
+   ],
+   [
+    "H",
+    "Lọc nội dung độc hại từ nguồn quà",
+    "Mô tả, điều kiện và hướng dẫn sử dụng của ưu đãi (kể cả ưu đãi mạng lưới) được làm sạch ngay khi đồng bộ, trước khi lưu và hiển thị cho khách.",
+    "Mã độc chèn trong nội dung từ nguồn quà không thể chạy trên thiết bị của khách."
+   ],
+   [
+    "H",
+    "Bảo vệ khoá bí mật của shop",
+    "Khoá bí mật của các kết nối không hiển thị trong dữ liệu hệ thống trả về; không có chức năng gửi thử voucher khi chưa đăng nhập.",
+    "Khoá kết nối của shop và chức năng gửi voucher không bị người ngoài lợi dụng."
+   ],
+   [
+    "H",
+    "Khu vực quản trị nội bộ được bảo vệ",
+    "Các chức năng quản trị chỉ truy cập được qua mạng nội bộ, không mở ra internet (không có ứng dụng quản trị công khai); không công khai tài liệu kỹ thuật; mặc định từ chối mọi truy cập chưa xác thực, kể cả cách vượt qua bằng đường dẫn được mã hoá.",
+    "Hạn chế nguy cơ bị tấn công vào thao tác duyệt quà hay điều chỉnh Điểm mạng lưới."
+   ],
+   [
+    "C",
+    "CNV bật/tắt danh mục, thương hiệu trên toàn hệ thống",
+    "CNV tắt hoặc bật một danh mục hay thương hiệu trên toàn hệ thống, có hiệu lực cao hơn mọi cấu hình của shop; kèm công cụ khôi phục liên kết bị tắt nhầm và cơ chế chặn tắt nhầm.",
+    "Xử lý nhanh một thương hiệu có sự cố trên toàn mạng chỉ bằng một thao tác, và khôi phục quà bị ẩn nhầm."
+   ]
+  ]
+ }
+];
+
+let n = 0;
+const el = document.getElementById('doc');
+el.innerHTML = THEMES.map(th => {
+  const rows = th.f.map(([w, name, what, benefit, confirm]) => {
+    n++;
+    const [wl, wc] = WHO[w];
+    const tag = confirm ? ' <span class="pill p-confirm">Cần xác nhận</span>' : '';
+    const note = confirm ? `<div class="confirm"><b>Cần xác nhận:</b> ${confirm}</div>` : '';
+    return `<tr><td class="num">${n}</td><td class="name">${name}<div class="pills"><span class="pill ${wc}">${wl}</span>${tag}</div></td><td class="what">${what}${note}</td><td>${benefit}</td></tr>`;
+  }).join('');
+  return `<div class="theme-bar"><h2>${th.t}</h2><span class="cnt">${th.f.length} tính năng</span></div>
+  <div class="theme-desc">${th.d}</div>
+  <table><thead><tr><th>#</th><th>Tính năng</th><th>Mô tả</th><th>Lợi ích</th></tr></thead><tbody>${rows}</tbody></table>`;
+}).join('');
+</script>
+</body>
+</html>

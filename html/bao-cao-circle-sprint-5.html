@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Báo cáo Circle Sprint 5</title>
+<style>
+  :root{
+    --page:#f4f4f1; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,.10);
+    --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4;
+    --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+    --good-text:#006300; --warn-text:#8a5a00; --crit-text:#a62828;
+    --r:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--page);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+  header{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+  h1{font-size:28px;margin:0 0 4px;letter-spacing:-.01em}
+  .sub{color:var(--ink-2);font-size:14px}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--border);background:var(--surface);white-space:nowrap}
+  .pill.good{color:var(--good-text);background:#eaf7ea;border-color:#bfe4bf}
+  .pill.warn{color:var(--warn-text);background:#fff6df;border-color:#f3dc9a}
+  .pill.crit{color:var(--crit-text);background:#fdecec;border-color:#f1b9b9}
+  h2{font-size:17px;margin:34px 0 12px;display:flex;align-items:center;gap:10px}
+  h2 .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--ink);color:#fff;font-size:12px}
+  .grid{display:grid;gap:14px}
+  .g4{grid-template-columns:repeat(4,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:900px){.g4{grid-template-columns:repeat(2,1fr)} .g3,.g2{grid-template-columns:1fr}}
+  @media(max-width:520px){.g4{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px}
+  .card h3{margin:0 0 2px;font-size:14.5px}
+  .card .hint{color:var(--muted);font-size:12.5px;margin-bottom:12px}
+  .tile .v{font-size:34px;font-weight:700;line-height:1.1;margin-top:6px}
+  .tile .l{color:var(--ink-2);font-size:13px}
+  .tile .d{font-size:12.5px;margin-top:6px;color:var(--ink-2)}
+  .tldr{border-left:4px solid var(--s1)}
+  .tldr p{margin:6px 0}
+  ul.clean{margin:8px 0 0;padding-left:18px} ul.clean li{margin:6px 0}
+  .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--ink-2);margin-top:8px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  svg{display:block;width:100%;height:auto;font-family:inherit}
+  svg text{fill:var(--ink-2);font-size:12px}
+  svg .ax{stroke:var(--axis)} svg .gl{stroke:var(--grid)}
+  svg .lbl{fill:var(--ink);font-weight:600}
+  svg .mut{fill:var(--muted);font-size:11px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--grid);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:0}
+  .bar{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}
+  .bar b{display:block;height:100%;border-radius:4px}
+  .tip{position:fixed;pointer-events:none;background:#1a1a19;color:#f0efec;font-size:12.5px;padding:7px 10px;border-radius:8px;opacity:0;transition:opacity .12s;z-index:9;max-width:260px}
+  .risk{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--grid)} .risk:last-child{border-bottom:0}
+  .risk .ico{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;font-weight:700;font-size:14px}
+  .risk .t{font-weight:600} .risk .m{color:var(--ink-2);font-size:13.5px}
+  footer{margin-top:40px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--grid);padding-top:14px}
+  .small{font-size:12.5px;color:var(--muted)}
+
+  /* --- Tính năng theo dự án (khuôn báo cáo tháng 10) --- */
+  .tag{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:800;padding:3px 11px;border-radius:20px;white-space:nowrap}
+  .t-rel{background:#d1fae5;color:#047857} .t-dev{background:#dbeafe;color:#1d4ed8}
+  .t-sign{background:#ede9fe;color:#6d28d9} .t-pend{background:#f1f0ec;color:#6b6a65} .t-todo{background:#fef3c7;color:#b45309}
+  .proj{margin-bottom:22px}
+  .proj-head{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:10px}
+  .proj-head .ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+  .proj-head .info{flex:1;min-width:0}
+  .proj-head .name{font-size:18px;font-weight:800;letter-spacing:-.3px}
+  .proj-head .st{font-size:13px;color:var(--ink-2);margin-top:2px}
+  .ftbl{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .ftbl thead th{background:#f1f0ec;color:var(--ink-2);padding:9px 12px 7px}
+  .ftbl tbody td{padding:9px 12px;border-bottom:1px solid var(--grid);font-size:13.5px;color:var(--ink-2)}
+  .ftbl tbody tr:last-child td{border-bottom:none}
+  .ftbl td.num{font-weight:800;color:#2a78d6;width:28px;text-align:left}
+  .ftbl td.ft b{color:var(--ink)}
+  .ftbl td.tagc{width:180px;text-align:right}
+  .ftbl tr.todo-h td{background:#fffbeb;font-weight:700;color:#b45309;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+  .ftbl tr.todo td.num{color:#b45309}
+  .legend-tags{display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:13px;color:var(--ink-2);margin:4px 0 14px}
+</style>
+</head>
+<body>
+<div class="tip" id="tip"></div>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>Báo cáo tiến độ · Circle Sprint 5</h1>
+    <div class="sub">Team Technology · 26/10 – 08/11/2026 · 4 dự án: NeoX|CNV, Reward Network, Affiliate (TECH TEAM), Sapo · Cập nhật 06/11/2026</div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <span class="pill good">● Dev hoàn tất 4/4 dự án</span>
+    <span class="pill">28 task · 4 người</span>
+  </div>
+</header>
+
+<h2><span class="n">1</span>Chỉ số chính</h2>
+<div class="grid g4">
+  <div class="card tile"><div class="l">Hoàn thành</div><div class="v" style="color:var(--good-text)">9<span style="font-size:18px;color:var(--muted)"> /28</span></div><div class="d">32% số task · 19 task đã dev, chờ ký HĐ/deploy</div></div>
+  <div class="card tile"><div class="l">Khối lượng hoàn thành (ước tính)</div><div class="v">86%</div><div class="d">Ước tính theo trạng thái 28 task</div></div>
+  <div class="card tile"><div class="l">Dự án xong 100%</div><div class="v">2<span style="font-size:18px;color:var(--muted)"> /4</span></div><div class="d">Reward Network · Affiliate · Sapo 93% · NeoX 80%</div></div>
+  <div class="card tile"><div class="l">Chờ bước ngoài đội</div><div class="v" style="color:var(--warn-text)">19 task</div><div class="d">18 NeoX chờ ký HĐ · 1 Sapo chờ deploy</div></div>
+</div>
+
+<h2><span class="n">2</span>Tổng quan tiến độ</h2>
+<div class="grid g2">
+  <div class="card"><h3>Trạng thái task toàn sprint</h3><div class="hint">28 task trong Sprint 5</div><div id="c-donut"></div></div>
+  <div class="card"><h3>% hoàn thành theo dự án</h3><div class="hint">Trọng số theo trạng thái từng task</div><div id="c-proj-pct"></div></div>
+</div>
+<div class="card" style="margin-top:14px"><h3>Số task theo dự án &amp; trạng thái</h3><div class="hint">Hoàn thành · Đã dev chờ deploy · Đã dev chờ ký hợp đồng</div><div id="c-proj-stack"></div></div>
+
+<h2><span class="n">3</span>Tính năng &amp; trạng thái theo dự án</h2>
+<div class="legend-tags">
+  <span><span class="tag t-rel">✅ Release</span> đang chạy production</span>
+  <span><span class="tag t-dev">🛠 Dev done</span> đã code xong, chờ deploy &amp; test</span>
+  <span><span class="tag t-sign">📝 Chờ ký hợp đồng</span> xong kỹ thuật, chờ thủ tục</span>
+  <span><span class="tag t-pend">⏸ Pending</span> tạm hoãn, làm sau</span>
+</div>
+  <div class="proj">
+    <div class="proj-head"><div class="ico" style="background:#fde9e0">🕸</div><div class="info"><div class="name">Reward Network — Mạng lưới ưu đãi</div><div class="st"><b>Phase 1 và một phần Phase 2</b> — release cho toàn bộ shop, có thể vận hành</div></div><span class="tag t-rel">✅ Release toàn bộ shop</span></div>
+    <table class="ftbl"><thead><tr><th>#</th><th>Tính năng</th><th style="text-align:right">Trạng thái</th></tr></thead><tbody>
+      <tr><td class="num">1</td><td class="ft"><b>Shop góp ưu đãi</b> bằng kho mã của mình lên chợ chung; sửa ưu đãi đang chạy, nạp thêm kho, tạm dừng</td><td class="tagc"><span class="tag t-rel">✅ Release</span></td></tr>
+      <tr><td class="num">2</td><td class="ft"><b>Chợ ưu đãi</b> — shop lấy ưu đãi của shop khác về phát cho khách của mình</td><td class="tagc"><span class="tag t-rel">✅ Release</span></td></tr>
+      <tr><td class="num">3</td><td class="ft"><b>Đổi điểm lấy ưu đãi chéo shop</b> trên Zalo Mini App; đổi nhiều suất một lần</td><td class="tagc"><span class="tag t-rel">✅ Release</span></td></tr>
+      <tr><td class="num">4</td><td class="ft"><b>Áp mã giảm giá mạng lưới tại trang thanh toán</b> mini-app — tự tính lại tổng tiền và phí ship</td><td class="tagc"><span class="tag t-rel">✅ Release</span></td></tr>
+      <tr><td class="num">5</td><td class="ft"><b>Hạn mức đổi quà mỗi khách</b> — shop góp, shop lấy và CNV cùng kiểm soát</td><td class="tagc"><span class="tag t-rel">✅ Release</span></td></tr>
+      <tr><td class="num">6</td><td class="ft"><b>Ví voucher 3 tab</b> (Chưa dùng / Đã dùng / Hết hạn); khách tự đánh dấu đã dùng; nhận diện chủ voucher theo số điện thoại</td><td class="tagc"><span class="tag t-rel">✅ Release</span></td></tr>
+      <tr><td class="num">7</td><td class="ft"><b>Điểm mạng lưới</b> ghi ngay lúc khách đổi quà; Tổng quan Góp / Lấy + việc "Cần chú ý" cho shop</td><td class="tagc"><span class="tag t-rel">✅ Release</span></td></tr>
+      <tr><td class="num">8</td><td class="ft"><b>Vận hành trên CRM</b> — duyệt ưu đãi chốt giá, ngành hàng &amp; danh mục, mời shop, xử lý vi phạm, đối soát nguồn mạng lưới</td><td class="tagc"><span class="tag t-rel">✅ Release</span></td></tr>
+      <tr><td class="num">9</td><td class="ft"><b>Quyền dùng mạng lưới theo gói dịch vụ</b>; trang giới thiệu + bảng giá + hướng dẫn cho shop mới</td><td class="tagc"><span class="tag t-rel">✅ Release</span></td></tr>
+      <tr><td class="num">10</td><td class="ft"><b>Video hướng dẫn + bài truyền thông</b> cho shop onboarding mạng lưới</td><td class="tagc"><span class="tag t-rel">✅ Release</span></td></tr>
+      <tr class="todo-h"><td colspan="3">Todo</td></tr>
+      <tr class="todo"><td class="num">1</td><td class="ft">Mở rộng Level (Cấp 2 trở lên) theo ngành hàng — <i>tạm thời pending, làm sau</i></td><td class="tagc"><span class="tag t-pend">⏸ Pending</span></td></tr>
+    </tbody></table>
+  </div>
+  <div class="proj">
+    <div class="proj-head"><div class="ico" style="background:#ede9fe">💳</div><div class="info"><div class="name">NeoX — Thanh toán thẻ</div><div class="st"><b>18/18 task chờ ký hợp đồng</b> — đã dev xong và nghiệm thu SIT với NeoX trên sandbox; chờ anh Khoa ký hợp đồng để deploy và UAT</div></div><span class="tag t-sign">📝 Chờ ký hợp đồng</span></div>
+    <table class="ftbl"><thead><tr><th>#</th><th>Tính năng</th><th style="text-align:right">Trạng thái</th></tr></thead><tbody>
+      <tr><td class="num">1</td><td class="ft">Thanh toán bằng thẻ <b>ATM / VISA / MASTERCARD</b></td><td class="tagc"><span class="tag t-sign">📝 Chờ ký hợp đồng</span></td></tr>
+      <tr><td class="num">2</td><td class="ft"><b>Lưu thẻ</b> cho lần thanh toán sau</td><td class="tagc"><span class="tag t-sign">📝 Chờ ký hợp đồng</span></td></tr>
+      <tr><td class="num">3</td><td class="ft"><b>Thanh toán bằng thẻ đã lưu</b></td><td class="tagc"><span class="tag t-sign">📝 Chờ ký hợp đồng</span></td></tr>
+      <tr><td class="num">4</td><td class="ft">Shop <b>quản lý danh sách thẻ đã lưu</b> (đặt mặc định, xoá)</td><td class="tagc"><span class="tag t-sign">📝 Chờ ký hợp đồng</span></td></tr>
+      <tr><td class="num">5</td><td class="ft"><b>Kế toán CNV xem danh sách giao dịch thẻ</b> trên CRM</td><td class="tagc"><span class="tag t-sign">📝 Chờ ký hợp đồng</span></td></tr>
+      <tr class="todo-h"><td colspan="3">Todo</td></tr>
+      <tr class="todo"><td class="num">1</td><td class="ft">Sau khi ký hợp đồng: deploy production + UAT</td><td class="tagc"><span class="tag t-todo">Todo</span></td></tr>
+      <tr class="todo"><td class="num">2</td><td class="ft">Phát hành hướng dẫn thanh toán thẻ cho shop trên docs + thông báo CS/Sales</td><td class="tagc"><span class="tag t-todo">Todo</span></td></tr>
+    </tbody></table>
+  </div>
+  <div class="proj">
+    <div class="proj-head"><div class="ico" style="background:#fef3c7">🔗</div><div class="info"><div class="name">Sapo — Kéo lead từ nền tảng bán hàng</div><div class="st">Thu hút khách hàng (lead) từ Sapo về CRM, chia sẻ hoa hồng cho đối tác khi khách phát sinh thanh toán</div></div><span class="tag t-dev">🛠 Dev done</span></div>
+    <table class="ftbl"><thead><tr><th>#</th><th>Tính năng</th><th style="text-align:right">Trạng thái</th></tr></thead><tbody>
+      <tr><td class="num">1</td><td class="ft"><b>Ghi nhận LEAD từ Sapo về CRM</b></td><td class="tagc"><span class="tag t-dev">🛠 Dev done</span></td></tr>
+      <tr><td class="num">2</td><td class="ft"><b>Onboarding shop</b> khi mở app CNV từ Sapo</td><td class="tagc"><span class="tag t-dev">🛠 Dev done</span></td></tr>
+      <tr><td class="num">3</td><td class="ft"><b>Xuất báo cáo lead</b> trên Connect</td><td class="tagc"><span class="tag t-dev">🛠 Dev done</span></td></tr>
+      <tr class="todo-h"><td colspan="3">Todo</td></tr>
+      <tr class="todo"><td class="num">1</td><td class="ft">Deploy và test lại trên UAT (shop test)</td><td class="tagc"><span class="tag t-todo">Todo</span></td></tr>
+      <tr class="todo"><td class="num">2</td><td class="ft">Mở rộng kéo LEAD từ <b>Haravan</b> về CRM (Sprint 6)</td><td class="tagc"><span class="tag t-todo">Todo</span></td></tr>
+    </tbody></table>
+  </div>
+  <div class="proj">
+    <div class="proj-head"><div class="ico" style="background:#d1fae5">🤝</div><div class="info"><div class="name">Affiliate — KH Thực Phẩm Sạch</div><div class="st">Bổ sung báo cáo khách hàng cho khách hàng Thực Phẩm Sạch</div></div><span class="tag t-dev">🛠 Dev done</span></div>
+    <table class="ftbl"><thead><tr><th>#</th><th>Tính năng</th><th style="text-align:right">Trạng thái</th></tr></thead><tbody>
+      <tr><td class="num">1</td><td class="ft">Màn <b>"Khách hàng mua hàng"</b> có doanh thu / hoa hồng tạo ra theo từng khách + xuất Excel</td><td class="tagc"><span class="tag t-dev">🛠 Dev done</span></td></tr>
+      <tr><td class="num">2</td><td class="ft">Xuất Excel <b>"Khách hàng được giới thiệu"</b> (F1–F2, trạng thái giới thiệu, ngày kích hoạt)</td><td class="tagc"><span class="tag t-dev">🛠 Dev done</span></td></tr>
+      <tr class="todo-h"><td colspan="3">Todo</td></tr>
+      <tr class="todo"><td class="num">1</td><td class="ft">Rà soát các tính năng đang whitelist một số shop (<b>rút tiền, đối soát</b>) để mở rộng (Sprint 6)</td><td class="tagc"><span class="tag t-todo">Todo</span></td></tr>
+      <tr class="todo"><td class="num">2</td><td class="ft">Rà soát và đánh giá lại các tính năng affiliate cũ có mà affiliate mới chưa có (Sprint 6)</td><td class="tagc"><span class="tag t-todo">Todo</span></td></tr>
+    </tbody></table>
+  </div>
+
+<footer>Nguồn: connect.cnvwork.com — Circle “Sprint 5” (series Technology, 26/10–08/11), lọc 4 dự án NeoX|CNV, Reward Network, TECH TEAM, Sapo; trích xuất 06/11/2026. Tiến độ ước tính theo trạng thái: Hoàn thành 100% · Đã dev chờ deploy/ký hợp đồng 80%. Trạng thái Reward Network 100%, Sapo đã dev xong và NeoX chờ ký hợp đồng do PO xác nhận 06/11.</footer>
+</div>
+
+<script>
+const SPRINT = {start:'2026-10-26', end:'2026-11-08', today:'2026-11-06'};
+const P = {NeoX:{name:'NeoX|CNV',hex:'#2a78d6'}, RN:{name:'Reward Network',hex:'#eb6834'}, AFF:{name:'Affiliate',hex:'#1baf7a'}, SAPO:{name:'Sapo',hex:'#eda100'}};
+const ST = {done:{n:'Hoàn thành',c:'#0ca30c',w:100}, dep:{n:'Đã dev · chờ deploy & test',c:'#2a78d6',w:80}, sign:{n:'Đã dev · chờ ký hợp đồng',c:'#8a5cf6',w:80}};
+const TN=['Như Trang','Trần Lê Huy','Hồ Trung Hải','Trần Ngọc Báu'];
+const [Tr,Hu,Ha,Ba]=TN;
+const T = [
+ {p:'NeoX',list:'NeoX – Phase 1',title:'Thiết kế luồng nghiệp vụ, UI/UX cho thanh toán bằng thẻ',short:'Thiết kế luồng & UI/UX',who:[Tr],created:'2026-10-26',done:'2026-10-26',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T01 · Chốt 6 câu hỏi chặn với NeoX và 2 quyết định nội bộ',short:'T01 Chốt câu hỏi NeoX',who:[Tr],created:'2026-10-21',done:'2026-10-29',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T04 · Connect: nhận thanh toán qua cổng NeoX, ghi sổ khoản thẻ',short:'T04 Connect nhận thanh toán',who:[Tr],created:'2026-10-21',done:'2026-10-26',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T05 · Tạo yêu cầu thanh toán thẻ cho hoá đơn, chuyển shop sang NeoX',short:'T05 Tạo yêu cầu thanh toán',who:[Tr,Hu],created:'2026-10-21',done:'2026-10-30',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T12 · Trả bằng thẻ đã lưu + quản lý thẻ (xem, đặt mặc định, xoá)',short:'T12 Trả bằng thẻ đã lưu',who:[Tr,Hu],created:'2026-10-21',done:'2026-10-30',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T06 · Ô chọn phương thức thanh toán trên Hub (8 popup)',short:'T06 Chọn phương thức TT',who:[Tr,Hu],created:'2026-10-21',done:'2026-10-30',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T07 · Trang quay về sau thanh toán + tự cập nhật trạng thái hoá đơn',short:'T07 Trang quay về',who:[Tr,Hu],created:'2026-10-21',done:'2026-10-30',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T08 · Màn kết quả thành công/thất bại + báo lỗi tiếng Việt',short:'T08 Màn kết quả',who:[Tr,Hu],created:'2026-10-21',done:'2026-10-30',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T09 · Trả hoá đơn chờ bằng thẻ từ trang Hoá đơn',short:'T09 Trả hoá đơn chờ',who:[Tr,Hu],created:'2026-10-21',done:'2026-10-30',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T13 · Chọn thẻ đã lưu trong popup, chờ ngân hàng không rời Hub',short:'T13 Chọn thẻ đã lưu',who:[Tr,Hu],created:'2026-10-21',done:'2026-10-30',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T14 · Cài đặt → Thanh toán: danh sách thẻ, đặt mặc định, xoá',short:'T14 Quản lý thẻ đã lưu',who:[Tr,Hu],created:'2026-10-21',done:'2026-10-30',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T15 · Cột Phương thức ở trang Hoá đơn',short:'T15 Cột Phương thức',who:[Tr,Hu],created:'2026-10-21',done:'2026-10-30',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T16 · CRM: kế toán xem giao dịch thẻ (nhãn NeoX + mã giao dịch)',short:'T16 CRM xem giao dịch',who:[Tr,Hu],created:'2026-10-21',done:'2026-10-30',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'Thanh toán thẻ (NeoX) — nghiệm thu tổng',short:'Thanh toán thẻ (tổng)',who:[Hu,Tr],created:'2026-10-28',done:null,s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T19 · Cảnh báo vận hành (Chat CNVWORK) + runbook',short:'T19 Cảnh báo + runbook',who:[Tr,Hu],created:'2026-10-21',done:'2026-11-06',s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T20 · Hướng dẫn shop trên docs.cnvcdp + thông báo phát hành',short:'T20 HDSD + thông báo',who:[Tr,Hu],created:'2026-10-21',done:null,s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T03 · Dựng cnv-payment trên staging (CI/CD, DB, đăng ký IPN)',short:'T03 Staging cnv-payment',who:[Tr],created:'2026-10-21',done:null,s:'sign'},
+ {p:'NeoX',list:'NeoX – Phase 1',title:'T10 · QC trên staging: trả thẻ lần đầu + 6 luồng hỏng',short:'T10 QC 6 luồng hỏng',who:[Tr,Hu],created:'2026-10-21',done:null,s:'sign'},
+ {p:'RN',list:'Rn Phase 1',title:'Setup để production vận hành được',short:'Setup production RN',who:[Tr],created:'2026-10-30',done:'2026-11-02',s:'done'},
+ {p:'RN',list:'Reward v2',title:'Làm trang giới thiệu Reward Network',short:'Trang giới thiệu RN',who:[Tr,Hu],created:'2026-10-30',done:'2026-11-06',s:'done'},
+ {p:'RN',list:'Rn Phase 1',title:'[RN] P1-33 · Hỗ trợ pilot + dự phòng sửa lỗi',short:'P1-33 Hỗ trợ pilot',who:[Tr,Ha,Ba],created:'2026-07-03',done:'2026-11-06',s:'done'},
+ {p:'RN',list:'Rn Phase 1',title:'Tạo video hướng dẫn và viết bài truyền thông',short:'Video + truyền thông',who:[Tr,Ha],created:'2026-11-03',done:'2026-11-06',s:'done'},
+ {p:'RN',list:'Rn Phase 1',title:'[RN] P1-32 · E2E pilot flow',short:'P1-32 E2E pilot',who:[Tr,Hu,Ha],created:'2026-07-03',done:'2026-11-06',s:'done'},
+ {p:'AFF',list:'Affiliate',title:'4.1 Màn “Khách hàng mua hàng”: doanh thu / hoa hồng theo khách + 2 nút xuất Excel',short:'4.1 KH mua hàng',who:[Tr,Hu],created:'2026-09-29',done:'2026-10-26',s:'done'},
+ {p:'AFF',list:'Affiliate',title:'4.2 Xuất Excel “Khách hàng được giới thiệu” (F1–F2)',short:'4.2 KH được giới thiệu',who:[Tr,Hu],created:'2026-09-29',done:'2026-10-26',s:'done'},
+ {p:'SAPO',list:'Sapo',title:'Tìm hiểu luồng cũ, thiết kế luồng mới',short:'Thiết kế luồng Sapo',who:[Tr],created:'2026-10-29',done:'2026-10-30',s:'done'},
+ {p:'SAPO',list:'Sapo',title:'Mockup UI/UX',short:'Mockup Sapo',who:[Tr],created:'2026-10-29',done:'2026-10-30',s:'done'},
+ {p:'SAPO',list:'Sapo',title:'Refactor luồng onboarding shop, tạo lead và xuất báo cáo trên Connect',short:'Onboarding + tạo lead',who:[Tr,Ha,Ba],created:'2026-10-29',done:null,s:'dep'},
+];
+T.forEach(t=>t.pct=ST[t.s].w);
+const SK=Object.keys(ST);
+// ---------- helpers ----------
+const d=s=>new Date(s+'T00:00:00');
+const days=(a,b)=>Math.round((d(b)-d(a))/86400000);
+const fmt=s=>s?s.slice(8,10)+'/'+s.slice(5,7):'—';
+const tip=document.getElementById('tip');
+function hover(el,text){el.addEventListener('mousemove',e=>{tip.textContent=text;tip.style.opacity=1;tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY+12)+'px';});el.addEventListener('mouseleave',()=>tip.style.opacity=0);}
+const svg=(w,h)=>{const s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);return s;};
+function el(n,a={},txt){const e=document.createElementNS('http://www.w3.org/2000/svg',n);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
+function legend(id,items){const l=document.createElement('div');l.className='legend';l.innerHTML=items.map(i=>`<span><i style="background:${i[1]}"></i>${i[0]}</span>`).join('');document.getElementById(id).appendChild(l);}
+
+
+// 1. Donut
+(function(){
+  const s=svg(440,200), cx=95,cy=100,r=70,sw=22, C=2*Math.PI*r; let off=0;
+  SK.forEach(k=>{const v=T.filter(t=>t.s===k).length; if(!v)return; const len=v/T.length*C-3;
+    const p=el('circle',{cx,cy,r,fill:'none',stroke:ST[k].c,'stroke-width':sw,'stroke-dasharray':`${len} ${C-len}`,'stroke-dashoffset':-off,transform:`rotate(-90 ${cx} ${cy})`});
+    hover(p,`${ST[k].n}: ${v} task`); s.appendChild(p); off+=v/T.length*C;});
+  const dn=T.filter(t=>t.s==='done').length;
+  s.appendChild(el('text',{x:cx,y:cy-4,'text-anchor':'middle',class:'lbl',style:'font-size:28px'},dn+'/'+T.length));
+  s.appendChild(el('text',{x:cx,y:cy+18,'text-anchor':'middle',class:'mut'},'hoàn thành'));
+  SK.forEach((k,i)=>{const y=50+i*36; s.appendChild(el('rect',{x:190,y:y-10,width:12,height:12,rx:3,fill:ST[k].c})); s.appendChild(el('text',{x:210,y:y,class:'lbl'},T.filter(t=>t.s===k).length)); s.appendChild(el('text',{x:230,y:y},ST[k].n));});
+  document.getElementById('c-donut').appendChild(s);
+})();
+// 3. % by project
+(function(){
+  const s=svg(320,250); let y=16;
+  Object.keys(P).forEach(k=>{const ts=T.filter(t=>t.p===k);const v=Math.round(ts.reduce((a,t)=>a+t.pct,0)/ts.length);const dn=ts.filter(t=>t.s==='done').length;
+    s.appendChild(el('text',{x:0,y:y,class:'lbl'},P[k].name)); s.appendChild(el('text',{x:320,y:y,'text-anchor':'end',class:'lbl'},v+'%'));
+    s.appendChild(el('rect',{x:0,y:y+8,width:320,height:12,rx:4,fill:'var(--grid)'}));
+    const b=el('rect',{x:0,y:y+8,width:3.2*v,height:12,rx:4,fill:P[k].hex});hover(b,`${P[k].name}: ${v}% · ${dn}/${ts.length} task xong`);s.appendChild(b);
+    s.appendChild(el('text',{x:0,y:y+34,class:'mut'},`${dn}/${ts.length} task hoàn thành`)); y+=60;});
+  document.getElementById('c-proj-pct').appendChild(s);
+})();
+// 4. Stacked by project
+(function(){
+  const W=520,H=230,L=130,R=30,top=14,bh=28,gap=16; const s=svg(W,H); const max=18, sc=(W-L-R)/max;
+  for(let v=0;v<=max;v+=3){const x=L+v*sc;s.appendChild(el('line',{x1:x,x2:x,y1:top,y2:H-30,class:'gl'}));s.appendChild(el('text',{x,y:H-14,'text-anchor':'middle',class:'mut'},v));}
+  Object.keys(P).forEach((k,i)=>{const y=top+6+i*(bh+gap); s.appendChild(el('text',{x:L-10,y:y+bh/2+4,'text-anchor':'end',class:'lbl'},P[k].name)); let x=L;
+    SK.forEach(sk=>{const c=T.filter(t=>t.p===k&&t.s===sk).length; if(!c)return; const r=el('rect',{x,y,width:c*sc-2,height:bh,rx:4,fill:ST[sk].c});hover(r,`${P[k].name} · ${ST[sk].n}: ${c}`);s.appendChild(r);
+      if(c*sc>16)s.appendChild(el('text',{x:x+c*sc/2-1,y:y+bh/2+4,'text-anchor':'middle',style:'fill:#fff;font-weight:600'},c)); x+=c*sc;});});
+  s.appendChild(el('line',{x1:L,x2:L,y1:top,y2:H-30,class:'ax'}));
+  document.getElementById('c-proj-stack').appendChild(s); legend('c-proj-stack',SK.map(k=>[ST[k].n,ST[k].c]));
+})();
+</script>
+</body>
+</html>
